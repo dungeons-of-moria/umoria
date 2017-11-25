@@ -1507,7 +1507,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
 }
 
 // Undead only get confused from turn undead, so they should flee
-static void monsterMoveUndead(Creature_t &creature, int monster_id, uint32_t &rcmove) {
+static void monsterMoveUndead(const Creature_t &creature, int monster_id, uint32_t &rcmove) {
     int directions[9];
     monsterGetMoveDirection(monster_id, directions);
 
@@ -1523,7 +1523,7 @@ static void monsterMoveUndead(Creature_t &creature, int monster_id, uint32_t &rc
     }
 }
 
-static void monsterMoveConfused(Creature_t &creature, int monster_id, uint32_t &rcmove) {
+static void monsterMoveConfused(const Creature_t &creature, int monster_id, uint32_t &rcmove) {
     int directions[9];
 
     directions[0] = randomNumber(9);
@@ -1538,7 +1538,7 @@ static void monsterMoveConfused(Creature_t &creature, int monster_id, uint32_t &
     }
 }
 
-static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, Creature_t &creature) {
+static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, const Creature_t &creature) {
     // Creature is confused or undead turned?
     if (monster.confused_amount != 0u) {
         if ((creature.defenses & CD_UNDEAD) != 0) {
@@ -1606,7 +1606,7 @@ static void monsterAttackWithoutMoving(int monster_id, uint32_t &rcmove, uint8_t
 // Move the critters about the dungeon -RAK-
 static void monsterMove(int monster_id, uint32_t &rcmove) {
     Monster_t &monster = monsters[monster_id];
-    Creature_t &creature = creatures_list[monster.creature_id];
+    const Creature_t &creature = creatures_list[monster.creature_id];
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
@@ -1671,7 +1671,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     }
 }
 
-static void memoryUpdateRecall(Monster_t &monster, bool wake, bool ignore, int rcmove) {
+static void memoryUpdateRecall(const Monster_t &monster, bool wake, bool ignore, int rcmove) {
     if (!monster.lit) {
         return;
     }
