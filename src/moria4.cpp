@@ -32,13 +32,13 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 }
 
 // Compute the digging ability of player; based on strength, and type of tool used
-static int playerDiggingAbility(Inventory_t *weapon) {
+static int playerDiggingAbility(const Inventory_t &weapon) {
     int diggingAbility = py.stats.used[A_STR];
 
-    if ((weapon->flags & TR_TUNNEL) != 0u) {
-        diggingAbility += 25 + weapon->misc_use * 50;
+    if ((weapon.flags & TR_TUNNEL) != 0u) {
+        diggingAbility += 25 + weapon.misc_use * 50;
     } else {
-        diggingAbility += (weapon->damage[0] * weapon->damage[1]) + weapon->to_hit + weapon->to_damage;
+        diggingAbility += (weapon.damage[0] * weapon.damage[1]) + weapon.to_hit + weapon.to_damage;
 
         // divide by two so that digging without shovel isn't too easy
         diggingAbility >>= 1;
@@ -47,7 +47,7 @@ static int playerDiggingAbility(Inventory_t *weapon) {
     // If this weapon is too heavy for the player to wield properly,
     // then also make it harder to dig with it.
     if (py.weapon_is_heavy) {
-        diggingAbility += (py.stats.used[A_STR] * 15) - weapon->weight;
+        diggingAbility += (py.stats.used[A_STR] * 15) - weapon.weight;
 
         if (diggingAbility < 0) {
             diggingAbility = 0;
@@ -155,7 +155,7 @@ void playerTunnel(int direction) {
     }
 
     if (item.category_id != TV_NOTHING) {
-        int diggingAbility = playerDiggingAbility(&item);
+        int diggingAbility = playerDiggingAbility(item);
 
         if (!dungeonDigAtLocation(y, x, tile.feature_id, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
