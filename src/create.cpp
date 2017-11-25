@@ -472,6 +472,8 @@ static void playerCalculateStartGold() {
 
 // Main Character Creation Routine -JWT-
 void characterCreate() {
+    playerInitializeBaseExperienceLevels();
+
     printCharacterInformation();
     characterChooseRace();
     characterSetGender();

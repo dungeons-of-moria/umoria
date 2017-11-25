@@ -2072,7 +2072,7 @@ void spellLoseEXP(int32_t adjustment) {
     displayCharacterExperience();
 
     int exp = 0;
-    while ((signed) (player_base_exp_levels[exp] * py.misc.experience_factor / 100) <= py.misc.exp) {
+    while ((signed) (py.base_exp_levels[exp] * py.misc.experience_factor / 100) <= py.misc.exp) {
         exp++;
     }
 

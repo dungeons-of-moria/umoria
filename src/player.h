@@ -118,6 +118,9 @@ typedef struct {
     // drain life + restore life does not affect hit points.
     uint16_t base_hp_levels[PLAYER_MAX_LEVEL];
 
+    // Base experience levels, may be adjusted up for race and/or class
+    uint32_t base_exp_levels[PLAYER_MAX_LEVEL];
+
     uint8_t running_tracker;   // Tracker for number of turns taken during one run cycle
     bool temporary_light_only; // Track if temporary light about player
 

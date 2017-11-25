@@ -79,15 +79,6 @@ ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL] = {
      "Chevalier",    "Justiciar",    "Paladin",      "High Lord"},
 };
 
-// Base experience levels, may be adjusted up for race and/or class
-uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL] = {
-     10,      25,      45,      70,      100,      140,      200,       280,
-    380,     500,     650,     850,     1100,     1400,     1800,      2300,
-   2900,    3600,    4400,    5400,     6800,     8400,    10200,     12500,
-  17500,   25000,   35000L,  50000L,   75000L,  100000L,  150000L,   200000L,
- 300000L, 400000L, 500000L, 750000L, 1500000L, 2500000L, 5000000L, 10000000L
-};
-
 // Race, STR, INT, WIS, DEX, CON, CHR,
 //   ages, heights, and weights (male then female)
 // Racial Bases for:

@@ -30,7 +30,6 @@ extern bool panic_save;
 
 // Following are player variables
 extern Player_t py;
-extern uint32_t player_base_exp_levels[PLAYER_MAX_LEVEL];
 
 extern ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
 extern Race_t character_races[PLAYER_MAX_RACES];
@@ -402,6 +401,7 @@ int getRandomDirection();
 bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();
+void playerInitializeBaseExperienceLevels();
 
 // potions.c
 void quaff();
