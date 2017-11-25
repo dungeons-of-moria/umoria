@@ -233,29 +233,29 @@ static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, i
     py.flags.confused += confused;
 }
 
-static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
-    if (!spellItemIdentified(*item)) {
+static void playerDisarmChestTrap(int y, int x, int total, Inventory_t &item) {
+    if (!spellItemIdentified(item)) {
         game.player_free_turn = true;
         printMessage("I don't see a trap.");
 
         return;
     }
 
-    if ((item->flags & CH_TRAPPED) != 0u) {
-        int level = item->depth_first_found;
+    if ((item.flags & CH_TRAPPED) != 0u) {
+        int level = item.depth_first_found;
 
         if ((total - level) > randomNumber(100)) {
-            item->flags &= ~CH_TRAPPED;
+            item.flags &= ~CH_TRAPPED;
 
-            if ((item->flags & CH_LOCKED) != 0u) {
-                item->special_name_id = SN_LOCKED;
+            if ((item.flags & CH_LOCKED) != 0u) {
+                item.special_name_id = SN_LOCKED;
             } else {
-                item->special_name_id = SN_DISARMED;
+                item.special_name_id = SN_DISARMED;
             }
 
             printMessage("You have disarmed the chest.");
 
-            spellItemIdentifyAndRemoveRandomInscription(*item);
+            spellItemIdentifyAndRemoveRandomInscription(item);
             py.misc.exp += level;
 
             displayCharacterExperience();
@@ -263,7 +263,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t *item) {
             printMessageNoCommandInterrupt("You failed to disarm the chest.");
         } else {
             printMessage("You set a trap off!");
-            spellItemIdentifyAndRemoveRandomInscription(*item);
+            spellItemIdentifyAndRemoveRandomInscription(item);
             chestTrap(y, x);
         }
         return;
@@ -298,7 +298,7 @@ void playerDisarmTrap() {
         if (item.category_id == TV_VIS_TRAP) {
             playerDisarmFloorTrap(y, x, disarm_ability, item.depth_first_found, dir, item.misc_use);
         } else if (item.category_id == TV_CHEST) {
-            playerDisarmChestTrap(y, x, disarm_ability, &item);
+            playerDisarmChestTrap(y, x, disarm_ability, item);
         } else {
             no_disarm = true;
         }
