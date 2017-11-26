@@ -359,7 +359,6 @@ void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 
 // moria4.c
-void playerTunnel(int direction);
 void playerDisarmTrap();
 void look();
 void playerThrowItem();
@@ -407,6 +406,9 @@ int playerToHitAdjustment();
 int playerArmorClassAdjustment();
 int playerDisarmAdjustment();
 int playerDamageAdjustment();
+
+// player_tunnel.cpp
+void playerTunnel(int direction);
 
 // potions.c
 void quaff();
