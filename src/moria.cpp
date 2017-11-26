@@ -33,6 +33,9 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     // Init the store inventories
     storeInitializeOwners();
 
+    // NOTE: base exp levels need initializing before loading a game
+    playerInitializeBaseExperienceLevels();
+
     // initialize some player fields - may or may not be needed -MRC-
     py.flags.spells_learnt = 0;
     py.flags.spells_worked = 0;
