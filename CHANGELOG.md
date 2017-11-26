@@ -9,10 +9,24 @@
 
 ### Code
 
-- Simpler display of _death_ screens (`death_tomb.txt`, `death_royal.txt` files).
-- Create a `Dungeon_t` and put all dungeon related globals here.
+There are two main areas of focus for this release. The first was to create
+more objects to move the numerous global variables on to. E.g. `Dungeon_t`.
+
+The second area of focus has been to start grouping related functions and
+variables in the same file. Ex. most player functions are moved to `player.cpp`,
+or a new `player_xxx.cpp` file has been created (run, stats, tunnel, etc.).
+The LOS and look functions are located in `los.cpp`.
+
+Grouping globals and functions together like this should make their usage and
+their relationships more obvious.
+
+These locations are by no means final, but are a useful first pass.
+
+- Grouping related functions together in the same file.
 - Move more Player globals to the `Player_t` struct.
+- Create a `Dungeon_t` and put all dungeon related globals here.
 - Started replacing `char *` with `std::string`.
+- Simpler display of _death_ screens (using `death_tomb.txt`, `death_royal.txt` files).
 
 
 ## 5.7.7 (2017-11-07)
