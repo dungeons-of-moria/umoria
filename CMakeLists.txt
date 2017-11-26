@@ -129,6 +129,7 @@ set(
         ${source_dir}/rnd.cpp
         ${source_dir}/recall.cpp
         ${source_dir}/player.cpp
+        ${source_dir}/player_stats.cpp
         ${source_dir}/helpers.cpp
 )
 

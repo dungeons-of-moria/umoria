@@ -259,9 +259,6 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
 void dungeonPlaceRandomObjectNear(int y, int x, int tries);
 void statsAsString(uint8_t stat, char *stat_string);
 void displayCharacterStats(int stat);
-int playerStatAdjustmentWisdomIntelligence(int stat);
-int playerStatAdjustmentCharisma();
-int playerStatAdjustmentConstitution();
 char *playerTitle();
 void printCharacterTitle();
 void printCharacterLevel();
@@ -280,15 +277,6 @@ void printCharacterMovementState();
 void printCharacterSpeed();
 void printCharacterStudyInstruction();
 void printCharacterWinner();
-void playerSetAndUseStat(int stat);
-bool playerStatRandomIncrease(int stat);
-bool playerStatRandomDecrease(int stat);
-bool playerStatRestore(int stat);
-void playerStatBoost(int stat, int amount);
-int playerToHitAdjustment();
-int playerArmorClassAdjustment();
-int playerDisarmAdjustment();
-int playerDamageAdjustment();
 void printCharacterStatsBlock();
 void drawCavePanel();
 void printCharacterInformation();
@@ -402,6 +390,20 @@ bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();
 void playerInitializeBaseExperienceLevels();
+
+// player_stats.cpp
+int playerStatAdjustmentWisdomIntelligence(int stat);
+int playerStatAdjustmentCharisma();
+int playerStatAdjustmentConstitution();
+void playerSetAndUseStat(int stat);
+bool playerStatRandomIncrease(int stat);
+bool playerStatRandomDecrease(int stat);
+bool playerStatRestore(int stat);
+void playerStatBoost(int stat, int amount);
+int playerToHitAdjustment();
+int playerArmorClassAdjustment();
+int playerDisarmAdjustment();
+int playerDamageAdjustment();
 
 // potions.c
 void quaff();
