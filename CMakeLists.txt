@@ -96,7 +96,8 @@ set(
         ${source_dir}/misc2.cpp
         ${source_dir}/misc3.cpp
         ${source_dir}/misc4.cpp
-        ${source_dir}/store1.cpp
+        ${source_dir}/store.cpp
+        ${source_dir}/store_inventory.cpp
         ${source_dir}/files.cpp
         ${source_dir}/io.cpp
         ${source_dir}/create.cpp
@@ -117,7 +118,6 @@ set(
         ${source_dir}/scrolls.cpp
         ${source_dir}/spells.cpp
         ${source_dir}/wizard.cpp
-        ${source_dir}/store2.cpp
         ${source_dir}/moria1.cpp
         ${source_dir}/moria2.cpp
         ${source_dir}/moria3.cpp

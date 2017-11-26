@@ -4,13 +4,34 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Store code, entering, command interpreter, buying, selling
+// Store: entering, command interpreter, buying, selling
 
 #include "headers.h"
 #include "externs.h"
 
 // Save the store's last increment value.
 static int16_t store_last_increment;
+
+// Initializes the stores with owners -RAK-
+void storeInitializeOwners() {
+    int count = MAX_OWNERS / MAX_STORES;
+
+    for (int store_id = 0; store_id < MAX_STORES; store_id++) {
+        Store_t &store = stores[store_id];
+
+        store.owner_id = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
+        store.insults_counter = 0;
+        store.turns_left_before_closing = 0;
+        store.unique_items_counter = 0;
+        store.good_purchases = 0;
+        store.bad_purchases = 0;
+
+        for (auto &item : store.inventory) {
+            inventoryItemCopyTo(OBJ_NOTHING, item.item);
+            item.cost = 0;
+        }
+    }
+}
 
 // Comments vary. -RAK-
 // Comment one : Finished haggling
@@ -778,7 +799,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
             int new_item_id = inventoryCarryItem(sell_item);
             int saved_store_counter = store.unique_items_counter;
 
-            storeDestroy(store_id, item_id, true);
+            storeDestroyItem(store_id, item_id, true);
 
             obj_desc_t description = {'\0'};
             itemDescription(description, inventory[new_item_id], true);
@@ -905,7 +926,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
         printMessage(msg);
 
         int item_pos_id;
-        storeCarry(store_id, item_pos_id, sold_item);
+        storeCarryItem(store_id, item_pos_id, sold_item);
 
         playerStrength();
 

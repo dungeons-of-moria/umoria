@@ -4,7 +4,7 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Store code, updating store inventory, pricing objects
+// Store: updating store inventory, pricing objects
 
 #include "headers.h"
 #include "externs.h"
@@ -21,6 +21,37 @@ static int32_t getFoodBuyPrice(const Inventory_t &item);
 static int32_t getRingAmuletBuyPrice(const Inventory_t &item);
 static int32_t getWandStaffBuyPrice(const Inventory_t &item);
 static int32_t getPickShovelBuyPrice(const Inventory_t &item);
+
+// Initialize and up-keep the store's inventory. -RAK-
+void storeMaintenance() {
+    for (int store_id = 0; store_id < MAX_STORES; store_id++) {
+        Store_t &store = stores[store_id];
+
+        store.insults_counter = 0;
+        if (store.unique_items_counter >= STORE_MIN_AUTO_SELL_ITEMS) {
+            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
+            if (store.unique_items_counter >= STORE_MAX_AUTO_BUY_ITEMS) {
+                turnaround += 1 + store.unique_items_counter - STORE_MAX_AUTO_BUY_ITEMS;
+            }
+            while (--turnaround >= 0) {
+                storeDestroyItem(store_id, randomNumber((int) store.unique_items_counter) - 1, false);
+            }
+        }
+
+        if (store.unique_items_counter <= STORE_MAX_AUTO_BUY_ITEMS) {
+            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
+            if (store.unique_items_counter < STORE_MIN_AUTO_SELL_ITEMS) {
+                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.unique_items_counter;
+            }
+
+            int16_t max_cost = store_owners[store.owner_id].max_cost;
+
+            while (--turnaround >= 0) {
+                storeItemCreate(store_id, max_cost);
+            }
+        }
+    }
+}
 
 // Returns the value for any given object -RAK-
 int32_t storeItemValue(const Inventory_t &item) {
@@ -225,7 +256,7 @@ static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *
 }
 
 // Add the item in INVEN_MAX to stores inventory. -RAK-
-void storeCarry(int store_id, int &index_id, Inventory_t &item) {
+void storeCarryItem(int store_id, int &index_id, Inventory_t &item) {
     index_id = -1;
 
     Store_t &store = stores[store_id];
@@ -280,7 +311,7 @@ void storeCarry(int store_id, int &index_id, Inventory_t &item) {
 
 // Destroy an item in the stores inventory.  Note that if
 // `only_one_of` is false, an entire slot is destroyed -RAK-
-void storeDestroy(int store_id, int item_id, bool only_one_of) {
+void storeDestroyItem(int store_id, int item_id, bool only_one_of) {
     Store_t &store = stores[store_id];
     Inventory_t &store_item = store.inventory[item_id].item;
 
@@ -311,27 +342,6 @@ void storeDestroy(int store_id, int item_id, bool only_one_of) {
     }
 }
 
-// Initializes the stores with owners -RAK-
-void storeInitializeOwners() {
-    int count = MAX_OWNERS / MAX_STORES;
-
-    for (int store_id = 0; store_id < MAX_STORES; store_id++) {
-        Store_t &store = stores[store_id];
-
-        store.owner_id = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
-        store.insults_counter = 0;
-        store.turns_left_before_closing = 0;
-        store.unique_items_counter = 0;
-        store.good_purchases = 0;
-        store.bad_purchases = 0;
-
-        for (auto &item : store.inventory) {
-            inventoryItemCopyTo(OBJ_NOTHING, item.item);
-            item.cost = 0;
-        }
-    }
-}
-
 // Creates an item and inserts it into store's inven -RAK-
 static void storeItemCreate(int store_id, int16_t max_cost) {
     int free_id = popt();
@@ -351,7 +361,7 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
                 itemIdentifyAsStoreBought(item);
 
                 int dummy;
-                storeCarry(store_id, dummy, item);
+                storeCarryItem(store_id, dummy, item);
 
                 tries = 10;
             }
@@ -359,37 +369,6 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
     }
 
     pusht((uint8_t) free_id);
-}
-
-// Initialize and up-keep the store's inventory. -RAK-
-void storeMaintenance() {
-    for (int store_id = 0; store_id < MAX_STORES; store_id++) {
-        Store_t &store = stores[store_id];
-
-        store.insults_counter = 0;
-        if (store.unique_items_counter >= STORE_MIN_AUTO_SELL_ITEMS) {
-            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store.unique_items_counter >= STORE_MAX_AUTO_BUY_ITEMS) {
-                turnaround += 1 + store.unique_items_counter - STORE_MAX_AUTO_BUY_ITEMS;
-            }
-            while (--turnaround >= 0) {
-                storeDestroy(store_id, randomNumber((int) store.unique_items_counter) - 1, false);
-            }
-        }
-
-        if (store.unique_items_counter <= STORE_MAX_AUTO_BUY_ITEMS) {
-            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store.unique_items_counter < STORE_MIN_AUTO_SELL_ITEMS) {
-                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.unique_items_counter;
-            }
-
-            int16_t max_cost = store_owners[store.owner_id].max_cost;
-
-            while (--turnaround >= 0) {
-                storeItemCreate(store_id, max_cost);
-            }
-        }
-    }
 }
 
 // eliminate need to bargain if player has haggled well in the past -DJB-

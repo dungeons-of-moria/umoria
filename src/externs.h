@@ -538,19 +538,19 @@ bool spellRestorePlayerLevels();
 // staffs.c
 void useStaff();
 
-// store1.c
+// store.cpp
+void storeInitializeOwners();
+void storeEnter(int store_id);
+
+// store_inventory.cpp
+void storeMaintenance();
 int32_t storeItemValue(const Inventory_t &item);
 int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &max_price, const Inventory_t &item);
 bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item);
-void storeCarry(int store_id, int &index_id, Inventory_t &item);
-void storeDestroy(int store_id, int item_id, bool only_one_of);
-void storeInitializeOwners();
-void storeMaintenance();
+void storeCarryItem(int store_id, int &index_id, Inventory_t &item);
+void storeDestroyItem(int store_id, int item_id, bool only_one_of);
 bool storeNoNeedToBargain(const Store_t &store, int32_t min_price);
 void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price);
-
-// store2.c
-void storeEnter(int store_id);
 
 // wands.c
 void wandAim();
