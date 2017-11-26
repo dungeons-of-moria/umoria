@@ -552,37 +552,6 @@ bool compactMonsters() {
     return true;
 }
 
-// Add to the players food time -RAK-
-void playerIngestFood(int amount) {
-    if (py.flags.food < 0) {
-        py.flags.food = 0;
-    }
-
-    py.flags.food += amount;
-
-    if (py.flags.food > PLAYER_FOOD_MAX) {
-        printMessage("You are bloated from overeating.");
-
-        // Calculate how much of amount is responsible for the bloating. Give the
-        // player food credit for 1/50, and also slow them for that many turns.
-        int extra = py.flags.food - PLAYER_FOOD_MAX;
-        if (extra > amount) {
-            extra = amount;
-        }
-        int penalty = extra / 50;
-
-        py.flags.slow += penalty;
-
-        if (extra == amount) {
-            py.flags.food = (int16_t) (py.flags.food - amount + penalty);
-        } else {
-            py.flags.food = (int16_t) (PLAYER_FOOD_MAX + penalty);
-        }
-    } else if (py.flags.food > PLAYER_FOOD_FULL) {
-        printMessage("You are full.");
-    }
-}
-
 // Returns a pointer to next free space -RAK-
 // Returns -1 if could not allocate a monster.
 static int popm() {

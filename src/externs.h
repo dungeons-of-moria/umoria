@@ -230,7 +230,6 @@ char caveGetTileSymbol(Coord_t coord);
 bool caveTileVisible(Coord_t coord);
 void drawDungeonPanel();
 bool compactMonsters();
-void playerIngestFood(int amount);
 bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
 void monsterPlaceWinning();
 void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
@@ -389,6 +388,7 @@ void playerInitializeBaseExperienceLevels();
 
 // player_eat.cpp
 void playerEat();
+void playerIngestFood(int amount);
 
 // player_stats.cpp
 int playerStatAdjustmentWisdomIntelligence(int stat);
