@@ -363,7 +363,6 @@ void playerTunnel(int direction);
 void playerDisarmTrap();
 void look();
 void playerThrowItem();
-void playerBash();
 int getRandomDirection();
 
 // player.cpp
@@ -385,6 +384,9 @@ void playerRestOff();
 // player_eat.cpp
 void playerEat();
 void playerIngestFood(int amount);
+
+// player_bash.cpp
+void playerBash();
 
 // player_run.cpp
 void playerFindInitialize(int direction);
