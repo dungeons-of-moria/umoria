@@ -154,11 +154,3 @@ void humanDateString(char *day) {
     strftime(day, 10, "%a %b %e", datetime);
 #endif
 }
-
-// Centers a string within a 31 character string -JWT-
-char *centerString(char *centered_str, const char *in_str) {
-    auto i = (int) strlen(in_str);
-    int j = 15 - i / 2;
-    (void) sprintf(centered_str, "%*s%s%*s", j, "", in_str, 31 - i - j, "");
-    return centered_str;
-}
