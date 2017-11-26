@@ -1584,11 +1584,6 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 // proud of it.   Adding the stores required some real slucky
 // hooks which I have not had time to re-think. -RAK-
 
-// Returns true if player has no light -RAK-
-bool playerNoLight() {
-    return !dg.floor[py.row][py.col].temporary_light && !dg.floor[py.row][py.col].permanent_light;
-}
-
 // map roguelike direction commands into numbers
 static char mapRoguelikeKeysToKeypad(char command) {
     switch (command) {
@@ -1824,112 +1819,6 @@ void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2) {
     } else {
         sub1_move_light(y1, x1, y2, x2);
     }
-}
-
-// Something happens to disturb the player. -CJS-
-// The first arg indicates a major disturbance, which affects search.
-// The second arg indicates a light change.
-void playerDisturb(int major_disturbance, int light_disturbance) {
-    game.command_count = 0;
-
-    if ((major_disturbance != 0) && ((py.flags.status & PY_SEARCH) != 0u)) {
-        playerSearchOff();
-    }
-
-    if (py.flags.rest != 0) {
-        playerRestOff();
-    }
-
-    if ((light_disturbance != 0) || (py.running_tracker != 0)) {
-        py.running_tracker = 0;
-        dungeonResetView();
-    }
-
-    flushInputBuffer();
-}
-
-// Search Mode enhancement -RAK-
-void playerSearchOn() {
-    playerChangeSpeed(1);
-
-    py.flags.status |= PY_SEARCH;
-
-    printCharacterMovementState();
-    printCharacterSpeed();
-
-    py.flags.food_digested++;
-}
-
-void playerSearchOff() {
-    dungeonResetView();
-    playerChangeSpeed(-1);
-
-    py.flags.status &= ~PY_SEARCH;
-
-    printCharacterMovementState();
-    printCharacterSpeed();
-    py.flags.food_digested--;
-}
-
-// Resting allows a player to safely restore his hp -RAK-
-void playerRestOn() {
-    int rest_num;
-
-    if (game.command_count > 0) {
-        rest_num = game.command_count;
-        game.command_count = 0;
-    } else {
-        rest_num = 0;
-        vtype_t rest_str = {'\0'};
-
-        putStringClearToEOL("Rest for how long? ", Coord_t{0, 0});
-
-        if (getStringInput(rest_str, Coord_t{0, 19}, 5)) {
-            if (rest_str[0] == '*') {
-                rest_num = -MAX_SHORT;
-            } else {
-                (void) stringToNumber(rest_str, rest_num);
-            }
-        }
-    }
-
-    // check for reasonable value, must be positive number
-    // in range of a short, or must be -MAX_SHORT
-    if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num <= MAX_SHORT)) {
-        if ((py.flags.status & PY_SEARCH) != 0u) {
-            playerSearchOff();
-        }
-
-        py.flags.rest = (int16_t) rest_num;
-        py.flags.status |= PY_REST;
-        printCharacterMovementState();
-        py.flags.food_digested--;
-
-        putStringClearToEOL("Press any key to stop resting...", Coord_t{0, 0});
-        putQIO();
-
-        return;
-    }
-
-    // Something went wrong
-    if (rest_num != 0) {
-        printMessage("Invalid rest count.");
-    }
-    messageLineClear();
-
-    game.player_free_turn = true;
-}
-
-void playerRestOff() {
-    py.flags.rest = 0;
-    py.flags.status &= ~PY_REST;
-
-    printCharacterMovementState();
-
-    // flush last message, or delete "press any key" message
-    printMessage(CNIL);
-
-    py.flags.food_digested++;
 }
 
 // Attacker's level and plusses,  defender's AC -RAK-

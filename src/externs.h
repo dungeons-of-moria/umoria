@@ -323,18 +323,12 @@ int displayEquipment(bool weighted, int column);
 void playerTakeOff(int item_id, int pack_position_id);
 void inventoryExecuteCommand(char command);
 bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
-bool playerNoLight();
 bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
 void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2);
 void dungeonLightRoom(int pos_y, int pos_x);
 void dungeonLiteSpot(int y, int x);
 void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
-void playerDisturb(int major_disturbance, int light_disturbance);
-void playerSearchOn();
-void playerSearchOff();
-void playerRestOn();
-void playerRestOff();
 bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
 void playerTakesHit(int damage, const char *creature_name);
 
@@ -385,6 +379,12 @@ void playerCalculateHitPoints();
 int playerAttackBlows(int weight, int &weight_to_hit);
 bool playerMovePosition(int dir, int &new_y, int &new_x);
 void playerTeleport(int new_distance);
+bool playerNoLight();
+void playerDisturb(int major_disturbance, int light_disturbance);
+void playerSearchOn();
+void playerSearchOff();
+void playerRestOn();
+void playerRestOff();
 
 // player_eat.cpp
 void playerEat();
