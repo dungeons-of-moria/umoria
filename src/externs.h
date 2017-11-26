@@ -361,7 +361,6 @@ void playerAttackPosition(int y, int x);
 // moria4.c
 void playerDisarmTrap();
 void look();
-void playerThrowItem();
 int getRandomDirection();
 
 // player.cpp
@@ -406,6 +405,9 @@ int playerToHitAdjustment();
 int playerArmorClassAdjustment();
 int playerDisarmAdjustment();
 int playerDamageAdjustment();
+
+// player_throw.cpp
+void playerThrowItem();
 
 // player_tunnel.cpp
 void playerTunnel(int direction);
