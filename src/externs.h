@@ -359,7 +359,6 @@ void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 
 // moria4.c
-void playerDisarmTrap();
 void look();
 int getRandomDirection();
 
@@ -408,6 +407,9 @@ int playerDamageAdjustment();
 
 // player_throw.cpp
 void playerThrowItem();
+
+// player_traps.cpp
+void playerDisarmTrap();
 
 // player_tunnel.cpp
 void playerTunnel(int direction);

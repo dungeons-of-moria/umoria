@@ -133,6 +133,7 @@ set(
         ${source_dir}/player_run.cpp
         ${source_dir}/player_stats.cpp
         ${source_dir}/player_throw.cpp
+        ${source_dir}/player_traps.cpp
         ${source_dir}/player_tunnel.cpp
         ${source_dir}/helpers.cpp
 )
