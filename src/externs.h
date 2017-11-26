@@ -298,15 +298,11 @@ void playerCalculateAllowedSpellsCount(int stat);
 void playerGainSpells();
 void playerGainMana(int stat);
 void displayCharacterExperience();
-void playerCalculateHitPoints();
 bool enterWizardMode();
-int playerAttackBlows(int weight, int &weight_to_hit);
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
 int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
-bool playerMovePosition(int dir, int &new_y, int &new_x);
 bool playerSavingThrow();
 bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k);
-void playerTeleport(int new_distance);
 
 // misc4.c
 void itemInscribe();
@@ -385,6 +381,10 @@ bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();
 void playerInitializeBaseExperienceLevels();
+void playerCalculateHitPoints();
+int playerAttackBlows(int weight, int &weight_to_hit);
+bool playerMovePosition(int dir, int &new_y, int &new_x);
+void playerTeleport(int new_distance);
 
 // player_eat.cpp
 void playerEat();
