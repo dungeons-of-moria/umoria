@@ -106,7 +106,6 @@ set(
         ${source_dir}/dungeon.cpp
         ${source_dir}/creature.cpp
         ${source_dir}/death.cpp
-        ${source_dir}/eat.cpp
         ${source_dir}/help.cpp
         ${source_dir}/magic.cpp
         ${source_dir}/potions.cpp
@@ -129,6 +128,7 @@ set(
         ${source_dir}/rnd.cpp
         ${source_dir}/recall.cpp
         ${source_dir}/player.cpp
+        ${source_dir}/player_eat.cpp
         ${source_dir}/player_stats.cpp
         ${source_dir}/helpers.cpp
 )

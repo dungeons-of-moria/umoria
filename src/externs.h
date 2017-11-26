@@ -140,9 +140,6 @@ void itemTypeRemainingCountDescription(int item_id);
 // dungeon.c
 void dungeonDisplayMap();
 
-// eat.c
-void playerEat();
-
 // files.c
 bool initializeScoreFile();
 void displaySplashScreen();
@@ -389,6 +386,9 @@ bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();
 void playerInitializeBaseExperienceLevels();
+
+// player_eat.cpp
+void playerEat();
 
 // player_stats.cpp
 int playerStatAdjustmentWisdomIntelligence(int stat);
