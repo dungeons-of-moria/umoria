@@ -586,28 +586,3 @@ void pusht(uint8_t treasure_id) {
 
     inventoryItemCopyTo(OBJ_NOTHING, treasure_list[current_treasure_id]);
 }
-
-// Should the object be enchanted -RAK-
-bool magicShouldBeEnchanted(int chance) {
-    return randomNumber(100) <= chance;
-}
-
-// Enchant a bonus based on degree desired -RAK-
-int magicEnchantmentBonus(int base, int max_standard, int level) {
-    int stand_deviation = (LEVEL_STD_OBJECT_ADJUST * level / 100) + LEVEL_MIN_OBJECT_STD;
-
-    // Check for level > max_standard since that may have generated an overflow.
-    if (stand_deviation > max_standard || level > max_standard) {
-        stand_deviation = max_standard;
-    }
-
-    // abs may be a macro, don't call it with randomNumberNormalDistribution() as a parameter
-    auto abs_distribution = (int) std::abs((std::intmax_t) randomNumberNormalDistribution(0, stand_deviation));
-    int bonus = (abs_distribution / 10) + base;
-
-    if (bonus < base) {
-        return base;
-    }
-
-    return bonus;
-}
