@@ -125,7 +125,7 @@ set(
         ${source_dir}/monsters.cpp
         ${source_dir}/treasure.cpp
         ${source_dir}/globals.cpp
-        ${source_dir}/rnd.cpp
+        ${source_dir}/rng.cpp
         ${source_dir}/recall.cpp
         ${source_dir}/player.cpp
         ${source_dir}/player_bash.cpp
