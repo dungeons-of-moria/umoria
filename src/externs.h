@@ -201,7 +201,6 @@ bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
-void sleep_in_seconds(int seconds);
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen

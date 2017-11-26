@@ -483,14 +483,6 @@ void waitForContinueKey(int line_number) {
     eraseLine(Coord_t{line_number, 0});
 }
 
-void sleep_in_seconds(int seconds) {
-#ifdef _WIN32
-    Sleep(seconds * 1000);
-#else
-    sleep((unsigned int) seconds);
-#endif
-}
-
 // Provides for a timeout on input. Does a non-blocking read, consuming the data if
 // any, and then returns 1 if data was read, zero otherwise.
 //
