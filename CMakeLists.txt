@@ -121,7 +121,7 @@ set(
         ${source_dir}/moria1.cpp
         ${source_dir}/moria2.cpp
         ${source_dir}/moria3.cpp
-        ${source_dir}/moria4.cpp
+        ${source_dir}/los.cpp
         ${source_dir}/monsters.cpp
         ${source_dir}/treasure.cpp
         ${source_dir}/globals.cpp

@@ -207,6 +207,10 @@ bool tilde(const char *file, char *expanded);
 
 bool checkFilePermissions();
 
+// los.cpp
+bool los(int from_y, int from_x, int to_y, int to_x);
+void look();
+
 // magic.c
 void getAndCastMagicSpell();
 
@@ -225,7 +229,6 @@ int coordWallsNextTo(Coord_t coord);
 int coordCorridorWallsNextTo(Coord_t coord);
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
-bool los(int from_y, int from_x, int to_y, int to_x);
 char caveGetTileSymbol(Coord_t coord);
 bool caveTileVisible(Coord_t coord);
 void drawDungeonPanel();
@@ -358,9 +361,6 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 int getRandomDirection();
-
-// moria4.c
-void look();
 
 // player.cpp
 bool playerIsMale();

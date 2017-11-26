@@ -4,13 +4,178 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Misc code, mainly to handle player commands
+// LOS (line-of-sight) and Looking functions
 
 #include "headers.h"
 #include "externs.h"
 
-static bool lookRay(int y, int from, int to);
-static bool lookSee(int x, int y, bool &transparent);
+// A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
+// 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.
+//
+// Returns true if a line of sight can be traced from x0, y0 to x1, y1.
+//
+// The LOS begins at the center of the tile [x0, y0] and ends at the center of
+// the tile [x1, y1].  If los() is to return true, all of the tiles this line
+// passes through must be transparent, WITH THE EXCEPTIONS of the starting and
+// ending tiles.
+//
+// We don't consider the line to be "passing through" a tile if it only passes
+// across one corner of that tile.
+
+// Because this function uses (short) ints for all calculations, overflow may
+// occur if deltaX and deltaY exceed 90.
+bool los(int from_y, int from_x, int to_y, int to_x) {
+    int delta_x = to_x - from_x;
+    int delta_y = to_y - from_y;
+
+    // Adjacent?
+    if (delta_x < 2 && delta_x > -2 && delta_y < 2 && delta_y > -2) {
+        return true;
+    }
+
+    // Handle the cases where delta_x or delta_y == 0.
+    if (delta_x == 0) {
+        if (delta_y < 0) {
+            int tmp = from_y;
+            from_y = to_y;
+            to_y = tmp;
+        }
+
+        for (int yy = from_y + 1; yy < to_y; yy++) {
+            if (dg.floor[yy][from_x].feature_id >= MIN_CLOSED_SPACE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    if (delta_y == 0) {
+        if (delta_x < 0) {
+            int tmp = from_x;
+            from_x = to_x;
+            to_x = tmp;
+        }
+
+        for (int xx = from_x + 1; xx < to_x; xx++) {
+            if (dg.floor[from_y][xx].feature_id >= MIN_CLOSED_SPACE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Now, we've eliminated all the degenerate cases.
+    // In the computations below, dy (or dx) and m are multiplied by a scale factor,
+    // scale = abs(delta_x * delta_y * 2), so that we can use integer arithmetic.
+    {
+        int xx;          // x position
+        int yy;          // y position
+        int scale;       // above scale factor
+        int scale_half;  // above scale factor / 2
+        int x_sign;      // sign of delta_x
+        int y_sign;      // sign of delta_y
+        int slope;       // slope or 1/slope of LOS
+
+        int delta_multiply = delta_x * delta_y;
+        scale_half = (int) std::abs((std::intmax_t) delta_multiply);
+        scale = scale_half << 1;
+        x_sign = delta_x < 0 ? -1 : 1;
+        y_sign = delta_y < 0 ? -1 : 1;
+
+        // Travel from one end of the line to the other, oriented along the longer axis.
+
+        auto abs_delta_x = (int) std::abs((std::intmax_t) delta_x);
+        auto abs_delta_y = (int) std::abs((std::intmax_t) delta_y);
+
+        if (abs_delta_x >= abs_delta_y) {
+            int dy; // "fractional" y position
+
+            // We start at the border between the first and second tiles, where
+            // the y offset = .5 * slope.  Remember the scale factor.
+            //
+            // We have:     slope = delta_y / delta_x * 2 * (delta_y * delta_x)
+            //                    = 2 * delta_y * delta_y.
+
+            dy = delta_y * delta_y;
+            slope = dy << 1;
+            xx = from_x + x_sign;
+
+            // Consider the special case where slope == 1.
+            if (dy == scale_half) {
+                yy = from_y + y_sign;
+                dy -= scale;
+            } else {
+                yy = from_y;
+            }
+
+            while ((to_x - xx) != 0) {
+                if (dg.floor[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                    return false;
+                }
+
+                dy += slope;
+
+                if (dy < scale_half) {
+                    xx += x_sign;
+                } else if (dy > scale_half) {
+                    yy += y_sign;
+                    if (dg.floor[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                        return false;
+                    }
+                    xx += x_sign;
+                    dy -= scale;
+                } else {
+                    // This is the case, dy == scale_half, where the LOS
+                    // exactly meets the corner of a tile.
+                    xx += x_sign;
+                    yy += y_sign;
+                    dy -= scale;
+                }
+            }
+            return true;
+        }
+
+        int dx; // "fractional" x position
+
+        dx = delta_x * delta_x;
+        slope = dx << 1;
+
+        yy = from_y + y_sign;
+
+        if (dx == scale_half) {
+            xx = from_x + x_sign;
+            dx -= scale;
+        } else {
+            xx = from_x;
+        }
+
+        while ((to_y - yy) != 0) {
+            if (dg.floor[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                return false;
+            }
+
+            dx += slope;
+
+            if (dx < scale_half) {
+                yy += y_sign;
+            } else if (dx > scale_half) {
+                xx += x_sign;
+                if (dg.floor[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
+                    return false;
+                }
+                yy += y_sign;
+                dx -= scale;
+            } else {
+                xx += x_sign;
+                yy += y_sign;
+                dx -= scale;
+            }
+        }
+        return true;
+    }
+}
 
 /*
   An enhanced look, with peripheral vision. Looking all 8 -CJS- directions will
@@ -78,6 +243,9 @@ static int los_map_diagonals1[] = {1, 3, 0, 2, 4};
 static int los_map_diagonals2[] = {2, 1, 0, 4, 3};
 
 #define GRADF 10000 // Any sufficiently big number will do
+
+static bool lookRay(int y, int from, int to);
+static bool lookSee(int x, int y, bool &transparent);
 
 // Look at what we can see. This is a free move.
 //
