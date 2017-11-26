@@ -549,8 +549,6 @@ int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &ma
 bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item);
 void storeCarryItem(int store_id, int &index_id, Inventory_t &item);
 void storeDestroyItem(int store_id, int item_id, bool only_one_of);
-bool storeNoNeedToBargain(const Store_t &store, int32_t min_price);
-void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price);
 
 // wands.c
 void wandAim();

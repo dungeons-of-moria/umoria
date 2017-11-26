@@ -12,6 +12,9 @@
 // Save the store's last increment value.
 static int16_t store_last_increment;
 
+static bool storeNoNeedToBargain(const Store_t &store, int32_t min_price);
+static void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price);
+
 // Initializes the stores with owners -RAK-
 void storeInitializeOwners() {
     int count = MAX_OWNERS / MAX_STORES;
@@ -1039,4 +1042,30 @@ void storeEnter(int store_id) {
 
     // Can't save and restore the screen because inventoryExecuteCommand() does that.
     drawCavePanel();
+}
+
+// eliminate need to bargain if player has haggled well in the past -DJB-
+static bool storeNoNeedToBargain(const Store_t &store, int32_t min_price) {
+    if (store.good_purchases == MAX_SHORT) {
+        return true;
+    }
+
+    int bargain_record = (store.good_purchases - 3 * store.bad_purchases - 5);
+
+    return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > min_price / 50));
+}
+
+// update the bargain info -DJB-
+static void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price) {
+    if (min_price > 9) {
+        if (price == min_price) {
+            if (store.good_purchases < MAX_SHORT) {
+                store.good_purchases++;
+            }
+        } else {
+            if (store.bad_purchases < MAX_SHORT) {
+                store.bad_purchases++;
+            }
+        }
+    }
 }
