@@ -408,13 +408,3 @@ static bool lookSee(int x, int y, bool &transparent) {
 
     return false;
 }
-
-int getRandomDirection() {
-    int dir;
-
-    do {
-        dir = randomNumber(9);
-    } while (dir == 5);
-
-    return dir;
-}

@@ -357,10 +357,10 @@ void dungeonCloseDoor();
 bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
+int getRandomDirection();
 
 // moria4.c
 void look();
-int getRandomDirection();
 
 // player.cpp
 bool playerIsMale();

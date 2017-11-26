@@ -1357,3 +1357,13 @@ void playerAttackPosition(int y, int x) {
 
     playerAttackMonster(y, x);
 }
+
+int getRandomDirection() {
+    int dir;
+
+    do {
+        dir = randomNumber(9);
+    } while (dir == 5);
+
+    return dir;
+}
