@@ -1795,42 +1795,6 @@ bool spellChangePlayerHitPoints(int adjustment) {
     return true;
 }
 
-// Cure players confusion -RAK-
-bool playerCureConfusion() {
-    if (py.flags.confused > 1) {
-        py.flags.confused = 1;
-        return true;
-    }
-    return false;
-}
-
-// Cure players blindness -RAK-
-bool playerCureBlindness() {
-    if (py.flags.blind > 1) {
-        py.flags.blind = 1;
-        return true;
-    }
-    return false;
-}
-
-// Cure poisoning -RAK-
-bool playerCurePoison() {
-    if (py.flags.poisoned > 1) {
-        py.flags.poisoned = 1;
-        return true;
-    }
-    return false;
-}
-
-// Cure the players fear -RAK-
-bool playerRemoveFear() {
-    if (py.flags.afraid > 1) {
-        py.flags.afraid = 1;
-        return true;
-    }
-    return false;
-}
-
 static void earthquakeHitsMonster(int monsterID) {
     Monster_t &monster = monsters[monsterID];
     const Creature_t &creature = creatures_list[monster.creature_id];
@@ -1897,15 +1861,6 @@ void dungeonEarthquake() {
             }
         }
     }
-}
-
-// Evil creatures don't like this. -RAK-
-bool playerProtectEvil() {
-    bool is_protected = py.flags.protect_evil == 0;
-
-    py.flags.protect_evil += randomNumber(25) + 3 * py.misc.level;
-
-    return is_protected;
 }
 
 // Create some high quality mush for the player. -RAK-
@@ -2110,16 +2065,6 @@ bool spellSlowPoison() {
     }
 
     return false;
-}
-
-// Bless -RAK-
-void playerBless(int adjustment) {
-    py.flags.blessed += adjustment;
-}
-
-// Detect Invisible for period of time -RAK-
-void playerDetectInvisible(int adjustment) {
-    py.flags.detect_invisible += adjustment;
 }
 
 static void replace_spot(int y, int x, int typ) {

@@ -385,6 +385,15 @@ void playerIngestFood(int amount);
 // player_bash.cpp
 void playerBash();
 
+// player_magic.cpp
+bool playerCureConfusion();
+bool playerCureBlindness();
+bool playerCurePoison();
+bool playerRemoveFear();
+bool playerProtectEvil();
+void playerBless(int adjustment);
+void playerDetectInvisible(int adjustment);
+
 // player_run.cpp
 void playerFindInitialize(int direction);
 void playerRunAndFind();
@@ -508,12 +517,7 @@ bool spellSleepAllMonsters();
 bool spellMassPolymorph();
 bool spellDetectEvil();
 bool spellChangePlayerHitPoints(int adjustment);
-bool playerCureConfusion();
-bool playerCureBlindness();
-bool playerCurePoison();
-bool playerRemoveFear();
 void dungeonEarthquake();
-bool playerProtectEvil();
 void spellCreateFood();
 bool spellDispelCreature(int creature_defense, int damage);
 bool spellTurnUndead();
@@ -526,8 +530,6 @@ void spellLoseCON();
 void spellLoseCHR();
 void spellLoseEXP(int32_t adjustment);
 bool spellSlowPoison();
-void playerBless(int adjustment);
-void playerDetectInvisible(int adjustment);
 void spellDestroyArea(int y, int x);
 bool spellEnchantItem(int16_t &plusses, int16_t max_bonus_limit);
 bool spellRemoveCurseFromAllItems();
