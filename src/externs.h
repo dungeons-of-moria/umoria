@@ -148,6 +148,14 @@ void displayDeathFile(const std::string &filename);
 void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
 
+// game.cpp
+void seedsInitialize(uint32_t seed);
+void seedSet(uint32_t seed);
+void seedResetToOldSeed();
+int randomNumber(int max);
+int randomNumberNormalDistribution(int mean, int standard);
+void setGameOptions();
+
 // generate.c
 void generateCave();
 
@@ -215,11 +223,6 @@ void look();
 void getAndCastMagicSpell();
 
 // misc1.c
-void seedsInitialize(uint32_t seed);
-void seedSet(uint32_t seed);
-void seedResetToOldSeed();
-int randomNumber(int max);
-int randomNumberNormalDistribution(int mean, int standard);
 int getAndClearFirstBit(uint32_t &flag);
 bool coordInBounds(Coord_t coord);
 bool coordOutsidePanel(Coord_t coord, bool force);
@@ -245,7 +248,6 @@ int magicEnchantmentBonus(int base, int max_standard, int level);
 
 // misc2.c
 void magicTreasureMagicalAbility(int item_id, int level);
-void setGameOptions();
 
 // misc3.c
 void dungeonSetTrap(int y, int x, int sub_type_id);
@@ -433,7 +435,7 @@ void pray();
 bool memoryMonsterKnown(const Recall_t &memory);
 int memoryRecall(int monster_id);
 
-// rnd.c
+// rng.cpp
 uint32_t getRandomSeed();
 void setRandomSeed(uint32_t seed);
 int32_t rnd();

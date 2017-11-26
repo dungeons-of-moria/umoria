@@ -91,6 +91,7 @@ set(
         ${source_dir}/data_tables.cpp
         ${source_dir}/data_treasure.cpp
         ${source_dir}/main.cpp
+        ${source_dir}/game.cpp
         ${source_dir}/moria.cpp
         ${source_dir}/misc1.cpp
         ${source_dir}/misc2.cpp
