@@ -132,6 +132,7 @@ set(
         ${source_dir}/player_bash.cpp
         ${source_dir}/player_eat.cpp
         ${source_dir}/player_magic.cpp
+        ${source_dir}/player_move.cpp
         ${source_dir}/player_run.cpp
         ${source_dir}/player_stats.cpp
         ${source_dir}/player_throw.cpp

@@ -351,7 +351,6 @@ void dungeonDeleteMonsterFix2(int id);
 bool dungeonDeleteObject(int y, int x);
 uint32_t monsterDeath(int y, int x, uint32_t flags);
 int monsterTakeHit(int monster_id, int damage);
-void playerMove(int direction, bool do_pickup);
 void chestTrap(int y, int x);
 void objectOpen();
 void dungeonCloseDoor();
@@ -391,6 +390,9 @@ bool playerRemoveFear();
 bool playerProtectEvil();
 void playerBless(int adjustment);
 void playerDetectInvisible(int adjustment);
+
+// player_move.cpp
+void playerMove(int direction, bool do_pickup);
 
 // player_run.cpp
 void playerFindInitialize(int direction);
