@@ -1700,6 +1700,10 @@ static void doWizardCommands(char com_val) {
     }
 }
 
+// TODO: use only commands here - don't just call the external functions.
+// TODO: E.g. split playerEat() into command/action functions: commandEat(), playerEat().
+// Possibly the "setup" happens in the command, such as the food check/selection of playerEat().
+// The command then calls playerEat() in player_eat.cpp - passing the selected food `item_id`.
 static void doCommand(char command) {
     bool do_pickup = moveWithoutPickup(&command);
 
