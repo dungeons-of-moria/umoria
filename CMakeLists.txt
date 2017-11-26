@@ -129,6 +129,7 @@ set(
         ${source_dir}/recall.cpp
         ${source_dir}/player.cpp
         ${source_dir}/player_eat.cpp
+        ${source_dir}/player_run.cpp
         ${source_dir}/player_stats.cpp
         ${source_dir}/helpers.cpp
 )

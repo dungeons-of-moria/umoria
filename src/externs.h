@@ -335,10 +335,6 @@ void playerTakesHit(int damage, const char *creature_name);
 // moria2.c
 void dungeonChangeTrapVisibility(int y, int x);
 void dungeonSearch(int y, int x, int chance);
-void playerFindInitialize(int direction);
-void playerRunAndFind();
-void playerEndRunning();
-void playerAreaAffect(int direction, int y, int x);
 void damageCorrodingGas(const char *creature_name);
 void damagePoisonedGas(int damage, const char *creature_name);
 void damageFire(int damage, const char *creature_name);
@@ -389,6 +385,12 @@ void playerRestOff();
 // player_eat.cpp
 void playerEat();
 void playerIngestFood(int amount);
+
+// player_run.cpp
+void playerFindInitialize(int direction);
+void playerRunAndFind();
+void playerEndRunning();
+void playerAreaAffect(int direction, int y, int x);
 
 // player_stats.cpp
 int playerStatAdjustmentWisdomIntelligence(int stat);
