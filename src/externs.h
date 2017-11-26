@@ -138,7 +138,6 @@ void itemChargesRemainingDescription(int item_id);
 void itemTypeRemainingCountDescription(int item_id);
 
 // dungeon.c
-void playDungeon();
 void dungeonDisplayMap();
 
 // eat.c
@@ -319,7 +318,7 @@ void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type);
 void itemReplaceInscription(Inventory_t &item, const char *inscription);
 void dungeonResetView();
 
-// moria.cpp
+// moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
 // moria1.c
