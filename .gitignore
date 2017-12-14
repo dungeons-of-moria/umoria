@@ -70,8 +70,10 @@ dkms.conf
 
 # build directories
 umoria.xcodeproj
+nbproject
 umoria
 
+compile_commands.json
 *.gz
 *.zip
 
