@@ -103,6 +103,7 @@ set(
         ${source_dir}/io.cpp
         ${source_dir}/create.cpp
         ${source_dir}/desc.cpp
+        ${source_dir}/inventory.cpp
         ${source_dir}/generate.cpp
         ${source_dir}/sets.cpp
         ${source_dir}/dungeon.cpp
