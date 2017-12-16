@@ -76,14 +76,22 @@ set(
         ${source_dir}/config.h
         ${source_dir}/constant.h
         ${source_dir}/curses.h
-        ${source_dir}/externs.h
-        ${source_dir}/headers.h
-        ${source_dir}/version.h
-        ${source_dir}/types.h
-        ${source_dir}/game.h
         ${source_dir}/dungeon.h
+        ${source_dir}/externs.h
+        ${source_dir}/game.h
+        ${source_dir}/headers.h
         ${source_dir}/monster.h
         ${source_dir}/player.h
+        ${source_dir}/types.h
+        ${source_dir}/version.h
+        ${source_dir}/globals.cpp
+        ${source_dir}/files.cpp
+        ${source_dir}/helpers.cpp
+        ${source_dir}/io.cpp
+        ${source_dir}/rng.cpp
+        ${source_dir}/save.cpp
+        ${source_dir}/scores.cpp
+        ${source_dir}/main.cpp
         ${source_dir}/data_creatures.cpp
         ${source_dir}/data_player.cpp
         ${source_dir}/data_recall.cpp
@@ -91,45 +99,26 @@ set(
         ${source_dir}/data_stores.cpp
         ${source_dir}/data_tables.cpp
         ${source_dir}/data_treasure.cpp
-        ${source_dir}/main.cpp
+        ${source_dir}/create.cpp
+        ${source_dir}/death.cpp
+        ${source_dir}/desc.cpp
+        ${source_dir}/dungeon.cpp
         ${source_dir}/game.cpp
-        ${source_dir}/moria.cpp
+        ${source_dir}/generate.cpp
+        ${source_dir}/help.cpp
+        ${source_dir}/inventory.cpp
+        ${source_dir}/los.cpp
+        ${source_dir}/magic.cpp
         ${source_dir}/misc1.cpp
         ${source_dir}/misc2.cpp
         ${source_dir}/misc3.cpp
         ${source_dir}/misc4.cpp
-        ${source_dir}/store.cpp
-        ${source_dir}/store_inventory.cpp
-        ${source_dir}/files.cpp
-        ${source_dir}/io.cpp
-        ${source_dir}/create.cpp
-        ${source_dir}/desc.cpp
-        ${source_dir}/inventory.cpp
-        ${source_dir}/generate.cpp
-        ${source_dir}/sets.cpp
-        ${source_dir}/dungeon.cpp
-        ${source_dir}/death.cpp
-        ${source_dir}/help.cpp
-        ${source_dir}/magic.cpp
-        ${source_dir}/potions.cpp
-        ${source_dir}/prayer.cpp
-        ${source_dir}/save.cpp
-        ${source_dir}/scores.cpp
-        ${source_dir}/staffs.cpp
-        ${source_dir}/wands.cpp
-        ${source_dir}/scrolls.cpp
-        ${source_dir}/spells.cpp
-        ${source_dir}/wizard.cpp
+        ${source_dir}/monster.cpp
+        ${source_dir}/monster_manager.cpp
+        ${source_dir}/moria.cpp
         ${source_dir}/moria1.cpp
         ${source_dir}/moria2.cpp
         ${source_dir}/moria3.cpp
-        ${source_dir}/los.cpp
-        ${source_dir}/monster.cpp
-        ${source_dir}/monster_manager.cpp
-        ${source_dir}/treasure.cpp
-        ${source_dir}/globals.cpp
-        ${source_dir}/rng.cpp
-        ${source_dir}/recall.cpp
         ${source_dir}/player.cpp
         ${source_dir}/player_bash.cpp
         ${source_dir}/player_eat.cpp
@@ -140,7 +129,18 @@ set(
         ${source_dir}/player_throw.cpp
         ${source_dir}/player_traps.cpp
         ${source_dir}/player_tunnel.cpp
-        ${source_dir}/helpers.cpp
+        ${source_dir}/potions.cpp
+        ${source_dir}/prayer.cpp
+        ${source_dir}/recall.cpp
+        ${source_dir}/scrolls.cpp
+        ${source_dir}/sets.cpp
+        ${source_dir}/spells.cpp
+        ${source_dir}/staffs.cpp
+        ${source_dir}/store.cpp
+        ${source_dir}/store_inventory.cpp
+        ${source_dir}/treasure.cpp
+        ${source_dir}/wands.cpp
+        ${source_dir}/wizard.cpp
 )
 
 
