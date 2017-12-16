@@ -10,7 +10,7 @@
 #include "externs.h"
 
 // Prints the gravestone of the character -RAK-
-void printTomb() {
+static void printTomb() {
     displayDeathFile(config.files.death_tomb);
 
     std::string text;
