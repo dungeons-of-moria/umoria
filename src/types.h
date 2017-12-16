@@ -14,8 +14,6 @@
 // aligned within the structure to their natural size boundary, so that
 // the structures contain no padding and are minimum size.
 
-constexpr uint8_t PLAYER_NAME_SIZE = 27;
-
 typedef char vtype_t[MORIA_MESSAGE_SIZE];
 
 // Note: since its output can easily exceed 80 characters, an object description

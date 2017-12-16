@@ -6,6 +6,8 @@
 
 #pragma once
 
+constexpr uint8_t PLAYER_NAME_SIZE = 27;
+
 // Player_t contains everything to be known about our player character
 typedef struct {
     struct {
