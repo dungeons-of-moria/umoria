@@ -84,6 +84,7 @@ set(
         ${source_dir}/monster.h
         ${source_dir}/player.h
         ${source_dir}/scores.h
+        ${source_dir}/store.h
         ${source_dir}/types.h
         ${source_dir}/version.h
         ${source_dir}/globals.cpp
