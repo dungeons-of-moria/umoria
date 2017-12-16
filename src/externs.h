@@ -404,12 +404,6 @@ void setFileptr(FILE *file);
 void saveHighScore(const HighScore_t &score);
 void readHighScore(HighScore_t &score);
 
-// scores.cpp
-void recordNewHighScore();
-void showScoresScreen();
-uint8_t highScoreGenderLabel();
-int32_t playerCalculateTotalPoints();
-
 // scrolls.c
 void readScroll();
 

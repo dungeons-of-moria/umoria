@@ -125,29 +125,10 @@ typedef struct {
     InventoryRecord_t inventory[STORE_MAX_DISCRETE_ITEMS];
 } Store_t;
 
-// HighScore_t is a score object used for saving to the high score file
-// This structure is 64 bytes in size
-typedef struct {
-    int32_t points;
-    int32_t birth_date;
-    int16_t uid;
-    int16_t mhp;
-    int16_t chp;
-    uint8_t dungeon_depth;
-    uint8_t level;
-    uint8_t deepest_dungeon_depth;
-    uint8_t gender;
-    uint8_t race;
-    uint8_t character_class;
-    char name[PLAYER_NAME_SIZE];
-    char died_from[25];
-} HighScore_t;
-
 //
 // The following are objects for storing the core game data,
 // which is loaded from the large hash maps at game start up.
 //
-
 
 // GameObject_t is a base data object (treasure_type).
 // Holds base game data for any given item in the game such
