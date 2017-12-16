@@ -26,6 +26,9 @@ constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();  // maximum lo
 // uses the number, the program may stop working correctly. Modify the
 // constants at your own risk. -JEW-
 
+constexpr uint8_t MORIA_MESSAGE_SIZE = 80;
+constexpr uint8_t OBJECT_DESCRIPTION_SIZE = 160;
+
 // message line location
 constexpr uint8_t MSG_LINE = 0;
 

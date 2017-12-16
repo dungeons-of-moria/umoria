@@ -136,6 +136,7 @@ typedef struct {
     bool weapon_is_heavy;        // Weapon is too heavy -CJS-
     bool carrying_light;         // `true` when player is carrying light
 } Player_t;
+
 bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();

@@ -15,8 +15,6 @@
 // the structures contain no padding and are minimum size.
 
 constexpr uint8_t PLAYER_NAME_SIZE = 27;
-constexpr uint8_t MORIA_MESSAGE_SIZE = 80;
-constexpr uint8_t OBJECT_DESCRIPTION_SIZE = 160;
 
 typedef char vtype_t[MORIA_MESSAGE_SIZE];
 
