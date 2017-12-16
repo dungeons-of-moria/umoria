@@ -80,6 +80,7 @@ set(
         ${source_dir}/externs.h
         ${source_dir}/game.h
         ${source_dir}/headers.h
+        ${source_dir}/inventory.h
         ${source_dir}/monster.h
         ${source_dir}/player.h
         ${source_dir}/types.h

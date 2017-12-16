@@ -50,10 +50,12 @@
 // General Umoria headers
 
 #include "constant.h"
+#include "inventory.h"
+
 #include "types.h"
 
 #include "config.h"
-#include "game.h"
 #include "dungeon.h"
+#include "game.h"
 #include "monster.h"
 #include "player.h"
