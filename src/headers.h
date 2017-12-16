@@ -51,7 +51,9 @@
 
 #include "constant.h"
 #include "types.h"
+
 #include "config.h"
 #include "game.h"
 #include "dungeon.h"
+#include "monster.h"
 #include "player.h"

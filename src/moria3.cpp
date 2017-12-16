@@ -126,7 +126,7 @@ void dungeonDeleteMonsterFix2(int id) {
 }
 
 // Creates objects nearby the coordinates given -RAK-
-static int dungeonSummonObject(int y, int x, int amount, int object_type) {
+int dungeonSummonObject(int y, int x, int amount, int object_type) {
     int real_type;
 
     if (object_type == 1 || object_type == 5) {
@@ -194,103 +194,7 @@ bool dungeonDeleteObject(int y, int x) {
     return caveTileVisible(Coord_t{y, x});
 }
 
-static int monsterDeathItemDropType(uint32_t flags) {
-    int object;
-
-    if ((flags & CM_CARRY_OBJ) != 0u) {
-        object = 1;
-    } else {
-        object = 0;
-    }
-
-    if ((flags & CM_CARRY_GOLD) != 0u) {
-        object += 2;
-    }
-
-    if ((flags & CM_SMALL_OBJ) != 0u) {
-        object += 4;
-    }
-
-    return object;
-}
-
-static int monsterDeathItemDropCount(uint32_t flags) {
-    int count = 0;
-
-    if (((flags & CM_60_RANDOM) != 0u) && randomNumber(100) < 60) {
-        count++;
-    }
-
-    if (((flags & CM_90_RANDOM) != 0u) && randomNumber(100) < 90) {
-        count++;
-    }
-
-    if ((flags & CM_1D2_OBJ) != 0u) {
-        count += randomNumber(2);
-    }
-
-    if ((flags & CM_2D2_OBJ) != 0u) {
-        count += diceDamageRoll(2, 2);
-    }
-
-    if ((flags & CM_4D2_OBJ) != 0u) {
-        count += diceDamageRoll(4, 2);
-    }
-
-    return count;
-}
-
-// Allocates objects upon a creatures death -RAK-
-// Oh well,  another creature bites the dust. Reward the
-// victor based on flags set in the main creature record.
-//
-// Returns a mask of bits from the given flags which indicates what the
-// monster is seen to have dropped.  This may be added to monster memory.
-uint32_t monsterDeath(int y, int x, uint32_t flags) {
-    int item_type = monsterDeathItemDropType(flags);
-    int item_count = monsterDeathItemDropCount(flags);
-
-    uint32_t dropped_item_id = 0;
-
-    if (item_count > 0) {
-        dropped_item_id = (uint32_t) dungeonSummonObject(y, x, item_count, item_type);
-    }
-
-    // maybe the player died in mid-turn
-    if (((flags & CM_WIN) != 0u) && !game.character_is_dead) {
-        game.total_winner = true;
-
-        printCharacterWinner();
-
-        printMessage("*** CONGRATULATIONS *** You have won the game.");
-        printMessage("You cannot save this game, but you may retire when ready.");
-    }
-
-    if (dropped_item_id == 0) {
-        return 0;
-    }
-
-    uint32_t return_flags = 0;
-
-    if ((dropped_item_id & 255) != 0u) {
-        return_flags |= CM_CARRY_OBJ;
-
-        if ((item_type & 0x04) != 0) {
-            return_flags |= CM_SMALL_OBJ;
-        }
-    }
-
-    if (dropped_item_id >= 256) {
-        return_flags |= CM_CARRY_GOLD;
-    }
-
-    int number_of_items = (dropped_item_id % 256) + (dropped_item_id / 256);
-    number_of_items = number_of_items << CM_TR_SHIFT;
-
-    return return_flags | number_of_items;
-}
-
-static void playerGainKillExperience(const Creature_t &creature) {
+void playerGainKillExperience(const Creature_t &creature) {
     uint16_t exp = creature.kill_exp_value * creature.level;
 
     int32_t quotient = exp / py.misc.level;
@@ -308,54 +212,6 @@ static void playerGainKillExperience(const Creature_t &creature) {
     }
 
     py.misc.exp += quotient;
-}
-
-// Decreases monsters hit points and deletes monster if needed.
-// (Picking on my babies.) -RAK-
-int monsterTakeHit(int monster_id, int damage) {
-    Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
-
-    monster.sleep_count = 0;
-    monster.hp -= damage;
-
-    if (monster.hp >= 0) {
-        return -1;
-    }
-
-    uint32_t treasure_flags = monsterDeath((int) monster.y, (int) monster.x, creature.movement);
-
-    Recall_t &memory = creature_recall[monster.creature_id];
-
-    if ((py.flags.blind < 1 && monster.lit) || ((creature.movement & CM_WIN) != 0u)) {
-        auto tmp = (uint32_t) ((memory.movement & CM_TREASURE) >> CM_TR_SHIFT);
-
-        if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
-            treasure_flags = (uint32_t) ((treasure_flags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
-        }
-
-        memory.movement = (uint32_t) ((memory.movement & ~CM_TREASURE) | treasure_flags);
-
-        if (memory.kills < MAX_SHORT) {
-            memory.kills++;
-        }
-    }
-
-    playerGainKillExperience(creature);
-
-    // can't call displayCharacterExperience() here, as that would result in "new level"
-    // message appearing before "monster dies" message.
-    int m_take_hit = monster.creature_id;
-
-    // in case this is called from within updateMonsters(), this is a horrible
-    // hack, the monsters/updateMonsters() code needs to be rewritten.
-    if (hack_monptr < monster_id) {
-        dungeonDeleteMonster(monster_id);
-    } else {
-        dungeonDeleteMonsterFix1(monster_id);
-    }
-
-    return m_take_hit;
 }
 
 static void playerCalculateToHitBlows(int weapon_id, int weapon_weight, int &blows, int &total_to_hit) {

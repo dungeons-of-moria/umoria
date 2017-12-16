@@ -110,11 +110,6 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 // create.c
 void characterCreate();
 
-// creature.c
-void monsterUpdateVisibility(int monster_id);
-bool monsterMultiply(int y, int x, int creatureID, int monsterID);
-void updateMonsters(bool attack);
-
 // death.c
 void exitGame();
 
@@ -217,6 +212,9 @@ void inventoryDestroyItem(int item_id);
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item);
 void inventoryDropItem(int item_id, bool drop_all);
 int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage);
+bool inventoryDiminishLightAttack(bool noticed);
+bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &monster_hp, bool noticed);
+bool executeDisenchantAttack();
 bool inventoryCanCarryItemCount(const Inventory_t &item);
 bool inventoryCanCarryItem(const Inventory_t &item);
 int inventoryCarryItem(Inventory_t &new_item);
@@ -243,12 +241,6 @@ int dicePlayerDamageRoll(uint8_t *notation_array);
 char caveGetTileSymbol(Coord_t coord);
 bool caveTileVisible(Coord_t coord);
 void drawDungeonPanel();
-bool compactMonsters();
-bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
-void monsterPlaceWinning();
-void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
-bool monsterSummon(int &y, int &x, bool sleeping);
-bool monsterSummonUndead(int &y, int &x);
 int popt();
 void pusht(uint8_t treasure_id);
 
@@ -313,6 +305,24 @@ void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type);
 void itemReplaceInscription(Inventory_t &item, const char *inscription);
 void dungeonResetView();
 
+// monster.cpp
+void monsterUpdateVisibility(int monster_id);
+bool monsterMultiply(int y, int x, int creatureID, int monsterID);
+void updateMonsters(bool attack);
+uint32_t monsterDeath(int y, int x, uint32_t flags);
+int monsterTakeHit(int monster_id, int damage);
+void printMonsterActionText(const std::string &name, const std::string &action);
+std::string monsterNameDescription(const std::string &real_name, bool is_lit);
+bool monsterSleep(int y, int x);
+
+// monster_management.cpp
+bool compactMonsters();
+bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
+void monsterPlaceWinning();
+void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
+bool monsterSummon(int &y, int &x, bool sleeping);
+bool monsterSummonUndead(int &y, int &x);
+
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
@@ -350,9 +360,9 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
 void dungeonDeleteMonster(int id);
 void dungeonDeleteMonsterFix1(int id);
 void dungeonDeleteMonsterFix2(int id);
+int dungeonSummonObject(int y, int x, int amount, int object_type);
 bool dungeonDeleteObject(int y, int x);
-uint32_t monsterDeath(int y, int x, uint32_t flags);
-int monsterTakeHit(int monster_id, int damage);
+void playerGainKillExperience(const Creature_t &creature);
 void chestTrap(int y, int x);
 void objectOpen();
 void dungeonCloseDoor();
@@ -376,6 +386,9 @@ void playerSearchOn();
 void playerSearchOff();
 void playerRestOn();
 void playerRestOff();
+bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
+void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move);
+bool playerTestAttackHits(int attack_id, uint8_t level);
 
 // player_eat.cpp
 void playerEat();
@@ -477,7 +490,6 @@ bool setAlchemistItems(int item_id);
 bool setMagicShopItems(int item_id);
 
 // spells.c
-bool monsterSleep(int y, int x);
 bool dungeonDetectTreasureOnPanel();
 bool dungeonDetectObjectOnPanel();
 bool dungeonDetectTrapOnPanel();

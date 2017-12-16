@@ -96,6 +96,110 @@ int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage)
     return damage;
 }
 
+bool inventoryDiminishLightAttack(bool noticed) {
+    Inventory_t &item = inventory[EQUIPMENT_LIGHT];
+
+    if (item.misc_use > 0) {
+        item.misc_use -= (250 + randomNumber(250));
+
+        if (item.misc_use < 1) {
+            item.misc_use = 1;
+        }
+
+        if (py.flags.blind < 1) {
+            printMessage("Your light dims.");
+        } else {
+            noticed = false;
+        }
+    } else {
+        noticed = false;
+    }
+
+    return noticed;
+}
+
+bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &monster_hp, bool noticed) {
+    Inventory_t &item = inventory[randomNumber(py.unique_inventory_items) - 1];
+
+    bool has_charges = item.category_id == TV_STAFF || item.category_id == TV_WAND;
+
+    if (has_charges && item.misc_use > 0) {
+        monster_hp += creature_level * item.misc_use;
+        item.misc_use = 0;
+        if (!spellItemIdentified(item)) {
+            itemAppendToInscription(item, ID_EMPTY);
+        }
+        printMessage("Energy drains from your pack!");
+    } else {
+        noticed = false;
+    }
+
+    return noticed;
+}
+
+bool executeDisenchantAttack() {
+    int item_id;
+
+    switch (randomNumber(7)) {
+        case 1:
+            item_id = EQUIPMENT_WIELD;
+            break;
+        case 2:
+            item_id = EQUIPMENT_BODY;
+            break;
+        case 3:
+            item_id = EQUIPMENT_ARM;
+            break;
+        case 4:
+            item_id = EQUIPMENT_OUTER;
+            break;
+        case 5:
+            item_id = EQUIPMENT_HANDS;
+            break;
+        case 6:
+            item_id = EQUIPMENT_HEAD;
+            break;
+        case 7:
+            item_id = EQUIPMENT_FEET;
+            break;
+        default:
+            return false;
+    }
+
+    bool success = false;
+    Inventory_t &item = inventory[item_id];
+
+    if (item.to_hit > 0) {
+        item.to_hit -= randomNumber(2);
+
+        // don't send it below zero
+        if (item.to_hit < 0) {
+            item.to_hit = 0;
+        }
+        success = true;
+    }
+    if (item.to_damage > 0) {
+        item.to_damage -= randomNumber(2);
+
+        // don't send it below zero
+        if (item.to_damage < 0) {
+            item.to_damage = 0;
+        }
+        success = true;
+    }
+    if (item.to_ac > 0) {
+        item.to_ac -= randomNumber(2);
+
+        // don't send it below zero
+        if (item.to_ac < 0) {
+            item.to_ac = 0;
+        }
+        success = true;
+    }
+
+    return success;
+}
+
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(const Inventory_t &item) {
     if (py.unique_inventory_items < EQUIPMENT_WIELD) {

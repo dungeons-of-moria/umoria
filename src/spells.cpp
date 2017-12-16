@@ -9,56 +9,10 @@
 #include "headers.h"
 #include "externs.h"
 
-static void printMonsterActionText(const std::string &name, const std::string &action) {
-    printMessage((name + " " + action).c_str());
-}
-
 // Following are spell procedure/functions -RAK-
 // These routines are commonly used in the scroll, potion, wands, and
 // staves routines, and are occasionally called from other areas.
 // Now included are creature spells also.           -RAK
-
-static std::string monsterNameDescription(const std::string &real_name, bool is_lit) {
-    if (is_lit) {
-        return "The " + real_name;
-    }
-    return "It";
-}
-
-// Sleep creatures adjacent to player -RAK-
-bool monsterSleep(int y, int x) {
-    bool asleep = false;
-
-    for (int row = y - 1; row <= y + 1 && row < MAX_HEIGHT; row++) {
-        for (int col = x - 1; col <= x + 1 && col < MAX_WIDTH; col++) {
-            uint8_t monster_id = dg.floor[row][col].creature_id;
-
-            if (monster_id <= 1) {
-                continue;
-            }
-
-            Monster_t &monster = monsters[monster_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
-
-            auto name = monsterNameDescription(creature.name, monster.lit);
-
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
-                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
-                }
-
-                printMonsterActionText(name, "is unaffected.");
-            } else {
-                monster.sleep_count = 500;
-                asleep = true;
-
-                printMonsterActionText(name, "falls asleep.");
-            }
-        }
-    }
-
-    return asleep;
-}
 
 // Detect any treasure on the current panel -RAK-
 bool dungeonDetectTreasureOnPanel() {

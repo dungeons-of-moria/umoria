@@ -78,11 +78,12 @@ set(
         ${source_dir}/curses.h
         ${source_dir}/externs.h
         ${source_dir}/headers.h
+        ${source_dir}/version.h
         ${source_dir}/types.h
         ${source_dir}/game.h
         ${source_dir}/dungeon.h
+        ${source_dir}/monster.h
         ${source_dir}/player.h
-        ${source_dir}/version.h
         ${source_dir}/data_creatures.cpp
         ${source_dir}/data_player.cpp
         ${source_dir}/data_recall.cpp
@@ -107,7 +108,6 @@ set(
         ${source_dir}/generate.cpp
         ${source_dir}/sets.cpp
         ${source_dir}/dungeon.cpp
-        ${source_dir}/creature.cpp
         ${source_dir}/death.cpp
         ${source_dir}/help.cpp
         ${source_dir}/magic.cpp
@@ -124,7 +124,8 @@ set(
         ${source_dir}/moria2.cpp
         ${source_dir}/moria3.cpp
         ${source_dir}/los.cpp
-        ${source_dir}/monsters.cpp
+        ${source_dir}/monster.cpp
+        ${source_dir}/monster_manager.cpp
         ${source_dir}/treasure.cpp
         ${source_dir}/globals.cpp
         ${source_dir}/rng.cpp
