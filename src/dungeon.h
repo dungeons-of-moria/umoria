@@ -53,3 +53,5 @@ typedef struct {
     // Floor definitions
     Tile_t floor[MAX_HEIGHT][MAX_WIDTH];
 } Dungeon_t;
+
+void dungeonDisplayMap();

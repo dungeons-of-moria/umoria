@@ -50,3 +50,12 @@ typedef struct {
     uint8_t dice;
     uint8_t sides;
 } MonsterAttack_t;
+
+void monsterUpdateVisibility(int monster_id);
+bool monsterMultiply(int y, int x, int creatureID, int monsterID);
+void updateMonsters(bool attack);
+uint32_t monsterDeath(int y, int x, uint32_t flags);
+int monsterTakeHit(int monster_id, int damage);
+void printMonsterActionText(const std::string &name, const std::string &action);
+std::string monsterNameDescription(const std::string &real_name, bool is_lit);
+bool monsterSleep(int y, int x);

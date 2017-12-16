@@ -131,9 +131,6 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
 void itemChargesRemainingDescription(int item_id);
 void itemTypeRemainingCountDescription(int item_id);
 
-// dungeon.c
-void dungeonDisplayMap();
-
 // files.c
 bool initializeScoreFile();
 void displaySplashScreen();
@@ -141,16 +138,6 @@ void displayTextHelpFile(const std::string &filename);
 void displayDeathFile(const std::string &filename);
 void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
-
-// game.cpp
-void seedsInitialize(uint32_t seed);
-void seedSet(uint32_t seed);
-void seedResetToOldSeed();
-int randomNumber(int max);
-int randomNumberNormalDistribution(int mean, int standard);
-void setGameOptions();
-bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
-bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 
 // generate.c
 void generateCave();
@@ -305,16 +292,6 @@ void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type);
 void itemReplaceInscription(Inventory_t &item, const char *inscription);
 void dungeonResetView();
 
-// monster.cpp
-void monsterUpdateVisibility(int monster_id);
-bool monsterMultiply(int y, int x, int creatureID, int monsterID);
-void updateMonsters(bool attack);
-uint32_t monsterDeath(int y, int x, uint32_t flags);
-int monsterTakeHit(int monster_id, int damage);
-void printMonsterActionText(const std::string &name, const std::string &action);
-std::string monsterNameDescription(const std::string &real_name, bool is_lit);
-bool monsterSleep(int y, int x);
-
 // monster_management.cpp
 bool compactMonsters();
 bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
@@ -370,25 +347,6 @@ bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 int getRandomDirection();
-
-// player.cpp
-bool playerIsMale();
-void playerSetGender(bool is_male);
-const char *playerGetGenderLabel();
-void playerInitializeBaseExperienceLevels();
-void playerCalculateHitPoints();
-int playerAttackBlows(int weight, int &weight_to_hit);
-bool playerMovePosition(int dir, int &new_y, int &new_x);
-void playerTeleport(int new_distance);
-bool playerNoLight();
-void playerDisturb(int major_disturbance, int light_disturbance);
-void playerSearchOn();
-void playerSearchOff();
-void playerRestOn();
-void playerRestOff();
-bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
-void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move);
-bool playerTestAttackHits(int attack_id, uint8_t level);
 
 // player_eat.cpp
 void playerEat();

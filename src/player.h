@@ -136,3 +136,20 @@ typedef struct {
     bool weapon_is_heavy;        // Weapon is too heavy -CJS-
     bool carrying_light;         // `true` when player is carrying light
 } Player_t;
+bool playerIsMale();
+void playerSetGender(bool is_male);
+const char *playerGetGenderLabel();
+void playerInitializeBaseExperienceLevels();
+void playerCalculateHitPoints();
+int playerAttackBlows(int weight, int &weight_to_hit);
+bool playerMovePosition(int dir, int &new_y, int &new_x);
+void playerTeleport(int new_distance);
+bool playerNoLight();
+void playerDisturb(int major_disturbance, int light_disturbance);
+void playerSearchOn();
+void playerSearchOff();
+void playerRestOn();
+void playerRestOff();
+bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
+void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move);
+bool playerTestAttackHits(int attack_id, uint8_t level);
