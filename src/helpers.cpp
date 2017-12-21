@@ -4,10 +4,24 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Generic helper functions
-
 #include "headers.h"
 #include <cassert>
+
+// Returns position of first set bit and clears that bit -RAK-
+int getAndClearFirstBit(uint32_t &flag) {
+    uint32_t mask = 0x1;
+
+    for (int i = 0; i < (int) sizeof(flag) * 8; i++) {
+        if ((flag & mask) != 0u) {
+            flag &= ~mask;
+            return i;
+        }
+        mask <<= 1;
+    }
+
+    // no one bits found
+    return -1;
+}
 
 // Insert a long number into a string (was `insert_lnum()` function)
 void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign) {

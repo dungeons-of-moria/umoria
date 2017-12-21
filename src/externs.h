@@ -145,14 +145,6 @@ void generateCave();
 // help.c
 void displayWorldObjectDescription();
 
-// helpers
-void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
-void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);
-bool isVowel(char ch);
-bool stringToNumber(const char *str, int &number);
-uint32_t getCurrentUnixTime();
-void humanDateString(char *day);
-
 // io.c
 bool terminalInitialize();
 void terminalRestore();
@@ -202,7 +194,6 @@ void look();
 void getAndCastMagicSpell();
 
 // misc1.c
-int getAndClearFirstBit(uint32_t &flag);
 bool coordInBounds(Coord_t coord);
 bool coordOutsidePanel(Coord_t coord, bool force);
 bool coordInsidePanel(Coord_t coord);

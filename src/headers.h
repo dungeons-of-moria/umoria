@@ -50,6 +50,7 @@
 // General Umoria headers
 
 #include "constant.h"
+#include "helpers.h"
 #include "inventory.h"
 
 #include "types.h"

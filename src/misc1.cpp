@@ -11,22 +11,6 @@
 
 static void panelBounds();
 
-// Returns position of first set bit and clears that bit -RAK-
-int getAndClearFirstBit(uint32_t &flag) {
-    uint32_t mask = 0x1;
-
-    for (int i = 0; i < (int) sizeof(flag) * 8; i++) {
-        if ((flag & mask) != 0u) {
-            flag &= ~mask;
-            return i;
-        }
-        mask <<= 1;
-    }
-
-    // no one bits found
-    return -1;
-}
-
 // Checks a co-ordinate for in bounds status -RAK-
 bool coordInBounds(Coord_t coord) {
     bool valid_y = coord.y > 0 && coord.y < dg.height - 1;
