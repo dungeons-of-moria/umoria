@@ -377,7 +377,7 @@ static void openClosedChest(int y, int x) {
 }
 
 // Opens a closed door or closed chest. -RAK-
-void objectOpen() {
+void playerOpenClosedObject() {
     int dir;
 
     if (!getDirectionWithMemory(CNIL, dir)) {
@@ -414,7 +414,7 @@ void objectOpen() {
 }
 
 // Closes an open door. -RAK-
-void dungeonCloseDoor() {
+void playerCloseDoor() {
     int dir;
 
     if (!getDirectionWithMemory(CNIL, dir)) {
@@ -458,7 +458,7 @@ void dungeonCloseDoor() {
 
 // Tunneling through real wall: 10, 11, 12 -RAK-
 // Used by TUNNEL and WALL_TO_MUD
-bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance) {
+bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance) {
     if (digging_ability <= digging_chance) {
         return false;
     }

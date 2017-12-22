@@ -190,7 +190,7 @@ bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_c
 void playerTakesHit(int damage, const char *creature_name);
 
 // moria2.c
-void dungeonChangeTrapVisibility(int y, int x);
+void trapChangeVisibility(int y, int x);
 void playerSearch(int y, int x, int chance);
 void damageCorrodingGas(const char *creature_name);
 void damagePoisonedGas(int damage, const char *creature_name);
@@ -203,9 +203,9 @@ void damageAcid(int damage, const char *creature_name);
 int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
 void playerGainKillExperience(const Creature_t &creature);
 void chestTrap(int y, int x);
-void objectOpen();
-void dungeonCloseDoor();
-bool dungeonTunnelWall(int y, int x, int digging_ability, int digging_chance);
+void playerOpenClosedObject();
+void playerCloseDoor();
+bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);
 void playerAttackPosition(int y, int x);
 int getRandomDirection();
@@ -282,7 +282,7 @@ void saveHighScore(const HighScore_t &score);
 void readHighScore(HighScore_t &score);
 
 // scrolls.c
-void readScroll();
+void scrollRead();
 
 // sets.c
 bool setRooms(int tile_id);
@@ -305,11 +305,11 @@ bool setAlchemistItems(int item_id);
 bool setMagicShopItems(int item_id);
 
 // spells.c
-bool dungeonDetectTreasureOnPanel();
-bool dungeonDetectObjectOnPanel();
-bool dungeonDetectTrapOnPanel();
-bool dungeonDetectSecretDoorsOnPanel();
-bool spellDetectInvisibleCreaturesOnPanel();
+bool spellDetectTreasureWithinVicinity();
+bool spellDetectObjectsWithinVicinity();
+bool spellDetectTrapsWithinVicinity();
+bool spellDetectSecretDoorssWithinVicinity();
+bool spellDetectInvisibleCreaturesWithinVicinity();
 bool spellLightArea(int y, int x);
 bool spellDarkenArea(int y, int x);
 void spellMapCurrentArea();
@@ -346,7 +346,7 @@ bool spellSleepAllMonsters();
 bool spellMassPolymorph();
 bool spellDetectEvil();
 bool spellChangePlayerHitPoints(int adjustment);
-void dungeonEarthquake();
+void spellEarthquake();
 void spellCreateFood();
 bool spellDispelCreature(int creature_defense, int damage);
 bool spellTurnUndead();
@@ -365,7 +365,7 @@ bool spellRemoveCurseFromAllItems();
 bool spellRestorePlayerLevels();
 
 // staffs.c
-void useStaff();
+void staffUse();
 
 // wands.c
 void wandAim();

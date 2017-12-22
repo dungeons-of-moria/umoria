@@ -90,8 +90,8 @@ static void castSpell(int spell_id) {
             (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
             break;
         case MageSpellTypes::find_hidden_traps_doors:
-            (void) dungeonDetectSecretDoorsOnPanel();
-            (void) dungeonDetectTrapOnPanel();
+            (void) spellDetectSecretDoorssWithinVicinity();
+            (void) spellDetectTrapsWithinVicinity();
             break;
         case MageSpellTypes::stinking_cloud:
             if (getDirectionWithMemory(CNIL, dir)) {

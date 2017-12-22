@@ -248,7 +248,7 @@ enum class TrapTypes {
 // Player hit a trap.  (Chuckle) -RAK-
 static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
-    dungeonChangeTrapVisibility(y, x);
+    trapChangeVisibility(y, x);
 
     Inventory_t &item = treasure_list[dg.floor[y][x].treasure_id];
 

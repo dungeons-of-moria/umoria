@@ -414,7 +414,7 @@ static void scrollWordOfRecall() {
 }
 
 // Scrolls for the reading -RAK-
-void readScroll() {
+void scrollRead() {
     game.player_free_turn = true;
 
     int item_pos_start, item_pos_end;
@@ -493,16 +493,16 @@ void readScroll() {
                 identified = true;
                 break;
             case 15:
-                identified = dungeonDetectTreasureOnPanel();
+                identified = spellDetectTreasureWithinVicinity();
                 break;
             case 16:
-                identified = dungeonDetectObjectOnPanel();
+                identified = spellDetectObjectsWithinVicinity();
                 break;
             case 17:
-                identified = dungeonDetectTrapOnPanel();
+                identified = spellDetectTrapsWithinVicinity();
                 break;
             case 18:
-                identified = dungeonDetectSecretDoorsOnPanel();
+                identified = spellDetectSecretDoorssWithinVicinity();
                 break;
             case 19:
                 printMessage("This is a mass genocide scroll.");
@@ -510,7 +510,7 @@ void readScroll() {
                 identified = true;
                 break;
             case 20:
-                identified = spellDetectInvisibleCreaturesOnPanel();
+                identified = spellDetectInvisibleCreaturesWithinVicinity();
                 break;
             case 21:
                 printMessage("There is a high pitched humming noise.");

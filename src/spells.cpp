@@ -15,7 +15,7 @@
 // Now included are creature spells also.           -RAK
 
 // Detect any treasure on the current panel -RAK-
-bool dungeonDetectTreasureOnPanel() {
+bool spellDetectTreasureWithinVicinity() {
     bool detected = false;
 
     for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
@@ -34,7 +34,7 @@ bool dungeonDetectTreasureOnPanel() {
 }
 
 // Detect all objects on the current panel -RAK-
-bool dungeonDetectObjectOnPanel() {
+bool spellDetectObjectsWithinVicinity() {
     bool detected = false;
 
     for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
@@ -53,7 +53,7 @@ bool dungeonDetectObjectOnPanel() {
 }
 
 // Locates and displays traps on current panel -RAK-
-bool dungeonDetectTrapOnPanel() {
+bool spellDetectTrapsWithinVicinity() {
     bool detected = false;
 
     for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
@@ -66,7 +66,7 @@ bool dungeonDetectTrapOnPanel() {
 
             if (treasure_list[tile.treasure_id].category_id == TV_INVIS_TRAP) {
                 tile.field_mark = true;
-                dungeonChangeTrapVisibility(y, x);
+                trapChangeVisibility(y, x);
                 detected = true;
             } else if (treasure_list[tile.treasure_id].category_id == TV_CHEST) {
                 Inventory_t &item = treasure_list[tile.treasure_id];
@@ -79,7 +79,7 @@ bool dungeonDetectTrapOnPanel() {
 }
 
 // Locates and displays all secret doors on current panel -RAK-
-bool dungeonDetectSecretDoorsOnPanel() {
+bool spellDetectSecretDoorssWithinVicinity() {
     bool detected = false;
 
     for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
@@ -94,7 +94,7 @@ bool dungeonDetectSecretDoorsOnPanel() {
                 // Secret doors
 
                 tile.field_mark = true;
-                dungeonChangeTrapVisibility(y, x);
+                trapChangeVisibility(y, x);
                 detected = true;
             } else if ((treasure_list[tile.treasure_id].category_id == TV_UP_STAIR || treasure_list[tile.treasure_id].category_id == TV_DOWN_STAIR) && !tile.field_mark) {
                 // Staircases
@@ -110,7 +110,7 @@ bool dungeonDetectSecretDoorsOnPanel() {
 }
 
 // Locates and displays all invisible creatures on current panel -RAK-
-bool spellDetectInvisibleCreaturesOnPanel() {
+bool spellDetectInvisibleCreaturesWithinVicinity() {
     bool detected = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
@@ -522,7 +522,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
                 item.misc_use = 0;
             } else if (item.category_id == TV_SECRET_DOOR) {
                 tile->field_mark = true;
-                dungeonChangeTrapVisibility(y, x);
+                trapChangeVisibility(y, x);
                 disarmed = true;
             } else if (item.category_id == TV_CHEST && item.flags != 0) {
                 disarmed = true;
@@ -545,7 +545,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
 }
 
 // Return flags for given type area affect -RAK-
-static void getAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_type, bool (**destroy)(Inventory_t *)) {
+static void spellGetAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_type, bool (**destroy)(Inventory_t *)) {
     switch (spell_type) {
         case GF_MAGIC_MISSILE:
             weapon_type = 0;
@@ -583,7 +583,7 @@ static void getAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_
             *destroy = setNull;
             break;
         default:
-            printMessage("ERROR in getAreaAffectFlags()\n");
+            printMessage("ERROR in spellGetAreaAffectFlags()\n");
     }
 }
 
@@ -642,7 +642,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type, weapon_type, harm_type, &dummy);
+    spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &dummy);
 
     int distance = 0;
     bool finished = false;
@@ -684,7 +684,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
+    spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
     int distance = 0;
 
@@ -809,7 +809,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
     bool (*destroy)(Inventory_t *);
     int harm_type;
     uint32_t weapon_type;
-    getAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
+    spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
@@ -1213,7 +1213,7 @@ bool spellWallToMud(int y, int x, int direction) {
         if (tile.feature_id >= MIN_CAVE_WALL && tile.feature_id != TILE_BOUNDARY_WALL) {
             finished = true;
 
-            (void) dungeonTunnelWall(y, x, 1, 0);
+            (void) playerTunnelWall(y, x, 1, 0);
 
             if (caveTileVisible(Coord_t{y, x})) {
                 turned = true;
@@ -1780,7 +1780,7 @@ static void earthquakeHitsMonster(int monsterID) {
 // This is a fun one.  In a given block, pick some walls and
 // turn them into open spots.  Pick some open spots and dg.game_turn
 // them into walls.  An "Earthquake" effect. -RAK-
-void dungeonEarthquake() {
+void spellEarthquake() {
     for (int y = py.row - 8; y <= py.row + 8; y++) {
         for (int x = py.col - 8; x <= py.col + 8; x++) {
             if ((y != py.row || x != py.col) && coordInBounds(Coord_t{y, x}) && randomNumber(8) == 1) {
@@ -2021,7 +2021,7 @@ bool spellSlowPoison() {
     return false;
 }
 
-static void replace_spot(int y, int x, int typ) {
+static void replaceSpot(int y, int x, int typ) {
     Tile_t &tile = dg.floor[y][x];
 
     switch (typ) {
@@ -2075,11 +2075,11 @@ void spellDestroyArea(int y, int x) {
 
                     // clear player's spot, but don't put wall there
                     if (distance == 0) {
-                        replace_spot(pos_y, pos_x, 1);
+                        replaceSpot(pos_y, pos_x, 1);
                     } else if (distance < 13) {
-                        replace_spot(pos_y, pos_x, randomNumber(6));
+                        replaceSpot(pos_y, pos_x, randomNumber(6));
                     } else if (distance < 16) {
-                        replace_spot(pos_y, pos_x, randomNumber(9));
+                        replaceSpot(pos_y, pos_x, randomNumber(9));
                     }
                 }
             }

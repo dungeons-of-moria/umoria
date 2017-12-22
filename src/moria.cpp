@@ -1896,7 +1896,7 @@ static void doCommand(char command) {
             game.player_free_turn = true;
             break;
         case 'c': // (c)lose an object
-            dungeonCloseDoor();
+            playerCloseDoor();
             break;
         case 'd': // (d)rop something
             inventoryExecuteCommand('d');
@@ -1921,7 +1921,7 @@ static void doCommand(char command) {
             getAndCastMagicSpell();
             break;
         case 'o': // (o)pen something
-            objectOpen();
+            playerOpenClosedObject();
             break;
         case 'p': // (p)ray
             pray();
@@ -1930,7 +1930,7 @@ static void doCommand(char command) {
             quaff();
             break;
         case 'r': // (r)ead
-            readScroll();
+            scrollRead();
             break;
         case 's': // (s)earch for a turn
             playerSearch(py.row, py.col, py.misc.chance_in_search);
@@ -1939,7 +1939,7 @@ static void doCommand(char command) {
             inventoryExecuteCommand('t');
             break;
         case 'Z': // (Z)ap a staff  (u)se a staff
-            useStaff();
+            staffUse();
             break;
         case 'v': // (v)ersion of game
             displayTextHelpFile(config.files.versions_history);

@@ -13,7 +13,7 @@ static bool damageMinusAC(uint32_t typ_dam);
 
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
-void dungeonChangeTrapVisibility(int y, int x) {
+void trapChangeVisibility(int y, int x) {
     uint8_t treasure_id = dg.floor[y][x].treasure_id;
 
     Inventory_t &item = treasure_list[treasure_id];
@@ -72,14 +72,14 @@ void playerSearch(int y, int x, int chance) {
                 (void) sprintf(msg, "You have found %s", description);
                 printMessage(msg);
 
-                dungeonChangeTrapVisibility(i, j);
+                trapChangeVisibility(i, j);
                 playerEndRunning();
             } else if (item.category_id == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
-                dungeonChangeTrapVisibility(i, j);
+                trapChangeVisibility(i, j);
                 playerEndRunning();
             } else if (item.category_id == TV_CHEST) {
                 // Chest is trapped?

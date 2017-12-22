@@ -99,10 +99,10 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellLightArea(py.row, py.col);
             break;
         case PriestSpellTypes::find_traps:
-            (void) dungeonDetectTrapOnPanel();
+            (void) spellDetectTrapsWithinVicinity();
             break;
         case PriestSpellTypes::detect_doors_stairs:
-            (void) dungeonDetectSecretDoorsOnPanel();
+            (void) spellDetectSecretDoorssWithinVicinity();
             break;
         case PriestSpellTypes::slow_poison:
             (void) spellSlowPoison();
@@ -157,7 +157,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) playerProtectEvil();
             break;
         case PriestSpellTypes::earthquake:
-            dungeonEarthquake();
+            spellEarthquake();
             break;
         case PriestSpellTypes::sense_surroundings:
             spellMapCurrentArea();

@@ -100,16 +100,16 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = spellLightArea(py.row, py.col);
                 break;
             case StaffSpellTypes::detect_doors_stairs:
-                identified = dungeonDetectSecretDoorsOnPanel();
+                identified = spellDetectSecretDoorssWithinVicinity();
                 break;
             case StaffSpellTypes::trap_location:
-                identified = dungeonDetectTrapOnPanel();
+                identified = spellDetectTrapsWithinVicinity();
                 break;
             case StaffSpellTypes::treasure_location:
-                identified = dungeonDetectTreasureOnPanel();
+                identified = spellDetectTreasureWithinVicinity();
                 break;
             case StaffSpellTypes::object_location:
-                identified = dungeonDetectObjectOnPanel();
+                identified = spellDetectObjectsWithinVicinity();
                 break;
             case StaffSpellTypes::teleportation:
                 playerTeleport(100);
@@ -117,7 +117,7 @@ static bool staffDischarge(Inventory_t &item) {
                 break;
             case StaffSpellTypes::earthquakes:
                 identified = true;
-                dungeonEarthquake();
+                spellEarthquake();
                 break;
             case StaffSpellTypes::summoning:
                 identified = false;
@@ -149,7 +149,7 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = spellChangePlayerHitPoints(randomNumber(8));
                 break;
             case StaffSpellTypes::detect_invisible:
-                identified = spellDetectInvisibleCreaturesOnPanel();
+                identified = spellDetectInvisibleCreaturesWithinVicinity();
                 break;
             case StaffSpellTypes::speed:
                 if (py.flags.fast == 0) {
@@ -201,7 +201,7 @@ static bool staffDischarge(Inventory_t &item) {
 }
 
 // Use a staff. -RAK-
-void useStaff() {
+void staffUse() {
     game.player_free_turn = true;
 
     int item_pos_start, item_pos_end;
