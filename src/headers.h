@@ -62,3 +62,4 @@
 #include "player.h"
 #include "scores.h"
 #include "store.h"
+#include "ui.h"

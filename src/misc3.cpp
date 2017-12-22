@@ -519,14 +519,6 @@ void printCharacterStatsBlock() {
     printCharacterStudyInstruction();
 }
 
-// Draws entire screen -RAK-
-void drawCavePanel() {
-    clearScreen();
-    printCharacterStatsBlock();
-    drawDungeonPanel();
-    printCharacterCurrentDepth();
-}
-
 // Prints the following information on the screen. -JWT-
 void printCharacterInformation() {
     clearScreen();

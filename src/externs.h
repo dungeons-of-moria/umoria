@@ -187,8 +187,6 @@ void getAndCastMagicSpell();
 
 // misc1.c
 bool coordInBounds(Coord_t coord);
-bool coordOutsidePanel(Coord_t coord, bool force);
-bool coordInsidePanel(Coord_t coord);
 int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b);
 int coordWallsNextTo(Coord_t coord);
 int coordCorridorWallsNextTo(Coord_t coord);
@@ -196,7 +194,6 @@ int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
 char caveGetTileSymbol(Coord_t coord);
 bool caveTileVisible(Coord_t coord);
-void drawDungeonPanel();
 int popt();
 void pusht(uint8_t treasure_id);
 
@@ -232,7 +229,6 @@ void printCharacterSpeed();
 void printCharacterStudyInstruction();
 void printCharacterWinner();
 void printCharacterStatsBlock();
-void drawCavePanel();
 void printCharacterInformation();
 void printCharacterStats();
 const char *statRating(int y, int x);
@@ -259,7 +255,6 @@ bool playerSavingThrow();
 void itemInscribe();
 void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type);
 void itemReplaceInscription(Inventory_t &item, const char *inscription);
-void dungeonResetView();
 
 // monster_management.cpp
 bool compactMonsters();

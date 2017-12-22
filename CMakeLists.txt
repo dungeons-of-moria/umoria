@@ -87,6 +87,7 @@ set(
         ${source_dir}/scores.h
         ${source_dir}/store.h
         ${source_dir}/types.h
+        ${source_dir}/ui.h
         ${source_dir}/version.h
         ${source_dir}/globals.cpp
         ${source_dir}/helpers.cpp
@@ -143,6 +144,7 @@ set(
         ${source_dir}/store.cpp
         ${source_dir}/store_inventory.cpp
         ${source_dir}/treasure.cpp
+        ${source_dir}/ui.cpp
         ${source_dir}/wands.cpp
         ${source_dir}/wizard.cpp
 )
