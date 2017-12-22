@@ -108,6 +108,7 @@ set(
         ${source_dir}/dungeon.cpp
         ${source_dir}/game.cpp
         ${source_dir}/game_files.cpp
+        ${source_dir}/game_objects.cpp
         ${source_dir}/generate.cpp
         ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp

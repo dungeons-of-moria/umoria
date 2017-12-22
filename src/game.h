@@ -39,6 +39,11 @@ void setGameOptions();
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 
+// game object management
+int popt();
+void pusht(uint8_t treasure_id);
+int itemGetRandomObjectId(int level, bool must_be_small);
+
 // game files
 bool initializeScoreFile();
 void displaySplashScreen();

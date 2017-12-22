@@ -153,11 +153,8 @@ void magicTreasureMagicalAbility(int item_id, int level);
 // misc1.c
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
-int popt();
-void pusht(uint8_t treasure_id);
 
 // misc3.c
-int itemGetRandomObjectId(int level, bool must_be_small);
 char *playerTitle();
 int playerCarryingLoadLimit();
 void playerStrength();

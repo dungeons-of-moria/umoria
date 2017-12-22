@@ -9,60 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-// Returns the array number of a random object -RAK-
-int itemGetRandomObjectId(int level, bool must_be_small) {
-    if (level == 0) {
-        return randomNumber(treasure_levels[0]) - 1;
-    }
-
-    if (level >= TREASURE_MAX_LEVELS) {
-        level = TREASURE_MAX_LEVELS;
-    } else if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
-        level = level * TREASURE_MAX_LEVELS / randomNumber(TREASURE_MAX_LEVELS) + 1;
-        if (level > TREASURE_MAX_LEVELS) {
-            level = TREASURE_MAX_LEVELS;
-        }
-    }
-
-    int object_id;
-
-    // This code has been added to make it slightly more likely to get the
-    // higher level objects.  Originally a uniform distribution over all
-    // objects less than or equal to the dungeon level. This distribution
-    // makes a level n objects occur approx 2/n% of the time on level n,
-    // and 1/2n are 0th level.
-    do {
-        if (randomNumber(2) == 1) {
-            object_id = randomNumber(treasure_levels[level]) - 1;
-        } else {
-            // Choose three objects, pick the highest level.
-            object_id = randomNumber(treasure_levels[level]) - 1;
-
-            int j = randomNumber(treasure_levels[level]) - 1;
-
-            if (object_id < j) {
-                object_id = j;
-            }
-
-            j = randomNumber(treasure_levels[level]) - 1;
-
-            if (object_id < j) {
-                object_id = j;
-            }
-
-            int foundLevel = game_objects[sorted_objects[object_id]].depth_first_found;
-
-            if (foundLevel == 0) {
-                object_id = randomNumber(treasure_levels[0]) - 1;
-            } else {
-                object_id = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
-            }
-        }
-    } while (must_be_small && setItemsLargerThanChests(&game_objects[sorted_objects[object_id]]));
-
-    return object_id;
-}
-
 char *playerTitle() {
     const char *p = nullptr;
 
