@@ -191,7 +191,7 @@ void playerTakesHit(int damage, const char *creature_name);
 
 // moria2.c
 void dungeonChangeTrapVisibility(int y, int x);
-void dungeonSearch(int y, int x, int chance);
+void playerSearch(int y, int x, int chance);
 void damageCorrodingGas(const char *creature_name);
 void damagePoisonedGas(int damage, const char *creature_name);
 void damageFire(int damage, const char *creature_name);

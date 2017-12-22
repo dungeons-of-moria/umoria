@@ -162,7 +162,7 @@ void playerTunnel(int direction) {
                 } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
-                    dungeonSearch(py.row, py.col, py.misc.chance_in_search);
+                    playerSearch(py.row, py.col, py.misc.chance_in_search);
                 } else {
                     abort();
                 }

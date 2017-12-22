@@ -34,7 +34,7 @@ void dungeonChangeTrapVisibility(int y, int x) {
 }
 
 // Searches for hidden things. -RAK-
-void dungeonSearch(int y, int x, int chance) {
+void playerSearch(int y, int x, int chance) {
     if (py.flags.confused > 0) {
         chance = chance / 10;
     }
