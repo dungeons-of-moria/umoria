@@ -144,17 +144,17 @@ void identifyGameObject();
 bool los(int from_y, int from_x, int to_y, int to_x);
 void look();
 
-// magic.c
+// mage_spells.cpp
 void getAndCastMagicSpell();
+
+// magic_items.cpp
+void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc1.c
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
 int popt();
 void pusht(uint8_t treasure_id);
-
-// misc2.c
-void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc3.c
 int itemGetRandomObjectId(int level, bool must_be_small);

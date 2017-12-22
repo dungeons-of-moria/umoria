@@ -112,9 +112,9 @@ set(
         ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp
         ${source_dir}/los.cpp
-        ${source_dir}/magic.cpp
+        ${source_dir}/mage_spells.cpp
+        ${source_dir}/magic_items.cpp
         ${source_dir}/misc1.cpp
-        ${source_dir}/misc2.cpp
         ${source_dir}/misc3.cpp
         ${source_dir}/monster.cpp
         ${source_dir}/monster_manager.cpp

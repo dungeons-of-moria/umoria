@@ -262,3 +262,4 @@ void getAndCastMagicSpell() {
 
     printCharacterCurrentMana();
 }
+
