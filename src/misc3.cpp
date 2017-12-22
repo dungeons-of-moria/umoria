@@ -15,44 +15,6 @@ static char blank_string[] = "                        ";
 
 static int spellChanceOfSuccess(int spell_id);
 
-// Places a particular trap at location y, x -RAK-
-void dungeonSetTrap(int y, int x, int sub_type_id) {
-    int free_treasure_id = popt();
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
-}
-
-// Places rubble at location y, x -RAK-
-void dungeonPlaceRubble(int y, int x) {
-    int free_treasure_id = popt();
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
-    dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
-    inventoryItemCopyTo(OBJ_RUBBLE, treasure_list[free_treasure_id]);
-}
-
-// Places a treasure (Gold or Gems) at given row, column -RAK-
-void dungeonPlaceGold(int y, int x) {
-    int free_treasure_id = popt();
-
-    int gold_type_id = ((randomNumber(dg.current_level + 2) + 2) / 2) - 1;
-
-    if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
-        gold_type_id += randomNumber(dg.current_level + 1);
-    }
-
-    if (gold_type_id >= MAX_GOLD_TYPES) {
-        gold_type_id = MAX_GOLD_TYPES - 1;
-    }
-
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
-    treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
-
-    if (dg.floor[y][x].creature_id == 1) {
-        printMessage("You feel something roll beneath your feet.");
-    }
-}
-
 // Returns the array number of a random object -RAK-
 int itemGetRandomObjectId(int level, bool must_be_small) {
     if (level == 0) {
@@ -105,77 +67,6 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
     } while (must_be_small && setItemsLargerThanChests(&game_objects[sorted_objects[object_id]]));
 
     return object_id;
-}
-
-// Places an object at given row, column co-ordinate -RAK-
-void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
-    int free_treasure_id = popt();
-
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
-
-    int object_id = itemGetRandomObjectId(dg.current_level, must_be_small);
-    inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
-
-    magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
-
-    if (dg.floor[y][x].creature_id == 1) {
-        printMessage("You feel something roll beneath your feet."); // -CJS-
-    }
-}
-
-// Allocates an object for tunnels and rooms -RAK-
-void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number) {
-    int y, x;
-
-    for (int i = 0; i < number; i++) {
-        // don't put an object beneath the player, this could cause
-        // problems if player is standing under rubble, or on a trap.
-        do {
-            y = randomNumber(dg.height) - 1;
-            x = randomNumber(dg.width) - 1;
-        } while (!(*set_function)(dg.floor[y][x].feature_id) || dg.floor[y][x].treasure_id != 0 || (y == py.row && x == py.col));
-
-        switch (object_type) {
-            case 1:
-                dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
-                break;
-            case 2:
-                // NOTE: object_type == 2 is no longer used - it used to be visible traps.
-                // FIXME: there was no `break` here so `case 3` catches it? -MRC-
-            case 3:
-                dungeonPlaceRubble(y, x);
-                break;
-            case 4:
-                dungeonPlaceGold(y, x);
-                break;
-            case 5:
-                dungeonPlaceRandomObjectAt(y, x, false);
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-// Creates objects nearby the coordinates given -RAK-
-void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
-    do {
-        for (int i = 0; i <= 10; i++) {
-            int j = y - 3 + randomNumber(5);
-            int k = x - 4 + randomNumber(7);
-
-            if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
-                if (randomNumber(100) < 75) {
-                    dungeonPlaceRandomObjectAt(j, k, false);
-                } else {
-                    dungeonPlaceGold(j, k);
-                }
-                i = 9;
-            }
-        }
-
-        tries--;
-    } while (tries != 0);
 }
 
 // Converts stat num into string -RAK-

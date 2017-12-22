@@ -157,14 +157,8 @@ void look();
 void getAndCastMagicSpell();
 
 // misc1.c
-bool coordInBounds(Coord_t coord);
-int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b);
-int coordWallsNextTo(Coord_t coord);
-int coordCorridorWallsNextTo(Coord_t coord);
 int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
-char caveGetTileSymbol(Coord_t coord);
-bool caveTileVisible(Coord_t coord);
 int popt();
 void pusht(uint8_t treasure_id);
 
@@ -172,13 +166,7 @@ void pusht(uint8_t treasure_id);
 void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc3.c
-void dungeonSetTrap(int y, int x, int sub_type_id);
-void dungeonPlaceRubble(int y, int x);
-void dungeonPlaceGold(int y, int x);
 int itemGetRandomObjectId(int level, bool must_be_small);
-void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small);
-void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number);
-void dungeonPlaceRandomObjectNear(int y, int x, int tries);
 void statsAsString(uint8_t stat, char *stat_string);
 void displayCharacterStats(int stat);
 char *playerTitle();
@@ -250,10 +238,6 @@ void inventoryExecuteCommand(char command);
 bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
 bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
-void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2);
-void dungeonLightRoom(int pos_y, int pos_x);
-void dungeonLiteSpot(int y, int x);
-void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
 bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
 void playerTakesHit(int damage, const char *creature_name);
 
@@ -269,11 +253,6 @@ void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
 int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
-void dungeonDeleteMonster(int id);
-void dungeonDeleteMonsterFix1(int id);
-void dungeonDeleteMonsterFix2(int id);
-int dungeonSummonObject(int y, int x, int amount, int object_type);
-bool dungeonDeleteObject(int y, int x);
 void playerGainKillExperience(const Creature_t &creature);
 void chestTrap(int y, int x);
 void objectOpen();

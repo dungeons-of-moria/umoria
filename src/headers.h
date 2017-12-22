@@ -56,10 +56,11 @@
 #include "types.h"
 
 #include "config.h"
-#include "dungeon.h"
 #include "game.h"
+#include "ui.h"
+#include "dungeon.h"
+
 #include "monster.h"
 #include "player.h"
 #include "scores.h"
 #include "store.h"
-#include "ui.h"

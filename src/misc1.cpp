@@ -9,78 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-// Checks a co-ordinate for in bounds status -RAK-
-bool coordInBounds(Coord_t coord) {
-    bool valid_y = coord.y > 0 && coord.y < dg.height - 1;
-    bool valid_x = coord.x > 0 && coord.x < dg.width - 1;
-
-    return valid_y && valid_x;
-}
-
-// Distance between two points -RAK-
-int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
-    int dy = coord_a.y - coord_b.y;
-    if (dy < 0) {
-        dy = -dy;
-    }
-
-    int dx = coord_a.x - coord_b.x;
-    if (dx < 0) {
-        dx = -dx;
-    }
-
-    int a = (dy + dx) << 1;
-    int b = dy > dx ? dx : dy;
-
-    return ((a - b) >> 1);
-}
-
-// Checks points north, south, east, and west for a wall -RAK-
-// note that y,x is always coordInBounds(), i.e. 0 < y < dg.height-1,
-// and 0 < x < dg.width-1
-int coordWallsNextTo(Coord_t coord) {
-    int walls = 0;
-
-    if (dg.floor[coord.y - 1][coord.x].feature_id >= MIN_CAVE_WALL) {
-        walls++;
-    }
-
-    if (dg.floor[coord.y + 1][coord.x].feature_id >= MIN_CAVE_WALL) {
-        walls++;
-    }
-
-    if (dg.floor[coord.y][coord.x - 1].feature_id >= MIN_CAVE_WALL) {
-        walls++;
-    }
-
-    if (dg.floor[coord.y][coord.x + 1].feature_id >= MIN_CAVE_WALL) {
-        walls++;
-    }
-
-    return walls;
-}
-
-// Checks all adjacent spots for corridors -RAK-
-// note that y, x is always coordInBounds(), hence no need to check that
-// j, k are coordInBounds(), even if they are 0 or cur_x-1 is still works
-int coordCorridorWallsNextTo(Coord_t coord) {
-    int walls = 0;
-
-    for (int yy = coord.y - 1; yy <= coord.y + 1; yy++) {
-        for (int xx = coord.x - 1; xx <= coord.x + 1; xx++) {
-            int tile_id = dg.floor[yy][xx].feature_id;
-            int treasure_id = dg.floor[yy][xx].treasure_id;
-
-            // should fail if there is already a door present
-            if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].category_id < TV_MIN_DOORS)) {
-                walls++;
-            }
-        }
-    }
-
-    return walls;
-}
-
 // generates damage for 2d6 style dice rolls
 int diceDamageRoll(int dice, int sides) {
     int sum = 0;
@@ -92,52 +20,6 @@ int diceDamageRoll(int dice, int sides) {
 
 int dicePlayerDamageRoll(uint8_t *notation_array) {
     return diceDamageRoll((int) notation_array[0], (int) notation_array[1]);
-}
-
-// Returns symbol for given row, column -RAK-
-char caveGetTileSymbol(Coord_t coord) {
-    const Tile_t &tile = dg.floor[coord.y][coord.x];
-
-    if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
-        return '@';
-    }
-
-    if ((py.flags.status & PY_BLIND) != 0u) {
-        return ' ';
-    }
-
-    if (py.flags.image > 0 && randomNumber(12) == 1) {
-        return (uint8_t) (randomNumber(95) + 31);
-    }
-
-    if (tile.creature_id > 1 && monsters[tile.creature_id].lit) {
-        return creatures_list[monsters[tile.creature_id].creature_id].sprite;
-    }
-
-    if (!tile.permanent_light && !tile.temporary_light && !tile.field_mark) {
-        return ' ';
-    }
-
-    if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
-        return treasure_list[tile.treasure_id].sprite;
-    }
-
-    if (tile.feature_id <= MAX_CAVE_FLOOR) {
-        return '.';
-    }
-
-    if (tile.feature_id == TILE_GRANITE_WALL || tile.feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
-        return '#';
-    }
-
-    // Originally set highlight bit, but that is not portable,
-    // now use the percent sign instead.
-    return '%';
-}
-
-// Tests a spot for light or field mark status -RAK-
-bool caveTileVisible(Coord_t coord) {
-    return dg.floor[coord.y][coord.x].permanent_light || dg.floor[coord.y][coord.x].temporary_light || dg.floor[coord.y][coord.x].field_mark;
 }
 
 // If too many objects on floor level, delete some of them-RAK-

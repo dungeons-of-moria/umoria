@@ -4,6 +4,8 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
+#pragma once
+
 // Tile_t holds data about a specific tile in the dungeon.
 typedef struct {
     uint8_t creature_id; // ID for any creature occupying the tile
@@ -15,24 +17,6 @@ typedef struct {
     bool permanent_light : 1; // Permanent light, used for walls and lighted rooms.
     bool temporary_light : 1; // Temporary light, used for player's lamp light,etc.
 } Tile_t;
-
-// Panel_t holds data about a screen panel (the dungeon display)
-// Screen panels calculated from the dungeon/screen dimensions
-typedef struct {
-    int row;
-    int col;
-
-    int top;
-    int bottom;
-    int left;
-    int right;
-
-    int col_prt;
-    int row_prt;
-
-    int16_t max_rows;
-    int16_t max_cols;
-} Panel_t;
 
 typedef struct {
     // Dungeon size is either just big enough for town level, or the whole dungeon itself
@@ -55,3 +39,29 @@ typedef struct {
 } Dungeon_t;
 
 void dungeonDisplayMap();
+
+bool coordInBounds(Coord_t coord);
+int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b);
+int coordWallsNextTo(Coord_t coord);
+int coordCorridorWallsNextTo(Coord_t coord);
+char caveGetTileSymbol(Coord_t coord);
+bool caveTileVisible(Coord_t coord);
+
+void dungeonSetTrap(int y, int x, int sub_type_id);
+void dungeonPlaceRubble(int y, int x);
+void dungeonPlaceGold(int y, int x);
+
+void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small);
+void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number);
+void dungeonPlaceRandomObjectNear(int y, int x, int tries);
+
+void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2);
+void dungeonLightRoom(int pos_y, int pos_x);
+void dungeonLiteSpot(int y, int x);
+void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
+
+void dungeonDeleteMonster(int id);
+void dungeonDeleteMonsterFix1(int id);
+void dungeonDeleteMonsterFix2(int id);
+int dungeonSummonObject(int y, int x, int amount, int object_type);
+bool dungeonDeleteObject(int y, int x);

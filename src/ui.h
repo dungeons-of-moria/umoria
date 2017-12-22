@@ -6,6 +6,24 @@
 
 #pragma once
 
+// Panel_t holds data about a screen panel (the dungeon display)
+// Screen panels calculated from the dungeon/screen dimensions
+typedef struct {
+    int row;
+    int col;
+
+    int top;
+    int bottom;
+    int left;
+    int right;
+
+    int col_prt;
+    int row_prt;
+
+    int16_t max_rows;
+    int16_t max_cols;
+} Panel_t;
+
 // UI - IO
 bool terminalInitialize();
 void terminalRestore();
