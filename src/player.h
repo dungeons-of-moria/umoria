@@ -139,12 +139,11 @@ typedef struct {
     bool carrying_light;         // `true` when player is carrying light
 } Player_t;
 
+void playerResetFlags();
+
 bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();
-void playerInitializeBaseExperienceLevels();
-void playerCalculateHitPoints();
-int playerAttackBlows(int weight, int &weight_to_hit);
 bool playerMovePosition(int dir, int &new_y, int &new_x);
 void playerTeleport(int new_distance);
 bool playerNoLight();
@@ -153,6 +152,80 @@ void playerSearchOn();
 void playerSearchOff();
 void playerRestOn();
 void playerRestOff();
-bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
 void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move);
 bool playerTestAttackHits(int attack_id, uint8_t level);
+
+void playerChangeSpeed(int speed);
+void playerAdjustBonusesForItem(const Inventory_t &item, int factor);
+void playerRecalculateBonuses();
+void playerTakeOff(int item_id, int pack_position_id);
+bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
+void playerTakesHit(int damage, const char *creature_name);
+
+void playerSearch(int y, int x, int chance);
+
+int playerCarryingLoadLimit();
+void playerStrength();
+
+void playerGainSpells();
+void playerGainMana(int stat);
+int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
+bool playerSavingThrow();
+
+void playerGainKillExperience(const Creature_t &creature);
+void playerOpenClosedObject();
+void playerCloseDoor();
+bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);
+void playerAttackPosition(int y, int x);
+void playerCalculateAllowedSpellsCount(int stat);
+
+// player_eat.cpp
+void playerEat();
+void playerIngestFood(int amount);
+
+// player_bash.cpp
+void playerBash();
+
+// player_magic.cpp
+bool playerCureConfusion();
+bool playerCureBlindness();
+bool playerCurePoison();
+bool playerRemoveFear();
+bool playerProtectEvil();
+void playerBless(int adjustment);
+void playerDetectInvisible(int adjustment);
+
+// player_move.cpp
+void playerMove(int direction, bool do_pickup);
+
+// player_run.cpp
+void playerFindInitialize(int direction);
+void playerRunAndFind();
+void playerEndRunning();
+void playerAreaAffect(int direction, int y, int x);
+
+// player_stats.cpp
+void playerInitializeBaseExperienceLevels();
+void playerCalculateHitPoints();
+int playerAttackBlows(int weight, int &weight_to_hit);
+int playerStatAdjustmentWisdomIntelligence(int stat);
+int playerStatAdjustmentCharisma();
+int playerStatAdjustmentConstitution();
+void playerSetAndUseStat(int stat);
+bool playerStatRandomIncrease(int stat);
+bool playerStatRandomDecrease(int stat);
+bool playerStatRestore(int stat);
+void playerStatBoost(int stat, int amount);
+int playerToHitAdjustment();
+int playerArmorClassAdjustment();
+int playerDisarmAdjustment();
+int playerDamageAdjustment();
+
+// player_throw.cpp
+void playerThrowItem();
+
+// player_traps.cpp
+void playerDisarmTrap();
+
+// player_tunnel.cpp
+void playerTunnel(int direction);

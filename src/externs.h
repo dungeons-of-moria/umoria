@@ -156,17 +156,10 @@ int dicePlayerDamageRoll(uint8_t *notation_array);
 
 // misc3.c
 char *playerTitle();
-int playerCarryingLoadLimit();
-void playerStrength();
 int spellChanceOfSuccess(int spell_id);
 bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell);
-void playerCalculateAllowedSpellsCount(int stat);
-void playerGainSpells();
-void playerGainMana(int stat);
 bool enterWizardMode();
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
-int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
-bool playerSavingThrow();
 
 // monster_management.cpp
 bool compactMonsters();
@@ -180,18 +173,12 @@ bool monsterSummonUndead(int &y, int &x);
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
 // moria1.c
-void playerChangeSpeed(int speed);
-void playerAdjustBonusesForItem(const Inventory_t &item, int factor);
-void playerRecalculateBonuses();
-void playerTakeOff(int item_id, int pack_position_id);
+uint32_t inventoryCollectAllItemFlags();
 bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
-bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
-void playerTakesHit(int damage, const char *creature_name);
 
 // moria2.c
 void trapChangeVisibility(int y, int x);
-void playerSearch(int y, int x, int chance);
 void damageCorrodingGas(const char *creature_name);
 void damagePoisonedGas(int damage, const char *creature_name);
 void damageFire(int damage, const char *creature_name);
@@ -201,62 +188,9 @@ void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
 int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
-void playerGainKillExperience(const Creature_t &creature);
 void chestTrap(int y, int x);
-void playerOpenClosedObject();
-void playerCloseDoor();
-bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void objectBlockedByMonster(int monster_id);
-void playerAttackPosition(int y, int x);
 int getRandomDirection();
-
-// player_eat.cpp
-void playerEat();
-void playerIngestFood(int amount);
-
-// player_bash.cpp
-void playerBash();
-
-// player_magic.cpp
-bool playerCureConfusion();
-bool playerCureBlindness();
-bool playerCurePoison();
-bool playerRemoveFear();
-bool playerProtectEvil();
-void playerBless(int adjustment);
-void playerDetectInvisible(int adjustment);
-
-// player_move.cpp
-void playerMove(int direction, bool do_pickup);
-
-// player_run.cpp
-void playerFindInitialize(int direction);
-void playerRunAndFind();
-void playerEndRunning();
-void playerAreaAffect(int direction, int y, int x);
-
-// player_stats.cpp
-int playerStatAdjustmentWisdomIntelligence(int stat);
-int playerStatAdjustmentCharisma();
-int playerStatAdjustmentConstitution();
-void playerSetAndUseStat(int stat);
-bool playerStatRandomIncrease(int stat);
-bool playerStatRandomDecrease(int stat);
-bool playerStatRestore(int stat);
-void playerStatBoost(int stat, int amount);
-int playerToHitAdjustment();
-int playerArmorClassAdjustment();
-int playerDisarmAdjustment();
-int playerDamageAdjustment();
-
-// player_throw.cpp
-void playerThrowItem();
-
-// player_traps.cpp
-void playerDisarmTrap();
-
-// player_tunnel.cpp
-void playerTunnel(int direction);
 
 // potions.c
 void quaff();

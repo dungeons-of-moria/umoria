@@ -1523,3 +1523,208 @@ bool monsterSleep(int y, int x) {
 
     return asleep;
 }
+
+bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
+    int item_pos_start;
+    int item_pos_end;
+    int32_t gold;
+
+    switch (attack_type) {
+        case 1: // Normal attack
+            // round half-way case down
+            damage -= ((py.misc.ac + py.misc.magical_ac) * damage) / 200;
+            playerTakesHit(damage, death_description);
+            break;
+        case 2: // Lose Strength
+            playerTakesHit(damage, death_description);
+            if (py.flags.sustain_str) {
+                printMessage("You feel weaker for a moment, but it passes.");
+            } else if (randomNumber(2) == 1) {
+                printMessage("You feel weaker.");
+                (void) playerStatRandomDecrease(A_STR);
+            } else {
+                noticed = false;
+            }
+            break;
+        case 3: // Confusion attack
+            playerTakesHit(damage, death_description);
+            if (randomNumber(2) == 1) {
+                if (py.flags.confused < 1) {
+                    printMessage("You feel confused.");
+                    py.flags.confused += randomNumber((int) creature_level);
+                } else {
+                    noticed = false;
+                }
+                py.flags.confused += 3;
+            } else {
+                noticed = false;
+            }
+            break;
+        case 4: // Fear attack
+            playerTakesHit(damage, death_description);
+            if (playerSavingThrow()) {
+                printMessage("You resist the effects!");
+            } else if (py.flags.afraid < 1) {
+                printMessage("You are suddenly afraid!");
+                py.flags.afraid += 3 + randomNumber((int) creature_level);
+            } else {
+                py.flags.afraid += 3;
+                noticed = false;
+            }
+            break;
+        case 5: // Fire attack
+            printMessage("You are enveloped in flames!");
+            damageFire(damage, death_description);
+            break;
+        case 6: // Acid attack
+            printMessage("You are covered in acid!");
+            damageAcid(damage, death_description);
+            break;
+        case 7: // Cold attack
+            printMessage("You are covered with frost!");
+            damageCold(damage, death_description);
+            break;
+        case 8: // Lightning attack
+            printMessage("Lightning strikes you!");
+            damageLightningBolt(damage, death_description);
+            break;
+        case 9: // Corrosion attack
+            printMessage("A stinging red gas swirls about you.");
+            damageCorrodingGas(death_description);
+            playerTakesHit(damage, death_description);
+            break;
+        case 10: // Blindness attack
+            playerTakesHit(damage, death_description);
+            if (py.flags.blind < 1) {
+                py.flags.blind += 10 + randomNumber((int) creature_level);
+                printMessage("Your eyes begin to sting.");
+            } else {
+                py.flags.blind += 5;
+                noticed = false;
+            }
+            break;
+        case 11: // Paralysis attack
+            playerTakesHit(damage, death_description);
+            if (playerSavingThrow()) {
+                printMessage("You resist the effects!");
+            } else if (py.flags.paralysis < 1) {
+                if (py.flags.free_action) {
+                    printMessage("You are unaffected.");
+                } else {
+                    py.flags.paralysis = (int16_t) (randomNumber((int) creature_level) + 3);
+                    printMessage("You are paralyzed.");
+                }
+            } else {
+                noticed = false;
+            }
+            break;
+        case 12: // Steal Money
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
+                printMessage("You quickly protect your money pouch!");
+            } else {
+                gold = (py.misc.au / 10) + randomNumber(25);
+                if (gold > py.misc.au) {
+                    py.misc.au = 0;
+                } else {
+                    py.misc.au -= gold;
+                }
+                printMessage("Your purse feels lighter.");
+                printCharacterGoldValue();
+            }
+            if (randomNumber(2) == 1) {
+                printMessage("There is a puff of smoke!");
+                spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
+            }
+            break;
+        case 13: // Steal Object
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
+                printMessage("You grab hold of your backpack!");
+            } else {
+                inventoryDestroyItem(randomNumber(py.unique_inventory_items) - 1);
+                printMessage("Your backpack feels lighter.");
+            }
+            if (randomNumber(2) == 1) {
+                printMessage("There is a puff of smoke!");
+                spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
+            }
+            break;
+        case 14: // Poison
+            playerTakesHit(damage, death_description);
+            printMessage("You feel very sick.");
+            py.flags.poisoned += randomNumber((int) creature_level) + 5;
+            break;
+        case 15: // Lose dexterity
+            playerTakesHit(damage, death_description);
+            if (py.flags.sustain_dex) {
+                printMessage("You feel clumsy for a moment, but it passes.");
+            } else {
+                printMessage("You feel more clumsy.");
+                (void) playerStatRandomDecrease(A_DEX);
+            }
+            break;
+        case 16: // Lose constitution
+            playerTakesHit(damage, death_description);
+            if (py.flags.sustain_con) {
+                printMessage("Your body resists the effects of the disease.");
+            } else {
+                printMessage("Your health is damaged!");
+                (void) playerStatRandomDecrease(A_CON);
+            }
+            break;
+        case 17: // Lose intelligence
+            playerTakesHit(damage, death_description);
+            printMessage("You have trouble thinking clearly.");
+            if (py.flags.sustain_int) {
+                printMessage("But your mind quickly clears.");
+            } else {
+                (void) playerStatRandomDecrease(A_INT);
+            }
+            break;
+        case 18: // Lose wisdom
+            playerTakesHit(damage, death_description);
+            if (py.flags.sustain_wis) {
+                printMessage("Your wisdom is sustained.");
+            } else {
+                printMessage("Your wisdom is drained.");
+                (void) playerStatRandomDecrease(A_WIS);
+            }
+            break;
+        case 19: // Lose experience
+            printMessage("You feel your life draining away!");
+            spellLoseEXP(damage + (py.misc.exp / 100) * MON_PLAYER_EXP_DRAINED_PER_HIT);
+            break;
+        case 20: // Aggravate monster
+            (void) spellAggravateMonsters(20);
+            break;
+        case 21: // Disenchant
+            if (executeDisenchantAttack()) {
+                printMessage("There is a static feeling in the air.");
+                playerRecalculateBonuses();
+            } else {
+                noticed = false;
+            }
+            break;
+        case 22: // Eat food
+            if (inventoryFindRange(TV_FOOD, TV_NEVER, item_pos_start, item_pos_end)) {
+                inventoryDestroyItem(item_pos_start);
+                printMessage("It got at your rations!");
+            } else {
+                noticed = false;
+            }
+            break;
+        case 23: // Eat light
+            noticed = inventoryDiminishLightAttack(noticed);
+            break;
+        case 24: // Eat charges
+            noticed = inventoryDiminishChargesAttack(creature_level, monster_hp, noticed);
+            break;
+        case 99:
+            noticed = false;
+            break;
+        default:
+            noticed = false;
+            break;
+    }
+
+    return noticed;
+}
