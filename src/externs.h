@@ -131,14 +131,6 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
 void itemChargesRemainingDescription(int item_id);
 void itemTypeRemainingCountDescription(int item_id);
 
-// files.c
-bool initializeScoreFile();
-void displaySplashScreen();
-void displayTextHelpFile(const std::string &filename);
-void displayDeathFile(const std::string &filename);
-void outputRandomLevelObjectsToFile();
-bool outputPlayerCharacterToFile(char *filename);
-
 // generate.c
 void generateCave();
 

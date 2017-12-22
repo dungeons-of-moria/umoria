@@ -89,7 +89,6 @@ set(
         ${source_dir}/types.h
         ${source_dir}/version.h
         ${source_dir}/globals.cpp
-        ${source_dir}/files.cpp
         ${source_dir}/helpers.cpp
         ${source_dir}/io.cpp
         ${source_dir}/rng.cpp
@@ -108,6 +107,7 @@ set(
         ${source_dir}/desc.cpp
         ${source_dir}/dungeon.cpp
         ${source_dir}/game.cpp
+        ${source_dir}/game_files.cpp
         ${source_dir}/generate.cpp
         ${source_dir}/help.cpp
         ${source_dir}/inventory.cpp

@@ -38,3 +38,11 @@ int randomNumberNormalDistribution(int mean, int standard);
 void setGameOptions();
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
+
+// game files
+bool initializeScoreFile();
+void displaySplashScreen();
+void displayTextHelpFile(const std::string &filename);
+void displayDeathFile(const std::string &filename);
+void outputRandomLevelObjectsToFile();
+bool outputPlayerCharacterToFile(char *filename);
