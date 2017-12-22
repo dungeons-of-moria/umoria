@@ -144,6 +144,7 @@ set(
         ${source_dir}/store_inventory.cpp
         ${source_dir}/treasure.cpp
         ${source_dir}/ui.cpp
+        ${source_dir}/ui_inventory.cpp
         ${source_dir}/ui_io.cpp
         ${source_dir}/wands.cpp
         ${source_dir}/wizard.cpp
