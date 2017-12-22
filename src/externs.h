@@ -130,6 +130,9 @@ void itemRemoveMagicNaming(Inventory_t &item);
 void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_prefix);
 void itemChargesRemainingDescription(int item_id);
 void itemTypeRemainingCountDescription(int item_id);
+void itemInscribe();
+void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type);
+void itemReplaceInscription(Inventory_t &item, const char *inscription);
 
 // generate.c
 void generateCave();
@@ -179,11 +182,6 @@ bool enterWizardMode();
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
 int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
 bool playerSavingThrow();
-
-// misc4.c
-void itemInscribe();
-void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type);
-void itemReplaceInscription(Inventory_t &item, const char *inscription);
 
 // monster_management.cpp
 bool compactMonsters();

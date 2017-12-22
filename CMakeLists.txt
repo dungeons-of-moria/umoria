@@ -116,7 +116,6 @@ set(
         ${source_dir}/misc1.cpp
         ${source_dir}/misc2.cpp
         ${source_dir}/misc3.cpp
-        ${source_dir}/misc4.cpp
         ${source_dir}/monster.cpp
         ${source_dir}/monster_manager.cpp
         ${source_dir}/moria.cpp
