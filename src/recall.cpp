@@ -673,3 +673,32 @@ static void memoryPrint(const char *p) {
         p++;
     }
 }
+
+// Allow access to monster memory. -CJS-
+void recallMonsterAttributes(char command) {
+    int n = 0;
+    char query;
+
+    for (int i = MON_MAX_CREATURES - 1; i >= 0; i--) {
+        if (creatures_list[i].sprite == command && memoryMonsterKnown(creature_recall[i])) {
+            if (n == 0) {
+                putString("You recall those details? [y/n]", Coord_t{0, 40});
+                query = getKeyInput();
+
+                if (query != 'y' && query != 'Y') {
+                    break;
+                }
+
+                eraseLine(Coord_t{0, 40});
+                terminalSaveScreen();
+            }
+            n++;
+
+            query = (char) memoryRecall(i);
+            terminalRestoreScreen();
+            if (query == ESCAPE) {
+                break;
+            }
+        }
+    }
+}

@@ -52,6 +52,18 @@ bool getInputConfirmation(const std::string &prompt);
 void waitForContinueKey(int line_number);
 bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);
+bool checkFilePermissions();
+
+#ifndef _WIN32
+// call functions which expand tilde before calling open/fopen
+#define open topen
+#define fopen tfopen
+
+FILE *tfopen(const char *file, const char *mode);
+int topen(const char *file, int flags, int mode);
+bool tilde(const char *file, char *expanded);
+#endif
+
 
 // UI
 bool coordOutsidePanel(Coord_t coord, bool force);

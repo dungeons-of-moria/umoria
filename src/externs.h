@@ -137,20 +137,8 @@ void itemReplaceInscription(Inventory_t &item, const char *inscription);
 // generate.c
 void generateCave();
 
-// help.c
-void displayWorldObjectDescription();
-
-#ifndef _WIN32
-// call functions which expand tilde before calling open/fopen
-#define open topen
-#define fopen tfopen
-
-FILE *tfopen(const char *file, const char *mode);
-int topen(const char *file, int flags, int mode);
-bool tilde(const char *file, char *expanded);
-#endif
-
-bool checkFilePermissions();
+// identification.cpp
+void identifyGameObject();
 
 // los.cpp
 bool los(int from_y, int from_x, int to_y, int to_x);
@@ -282,6 +270,7 @@ void pray();
 // recall.c
 bool memoryMonsterKnown(const Recall_t &memory);
 int memoryRecall(int monster_id);
+void recallMonsterAttributes(char command);
 
 // rng.cpp
 uint32_t getRandomSeed();

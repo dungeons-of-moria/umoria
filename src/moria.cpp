@@ -1796,7 +1796,7 @@ static void doCommand(char command) {
             playerFindInitialize(9);
             break;
         case '/': // (/) identify a symbol
-            displayWorldObjectDescription();
+            identifyGameObject();
             game.player_free_turn = true;
             break;
         case '.': // (.) stay in one place (5)

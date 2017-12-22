@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "externs.h"
 
-static const char *asciiCharacterDescription(char command) {
+static const char *objectDescription(char command) {
     // every printing ASCII character is listed here, in the
     // order in which they appear in the ASCII character set.
     switch (command) {
@@ -211,42 +211,13 @@ static const char *asciiCharacterDescription(char command) {
     }
 }
 
-// Allow access to monster memory. -CJS-
-static void printKnownMonsterMemories(char command) {
-    int n = 0;
-    char query;
-
-    for (int i = MON_MAX_CREATURES - 1; i >= 0; i--) {
-        if (creatures_list[i].sprite == command && memoryMonsterKnown(creature_recall[i])) {
-            if (n == 0) {
-                putString("You recall those details? [y/n]", Coord_t{0, 40});
-                query = getKeyInput();
-
-                if (query != 'y' && query != 'Y') {
-                    break;
-                }
-
-                eraseLine(Coord_t{0, 40});
-                terminalSaveScreen();
-            }
-            n++;
-
-            query = (char) memoryRecall(i);
-            terminalRestoreScreen();
-            if (query == ESCAPE) {
-                break;
-            }
-        }
-    }
-}
-
-void displayWorldObjectDescription() {
+void identifyGameObject() {
     char command;
     if (!getCommand("Enter character to be identified :", command)) {
         return;
     }
 
-    putStringClearToEOL(asciiCharacterDescription(command), Coord_t{0, 0});
+    putStringClearToEOL(objectDescription(command), Coord_t{0, 0});
 
-    printKnownMonsterMemories(command);
+    recallMonsterAttributes(command);
 }
