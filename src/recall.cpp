@@ -486,23 +486,18 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t
 
     // attack_count counts the attacks as printed, used for punctuation
     int attack_count = 0;
-
     for (int i = 0; i < MON_MAX_ATTACKS; i++) {
         int attack_id = creature.damage[i];
         if (attack_id == 0) break;
-
-        int attack_type, attack_description_id;
-        int attack_dice, attack_sides;
 
         // don't print out unknown attacks
         if (memory.attacks[i] == 0u) {
             continue;
         }
 
-        attack_type = monster_attacks[attack_id].type_id;
-        attack_description_id = monster_attacks[attack_id].description_id;
-        attack_dice = monster_attacks[attack_id].dice;
-        attack_sides = monster_attacks[attack_id].sides;
+        uint8_t attack_type = monster_attacks[attack_id].type_id;
+        uint8_t attack_description_id = monster_attacks[attack_id].description_id;
+        Dice_t dice = monster_attacks[attack_id].dice;
 
         attack_count++;
 
@@ -520,7 +515,7 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t
 
         memoryPrint(recall_description_attack_method[attack_description_id]);
 
-        if (attack_type != 1 || (attack_dice > 0 && attack_sides > 0)) {
+        if (attack_type != 1 || (dice.dice > 0 && dice.sides > 0)) {
             memoryPrint(" to ");
 
             if (attack_type > 24) {
@@ -529,8 +524,8 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t
 
             memoryPrint(recall_description_attack_type[attack_type]);
 
-            if ((attack_dice != 0) && (attack_sides != 0)) {
-                if (knowdamage(creature.level, memory.attacks[i], attack_dice * attack_sides)) {
+            if ((dice.dice != 0) && (dice.sides != 0)) {
+                if (knowdamage(creature.level, memory.attacks[i], dice.dice * dice.sides)) {
                     // Loss of experience
                     if (attack_type == 19) {
                         memoryPrint(" by");
@@ -539,7 +534,7 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t
                     }
 
                     vtype_t msg = {'\0'};
-                    (void) sprintf(msg, " %dd%d", attack_dice, attack_sides);
+                    (void) sprintf(msg, " %dd%d", dice.dice, dice.sides);
                     memoryPrint(msg);
                 }
             }

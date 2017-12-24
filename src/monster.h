@@ -47,8 +47,7 @@ typedef struct {
 typedef struct {
     uint8_t type_id;
     uint8_t description_id;
-    uint8_t dice;
-    uint8_t sides;
+    Dice_t dice;
 } MonsterAttack_t;
 
 void monsterUpdateVisibility(int monster_id);

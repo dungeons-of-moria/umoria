@@ -403,8 +403,7 @@ static void monsterAttackPlayer(int monster_id) {
 
         uint8_t attack_type = monster_attacks[damage_type_id].type_id;
         uint8_t attack_desc = monster_attacks[damage_type_id].description_id;
-        uint8_t attack_dice = monster_attacks[damage_type_id].dice;
-        uint8_t attack_sides = monster_attacks[damage_type_id].sides;
+        Dice_t dice = monster_attacks[damage_type_id].dice;
 
         if (py.flags.protect_evil > 0 && ((creature.defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature.level) {
             if (monster.lit) {
@@ -432,7 +431,7 @@ static void monsterAttackPlayer(int monster_id) {
                 notice = false;
             }
 
-            int damage = diceRoll(Dice_t{attack_dice, attack_sides});
+            int damage = diceRoll(dice);
             notice = executeAttackOnPlayer(creature.level, monster.hp, monster_id, attack_type, damage, death_description, notice);
 
             // Moved here from monsterMove, so that monster only confused if it
