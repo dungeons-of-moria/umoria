@@ -150,9 +150,6 @@ void getAndCastMagicSpell();
 // magic_items.cpp
 void magicTreasureMagicalAbility(int item_id, int level);
 
-// misc1.c
-int dicePlayerDamageRoll(uint8_t *notation_array);
-
 // misc3.c
 char *playerTitle();
 int spellChanceOfSuccess(int spell_id);

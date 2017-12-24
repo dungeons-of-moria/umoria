@@ -1170,7 +1170,7 @@ static void playerAttackMonster(int y, int x) {
         printMessage(msg);
 
         if (item.category_id != TV_NOTHING) {
-            damage = dicePlayerDamageRoll(item.damage);
+            damage = diceRoll(item.damage[0], item.damage[1]);
             damage = itemMagicAbilityDamage(item, damage, monster.creature_id);
             damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, CLASS_BTH);
         } else {

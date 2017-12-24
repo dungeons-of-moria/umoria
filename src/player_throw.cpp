@@ -32,7 +32,7 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
     }
 
     // Throwing objects
-    damage = dicePlayerDamageRoll(item.damage) + item.to_damage;
+    damage = diceRoll(item.damage[0], item.damage[1]) + item.to_damage;
     base_to_hit = py.misc.bth_with_bows * 75 / 100;
     plus_to_hit = py.misc.plusses_to_hit + item.to_hit;
 
