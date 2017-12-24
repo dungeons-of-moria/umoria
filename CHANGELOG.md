@@ -2,6 +2,9 @@
 
 ## HEAD
 
+
+## 5.7.8 (2017-12-24)
+
 - Improve _Wizard Mode_ help files.
 - Easier item creation in _Wizard Mode_ (inspired by Bmoria).
 - Change `[Press any key to continue.]` to `[ press any key to continue ]`,
