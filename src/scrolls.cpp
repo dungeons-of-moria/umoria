@@ -128,7 +128,7 @@ static bool scrollEnchantWeaponToDamage() {
     int16_t scroll_type;
 
     if (item.category_id >= TV_HAFTED && item.category_id <= TV_DIGGING) {
-        scroll_type = item.damage[0] * item.damage[1];
+        scroll_type = (int16_t) maxHitPoints(item.damage);
     } else {
         // Bows' and arrows' enchantments should not be
         // limited by their low base damages
@@ -251,7 +251,7 @@ static bool scrollEnchantWeapon() {
     int16_t scroll_type;
 
     if (item.category_id >= TV_HAFTED && item.category_id <= TV_DIGGING) {
-        scroll_type = item.damage[0] * item.damage[1];
+        scroll_type = (int16_t) maxHitPoints(item.damage);
     } else {
         // Bows' and arrows' enchantments should not be limited
         // by their low base damages

@@ -88,7 +88,7 @@ static void magicalSword(Inventory_t &item, int special, int level) {
     item.to_hit += magicEnchantmentBonus(0, 40, level);
 
     // Magical damage bonus now proportional to weapon base damage
-    int damageBonus = item.damage[0] * item.damage[1];
+    int damageBonus = maxHitPoints(item.damage);
 
     item.to_damage += magicEnchantmentBonus(0, 4 * damageBonus, damageBonus * level / 10);
 
@@ -182,7 +182,7 @@ static void cursedSword(Inventory_t &item, int level) {
     item.to_hit -= magicEnchantmentBonus(1, 55, level);
 
     // Magical damage bonus now proportional to weapon base damage
-    int damageBonus = item.damage[0] * item.damage[1];
+    int damageBonus = maxHitPoints(item.damage);
 
     item.to_damage -= magicEnchantmentBonus(1, 11 * damageBonus / 2, damageBonus * level / 10);
     item.flags |= TR_CURSED;

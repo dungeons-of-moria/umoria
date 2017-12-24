@@ -50,13 +50,13 @@
 // General Umoria headers
 
 #include "constant.h"
+#include "dice.h"
 #include "helpers.h"
 #include "inventory.h"
 
 #include "types.h"
 
 #include "config.h"
-#include "dice.h"
 #include "game.h"
 #include "ui.h"
 #include "dungeon.h"

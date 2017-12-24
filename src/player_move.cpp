@@ -252,7 +252,7 @@ static void playerStepsOnTrap(int y, int x) {
 
     Inventory_t &item = treasure_list[dg.floor[y][x].treasure_id];
 
-    int damage = diceRoll(Dice_t{item.damage[0], item.damage[1]});
+    int damage = diceRoll(item.damage);
 
     switch ((TrapTypes) item.sub_category_id) {
         case TrapTypes::open_pit:

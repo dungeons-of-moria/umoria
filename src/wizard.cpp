@@ -8,6 +8,7 @@
 
 #include "headers.h"
 #include "externs.h"
+#include "dice.h"
 
 #include <sstream>
 
@@ -359,7 +360,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item.damage[0] = (uint8_t) number;
+        item.damage.dice = (uint8_t) number;
     }
 
     putStringClearToEOL("Damage (sides): ", Coord_t{0, 0});
@@ -367,7 +368,7 @@ void wizardCreateObjects() {
         return;
     }
     if (stringToNumber(input, number)) {
-        item.damage[1] = (uint8_t) number;
+        item.damage.sides = (uint8_t) number;
     }
 
     putStringClearToEOL("+To hit: ", Coord_t{0, 0});

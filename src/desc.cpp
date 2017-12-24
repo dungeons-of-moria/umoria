@@ -319,7 +319,7 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
         case TV_SLING_AMMO:
         case TV_BOLT:
         case TV_ARROW:
-            (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item.damage.dice, item.damage.sides);
             break;
         case TV_LIGHT:
             misc_type = ItemMiscUse::light;
@@ -332,12 +332,12 @@ void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_p
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
-            (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item.damage.dice, item.damage.sides);
             misc_type = ItemMiscUse::flags;
             break;
         case TV_DIGGING:
             misc_type = ItemMiscUse::z_plusses;
-            (void) sprintf(damstr, " (%dd%d)", item.damage[0], item.damage[1]);
+            (void) sprintf(damstr, " (%dd%d)", item.damage.sides, item.damage.sides);
             break;
         case TV_BOOTS:
         case TV_GLOVES:

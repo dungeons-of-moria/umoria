@@ -113,9 +113,7 @@ static void playerBashAttack(int y, int x) {
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
-        auto dice = inventory[EQUIPMENT_ARM].damage[0];
-        auto sides = inventory[EQUIPMENT_ARM].damage[1];
-        int damage = diceRoll(Dice_t{dice, sides});
+        int damage = diceRoll(inventory[EQUIPMENT_ARM].damage);
         damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.used[A_STR], 0, damage, CLASS_BTH);
         damage += py.misc.weight / 60;
         damage += 3;
