@@ -56,6 +56,7 @@
 #include "types.h"
 
 #include "config.h"
+#include "dice.h"
 #include "game.h"
 #include "ui.h"
 #include "dungeon.h"

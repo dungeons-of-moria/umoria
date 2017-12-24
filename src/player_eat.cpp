@@ -180,7 +180,7 @@ void playerEat() {
                 break;
 #endif
             case FoodMagicTypes::major_cures:
-                identified = spellChangePlayerHitPoints(diceRoll(3, 12));
+                identified = spellChangePlayerHitPoints(diceRoll(Dice_t{3, 12}));
                 break;
             case FoodMagicTypes::poisonous_food:
                 playerTakesHit(randomNumber(18), "poisonous food.");

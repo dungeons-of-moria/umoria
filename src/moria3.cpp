@@ -64,7 +64,7 @@ static void chestLooseStrength() {
 
     (void) playerStatRandomDecrease(A_STR);
 
-    playerTakesHit(diceRoll(1, 4), "a poison needle");
+    playerTakesHit(diceRoll(Dice_t{1, 4}), "a poison needle");
 
     printMessage("You feel weakened!");
 }
@@ -72,7 +72,7 @@ static void chestLooseStrength() {
 static void chestPoison() {
     printMessage("A small needle has pricked you!");
 
-    playerTakesHit(diceRoll(1, 6), "a poison needle");
+    playerTakesHit(diceRoll(Dice_t{1, 6}), "a poison needle");
 
     py.flags.poisoned += 10 + randomNumber(20);
 }
@@ -102,7 +102,7 @@ static void chestExplode(int y, int x) {
 
     (void) dungeonDeleteObject(y, x);
 
-    playerTakesHit(diceRoll(5, 8), "an exploding chest");
+    playerTakesHit(diceRoll(Dice_t{5, 8}), "an exploding chest");
 }
 
 // Chests have traps too. -RAK-

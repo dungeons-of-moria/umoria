@@ -219,12 +219,3 @@ bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
 }
-
-// generates damage for 2d6 style dice rolls
-int diceRoll(int dice, int sides) {
-    int sum = 0;
-    for (int i = 0; i < dice; i++) {
-        sum += randomNumber(sides);
-    }
-    return sum;
-}

@@ -55,7 +55,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     } else {
         auto dice = creatures_list[creature_id].hit_die[0];
         auto sides = creatures_list[creature_id].hit_die[1];
-        monster.hp = (int16_t) diceRoll(dice, sides);
+        monster.hp = (int16_t) diceRoll(Dice_t{dice, sides});
     }
 
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
@@ -117,7 +117,7 @@ void monsterPlaceWinning() {
     } else {
         auto dice = creatures_list[creature_id].hit_die[0];
         auto sides = creatures_list[creature_id].hit_die[1];
-        monster.hp = (int16_t) diceRoll(dice, sides);
+        monster.hp = (int16_t) diceRoll(Dice_t{dice, sides});
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t

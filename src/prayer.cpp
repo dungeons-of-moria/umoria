@@ -87,7 +87,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) spellDetectEvil();
             break;
         case PriestSpellTypes::cure_light_wounds:
-            (void) spellChangePlayerHitPoints(diceRoll(3, 3));
+            (void) spellChangePlayerHitPoints(diceRoll(Dice_t{3, 3}));
             break;
         case PriestSpellTypes::bless:
             playerBless(randomNumber(12) + 12);
@@ -116,7 +116,7 @@ static void playerRecitePrayer(int prayer_type) {
             playerTeleport((py.misc.level * 3));
             break;
         case PriestSpellTypes::cure_medium_wounds:
-            (void) spellChangePlayerHitPoints(diceRoll(4, 4));
+            (void) spellChangePlayerHitPoints(diceRoll(Dice_t{4, 4}));
             break;
         case PriestSpellTypes::chant:
             playerBless(randomNumber(24) + 24);
@@ -144,11 +144,11 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::orb_of_draining:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.row, py.col, dir, (diceRoll(3, 6) + py.misc.level), GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(py.row, py.col, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case PriestSpellTypes::cure_serious_wounds:
-            (void) spellChangePlayerHitPoints(diceRoll(8, 4));
+            (void) spellChangePlayerHitPoints(diceRoll(Dice_t{8, 4}));
             break;
         case PriestSpellTypes::sense_invisible:
             playerDetectInvisible(randomNumber(24) + 24);
@@ -163,7 +163,7 @@ static void playerRecitePrayer(int prayer_type) {
             spellMapCurrentArea();
             break;
         case PriestSpellTypes::cure_critical_wounds:
-            (void) spellChangePlayerHitPoints(diceRoll(16, 4));
+            (void) spellChangePlayerHitPoints(diceRoll(Dice_t{16, 4}));
             break;
         case PriestSpellTypes::turn_undead:
             (void) spellTurnUndead();

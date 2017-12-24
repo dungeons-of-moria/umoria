@@ -76,6 +76,7 @@ set(
         ${source_dir}/config.h
         ${source_dir}/constant.h
         ${source_dir}/curses.h
+        ${source_dir}/dice.h
         ${source_dir}/dungeon.h
         ${source_dir}/externs.h
         ${source_dir}/game.h
@@ -105,6 +106,7 @@ set(
         ${source_dir}/create.cpp
         ${source_dir}/death.cpp
         ${source_dir}/desc.cpp
+        ${source_dir}/dice.cpp
         ${source_dir}/dungeon.cpp
         ${source_dir}/game.cpp
         ${source_dir}/game_files.cpp

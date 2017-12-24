@@ -397,17 +397,14 @@ static void monsterAttackPlayer(int monster_id) {
     vtype_t death_description = {'\0'};
     playerDiedFromString(&death_description, creature.name, creature.movement);
 
-    int attack_type, attack_desc, attack_dice, attack_sides;
     int attack_counter = 0;
-    vtype_t description = {'\0'};
-
     for (auto &damage_type_id : creature.damage) {
         if (damage_type_id == 0 || game.character_is_dead) break;
 
-        attack_type = monster_attacks[damage_type_id].type_id;
-        attack_desc = monster_attacks[damage_type_id].description_id;
-        attack_dice = monster_attacks[damage_type_id].dice;
-        attack_sides = monster_attacks[damage_type_id].sides;
+        uint8_t attack_type = monster_attacks[damage_type_id].type_id;
+        uint8_t attack_desc = monster_attacks[damage_type_id].description_id;
+        uint8_t attack_dice = monster_attacks[damage_type_id].dice;
+        uint8_t attack_sides = monster_attacks[damage_type_id].sides;
 
         if (py.flags.protect_evil > 0 && ((creature.defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature.level) {
             if (monster.lit) {
@@ -421,8 +418,8 @@ static void monsterAttackPlayer(int monster_id) {
             playerDisturb(1, 0);
 
             // can not strcat to name because the creature may have multiple attacks.
+            vtype_t description = {'\0'};
             (void) strcpy(description, name);
-
             monsterPrintAttackDescription(description, attack_desc);
 
             // always fail to notice attack if creature invisible, set notice
@@ -435,7 +432,7 @@ static void monsterAttackPlayer(int monster_id) {
                 notice = false;
             }
 
-            int damage = diceRoll(attack_dice, attack_sides);
+            int damage = diceRoll(Dice_t{attack_dice, attack_sides});
             notice = executeAttackOnPlayer(creature.level, monster.hp, monster_id, attack_type, damage, death_description, notice);
 
             // Moved here from monsterMove, so that monster only confused if it
@@ -457,6 +454,8 @@ static void monsterAttackPlayer(int monster_id) {
         } else {
             if ((attack_desc >= 1 && attack_desc <= 3) || attack_desc == 6) {
                 playerDisturb(1, 0);
+
+                vtype_t description = {'\0'};
                 (void) strcpy(description, name);
                 printMessage(strcat(description, "misses you."));
             }
@@ -697,14 +696,14 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                playerTakesHit(diceRoll(3, 8), death_description);
+                playerTakesHit(diceRoll(Dice_t{3, 8}), death_description);
             }
             break;
         case 9: // Serious Wound
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                playerTakesHit(diceRoll(8, 8), death_description);
+                playerTakesHit(diceRoll(Dice_t{8, 8}), death_description);
             }
             break;
         case 10: // Hold Person
@@ -1041,7 +1040,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
-        int i = monsterTakeHit(monster_id, diceRoll(8, 8));
+        int i = monsterTakeHit(monster_id, diceRoll(Dice_t{8, 8}));
         hack_monptr = -1;
 
         if (i >= 0) {
@@ -1418,11 +1417,11 @@ static int monsterDeathItemDropCount(uint32_t flags) {
     }
 
     if ((flags & CM_2D2_OBJ) != 0u) {
-        count += diceRoll(2, 2);
+        count += diceRoll(Dice_t{2, 2});
     }
 
     if ((flags & CM_4D2_OBJ) != 0u) {
-        count += diceRoll(4, 2);
+        count += diceRoll(Dice_t{4, 2});
     }
 
     return count;
