@@ -339,8 +339,8 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
     to_item.to_damage = from.to_damage;
     to_item.ac = from.ac;
     to_item.to_ac = from.to_ac;
-    to_item.damage.dice = from.damage[0];
-    to_item.damage.sides = from.damage[1];
+    to_item.damage.dice = from.damage.dice;
+    to_item.damage.sides = from.damage.sides;
     to_item.depth_first_found = from.depth_first_found;
     to_item.identification = 0;
 }
