@@ -18,12 +18,6 @@ Monster_t blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, 0};
 int16_t next_free_monster_id;    // ID for the next available monster ptr
 int16_t monster_multiply_total;  // Total number of reproduction's of creatures
 
-// Returns max hit points -RAK-
-// Receives the `Creature_t.hit_die` array
-int monsterMaxHitPoints(const Dice_t &dice) {
-    return dice.dice * dice.sides;
-}
-
 // Returns a pointer to next free space -RAK-
 // Returns -1 if could not allocate a monster.
 static int popm() {
@@ -51,7 +45,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
-        monster.hp = (int16_t) monsterMaxHitPoints(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
         monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
     }
@@ -111,7 +105,7 @@ void monsterPlaceWinning() {
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
-        monster.hp = (int16_t) monsterMaxHitPoints(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
     } else {
         monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
     }

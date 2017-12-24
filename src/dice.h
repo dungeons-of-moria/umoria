@@ -12,3 +12,4 @@ typedef struct {
 } Dice_t;
 
 int diceRoll(Dice_t die);
+int maxHitPoints(const Dice_t &dice);

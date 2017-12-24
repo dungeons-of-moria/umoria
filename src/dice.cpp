@@ -14,3 +14,8 @@ int diceRoll(Dice_t die) {
     }
     return sum;
 }
+
+// Returns max hit points -RAK-
+int maxHitPoints(const Dice_t &dice) {
+    return dice.dice * dice.sides;
+}

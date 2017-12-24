@@ -50,7 +50,6 @@ typedef struct {
     Dice_t dice;
 } MonsterAttack_t;
 
-int monsterMaxHitPoints(const Dice_t &dice);
 void monsterUpdateVisibility(int monster_id);
 bool monsterMultiply(int y, int x, int creatureID, int monsterID);
 void updateMonsters(bool attack);
