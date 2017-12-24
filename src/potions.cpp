@@ -136,13 +136,13 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 }
                 break;
             case PotionSpellTypes::cure_light_wounds:
-                identified = spellChangePlayerHitPoints(diceDamageRoll(2, 7));
+                identified = spellChangePlayerHitPoints(diceRoll(2, 7));
                 break;
             case PotionSpellTypes::cure_serious_wounds:
-                identified = spellChangePlayerHitPoints(diceDamageRoll(4, 7));
+                identified = spellChangePlayerHitPoints(diceRoll(4, 7));
                 break;
             case PotionSpellTypes::cure_critical_wounds:
-                identified = spellChangePlayerHitPoints(diceDamageRoll(6, 7));
+                identified = spellChangePlayerHitPoints(diceRoll(6, 7));
                 break;
             case PotionSpellTypes::healing:
                 identified = spellChangePlayerHitPoints(1000);

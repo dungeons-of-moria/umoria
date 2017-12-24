@@ -151,7 +151,6 @@ void getAndCastMagicSpell();
 void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc1.c
-int diceDamageRoll(int dice, int sides);
 int dicePlayerDamageRoll(uint8_t *notation_array);
 
 // misc3.c

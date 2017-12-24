@@ -436,7 +436,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
             creature_recall[monster.creature_id].defenses |= CD_LIGHT;
         }
 
-        if (monsterTakeHit(monster_id, diceDamageRoll(2, 8)) >= 0) {
+        if (monsterTakeHit(monster_id, diceRoll(2, 8)) >= 0) {
             printMonsterActionText(name, "shrivels away in the light!");
             displayCharacterExperience();
         } else {
@@ -1388,7 +1388,7 @@ bool spellBuildWall(int y, int x, int direction) {
                     // this will kill everything
                     damage = 3000;
                 } else {
-                    damage = diceDamageRoll(4, 8);
+                    damage = diceRoll(4, 8);
                 }
 
                 auto name = monsterNameDescription(creature.name, monster.lit);
@@ -1402,7 +1402,7 @@ bool spellBuildWall(int y, int x, int direction) {
             } else if (creature.sprite == 'E' || creature.sprite == 'X') {
                 // must be an earth elemental, an earth spirit,
                 // or a Xorn to increase its hit points
-                monster.hp += diceDamageRoll(4, 8);
+                monster.hp += diceRoll(4, 8);
             }
         }
 
@@ -1759,7 +1759,7 @@ static void earthquakeHitsMonster(int monsterID) {
             // this will kill everything
             damage = 3000;
         } else {
-            damage = diceDamageRoll(4, 8);
+            damage = diceRoll(4, 8);
         }
 
         auto name = monsterNameDescription(creature.name, monster.lit);
@@ -1773,7 +1773,7 @@ static void earthquakeHitsMonster(int monsterID) {
     } else if (creature.sprite == 'E' || creature.sprite == 'X') {
         // must be an earth elemental or an earth spirit, or a
         // Xorn increase its hit points
-        monster.hp += diceDamageRoll(4, 8);
+        monster.hp += diceRoll(4, 8);
     }
 }
 

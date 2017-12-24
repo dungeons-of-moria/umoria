@@ -60,7 +60,7 @@ int randomNumberNormalDistribution(int mean, int standard) {
     // alternate randomNumberNormalDistribution() code, slower but much smaller since no table
     // 2 per 1,000,000 will be > 4*SD, max is 5*SD
     //
-    // tmp = diceDamageRoll(8, 99);   // mean 400, SD 81
+    // tmp = diceRoll(8, 99);             // mean 400, SD 81
     // tmp = (tmp - 400) * standard / 81;
     // return tmp + mean;
 
@@ -218,4 +218,13 @@ bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
 
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
+}
+
+// generates damage for 2d6 style dice rolls
+int diceRoll(int dice, int sides) {
+    int sum = 0;
+    for (int i = 0; i < dice; i++) {
+        sum += randomNumber(sides);
+    }
+    return sum;
 }

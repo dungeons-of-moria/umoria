@@ -55,15 +55,15 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = true;
                 break;
             case WandSpellTypes::lightning_bolt:
-                spellFireBolt(y, x, direction, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(y, x, direction, diceRoll(4, 8), GF_LIGHTNING, spell_names[8]);
                 identified = true;
                 break;
             case WandSpellTypes::frost_bolt:
-                spellFireBolt(y, x, direction, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
+                spellFireBolt(y, x, direction, diceRoll(6, 8), GF_FROST, spell_names[14]);
                 identified = true;
                 break;
             case WandSpellTypes::fire_bolt:
-                spellFireBolt(y, x, direction, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
+                spellFireBolt(y, x, direction, diceRoll(9, 8), GF_FIRE, spell_names[22]);
                 identified = true;
                 break;
             case WandSpellTypes::stone_to_mud:
@@ -73,7 +73,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = spellPolymorphMonster(y, x, direction);
                 break;
             case WandSpellTypes::heal_monster:
-                identified = spellChangeMonsterHitPoints(y, x, direction, -diceDamageRoll(4, 6));
+                identified = spellChangeMonsterHitPoints(y, x, direction, -diceRoll(4, 6));
                 break;
             case WandSpellTypes::haste_monster:
                 identified = spellSpeedMonster(y, x, direction, 1);
@@ -94,7 +94,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = spellDestroyDoorsTrapsInDirection(y, x, direction);
                 break;
             case WandSpellTypes::magic_missile:
-                spellFireBolt(y, x, direction, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(y, x, direction, diceRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
                 identified = true;
                 break;
             case WandSpellTypes::wall_building:

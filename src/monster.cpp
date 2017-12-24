@@ -435,7 +435,7 @@ static void monsterAttackPlayer(int monster_id) {
                 notice = false;
             }
 
-            int damage = diceDamageRoll(attack_dice, attack_sides);
+            int damage = diceRoll(attack_dice, attack_sides);
             notice = executeAttackOnPlayer(creature.level, monster.hp, monster_id, attack_type, damage, death_description, notice);
 
             // Moved here from monsterMove, so that monster only confused if it
@@ -697,14 +697,14 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                playerTakesHit(diceDamageRoll(3, 8), death_description);
+                playerTakesHit(diceRoll(3, 8), death_description);
             }
             break;
         case 9: // Serious Wound
             if (playerSavingThrow()) {
                 printMessage("You resist the effects of the spell.");
             } else {
-                playerTakesHit(diceDamageRoll(8, 8), death_description);
+                playerTakesHit(diceRoll(8, 8), death_description);
             }
             break;
         case 10: // Hold Person
@@ -1041,7 +1041,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
-        int i = monsterTakeHit(monster_id, diceDamageRoll(8, 8));
+        int i = monsterTakeHit(monster_id, diceRoll(8, 8));
         hack_monptr = -1;
 
         if (i >= 0) {
@@ -1418,11 +1418,11 @@ static int monsterDeathItemDropCount(uint32_t flags) {
     }
 
     if ((flags & CM_2D2_OBJ) != 0u) {
-        count += diceDamageRoll(2, 2);
+        count += diceRoll(2, 2);
     }
 
     if ((flags & CM_4D2_OBJ) != 0u) {
-        count += diceDamageRoll(4, 2);
+        count += diceRoll(4, 2);
     }
 
     return count;

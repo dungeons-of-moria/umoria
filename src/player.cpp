@@ -1175,7 +1175,7 @@ static void playerAttackMonster(int y, int x) {
             damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, CLASS_BTH);
         } else {
             // Bare hands!?
-            damage = diceDamageRoll(1, 1);
+            damage = diceRoll(1, 1);
             damage = playerWeaponCriticalBlow(1, 0, damage, CLASS_BTH);
         }
 

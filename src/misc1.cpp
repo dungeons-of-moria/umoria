@@ -9,15 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-// generates damage for 2d6 style dice rolls
-int diceDamageRoll(int dice, int sides) {
-    int sum = 0;
-    for (int i = 0; i < dice; i++) {
-        sum += randomNumber(sides);
-    }
-    return sum;
-}
-
 int dicePlayerDamageRoll(uint8_t *notation_array) {
-    return diceDamageRoll((int) notation_array[0], (int) notation_array[1]);
+    return diceRoll((int) notation_array[0], (int) notation_array[1]);
 }

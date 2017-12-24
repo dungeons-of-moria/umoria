@@ -74,7 +74,7 @@ static void castSpell(int spell_id) {
     switch ((MageSpellTypes) spell_id) {
         case MageSpellTypes::magic_missile :
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceDamageRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(py.row, py.col, dir, diceRoll(2, 6), GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
         case MageSpellTypes::detect_monsters:
@@ -87,7 +87,7 @@ static void castSpell(int spell_id) {
             (void) spellLightArea(py.row, py.col);
             break;
         case MageSpellTypes::cure_light_wounds:
-            (void) spellChangePlayerHitPoints(diceDamageRoll(4, 4));
+            (void) spellChangePlayerHitPoints(diceRoll(4, 4));
             break;
         case MageSpellTypes::find_hidden_traps_doors:
             (void) spellDetectSecretDoorssWithinVicinity();
@@ -105,7 +105,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::lightning_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceDamageRoll(4, 8), GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(py.row, py.col, dir, diceRoll(4, 8), GF_LIGHTNING, spell_names[8]);
             }
             break;
         case MageSpellTypes::trap_door_destruction:
@@ -129,7 +129,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::frost_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceDamageRoll(6, 8), GF_FROST, spell_names[14]);
+                spellFireBolt(py.row, py.col, dir, diceRoll(6, 8), GF_FROST, spell_names[14]);
             }
             break;
         case MageSpellTypes::wall_to_mud:
@@ -159,7 +159,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::fire_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceDamageRoll(9, 8), GF_FIRE, spell_names[22]);
+                spellFireBolt(py.row, py.col, dir, diceRoll(9, 8), GF_FIRE, spell_names[22]);
             }
             break;
         case MageSpellTypes::speed_monster:
