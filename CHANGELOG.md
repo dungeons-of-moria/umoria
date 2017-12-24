@@ -25,6 +25,7 @@ These locations are by no means final, but are a useful first pass.
 - Grouping related functions together in the same file.
 - Move more Player globals to the `Player_t` struct.
 - Create a `Dungeon_t` and put all dungeon related globals here.
+- Create a `Dice_t` instead of using an array.
 - Started replacing `char *` with `std::string`.
 - Simpler display of _death_ screens (using `death_tomb.txt`, `death_royal.txt` files).
 
