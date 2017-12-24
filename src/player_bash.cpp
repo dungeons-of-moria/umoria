@@ -8,6 +8,7 @@
 
 #include "headers.h"
 #include "externs.h"
+#include "dice.h"
 
 static void playerBashAttack(int y, int x);
 static void playerBashPosition(int y, int x);
@@ -134,9 +135,10 @@ static void playerBashAttack(int y, int x) {
             // Can not stun Balrog
             int avg_max_hp;
             if ((creature.defenses & CD_MAX_HP) != 0) {
-                avg_max_hp = creature.hit_die[0] * creature.hit_die[1];
+                avg_max_hp = monsterMaxHitPoints(creature.hit_die);
             } else {
-                avg_max_hp = (creature.hit_die[0] * (creature.hit_die[1] + 1)) >> 1;
+                // TODO: use monsterMaxHitPoints(), just be careful about the bit shift
+                avg_max_hp = (creature.hit_die.dice * (creature.hit_die.sides + 1)) >> 1;
             }
 
             if (100 + randomNumber(400) + randomNumber(400) > monster.hp + avg_max_hp) {

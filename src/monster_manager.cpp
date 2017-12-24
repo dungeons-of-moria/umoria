@@ -20,8 +20,8 @@ int16_t monster_multiply_total;  // Total number of reproduction's of creatures
 
 // Returns max hit points -RAK-
 // Receives the `Creature_t.hit_die` array
-static int monsterMaxHitPoints(const uint8_t *array) {
-    return (array[0] * array[1]);
+int monsterMaxHitPoints(const Dice_t &dice) {
+    return dice.dice * dice.sides;
 }
 
 // Returns a pointer to next free space -RAK-
@@ -53,9 +53,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
         monster.hp = (int16_t) monsterMaxHitPoints(creatures_list[creature_id].hit_die);
     } else {
-        auto dice = creatures_list[creature_id].hit_die[0];
-        auto sides = creatures_list[creature_id].hit_die[1];
-        monster.hp = (int16_t) diceRoll(Dice_t{dice, sides});
+        monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
     }
 
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
@@ -115,9 +113,7 @@ void monsterPlaceWinning() {
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
         monster.hp = (int16_t) monsterMaxHitPoints(creatures_list[creature_id].hit_die);
     } else {
-        auto dice = creatures_list[creature_id].hit_die[0];
-        auto sides = creatures_list[creature_id].hit_die[1];
-        monster.hp = (int16_t) diceRoll(Dice_t{dice, sides});
+        monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t

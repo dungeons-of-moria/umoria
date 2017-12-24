@@ -325,7 +325,7 @@ static void memoryKillDifficulty(const Creature_t &creature, uint32_t monster_ki
     (void) sprintf(description, " It has an armor rating of %d", creature.ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature.defenses & CD_MAX_HP) != 0 ? " maximized" : ""), creature.hit_die[0], creature.hit_die[1]);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature.defenses & CD_MAX_HP) != 0 ? " maximized" : ""), creature.hit_die.dice, creature.hit_die.sides);
     memoryPrint(description);
 }
 

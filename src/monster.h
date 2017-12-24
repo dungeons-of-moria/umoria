@@ -37,7 +37,7 @@ typedef struct {
     uint8_t ac;                 // AC
     uint8_t speed;              // Movement speed+10 (NOTE: +10 so that it can be an unsigned int)
     uint8_t sprite;             // Character representation (cchar)
-    uint8_t hit_die[2];         // Creatures hit die
+    Dice_t hit_die;             // Creatures hit die
     uint8_t damage[4];          // Type attack and damage
     uint8_t level;              // Level of creature
 } Creature_t;
@@ -50,6 +50,7 @@ typedef struct {
     Dice_t dice;
 } MonsterAttack_t;
 
+int monsterMaxHitPoints(const Dice_t &dice);
 void monsterUpdateVisibility(int monster_id);
 bool monsterMultiply(int y, int x, int creatureID, int monsterID);
 void updateMonsters(bool attack);
