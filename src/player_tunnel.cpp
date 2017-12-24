@@ -35,7 +35,7 @@ static int playerDiggingAbility(const Inventory_t &weapon) {
     if ((weapon.flags & TR_TUNNEL) != 0u) {
         diggingAbility += 25 + weapon.misc_use * 50;
     } else {
-        diggingAbility += maxHitPoints(weapon.damage) + weapon.to_hit + weapon.to_damage;
+        diggingAbility += maxDiceRoll(weapon.damage) + weapon.to_hit + weapon.to_damage;
 
         // divide by two so that digging without shovel isn't too easy
         diggingAbility >>= 1;

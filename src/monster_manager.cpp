@@ -45,7 +45,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
-        monster.hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) maxDiceRoll(creatures_list[creature_id].hit_die);
     } else {
         monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
     }
@@ -105,7 +105,7 @@ void monsterPlaceWinning() {
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
-        monster.hp = (int16_t) maxHitPoints(creatures_list[creature_id].hit_die);
+        monster.hp = (int16_t) maxDiceRoll(creatures_list[creature_id].hit_die);
     } else {
         monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
     }

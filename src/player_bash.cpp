@@ -133,9 +133,9 @@ static void playerBashAttack(int y, int x) {
             // Can not stun Balrog
             int avg_max_hp;
             if ((creature.defenses & CD_MAX_HP) != 0) {
-                avg_max_hp = maxHitPoints(creature.hit_die);
+                avg_max_hp = maxDiceRoll(creature.hit_die);
             } else {
-                // TODO: use maxHitPoints(), just be careful about the bit shift
+                // TODO: use maxDiceRoll(), just be careful about the bit shift
                 avg_max_hp = (creature.hit_die.dice * (creature.hit_die.sides + 1)) >> 1;
             }
 
