@@ -121,7 +121,6 @@ set(
         ${source_dir}/los.cpp
         ${source_dir}/mage_spells.cpp
         ${source_dir}/magic_items.cpp
-        ${source_dir}/misc3.cpp
         ${source_dir}/monster.cpp
         ${source_dir}/monster_manager.cpp
         ${source_dir}/moria.cpp

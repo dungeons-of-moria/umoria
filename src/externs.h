@@ -126,9 +126,6 @@ void look();
 // magic_items.cpp
 void magicTreasureMagicalAbility(int item_id, int level);
 
-// misc3.c
-int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
-
 // monster_management.cpp
 bool compactMonsters();
 bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);

@@ -196,6 +196,7 @@ bool playerRemoveFear();
 bool playerProtectEvil();
 void playerBless(int adjustment);
 void playerDetectInvisible(int adjustment);
+int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
 
 // player_move.cpp
 void playerMove(int direction, bool do_pickup);
