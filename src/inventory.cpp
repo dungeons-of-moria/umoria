@@ -9,6 +9,16 @@
 #include "headers.h"
 #include "externs.h"
 
+uint32_t inventoryCollectAllItemFlags() {
+    uint32_t flags = 0;
+
+    for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
+        flags |= inventory[i].flags;
+    }
+
+    return flags;
+}
+
 // Destroy an item in the inventory -RAK-
 void inventoryDestroyItem(int item_id) {
     Inventory_t &item = inventory[item_id];
@@ -343,4 +353,157 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
     to_item.damage.sides = from.damage.sides;
     to_item.depth_first_found = from.depth_first_found;
     to_item.identification = 0;
+}
+
+// AC gets worse -RAK-
+// Note: This routine affects magical AC bonuses so
+// that stores can detect the damage.
+static bool damageMinusAC(uint32_t typ_dam) {
+    int itemsCount = 0;
+    int items[6];
+
+    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_BODY;
+        itemsCount++;
+    }
+
+    if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_ARM;
+        itemsCount++;
+    }
+
+    if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_OUTER;
+        itemsCount++;
+    }
+
+    if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_HANDS;
+        itemsCount++;
+    }
+
+    if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_HEAD;
+        itemsCount++;
+    }
+
+    // also affect boots
+    if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
+        items[itemsCount] = EQUIPMENT_FEET;
+        itemsCount++;
+    }
+
+    bool minus = false;
+
+    if (itemsCount == 0) {
+        return minus;
+    }
+
+    int itemID = items[randomNumber(itemsCount) - 1];
+
+    obj_desc_t description = {'\0'};
+    obj_desc_t msg = {'\0'};
+
+    if ((inventory[itemID].flags & typ_dam) != 0u) {
+        minus = true;
+
+        itemDescription(description, inventory[itemID], false);
+        (void) sprintf(msg, "Your %s resists damage!", description);
+        printMessage(msg);
+    } else if (inventory[itemID].ac + inventory[itemID].to_ac > 0) {
+        minus = true;
+
+        itemDescription(description, inventory[itemID], false);
+        (void) sprintf(msg, "Your %s is damaged!", description);
+        printMessage(msg);
+
+        inventory[itemID].to_ac--;
+        playerRecalculateBonuses();
+    }
+
+    return minus;
+}
+
+// Corrode the unsuspecting person's armor -RAK-
+void damageCorrodingGas(const char *creature_name) {
+    if (!damageMinusAC((uint32_t) TR_RES_ACID)) {
+        playerTakesHit(randomNumber(8), creature_name);
+    }
+
+    if (inventoryDamageItem(setCorrodableItems, 5) > 0) {
+        printMessage("There is an acrid smell coming from your pack.");
+    }
+}
+
+// Poison gas the idiot. -RAK-
+void damagePoisonedGas(int damage, const char *creature_name) {
+    playerTakesHit(damage, creature_name);
+
+    py.flags.poisoned += 12 + randomNumber(damage);
+}
+
+// Burn the fool up. -RAK-
+void damageFire(int damage, const char *creature_name) {
+    if (py.flags.resistant_to_fire) {
+        damage = damage / 3;
+    }
+
+    if (py.flags.heat_resistance > 0) {
+        damage = damage / 3;
+    }
+
+    playerTakesHit(damage, creature_name);
+
+    if (inventoryDamageItem(setFlammableItems, 3) > 0) {
+        printMessage("There is smoke coming from your pack!");
+    }
+}
+
+// Freeze them to death. -RAK-
+void damageCold(int damage, const char *creature_name) {
+    if (py.flags.resistant_to_cold) {
+        damage = damage / 3;
+    }
+
+    if (py.flags.cold_resistance > 0) {
+        damage = damage / 3;
+    }
+
+    playerTakesHit(damage, creature_name);
+
+    if (inventoryDamageItem(setFrostDestroyableItems, 5) > 0) {
+        printMessage("Something shatters inside your pack!");
+    }
+}
+
+// Lightning bolt the sucker away. -RAK-
+void damageLightningBolt(int damage, const char *creature_name) {
+    if (py.flags.resistant_to_light) {
+        damage = damage / 3;
+    }
+
+    playerTakesHit(damage, creature_name);
+
+    if (inventoryDamageItem(setLightningDestroyableItems, 3) > 0) {
+        printMessage("There are sparks coming from your pack!");
+    }
+}
+
+// Throw acid on the hapless victim -RAK-
+void damageAcid(int damage, const char *creature_name) {
+    int flag = 0;
+
+    if (damageMinusAC((uint32_t) TR_RES_ACID)) {
+        flag = 1;
+    }
+
+    if (py.flags.resistant_to_acid) {
+        flag += 2;
+    }
+
+    playerTakesHit(damage / (flag + 1), creature_name);
+
+    if (inventoryDamageItem(setAcidAffectedItems, 3) > 0) {
+        printMessage("There is an acrid smell coming from your pack!");
+    }
 }

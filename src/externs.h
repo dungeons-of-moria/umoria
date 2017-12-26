@@ -162,18 +162,11 @@ bool monsterSummonUndead(int &y, int &x);
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
 // moria1.c
-uint32_t inventoryCollectAllItemFlags();
 bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
 
 // moria2.c
 void trapChangeVisibility(int y, int x);
-void damageCorrodingGas(const char *creature_name);
-void damagePoisonedGas(int damage, const char *creature_name);
-void damageFire(int damage, const char *creature_name);
-void damageCold(int damage, const char *creature_name);
-void damageLightningBolt(int damage, const char *creature_name);
-void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
 void chestTrap(int y, int x);
@@ -200,6 +193,8 @@ int32_t rnd();
 bool saveGame();
 bool loadGame(bool &generate);
 void setFileptr(FILE *file);
+
+// scores
 void saveHighScore(const HighScore_t &score);
 void readHighScore(HighScore_t &score);
 

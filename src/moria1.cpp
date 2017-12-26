@@ -9,16 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-uint32_t inventoryCollectAllItemFlags() {
-    uint32_t flags = 0;
-
-    for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
-        flags |= inventory[i].flags;
-    }
-
-    return flags;
-}
-
 // I may have written the town level code, but I'm not exactly
 // proud of it.   Adding the stores required some real slucky
 // hooks which I have not had time to re-think. -RAK-

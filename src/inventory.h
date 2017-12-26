@@ -41,6 +41,8 @@ typedef struct {
     uint8_t identification;         // Identify information
 } Inventory_t;
 
+uint32_t inventoryCollectAllItemFlags();
+
 void inventoryDestroyItem(int item_id);
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item);
 void inventoryDropItem(int item_id, bool drop_all);
@@ -53,3 +55,10 @@ bool inventoryCanCarryItem(const Inventory_t &item);
 int inventoryCarryItem(Inventory_t &new_item);
 bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k);
 void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item);
+
+void damageCorrodingGas(const char *creature_name);
+void damagePoisonedGas(int damage, const char *creature_name);
+void damageFire(int damage, const char *creature_name);
+void damageCold(int damage, const char *creature_name);
+void damageLightningBolt(int damage, const char *creature_name);
+void damageAcid(int damage, const char *creature_name);
