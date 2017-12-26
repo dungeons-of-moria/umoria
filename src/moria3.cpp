@@ -102,13 +102,3 @@ void objectBlockedByMonster(int monster_id) {
     (void) sprintf(msg, "%s is in your way!", description);
     printMessage(msg);
 }
-
-int getRandomDirection() {
-    int dir;
-
-    do {
-        dir = randomNumber(9);
-    } while (dir == 5);
-
-    return dir;
-}

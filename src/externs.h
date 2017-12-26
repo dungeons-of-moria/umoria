@@ -161,14 +161,9 @@ bool monsterSummonUndead(int &y, int &x);
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
-// moria1.c
-bool getDirectionWithMemory(char *prompt, int &direction);
-bool getAllDirections(const char *prompt, int &direction);
-
 // moria3.c
 void chestTrap(int y, int x);
 void objectBlockedByMonster(int monster_id);
-int getRandomDirection();
 
 // potions.c
 void quaff();

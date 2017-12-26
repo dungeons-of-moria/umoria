@@ -219,3 +219,105 @@ bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch) {
     return major == CURRENT_VERSION_MAJOR && minor == CURRENT_VERSION_MINOR && patch == CURRENT_VERSION_PATCH;
 }
+
+int getRandomDirection() {
+    int dir;
+
+    do {
+        dir = randomNumber(9);
+    } while (dir == 5);
+
+    return dir;
+}
+
+// map roguelike direction commands into numbers
+static char mapRoguelikeKeysToKeypad(char command) {
+    switch (command) {
+        case 'h':
+            return '4';
+        case 'y':
+            return '7';
+        case 'k':
+            return '8';
+        case 'u':
+            return '9';
+        case 'l':
+            return '6';
+        case 'n':
+            return '3';
+        case 'j':
+            return '2';
+        case 'b':
+            return '1';
+        case '.':
+            return '5';
+        default:
+            return command;
+    }
+}
+
+// Prompts for a direction -RAK-
+// Direction memory added, for repeated commands.  -CJS
+bool getDirectionWithMemory(char *prompt, int &direction) {
+    static char prev_dir; // Direction memory. -CJS-
+
+    // used in counted commands. -CJS-
+    if (game.use_last_direction) {
+        direction = prev_dir;
+        return true;
+    }
+
+    if (prompt == CNIL) {
+        prompt = (char *) "Which direction?";
+    }
+
+    char command;
+
+    while (true) {
+        // Don't end a counted command. -CJS-
+        int save = game.command_count;
+
+        if (!getCommand(prompt, command)) {
+            game.player_free_turn = true;
+            return false;
+        }
+
+        game.command_count = save;
+
+        if (config.use_roguelike_keys) {
+            command = mapRoguelikeKeysToKeypad(command);
+        }
+
+        if (command >= '1' && command <= '9' && command != '5') {
+            prev_dir = command - '0';
+            direction = prev_dir;
+            return true;
+        }
+
+        terminalBellSound();
+    }
+}
+
+// Similar to getDirectionWithMemory(), except that no memory exists,
+// and it is allowed to enter the null direction. -CJS-
+bool getAllDirections(const char *prompt, int &direction) {
+    char command;
+
+    while (true) {
+        if (!getCommand(prompt, command)) {
+            game.player_free_turn = true;
+            return false;
+        }
+
+        if (config.use_roguelike_keys) {
+            command = mapRoguelikeKeysToKeypad(command);
+        }
+
+        if (command >= '1' && command <= '9') {
+            direction = command - '0';
+            return true;
+        }
+
+        terminalBellSound();
+    }
+}

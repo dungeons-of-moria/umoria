@@ -39,6 +39,10 @@ void setGameOptions();
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 bool isCurrentGameVersion(uint8_t major, uint8_t minor, uint8_t patch);
 
+int getRandomDirection();
+bool getDirectionWithMemory(char *prompt, int &direction);
+bool getAllDirections(const char *prompt, int &direction);
+
 // game object management
 int popt();
 void pusht(uint8_t treasure_id);
