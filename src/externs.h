@@ -137,9 +137,6 @@ bool monsterSummonUndead(int &y, int &x);
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
-// moria3.c
-void objectBlockedByMonster(int monster_id);
-
 // potions.c
 void quaff();
 

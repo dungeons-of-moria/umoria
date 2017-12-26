@@ -716,3 +716,20 @@ void itemAppendToInscription(Inventory_t &item, uint8_t item_ident_type) {
 void itemReplaceInscription(Inventory_t &item, const char *inscription) {
     (void) strcpy(item.inscription, inscription);
 }
+
+void objectBlockedByMonster(int monster_id) {
+    vtype_t description = {'\0'};
+    vtype_t msg = {'\0'};
+
+    const Monster_t &monster = monsters[monster_id];
+    const char *name = creatures_list[monster.creature_id].name;
+
+    if (monster.lit) {
+        (void) sprintf(description, "The %s", name);
+    } else {
+        (void) strcpy(description, "Something");
+    }
+
+    (void) sprintf(msg, "%s is in your way!", description);
+    printMessage(msg);
+}
