@@ -90,6 +90,7 @@ set(
         ${source_dir}/scores.h
         ${source_dir}/spells.h
         ${source_dir}/store.h
+        ${source_dir}/treasure.h
         ${source_dir}/types.h
         ${source_dir}/ui.h
         ${source_dir}/version.h
@@ -120,7 +121,6 @@ set(
         ${source_dir}/inventory.cpp
         ${source_dir}/los.cpp
         ${source_dir}/mage_spells.cpp
-        ${source_dir}/magic_items.cpp
         ${source_dir}/monster.cpp
         ${source_dir}/monster_manager.cpp
         ${source_dir}/moria.cpp

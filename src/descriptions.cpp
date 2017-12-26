@@ -9,8 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-static void unsample(Inventory_t &item);
-
 char magic_item_titles[MAX_TITLES][10];
 
 // Initialize all Potions, wands, staves, scrolls, etc.
@@ -163,6 +161,24 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
     return isObjectKnown(id);
 }
 
+// Remove an automatically generated inscription. -CJS-
+static void unsample(Inventory_t &item) {
+    // this also used to clear ID_DAMD flag, but I think it should remain set
+    item.identification &= ~(ID_MAGIK | ID_EMPTY);
+
+    int16_t id = objectPositionOffset(item.category_id, item.sub_category_id);
+
+    if (id < 0) {
+        return;
+    }
+
+    id <<= 6;
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+
+    // clear the tried flag, since it is now known
+    clearObjectTriedFlag(id);
+}
+
 // Remove "Secret" symbol for identity of plusses
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item) {
     unsample(item);
@@ -188,24 +204,6 @@ void itemIdentifyAsStoreBought(Inventory_t &item) {
 
 bool itemStoreBought(int identification) {
     return (identification & ID_STORE_BOUGHT) != 0;
-}
-
-// Remove an automatically generated inscription. -CJS-
-static void unsample(Inventory_t &item) {
-    // this also used to clear ID_DAMD flag, but I think it should remain set
-    item.identification &= ~(ID_MAGIK | ID_EMPTY);
-
-    int16_t id = objectPositionOffset(item.category_id, item.sub_category_id);
-
-    if (id < 0) {
-        return;
-    }
-
-    id <<= 6;
-    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
-
-    // clear the tried flag, since it is now known
-    clearObjectTriedFlag(id);
 }
 
 // Somethings been sampled -CJS-

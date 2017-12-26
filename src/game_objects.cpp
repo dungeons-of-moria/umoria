@@ -9,6 +9,9 @@
 #include "headers.h"
 #include "externs.h"
 
+int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
+int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
+
 // If too many objects on floor level, delete some of them-RAK-
 static void compactObjects() {
     printMessage("Compacting objects...");

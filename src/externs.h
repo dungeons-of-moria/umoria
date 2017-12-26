@@ -123,9 +123,6 @@ void identifyGameObject();
 bool los(int from_y, int from_x, int to_y, int to_x);
 void look();
 
-// magic_items.cpp
-void magicTreasureMagicalAbility(int item_id, int level);
-
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 

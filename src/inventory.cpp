@@ -9,6 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
+Inventory_t inventory[PLAYER_INVENTORY_SIZE];
+
 uint32_t inventoryCollectAllItemFlags() {
     uint32_t flags = 0;
 

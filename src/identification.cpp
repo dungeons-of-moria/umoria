@@ -9,6 +9,9 @@
 #include "headers.h"
 #include "externs.h"
 
+// Identified objects flags
+uint8_t objects_identified[OBJECT_IDENT_SIZE];
+
 static const char *objectDescription(char command) {
     // every printing ASCII character is listed here, in the
     // order in which they appear in the ASCII character set.
