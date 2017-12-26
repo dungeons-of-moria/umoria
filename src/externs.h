@@ -126,14 +126,6 @@ void look();
 // magic_items.cpp
 void magicTreasureMagicalAbility(int item_id, int level);
 
-// monster_management.cpp
-bool compactMonsters();
-bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
-void monsterPlaceWinning();
-void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
-bool monsterSummon(int &y, int &x, bool sleeping);
-bool monsterSummonUndead(int &y, int &x);
-
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
