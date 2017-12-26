@@ -125,7 +125,6 @@ set(
         ${source_dir}/monster_manager.cpp
         ${source_dir}/moria.cpp
         ${source_dir}/moria1.cpp
-        ${source_dir}/moria2.cpp
         ${source_dir}/moria3.cpp
         ${source_dir}/player.cpp
         ${source_dir}/player_bash.cpp

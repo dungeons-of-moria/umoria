@@ -165,9 +165,6 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
 
-// moria2.c
-void trapChangeVisibility(int y, int x);
-
 // moria3.c
 void chestTrap(int y, int x);
 void objectBlockedByMonster(int monster_id);

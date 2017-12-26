@@ -48,6 +48,8 @@ char caveGetTileSymbol(Coord_t coord);
 bool caveTileVisible(Coord_t coord);
 
 void dungeonSetTrap(int y, int x, int sub_type_id);
+void trapChangeVisibility(int y, int x);
+
 void dungeonPlaceRubble(int y, int x);
 void dungeonPlaceGold(int y, int x);
 

@@ -223,6 +223,28 @@ void dungeonSetTrap(int y, int x, int sub_type_id) {
     inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
 }
 
+// Change a trap from invisible to visible -RAK-
+// Note: Secret doors are handled here
+void trapChangeVisibility(int y, int x) {
+    uint8_t treasure_id = dg.floor[y][x].treasure_id;
+
+    Inventory_t &item = treasure_list[treasure_id];
+
+    if (item.category_id == TV_INVIS_TRAP) {
+        item.category_id = TV_VIS_TRAP;
+        dungeonLiteSpot(y, x);
+        return;
+    }
+
+    // change secret door to closed door
+    if (item.category_id == TV_SECRET_DOOR) {
+        item.id = OBJ_CLOSED_DOOR;
+        item.category_id = game_objects[OBJ_CLOSED_DOOR].category_id;
+        item.sprite = game_objects[OBJ_CLOSED_DOOR].sprite;
+        dungeonLiteSpot(y, x);
+    }
+}
+
 // Places rubble at location y, x -RAK-
 void dungeonPlaceRubble(int y, int x) {
     int free_treasure_id = popt();
