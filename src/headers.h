@@ -65,4 +65,5 @@
 #include "monster.h"
 #include "player.h"
 #include "scores.h"
+#include "spells.h"
 #include "store.h"

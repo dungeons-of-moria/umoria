@@ -9,6 +9,141 @@
 #include "headers.h"
 #include "externs.h"
 
+// Returns spell pointer -RAK-
+static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell) {
+    spell_id = -1;
+
+    vtype_t str = {'\0'};
+    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell_ids[0] + 'a' - first_spell, spell_ids[number_of_choices - 1] + 'a' - first_spell, prompt);
+
+    bool spell_found = false;
+    bool redraw = false;
+
+    int offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+
+    char choice;
+
+    while (!spell_found && getCommand(str, choice)) {
+        if (isupper((int) choice) != 0) {
+            spell_id = choice - 'A' + first_spell;
+
+            // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
+            int test_spell_id;
+            for (test_spell_id = 0; test_spell_id < number_of_choices; test_spell_id++) {
+                if (spell_id == spell_ids[test_spell_id]) {
+                    break;
+                }
+            }
+
+            if (test_spell_id == number_of_choices) {
+                spell_id = -2;
+            } else {
+                const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
+
+                vtype_t tmp_str = {'\0'};
+                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], spell.mana_required, spellChanceOfSuccess(spell_id));
+                if (getInputConfirmation(tmp_str)) {
+                    spell_found = true;
+                } else {
+                    spell_id = -1;
+                }
+            }
+        } else if (islower((int) choice) != 0) {
+            spell_id = choice - 'a' + first_spell;
+
+            // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
+            int test_spell_id;
+            for (test_spell_id = 0; test_spell_id < number_of_choices; test_spell_id++) {
+                if (spell_id == spell_ids[test_spell_id]) {
+                    break;
+                }
+            }
+
+            if (test_spell_id == number_of_choices) {
+                spell_id = -2;
+            } else {
+                spell_found = true;
+            }
+        } else if (choice == '*') {
+            // only do this drawing once
+            if (!redraw) {
+                terminalSaveScreen();
+                redraw = true;
+                displaySpellsList(spell_ids, number_of_choices, false, first_spell);
+            }
+        } else if (isalpha((int) choice) != 0) {
+            spell_id = -2;
+        } else {
+            spell_id = -1;
+            terminalBellSound();
+        }
+
+        if (spell_id == -2) {
+            vtype_t tmp_str = {'\0'};
+            (void) sprintf(tmp_str, "You don't know that %s.", (offset == NAME_OFFSET_SPELLS ? "spell" : "prayer"));
+            printMessage(tmp_str);
+        }
+    }
+
+    if (redraw) {
+        terminalRestoreScreen();
+    }
+
+    messageLineClear();
+
+    if (spell_found) {
+        spell_chance = spellChanceOfSuccess(spell_id);
+    }
+
+    return spell_found;
+}
+
+// Return spell number and failure chance -RAK-
+// returns -1 if no spells in book
+// returns  1 if choose a spell in book to cast
+// returns  0 if don't choose a spell, i.e. exit with an escape
+// TODO: split into two functions; getting spell ID and casting an actual spell
+int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance) {
+    // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
+    uint32_t flags = inventory[item_id].flags;
+    int first_spell = getAndClearFirstBit(flags);
+    flags = inventory[item_id].flags & py.flags.spells_learnt;
+
+    // TODO(cook) move access to `magic_spells[]` directly to the for loop it's used in, below?
+    Spell_t *spells = magic_spells[py.misc.class_id - 1];
+
+    int spell_count = 0;
+    int spell_list[31];
+
+    while (flags != 0u) {
+        int pos = getAndClearFirstBit(flags);
+
+        if (spells[pos].level_required <= py.misc.level) {
+            spell_list[spell_count] = pos;
+            spell_count++;
+        }
+    }
+
+    if (spell_count == 0) {
+        return -1;
+    }
+
+    int result = 0;
+    if (spellGetId(spell_list, spell_count, spell_id, spell_chance, prompt, first_spell)) {
+        result = 1;
+    }
+
+    if ((result != 0) && magic_spells[py.misc.class_id - 1][spell_id].mana_required > py.misc.current_mana) {
+        if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+            result = (int) getInputConfirmation("You summon your limited strength to cast this one! Confirm?");
+        } else {
+            result = (int) getInputConfirmation("The gods may think you presumptuous for this! Confirm?");
+        }
+    }
+
+    return result;
+}
+
 // Following are spell procedure/functions -RAK-
 // These routines are commonly used in the scroll, potion, wands, and
 // staves routines, and are occasionally called from other areas.

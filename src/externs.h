@@ -148,7 +148,6 @@ void look();
 void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc3.c
-bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell);
 bool enterWizardMode();
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
 
@@ -178,7 +177,6 @@ void damageLightningBolt(int damage, const char *creature_name);
 void damageAcid(int damage, const char *creature_name);
 
 // moria3.c
-int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
 void chestTrap(int y, int x);
 void objectBlockedByMonster(int monster_id);
 int getRandomDirection();
@@ -228,66 +226,6 @@ bool setWeaponsmithItems(int item_id);
 bool setTempleItems(int item_id);
 bool setAlchemistItems(int item_id);
 bool setMagicShopItems(int item_id);
-
-// spells.c
-bool spellDetectTreasureWithinVicinity();
-bool spellDetectObjectsWithinVicinity();
-bool spellDetectTrapsWithinVicinity();
-bool spellDetectSecretDoorssWithinVicinity();
-bool spellDetectInvisibleCreaturesWithinVicinity();
-bool spellLightArea(int y, int x);
-bool spellDarkenArea(int y, int x);
-void spellMapCurrentArea();
-bool spellIdentifyItem();
-bool spellAggravateMonsters(int affect_distance);
-bool spellSurroundPlayerWithTraps();
-bool spellSurroundPlayerWithDoors();
-bool spellDestroyAdjacentDoorsTraps();
-bool spellDetectMonsters();
-void spellLightLine(int x, int y, int direction);
-void spellStarlite(int y, int x);
-bool spellDisarmAllInDirection(int y, int x, int direction);
-void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name);
-void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name);
-void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, const std::string &spell_name);
-bool spellRechargeItem(int number_of_charges);
-bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp);
-bool spellDrainLifeFromMonster(int y, int x, int direction);
-bool spellSpeedMonster(int y, int x, int direction, int speed);
-bool spellConfuseMonster(int y, int x, int direction);
-bool spellSleepMonster(int y, int x, int direction);
-bool spellWallToMud(int y, int x, int direction);
-bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction);
-bool spellPolymorphMonster(int y, int x, int direction);
-bool spellBuildWall(int y, int x, int direction);
-bool spellCloneMonster(int y, int x, int direction);
-void spellTeleportAwayMonster(int monster_id, int distance_from_player);
-void spellTeleportPlayerTo(int y, int x);
-bool spellTeleportAwayMonsterInDirection(int y, int x, int direction);
-bool spellMassGenocide();
-bool spellGenocide();
-bool spellSpeedAllMonsters(int speed);
-bool spellSleepAllMonsters();
-bool spellMassPolymorph();
-bool spellDetectEvil();
-bool spellChangePlayerHitPoints(int adjustment);
-void spellEarthquake();
-void spellCreateFood();
-bool spellDispelCreature(int creature_defense, int damage);
-bool spellTurnUndead();
-void spellWardingGlyph();
-void spellLoseSTR();
-void spellLoseINT();
-void spellLoseWIS();
-void spellLoseDEX();
-void spellLoseCON();
-void spellLoseCHR();
-void spellLoseEXP(int32_t adjustment);
-bool spellSlowPoison();
-void spellDestroyArea(int y, int x);
-bool spellEnchantItem(int16_t &plusses, int16_t max_bonus_limit);
-bool spellRemoveCurseFromAllItems();
-bool spellRestorePlayerLevels();
 
 // staffs.c
 void staffUse();
