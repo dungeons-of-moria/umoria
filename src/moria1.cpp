@@ -9,10 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-// I may have written the town level code, but I'm not exactly
-// proud of it.   Adding the stores required some real slucky
-// hooks which I have not had time to re-think. -RAK-
-
 // map roguelike direction commands into numbers
 static char mapRoguelikeKeysToKeypad(char command) {
     switch (command) {

@@ -1184,6 +1184,10 @@ static void lightTown() {
     }
 }
 
+// I may have written the town level code, but I'm not exactly
+// proud of it.   Adding the stores required some real slucky
+// hooks which I have not had time to re-think. -RAK-
+
 // Town logic flow for generation of new town
 static void townGeneration() {
     seedSet(game.town_seed);
