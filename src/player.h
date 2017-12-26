@@ -179,6 +179,8 @@ bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);
 void playerAttackPosition(int y, int x);
 void playerCalculateAllowedSpellsCount(int stat);
 
+char *playerRankTitle();
+
 // player_eat.cpp
 void playerEat();
 void playerIngestFood(int amount);

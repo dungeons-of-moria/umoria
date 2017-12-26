@@ -215,7 +215,7 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) fprintf(file1, " Social Class : %6d", py.misc.social_class);
     statsAsString(py.stats.used[A_DEX], statDescription);
     (void) fprintf(file1, "   DEX : %s\n", statDescription);
-    (void) fprintf(file1, " Title%8s %-23s", colon, playerTitle());
+    (void) fprintf(file1, " Title%8s %-23s", colon, playerRankTitle());
     (void) fprintf(file1, "%22s", blank);
     statsAsString(py.stats.used[A_CON], statDescription);
     (void) fprintf(file1, "   CON : %s\n", statDescription);

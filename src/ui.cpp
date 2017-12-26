@@ -202,7 +202,7 @@ static void printNumber(int num, int row, int column) {
 
 // Prints title of character -RAK-
 void printCharacterTitle() {
-    printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
+    printCharacterInfoInField(playerRankTitle(), 4, STAT_COLUMN);
 }
 
 // Prints level -RAK-
@@ -404,7 +404,7 @@ void printCharacterWinner() {
 void printCharacterStatsBlock() {
     printCharacterInfoInField(character_races[py.misc.race_id].name, 2, STAT_COLUMN);
     printCharacterInfoInField(classes[py.misc.class_id].title, 3, STAT_COLUMN);
-    printCharacterInfoInField(playerTitle(), 4, STAT_COLUMN);
+    printCharacterInfoInField(playerRankTitle(), 4, STAT_COLUMN);
 
     for (int i = 0; i < 6; i++) {
         displayCharacterStats(i);

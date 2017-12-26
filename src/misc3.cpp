@@ -9,22 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-char *playerTitle() {
-    const char *p = nullptr;
-
-    if (py.misc.level < 1) {
-        p = "Babe in arms";
-    } else if (py.misc.level <= PLAYER_MAX_LEVEL) {
-        p = class_rank_titles[py.misc.class_id][py.misc.level - 1];
-    } else if (playerIsMale()) {
-        p = "**KING**";
-    } else {
-        p = "**QUEEN**";
-    }
-
-    return (char *) p;
-}
-
 // Returns spell chance of failure for class_to_use_mage_spells -RAK-
 int spellChanceOfSuccess(int spell_id) {
     const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];

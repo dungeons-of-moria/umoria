@@ -19,7 +19,7 @@ static void printTomb() {
     putString(text.c_str(), Coord_t{6, (int) (26 - text.length() / 2)});
 
     if (!game.total_winner) {
-        text = playerTitle();
+        text = playerRankTitle();
     } else {
         text = "Magnificent";
     }

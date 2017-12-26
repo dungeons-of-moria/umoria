@@ -151,7 +151,6 @@ void getAndCastMagicSpell();
 void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc3.c
-char *playerTitle();
 int spellChanceOfSuccess(int spell_id);
 bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell);
 bool enterWizardMode();
