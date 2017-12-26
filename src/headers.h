@@ -67,3 +67,4 @@
 #include "scores.h"
 #include "spells.h"
 #include "store.h"
+#include "wizard.h"

@@ -9,24 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-// lets anyone enter wizard mode after a disclaimer... -JEW-
-bool enterWizardMode() {
-    bool answer = false;
-
-    if (game.noscore == 0) {
-        printMessage("Wizard mode is for debugging and experimenting.");
-        answer = getInputConfirmation("The game will not be scored if you enter wizard mode. Are you sure?");
-    }
-
-    if ((game.noscore != 0) || answer) {
-        game.noscore |= 0x2;
-        game.wizard_mode = true;
-        return true;
-    }
-
-    return false;
-}
-
 // Special damage due to magical abilities of object -RAK-
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id) {
     bool is_ego_weapon = (item.flags & TR_EGO_WEAPON) != 0;

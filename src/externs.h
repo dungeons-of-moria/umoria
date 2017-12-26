@@ -148,7 +148,6 @@ void look();
 void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc3.c
-bool enterWizardMode();
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
 
 // monster_management.cpp
@@ -232,9 +231,3 @@ void staffUse();
 
 // wands.c
 void wandAim();
-
-// wizard.c
-void wizardLightUpDungeon();
-void wizardCharacterAdjustment();
-void wizardGenerateObject();
-void wizardCreateObjects();

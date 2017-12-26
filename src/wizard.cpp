@@ -12,6 +12,24 @@
 
 #include <sstream>
 
+// lets anyone enter wizard mode after a disclaimer... -JEW-
+bool enterWizardMode() {
+    bool answer = false;
+
+    if (game.noscore == 0) {
+        printMessage("Wizard mode is for debugging and experimenting.");
+        answer = getInputConfirmation("The game will not be scored if you enter wizard mode. Are you sure?");
+    }
+
+    if ((game.noscore != 0) || answer) {
+        game.noscore |= 0x2;
+        game.wizard_mode = true;
+        return true;
+    }
+
+    return false;
+}
+
 // Light up the dungeon -RAK-
 void wizardLightUpDungeon() {
     bool flag;
