@@ -138,7 +138,6 @@ bool monsterSummonUndead(int &y, int &x);
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 
 // moria3.c
-void chestTrap(int y, int x);
 void objectBlockedByMonster(int monster_id);
 
 // potions.c

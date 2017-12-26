@@ -140,3 +140,80 @@ void playerDisarmTrap() {
         game.player_free_turn = true;
     }
 }
+
+static void chestLooseStrength() {
+    printMessage("A small needle has pricked you!");
+
+    if (py.flags.sustain_str) {
+        printMessage("You are unaffected.");
+        return;
+    }
+
+    (void) playerStatRandomDecrease(A_STR);
+
+    playerTakesHit(diceRoll(Dice_t{1, 4}), "a poison needle");
+
+    printMessage("You feel weakened!");
+}
+
+static void chestPoison() {
+    printMessage("A small needle has pricked you!");
+
+    playerTakesHit(diceRoll(Dice_t{1, 6}), "a poison needle");
+
+    py.flags.poisoned += 10 + randomNumber(20);
+}
+
+static void chestParalysed() {
+    printMessage("A puff of yellow gas surrounds you!");
+
+    if (py.flags.free_action) {
+        printMessage("You are unaffected.");
+        return;
+    }
+
+    printMessage("You choke and pass out.");
+    py.flags.paralysis = (int16_t) (10 + randomNumber(20));
+}
+
+static void chestSummonMonster(int y, int x) {
+    for (int i = 0; i < 3; i++) {
+        int cy = y;
+        int cx = x;
+        (void) monsterSummon(cy, cx, false);
+    }
+}
+
+static void chestExplode(int y, int x) {
+    printMessage("There is a sudden explosion!");
+
+    (void) dungeonDeleteObject(y, x);
+
+    playerTakesHit(diceRoll(Dice_t{5, 8}), "an exploding chest");
+}
+
+// Chests have traps too. -RAK-
+// Note: Chest traps are based on the FLAGS value
+void chestTrap(int y, int x) {
+    uint32_t flags = treasure_list[dg.floor[y][x].treasure_id].flags;
+
+    if ((flags & CH_LOSE_STR) != 0u) {
+        chestLooseStrength();
+    }
+
+    if ((flags & CH_POISON) != 0u) {
+        chestPoison();
+    }
+
+    if ((flags & CH_PARALYSED) != 0u) {
+        chestParalysed();
+    }
+
+    if ((flags & CH_SUMMON) != 0u) {
+        chestSummonMonster(y, x);
+    }
+
+    if ((flags & CH_EXPLODE) != 0u) {
+        chestExplode(y, x);
+    }
+}
