@@ -83,6 +83,7 @@ set(
         ${source_dir}/headers.h
         ${source_dir}/helpers.h
         ${source_dir}/inventory.h
+        ${source_dir}/mage_spells.h
         ${source_dir}/monster.h
         ${source_dir}/player.h
         ${source_dir}/scores.h

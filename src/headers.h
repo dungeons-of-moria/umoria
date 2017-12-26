@@ -61,6 +61,7 @@
 #include "ui.h"
 #include "dungeon.h"
 
+#include "mage_spells.h"
 #include "monster.h"
 #include "player.h"
 #include "scores.h"

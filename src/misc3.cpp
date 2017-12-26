@@ -9,34 +9,6 @@
 #include "headers.h"
 #include "externs.h"
 
-// Returns spell chance of failure for class_to_use_mage_spells -RAK-
-int spellChanceOfSuccess(int spell_id) {
-    const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
-
-    int chance = spell.failure_chance - 3 * (py.misc.level - spell.level_required);
-
-    int stat;
-    if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
-        stat = A_INT;
-    } else {
-        stat = A_WIS;
-    }
-
-    chance -= 3 * (playerStatAdjustmentWisdomIntelligence(stat) - 1);
-
-    if (spell.mana_required > py.misc.current_mana) {
-        chance += 5 * (spell.mana_required - py.misc.current_mana);
-    }
-
-    if (chance > 95) {
-        chance = 95;
-    } else if (chance < 5) {
-        chance = 5;
-    }
-
-    return chance;
-}
-
 // Returns spell pointer -RAK-
 bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell) {
     spell_id = -1;

@@ -144,14 +144,10 @@ void identifyGameObject();
 bool los(int from_y, int from_x, int to_y, int to_x);
 void look();
 
-// mage_spells.cpp
-void getAndCastMagicSpell();
-
 // magic_items.cpp
 void magicTreasureMagicalAbility(int item_id, int level);
 
 // misc3.c
-int spellChanceOfSuccess(int spell_id);
 bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell);
 bool enterWizardMode();
 int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
