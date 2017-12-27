@@ -116,9 +116,6 @@ void exitGame();
 // generate.c
 void generateCave();
 
-// identification.cpp
-void identifyGameObject();
-
 // los.cpp
 bool los(int from_y, int from_x, int to_y, int to_x);
 void look();

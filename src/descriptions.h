@@ -6,6 +6,8 @@
 
 #pragma once
 
+void identifyGameObject();
+
 void magicInitializeItemNames();
 int16_t objectPositionOffset(int category_id, int sub_category_id);
 void itemSetAsIdentified(int category_id, int sub_category_id);
