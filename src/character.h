@@ -68,3 +68,5 @@ typedef struct {
     uint8_t next;     // Pointer to next table
     uint8_t bonus;    // Bonus to the Social Class+50
 } Background_t;
+
+void characterCreate();

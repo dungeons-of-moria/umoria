@@ -107,9 +107,6 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 // Only extern functions declared here, static functions
 // declared inside the file that defines them.
 
-// create.c
-void characterCreate();
-
 // death.c
 void exitGame();
 

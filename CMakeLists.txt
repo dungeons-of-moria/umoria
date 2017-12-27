@@ -111,7 +111,7 @@ set(
         ${source_dir}/data_stores.cpp
         ${source_dir}/data_tables.cpp
         ${source_dir}/data_treasure.cpp
-        ${source_dir}/create.cpp
+        ${source_dir}/character.cpp
         ${source_dir}/death.cpp
         ${source_dir}/dice.cpp
         ${source_dir}/dungeon.cpp
