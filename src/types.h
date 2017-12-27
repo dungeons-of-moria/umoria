@@ -112,8 +112,3 @@ typedef struct {
 // ClassRankTitle_t is a base game object
 // Holds the base game data for all character Class titles: Novice, Mage (5th), Paladin, etc.
 typedef const char *ClassRankTitle_t;
-
-typedef struct {
-    int32_t y;
-    int32_t x;
-} Coord_t;

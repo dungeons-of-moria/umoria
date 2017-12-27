@@ -24,6 +24,11 @@ typedef struct {
     int16_t max_cols;
 } Panel_t;
 
+typedef struct {
+    int32_t y;
+    int32_t x;
+} Coord_t;
+
 // UI - IO
 bool terminalInitialize();
 void terminalRestore();
