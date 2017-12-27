@@ -151,7 +151,6 @@ void scrollRead();
 
 // sets.c
 bool setNull(Inventory_t *item);
-bool setItemsLargerThanChests(DungeonObject_t *item);
 
 // staffs.c
 void staffUse();
