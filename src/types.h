@@ -108,7 +108,3 @@ typedef struct {
     Dice_t damage;             // Damage when hits
     uint8_t depth_first_found; // Dungeon level item first found
 } GameObject_t;
-
-// ClassRankTitle_t is a base game object
-// Holds the base game data for all character Class titles: Novice, Mage (5th), Paladin, etc.
-typedef const char *ClassRankTitle_t;

@@ -8,6 +8,11 @@
 
 constexpr uint8_t PLAYER_NAME_SIZE = 27;
 
+// ClassRankTitle_t of the player: Novice, Mage (5th), Paladin, etc.
+// Currently only used by the `playerRankTitle()` function.
+// TODO: perhaps use a plain std::string instead?
+typedef const char *ClassRankTitle_t;
+
 // Player_t contains everything to be known about our player character
 typedef struct {
     struct {
