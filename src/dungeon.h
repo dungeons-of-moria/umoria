@@ -88,3 +88,6 @@ void dungeonDeleteMonsterFix1(int id);
 void dungeonDeleteMonsterFix2(int id);
 int dungeonSummonObject(int y, int x, int amount, int object_type);
 bool dungeonDeleteObject(int y, int x);
+
+// generate the dungeon
+void generateCave();

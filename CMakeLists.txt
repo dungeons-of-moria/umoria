@@ -115,10 +115,10 @@ set(
         ${source_dir}/death.cpp
         ${source_dir}/dice.cpp
         ${source_dir}/dungeon.cpp
+        ${source_dir}/dungeon_generate.cpp
         ${source_dir}/game.cpp
         ${source_dir}/game_files.cpp
         ${source_dir}/game_objects.cpp
-        ${source_dir}/generate.cpp
         ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp
         ${source_dir}/los.cpp

@@ -110,9 +110,6 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 // death.c
 void exitGame();
 
-// generate.c
-void generateCave();
-
 // los.cpp
 bool los(int from_y, int from_x, int to_y, int to_x);
 void look();
