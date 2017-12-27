@@ -105,7 +105,7 @@ For details on how to contribute to the Umoria project, please read our
 
 ## License Information
 
-Umoria is released under the [General Public License version 2](LICENSE) (GPL v2).
+Umoria is released under the [GNU General Public License v2.0](LICENSE).
 
 In 2007 Ben Asselstine and Ben Shadwick started the
 [_free-moria_](http://free-moria.sourceforge.net/) project to re-license
