@@ -153,21 +153,19 @@ void scrollRead();
 bool setRooms(int tile_id);
 bool setCorridors(int tile_id);
 bool setFloors(int tile_id);
+
 bool setCorrodableItems(Inventory_t *item);
 bool setFlammableItems(Inventory_t *item);
 bool setFrostDestroyableItems(Inventory_t *item);
 bool setAcidAffectedItems(Inventory_t *item);
 bool setLightningDestroyableItems(Inventory_t *item);
+
 bool setNull(Inventory_t *item);
+
 bool setAcidDestroyableItems(Inventory_t *item);
 bool setFireDestroyableItems(Inventory_t *item);
+
 bool setItemsLargerThanChests(DungeonObject_t *item);
-bool setGeneralStoreItems(int item_id);
-bool setArmoryItems(int item_id);
-bool setWeaponsmithItems(int item_id);
-bool setTempleItems(int item_id);
-bool setAlchemistItems(int item_id);
-bool setMagicShopItems(int item_id);
 
 // staffs.c
 void staffUse();

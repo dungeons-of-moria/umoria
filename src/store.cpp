@@ -848,6 +848,94 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
     return purchased;
 }
 
+// Functions to emulate the original Pascal sets
+static bool setGeneralStoreItems(int item_id) {
+    switch (item_id) {
+        case TV_DIGGING:
+        case TV_BOOTS:
+        case TV_CLOAK:
+        case TV_FOOD:
+        case TV_FLASK:
+        case TV_LIGHT:
+        case TV_SPIKE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setArmoryItems(int item_id) {
+    switch (item_id) {
+        case TV_BOOTS:
+        case TV_GLOVES:
+        case TV_HELM:
+        case TV_SHIELD:
+        case TV_HARD_ARMOR:
+        case TV_SOFT_ARMOR:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setWeaponsmithItems(int item_id) {
+    switch (item_id) {
+        case TV_SLING_AMMO:
+        case TV_BOLT:
+        case TV_ARROW:
+        case TV_BOW:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_SWORD:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setTempleItems(int item_id) {
+    switch (item_id) {
+        case TV_HAFTED:
+        case TV_SCROLL1:
+        case TV_SCROLL2:
+        case TV_POTION1:
+        case TV_POTION2:
+        case TV_PRAYER_BOOK:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setAlchemistItems(int item_id) {
+    switch (item_id) {
+        case TV_SCROLL1:
+        case TV_SCROLL2:
+        case TV_POTION1:
+        case TV_POTION2:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setMagicShopItems(int item_id) {
+    switch (item_id) {
+        case TV_AMULET:
+        case TV_RING:
+        case TV_STAFF:
+        case TV_WAND:
+        case TV_SCROLL1:
+        case TV_SCROLL2:
+        case TV_POTION1:
+        case TV_POTION2:
+        case TV_MAGIC_BOOK:
+            return true;
+        default:
+            return false;
+    }
+}
+
 // Each store will buy only certain items, based on TVAL
 bool (*store_buy[MAX_STORES])(int) = {
     setGeneralStoreItems,
