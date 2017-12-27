@@ -426,6 +426,121 @@ static bool damageMinusAC(uint32_t typ_dam) {
     return minus;
 }
 
+// Functions to emulate the original Pascal sets
+static bool setCorrodableItems(Inventory_t *item) {
+    switch (item->category_id) {
+        case TV_SWORD:
+        case TV_HELM:
+        case TV_SHIELD:
+        case TV_HARD_ARMOR:
+        case TV_WAND:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setFlammableItems(Inventory_t *item) {
+    switch (item->category_id) {
+        case TV_ARROW:
+        case TV_BOW:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_BOOTS:
+        case TV_GLOVES:
+        case TV_CLOAK:
+        case TV_SOFT_ARMOR:
+            // Items of (RF) should not be destroyed.
+            return (item->flags & TR_RES_FIRE) == 0;
+        case TV_STAFF:
+        case TV_SCROLL1:
+        case TV_SCROLL2:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool setAcidAffectedItems(Inventory_t *item) {
+    switch (item->category_id) {
+        case TV_MISC:
+        case TV_CHEST:
+            return true;
+        case TV_BOLT:
+        case TV_ARROW:
+        case TV_BOW:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_BOOTS:
+        case TV_GLOVES:
+        case TV_CLOAK:
+        case TV_SOFT_ARMOR:
+            return (item->flags & TR_RES_ACID) == 0;
+        default:
+            return false;
+    }
+}
+
+bool setFrostDestroyableItems(Inventory_t *item) {
+    return (item->category_id == TV_POTION1 || item->category_id == TV_POTION2 || item->category_id == TV_FLASK);
+}
+
+bool setLightningDestroyableItems(Inventory_t *item) {
+    return (item->category_id == TV_RING || item->category_id == TV_WAND || item->category_id == TV_SPIKE);
+}
+
+bool setAcidDestroyableItems(Inventory_t *item) {
+    switch (item->category_id) {
+        case TV_ARROW:
+        case TV_BOW:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_BOOTS:
+        case TV_GLOVES:
+        case TV_CLOAK:
+        case TV_HELM:
+        case TV_SHIELD:
+        case TV_HARD_ARMOR:
+        case TV_SOFT_ARMOR:
+            return (item->flags & TR_RES_ACID) == 0;
+        case TV_STAFF:
+        case TV_SCROLL1:
+        case TV_SCROLL2:
+        case TV_FOOD:
+        case TV_OPEN_DOOR:
+        case TV_CLOSED_DOOR:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool setFireDestroyableItems(Inventory_t *item) {
+    switch (item->category_id) {
+        case TV_ARROW:
+        case TV_BOW:
+        case TV_HAFTED:
+        case TV_POLEARM:
+        case TV_BOOTS:
+        case TV_GLOVES:
+        case TV_CLOAK:
+        case TV_SOFT_ARMOR:
+            return (item->flags & TR_RES_FIRE) == 0;
+        case TV_STAFF:
+        case TV_SCROLL1:
+        case TV_SCROLL2:
+        case TV_POTION1:
+        case TV_POTION2:
+        case TV_FLASK:
+        case TV_FOOD:
+        case TV_OPEN_DOOR:
+        case TV_CLOSED_DOOR:
+            return true;
+        default:
+            return false;
+    }
+}
+
 // Corrode the unsuspecting person's armor -RAK-
 void damageCorrodingGas(const char *creature_name) {
     if (!damageMinusAC((uint32_t) TR_RES_ACID)) {

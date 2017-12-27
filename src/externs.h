@@ -150,17 +150,7 @@ void readHighScore(HighScore_t &score);
 void scrollRead();
 
 // sets.c
-bool setCorrodableItems(Inventory_t *item);
-bool setFlammableItems(Inventory_t *item);
-bool setFrostDestroyableItems(Inventory_t *item);
-bool setAcidAffectedItems(Inventory_t *item);
-bool setLightningDestroyableItems(Inventory_t *item);
-
 bool setNull(Inventory_t *item);
-
-bool setAcidDestroyableItems(Inventory_t *item);
-bool setFireDestroyableItems(Inventory_t *item);
-
 bool setItemsLargerThanChests(DungeonObject_t *item);
 
 // staffs.c

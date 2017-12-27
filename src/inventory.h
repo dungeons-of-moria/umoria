@@ -56,6 +56,11 @@ int inventoryCarryItem(Inventory_t &new_item);
 bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k);
 void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item);
 
+bool setFrostDestroyableItems(Inventory_t *item);
+bool setLightningDestroyableItems(Inventory_t *item);
+bool setAcidDestroyableItems(Inventory_t *item);
+bool setFireDestroyableItems(Inventory_t *item);
+
 void damageCorrodingGas(const char *creature_name);
 void damagePoisonedGas(int damage, const char *creature_name);
 void damageFire(int damage, const char *creature_name);
