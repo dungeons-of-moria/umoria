@@ -963,6 +963,19 @@ static void dungeonNewSpot(int16_t &y, int16_t &x) {
     x = (int16_t) pos_x;
 }
 
+// Functions to emulate the original Pascal sets
+static bool setRooms(int tile_id) {
+    return (tile_id == TILE_DARK_FLOOR || tile_id == TILE_LIGHT_FLOOR);
+}
+
+static bool setCorridors(int tile_id) {
+    return (tile_id == TILE_CORR_FLOOR || tile_id == TILE_BLOCKED_FLOOR);
+}
+
+static bool setFloors(int tile_id) {
+    return (tile_id <= MAX_CAVE_FLOOR);
+}
+
 // Cave logic flow for generation of new dungeon
 static void dungeonGenerate() {
     // Room initialization

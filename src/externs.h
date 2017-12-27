@@ -150,10 +150,6 @@ void readHighScore(HighScore_t &score);
 void scrollRead();
 
 // sets.c
-bool setRooms(int tile_id);
-bool setCorridors(int tile_id);
-bool setFloors(int tile_id);
-
 bool setCorrodableItems(Inventory_t *item);
 bool setFlammableItems(Inventory_t *item);
 bool setFrostDestroyableItems(Inventory_t *item);

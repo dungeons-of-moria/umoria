@@ -8,18 +8,6 @@
 
 #include "headers.h"
 
-bool setRooms(int tile_id) {
-    return (tile_id == TILE_DARK_FLOOR || tile_id == TILE_LIGHT_FLOOR);
-}
-
-bool setCorridors(int tile_id) {
-    return (tile_id == TILE_CORR_FLOOR || tile_id == TILE_BLOCKED_FLOOR);
-}
-
-bool setFloors(int tile_id) {
-    return (tile_id <= MAX_CAVE_FLOOR);
-}
-
 bool setCorrodableItems(Inventory_t *item) {
     switch (item->category_id) {
         case TV_SWORD:
