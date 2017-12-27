@@ -91,6 +91,7 @@ set(
         ${source_dir}/recall.h
         ${source_dir}/scores.h
         ${source_dir}/spells.h
+        ${source_dir}/staves.h
         ${source_dir}/store.h
         ${source_dir}/treasure.h
         ${source_dir}/types.h
@@ -141,14 +142,13 @@ set(
         ${source_dir}/recall.cpp
         ${source_dir}/scrolls.cpp
         ${source_dir}/spells.cpp
-        ${source_dir}/staffs.cpp
+        ${source_dir}/staves.cpp
         ${source_dir}/store.cpp
         ${source_dir}/store_inventory.cpp
         ${source_dir}/treasure.cpp
         ${source_dir}/ui.cpp
         ${source_dir}/ui_inventory.cpp
         ${source_dir}/ui_io.cpp
-        ${source_dir}/wands.cpp
         ${source_dir}/wizard.cpp
 )
 

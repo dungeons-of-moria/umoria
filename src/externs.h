@@ -148,9 +148,3 @@ void readHighScore(HighScore_t &score);
 
 // scrolls.c
 void scrollRead();
-
-// staffs.c
-void staffUse();
-
-// wands.c
-void wandAim();

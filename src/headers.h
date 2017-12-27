@@ -66,6 +66,7 @@
 #include "recall.h"
 #include "scores.h"
 #include "spells.h"
+#include "staves.h"
 #include "store.h"
 #include "treasure.h"
 #include "wizard.h"
