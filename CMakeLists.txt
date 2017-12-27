@@ -77,13 +77,13 @@ set(
         ${source_dir}/config.h
         ${source_dir}/constant.h
         ${source_dir}/curses.h
-        ${source_dir}/descriptions.h
         ${source_dir}/dice.h
         ${source_dir}/dungeon.h
         ${source_dir}/externs.h
         ${source_dir}/game.h
         ${source_dir}/headers.h
         ${source_dir}/helpers.h
+        ${source_dir}/identification.h
         ${source_dir}/inventory.h
         ${source_dir}/mage_spells.h
         ${source_dir}/monster.h
@@ -113,13 +113,13 @@ set(
         ${source_dir}/data_treasure.cpp
         ${source_dir}/create.cpp
         ${source_dir}/death.cpp
-        ${source_dir}/descriptions.cpp
         ${source_dir}/dice.cpp
         ${source_dir}/dungeon.cpp
         ${source_dir}/game.cpp
         ${source_dir}/game_files.cpp
         ${source_dir}/game_objects.cpp
         ${source_dir}/generate.cpp
+        ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp
         ${source_dir}/los.cpp
         ${source_dir}/mage_spells.cpp

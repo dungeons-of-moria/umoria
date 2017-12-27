@@ -4,7 +4,8 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Handle object descriptions, mostly string handling code
+// Handle object identification and descriptions
+// ...mostly string handling code
 
 #include "headers.h"
 #include "externs.h"

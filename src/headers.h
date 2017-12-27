@@ -53,13 +53,13 @@
 #include "types.h"
 
 #include "character.h"
-#include "dice.h"         // before inventory.h
-#include "inventory.h"    // before descriptions.h
-#include "descriptions.h"
+#include "dice.h"
 #include "ui.h"           // before dungeon.h
 #include "dungeon.h"
 #include "game.h"
 #include "helpers.h"
+#include "inventory.h"    // before identification.h
+#include "identification.h"
 #include "mage_spells.h"
 #include "monster.h"
 #include "player.h"
