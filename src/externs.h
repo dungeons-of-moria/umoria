@@ -61,7 +61,7 @@ extern const char *speech_haggling_try_again[10];
 extern const char *speech_sorry[5];
 
 // Following are treasure arrays  and variables
-extern GameObject_t game_objects[MAX_OBJECTS_IN_GAME];
+extern DungeonObject_t game_objects[MAX_OBJECTS_IN_GAME];
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 extern Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
@@ -161,7 +161,7 @@ bool setLightningDestroyableItems(Inventory_t *item);
 bool setNull(Inventory_t *item);
 bool setAcidDestroyableItems(Inventory_t *item);
 bool setFireDestroyableItems(Inventory_t *item);
-bool setItemsLargerThanChests(GameObject_t *item);
+bool setItemsLargerThanChests(DungeonObject_t *item);
 bool setGeneralStoreItems(int item_id);
 bool setArmoryItems(int item_id);
 bool setWeaponsmithItems(int item_id);
