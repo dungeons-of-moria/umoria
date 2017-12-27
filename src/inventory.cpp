@@ -427,6 +427,11 @@ static bool damageMinusAC(uint32_t typ_dam) {
 }
 
 // Functions to emulate the original Pascal sets
+bool setNull(Inventory_t *item) {
+    (void) item; // silence warnings
+    return false;
+}
+
 static bool setCorrodableItems(Inventory_t *item) {
     switch (item->category_id) {
         case TV_SWORD:

@@ -140,7 +140,6 @@ set(
         ${source_dir}/prayer.cpp
         ${source_dir}/recall.cpp
         ${source_dir}/scrolls.cpp
-        ${source_dir}/sets.cpp
         ${source_dir}/spells.cpp
         ${source_dir}/staffs.cpp
         ${source_dir}/store.cpp

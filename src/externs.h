@@ -149,9 +149,6 @@ void readHighScore(HighScore_t &score);
 // scrolls.c
 void scrollRead();
 
-// sets.c
-bool setNull(Inventory_t *item);
-
 // staffs.c
 void staffUse();
 

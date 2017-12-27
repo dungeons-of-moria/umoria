@@ -56,6 +56,7 @@ int inventoryCarryItem(Inventory_t &new_item);
 bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k);
 void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item);
 
+bool setNull(Inventory_t *item);
 bool setFrostDestroyableItems(Inventory_t *item);
 bool setLightningDestroyableItems(Inventory_t *item);
 bool setAcidDestroyableItems(Inventory_t *item);
