@@ -87,6 +87,7 @@ set(
         ${source_dir}/mage_spells.h
         ${source_dir}/monster.h
         ${source_dir}/player.h
+        ${source_dir}/recall.h
         ${source_dir}/scores.h
         ${source_dir}/spells.h
         ${source_dir}/store.h

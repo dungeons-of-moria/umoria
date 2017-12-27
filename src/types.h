@@ -83,18 +83,6 @@ typedef struct {
     uint8_t bonus;    // Bonus to the Social Class+50
 } Background_t;
 
-// Recall_t holds the player's known knowledge for any given monster, aka memories
-typedef struct {
-    uint32_t movement;
-    uint32_t spells;
-    uint16_t kills;
-    uint16_t deaths;
-    uint16_t defenses;
-    uint8_t wake;
-    uint8_t ignore;
-    uint8_t attacks[MON_MAX_ATTACKS];
-} Recall_t;
-
 //
 // The following are objects for storing the core game data,
 // which is loaded from the large hash maps at game start up.

@@ -132,11 +132,6 @@ void quaff();
 // prayer.c
 void pray();
 
-// recall.c
-bool memoryMonsterKnown(const Recall_t &memory);
-int memoryRecall(int monster_id);
-void recallMonsterAttributes(char command);
-
 // rng.cpp
 uint32_t getRandomSeed();
 void setRandomSeed(uint32_t seed);

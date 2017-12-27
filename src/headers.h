@@ -65,6 +65,7 @@
 #include "mage_spells.h"
 #include "monster.h"
 #include "player.h"
+#include "recall.h"
 #include "scores.h"
 #include "spells.h"
 #include "store.h"
