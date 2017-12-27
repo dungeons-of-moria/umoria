@@ -48,21 +48,18 @@
 
 
 // General Umoria headers
-
+#include "config.h"
 #include "constant.h"
-#include "dice.h"
-#include "helpers.h"
-#include "inventory.h"
-
 #include "types.h"
 
-#include "config.h"
-#include "game.h"
-#include "ui.h"
-#include "dungeon.h"
-
 #include "character.h"
+#include "dice.h"         // before inventory.h
+#include "inventory.h"    // before descriptions.h
 #include "descriptions.h"
+#include "ui.h"           // before dungeon.h
+#include "dungeon.h"
+#include "game.h"
+#include "helpers.h"
 #include "mage_spells.h"
 #include "monster.h"
 #include "player.h"
