@@ -73,6 +73,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 ${cxx_warnings}")
 set(source_dir ${PROJECT_SOURCE_DIR}/src)
 set(
         source_files
+        ${source_dir}/character.h
         ${source_dir}/config.h
         ${source_dir}/constant.h
         ${source_dir}/curses.h
