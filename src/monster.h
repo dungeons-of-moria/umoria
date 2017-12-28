@@ -52,6 +52,15 @@ typedef struct {
     Dice_t dice;
 } MonsterAttack_t;
 
+extern int hack_monptr;
+extern Creature_t creatures_list[MON_MAX_CREATURES];
+extern Monster_t monsters[MON_TOTAL_ALLOCATIONS];
+extern int16_t monster_levels[MON_MAX_LEVELS + 1];
+extern MonsterAttack_t monster_attacks[MON_ATTACK_TYPES];
+extern Monster_t blank_monster;
+extern int16_t next_free_monster_id;
+extern int16_t monster_multiply_total;
+
 void monsterUpdateVisibility(int monster_id);
 bool monsterMultiply(int y, int x, int creatureID, int monsterID);
 void updateMonsters(bool attack);

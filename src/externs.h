@@ -8,8 +8,6 @@
 
 // Declarations for global variables and initialized data
 
-extern int hack_monptr;
-
 extern bool teleport_player;
 
 // Converted to uint16_t when saving the game.
@@ -55,14 +53,7 @@ extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 extern char *special_item_names[SN_ARRAY_SIZE];
 
 // Following are creature arrays and variables
-extern Creature_t creatures_list[MON_MAX_CREATURES];
-extern Monster_t monsters[MON_TOTAL_ALLOCATIONS];
-extern int16_t monster_levels[MON_MAX_LEVELS + 1];
-extern MonsterAttack_t monster_attacks[MON_ATTACK_TYPES];
 extern Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories. -CJS-
-extern Monster_t blank_monster;
-extern int16_t next_free_monster_id;
-extern int16_t monster_multiply_total;
 extern const char *recall_description_attack_type[25];
 extern const char *recall_description_attack_method[20];
 extern const char *recall_description_how_much[8];
