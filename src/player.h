@@ -238,3 +238,9 @@ void chestTrap(int y, int x);
 
 // player_tunnel.cpp
 void playerTunnel(int direction);
+
+// player_quaff.cpp
+void quaff();
+
+// player_pray.cpp
+void pray();

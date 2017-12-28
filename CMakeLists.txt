@@ -131,13 +131,13 @@ set(
         ${source_dir}/player_eat.cpp
         ${source_dir}/player_magic.cpp
         ${source_dir}/player_move.cpp
+        ${source_dir}/player_pray.cpp
+        ${source_dir}/player_quaff.cpp
         ${source_dir}/player_run.cpp
         ${source_dir}/player_stats.cpp
         ${source_dir}/player_throw.cpp
         ${source_dir}/player_traps.cpp
         ${source_dir}/player_tunnel.cpp
-        ${source_dir}/potions.cpp
-        ${source_dir}/prayer.cpp
         ${source_dir}/recall.cpp
         ${source_dir}/scores.cpp
         ${source_dir}/scrolls.cpp
