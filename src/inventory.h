@@ -46,7 +46,6 @@ uint32_t inventoryCollectAllItemFlags();
 void inventoryDestroyItem(int item_id);
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item);
 void inventoryDropItem(int item_id, bool drop_all);
-int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage);
 bool inventoryDiminishLightAttack(bool noticed);
 bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &monster_hp, bool noticed);
 bool executeDisenchantAttack();
