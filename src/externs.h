@@ -107,10 +107,6 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 // Only extern functions declared here, static functions
 // declared inside the file that defines them.
 
-// los.cpp
-bool los(int from_y, int from_x, int to_y, int to_x);
-void look();
-
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
 

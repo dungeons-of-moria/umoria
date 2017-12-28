@@ -91,3 +91,7 @@ bool dungeonDeleteObject(int y, int x);
 
 // generate the dungeon
 void generateCave();
+
+// Line of Sight
+bool los(int from_y, int from_x, int to_y, int to_x);
+void look();

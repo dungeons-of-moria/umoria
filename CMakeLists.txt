@@ -115,13 +115,13 @@ set(
         ${source_dir}/dice.cpp
         ${source_dir}/dungeon.cpp
         ${source_dir}/dungeon_generate.cpp
+        ${source_dir}/dungeon_los.cpp
         ${source_dir}/game.cpp
         ${source_dir}/game_death.cpp
         ${source_dir}/game_files.cpp
         ${source_dir}/game_objects.cpp
         ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp
-        ${source_dir}/los.cpp
         ${source_dir}/mage_spells.cpp
         ${source_dir}/monster.cpp
         ${source_dir}/monster_manager.cpp
