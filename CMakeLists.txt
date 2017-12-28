@@ -120,13 +120,13 @@ set(
         ${source_dir}/game_death.cpp
         ${source_dir}/game_files.cpp
         ${source_dir}/game_objects.cpp
+        ${source_dir}/game_run.cpp
         ${source_dir}/game_save.cpp
         ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp
         ${source_dir}/mage_spells.cpp
         ${source_dir}/monster.cpp
         ${source_dir}/monster_manager.cpp
-        ${source_dir}/moria.cpp
         ${source_dir}/player.cpp
         ${source_dir}/player_bash.cpp
         ${source_dir}/player_eat.cpp

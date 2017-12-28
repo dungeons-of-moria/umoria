@@ -100,12 +100,3 @@ extern const char *syllables[MAX_SYLLABLES];
 extern uint8_t blows_table[7][6];
 
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
-
-
-// Function return values
-//
-// Only extern functions declared here, static functions
-// declared inside the file that defines them.
-
-// moria.cpp - also includes the main dungeon game loop: playDungeon()
-void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
