@@ -20,5 +20,14 @@ typedef struct {
     uint8_t attacks[MON_MAX_ATTACKS];
 } Recall_t;
 
+extern Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories. -CJS-
+extern const char *recall_description_attack_type[25];
+extern const char *recall_description_attack_method[20];
+extern const char *recall_description_how_much[8];
+extern const char *recall_description_move[6];
+extern const char *recall_description_spell[15];
+extern const char *recall_description_breath[5];
+extern const char *recall_description_weakness[6];
+
 int memoryRecall(int monster_id);
 void recallMonsterAttributes(char command);
