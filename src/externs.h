@@ -107,9 +107,6 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 // Only extern functions declared here, static functions
 // declared inside the file that defines them.
 
-// death.c
-void exitGame();
-
 // los.cpp
 bool los(int from_y, int from_x, int to_y, int to_x);
 void look();

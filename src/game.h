@@ -55,3 +55,6 @@ void displayTextHelpFile(const std::string &filename);
 void displayDeathFile(const std::string &filename);
 void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
+
+// game death
+void exitGame();

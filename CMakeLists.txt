@@ -112,11 +112,11 @@ set(
         ${source_dir}/data_tables.cpp
         ${source_dir}/data_treasure.cpp
         ${source_dir}/character.cpp
-        ${source_dir}/death.cpp
         ${source_dir}/dice.cpp
         ${source_dir}/dungeon.cpp
         ${source_dir}/dungeon_generate.cpp
         ${source_dir}/game.cpp
+        ${source_dir}/game_death.cpp
         ${source_dir}/game_files.cpp
         ${source_dir}/game_objects.cpp
         ${source_dir}/identification.cpp
