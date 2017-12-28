@@ -18,6 +18,9 @@ typedef struct {
     uint8_t exp_gain_for_learning; // 1/4 of exp gained for learning spell
 } Spell_t;
 
+extern Spell_t magic_spells[PLAYER_MAX_CLASSES - 1][31];
+extern char *spell_names[62];
+
 int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
 
 bool spellDetectTreasureWithinVicinity();

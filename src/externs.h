@@ -8,10 +8,6 @@
 
 // Declarations for global variables and initialized data
 
-// Warriors don't have spells, so there is no entry for them.
-extern Spell_t magic_spells[PLAYER_MAX_CLASSES - 1][31];
-extern char *spell_names[62];
-
 // Following are treasure arrays  and variables
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
