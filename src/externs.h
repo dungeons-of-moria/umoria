@@ -10,8 +10,6 @@
 
 extern int hack_monptr;
 
-extern FILE *highscore_fp;
-
 extern Config_t config;
 extern Dungeon_t dg;
 
