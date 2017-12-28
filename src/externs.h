@@ -13,7 +13,6 @@ extern int hack_monptr;
 extern FILE *highscore_fp;
 
 extern Config_t config;
-extern Game_t game;
 extern Dungeon_t dg;
 
 extern bool screen_has_changed;
@@ -100,5 +99,3 @@ extern const char *amulets[MAX_AMULETS];
 extern const char *syllables[MAX_SYLLABLES];
 
 extern uint8_t blows_table[7][6];
-
-extern uint16_t normal_table[NORMAL_TABLE_SIZE];

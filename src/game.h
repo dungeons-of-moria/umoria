@@ -32,6 +32,8 @@ typedef struct {
     vtype_t character_died_from = {'\0'}; // What the character died from: starvation, Bat, etc.
 } Game_t;
 
+extern Game_t game;
+
 void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
 void seedResetToOldSeed();

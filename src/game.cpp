@@ -59,6 +59,8 @@ int randomNumber(int max) {
 
 // Generates a random integer number of NORMAL distribution -RAK-
 int randomNumberNormalDistribution(int mean, int standard) {
+    static uint16_t normal_table[NORMAL_TABLE_SIZE];
+
     // alternate randomNumberNormalDistribution() code, slower but much smaller since no table
     // 2 per 1,000,000 will be > 4*SD, max is 5*SD
     //

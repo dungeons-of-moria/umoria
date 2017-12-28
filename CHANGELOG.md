@@ -1,4 +1,4 @@
-# Umoria Changes
+# Umoria CHANGELOG - this file tracks changes since v5.6.0
 
 ## HEAD
 
