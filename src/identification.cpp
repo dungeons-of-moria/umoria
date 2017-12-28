@@ -360,24 +360,6 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
     clearObjectTriedFlag(id);
 }
 
-// Items which don't have a 'color' are always known / itemSetAsIdentified(),
-// so that they can be carried in order in the inventory.
-bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int identification) {
-    int16_t id = objectPositionOffset(category_id, sub_category_id);
-
-    if (id < 0) {
-        return OD_KNOWN1 != 0u;
-    }
-    if (itemStoreBought(identification)) {
-        return OD_KNOWN1 != 0u;
-    }
-
-    id <<= 6;
-    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
-
-    return isObjectKnown(id);
-}
-
 // Remove an automatically generated inscription. -CJS-
 static void unsample(Inventory_t &item) {
     // this also used to clear ID_DAMD flag, but I think it should remain set
@@ -419,8 +401,26 @@ void itemIdentifyAsStoreBought(Inventory_t &item) {
     spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
-bool itemStoreBought(int identification) {
+static bool itemStoreBought(int identification) {
     return (identification & ID_STORE_BOUGHT) != 0;
+}
+
+// Items which don't have a 'color' are always known / itemSetAsIdentified(),
+// so that they can be carried in order in the inventory.
+bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int identification) {
+    int16_t id = objectPositionOffset(category_id, sub_category_id);
+
+    if (id < 0) {
+        return OD_KNOWN1 != 0u;
+    }
+    if (itemStoreBought(identification)) {
+        return OD_KNOWN1 != 0u;
+    }
+
+    id <<= 6;
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+
+    return isObjectKnown(id);
 }
 
 // Somethings been sampled -CJS-

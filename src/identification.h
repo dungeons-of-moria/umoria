@@ -17,7 +17,6 @@ bool spellItemIdentified(const Inventory_t &item);
 void spellItemRemoveIdentification(Inventory_t &item);
 void itemIdentificationClearEmpty(Inventory_t &item);
 void itemIdentifyAsStoreBought(Inventory_t &item);
-bool itemStoreBought(int identification);
 void itemSetAsTried(const Inventory_t &item);
 void itemIdentify(Inventory_t &item, int &item_id);
 void itemRemoveMagicNaming(Inventory_t &item);
