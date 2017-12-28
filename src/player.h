@@ -144,8 +144,6 @@ typedef struct {
     bool carrying_light;         // `true` when player is carrying light
 } Player_t;
 
-void playerResetFlags();
-
 bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();

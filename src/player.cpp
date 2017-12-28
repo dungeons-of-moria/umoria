@@ -12,7 +12,7 @@
 // Player record for most player related info
 Player_t py = Player_t{};
 
-void playerResetFlags() {
+static void playerResetFlags() {
     py.flags.see_invisible = false;
     py.flags.teleport = false;
     py.flags.free_action = false;
