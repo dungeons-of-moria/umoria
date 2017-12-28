@@ -15,9 +15,6 @@ extern bool teleport_player;
 // Converted to uint16_t when saving the game.
 extern int16_t missiles_counter;
 
-extern int eof_flag;
-extern bool panic_save;
-
 // Following are player variables
 extern Player_t py;
 
@@ -56,9 +53,6 @@ extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 extern Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 extern char *special_item_names[SN_ARRAY_SIZE];
-extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
-
-extern int16_t current_treasure_id;
 
 // Following are creature arrays and variables
 extern Creature_t creatures_list[MON_MAX_CREATURES];

@@ -33,6 +33,11 @@ typedef struct {
 } Game_t;
 
 extern Game_t game;
+extern int eof_flag;
+extern bool panic_save;
+extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
+extern int16_t current_treasure_id;
+extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 
 void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
