@@ -19,7 +19,7 @@ typedef struct {
 } Spell_t;
 
 extern Spell_t magic_spells[PLAYER_MAX_CLASSES - 1][31];
-extern char *spell_names[62];
+extern const char *spell_names[62];
 
 int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance);
 
