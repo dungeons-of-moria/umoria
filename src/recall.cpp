@@ -12,8 +12,6 @@
 // Monster memories
 Recall_t creature_recall[MON_MAX_CREATURES];
 
-static void memoryPrint(const char *p);
-
 static vtype_t roff_buffer = {'\0'};        // Line buffer.
 static char *roff_buffer_pointer = nullptr; // Pointer into line buffer.
 static int roff_print_line;                 // Place to print line now being loaded.
@@ -21,13 +19,43 @@ static int roff_print_line;                 // Place to print line now being loa
 #define plural(c, ss, sp) ((c) == 1 ? (ss) : (sp))
 
 // Number of kills needed for information.
-
 // the higher the level of the monster, the fewer the attacks you need,
 // the more damage an attack does, the more attacks you need.
 #define knowdamage(l, a, d) ((4 + (l)) * (a) > 80 * (d))
 
+// Print out strings, filling up lines as we go.
+static void memoryPrint(const char *p) {
+    while (*p != 0) {
+        *roff_buffer_pointer = *p;
+
+        if (*p == '\n' || roff_buffer_pointer >= roff_buffer + sizeof(roff_buffer) - 1) {
+            char *q = roff_buffer_pointer;
+            if (*p != '\n') {
+                while (*q != ' ') {
+                    q--;
+                }
+            }
+            *q = 0;
+            putStringClearToEOL(roff_buffer, Coord_t{roff_print_line, 0});
+            roff_print_line++;
+
+            char *r = roff_buffer;
+
+            while (q < roff_buffer_pointer) {
+                q++;
+                *r = *q;
+                r++;
+            }
+            roff_buffer_pointer = r;
+        } else {
+            roff_buffer_pointer++;
+        }
+        p++;
+    }
+}
+
 // Do we know anything about this monster?
-bool memoryMonsterKnown(const Recall_t &memory) {
+static bool memoryMonsterKnown(const Recall_t &memory) {
     if (game.wizard_mode) {
         return true;
     }
@@ -636,37 +664,6 @@ int memoryRecall(int monster_id) {
     }
 
     return getKeyInput();
-}
-
-// Print out strings, filling up lines as we go.
-static void memoryPrint(const char *p) {
-    while (*p != 0) {
-        *roff_buffer_pointer = *p;
-
-        if (*p == '\n' || roff_buffer_pointer >= roff_buffer + sizeof(roff_buffer) - 1) {
-            char *q = roff_buffer_pointer;
-            if (*p != '\n') {
-                while (*q != ' ') {
-                    q--;
-                }
-            }
-            *q = 0;
-            putStringClearToEOL(roff_buffer, Coord_t{roff_print_line, 0});
-            roff_print_line++;
-
-            char *r = roff_buffer;
-
-            while (q < roff_buffer_pointer) {
-                q++;
-                *r = *q;
-                r++;
-            }
-            roff_buffer_pointer = r;
-        } else {
-            roff_buffer_pointer++;
-        }
-        p++;
-    }
 }
 
 // Allow access to monster memory. -CJS-

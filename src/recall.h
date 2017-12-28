@@ -18,6 +18,5 @@ typedef struct {
     uint8_t attacks[MON_MAX_ATTACKS];
 } Recall_t;
 
-bool memoryMonsterKnown(const Recall_t &memory);
 int memoryRecall(int monster_id);
 void recallMonsterAttributes(char command);
