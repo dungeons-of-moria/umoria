@@ -121,14 +121,5 @@ uint32_t getRandomSeed();
 void setRandomSeed(uint32_t seed);
 int32_t rnd();
 
-// save.c
-bool saveGame();
-bool loadGame(bool &generate);
-void setFileptr(FILE *file);
-
-// scores
-void saveHighScore(const HighScore_t &score);
-void readHighScore(HighScore_t &score);
-
 // scrolls.c
 void scrollRead();

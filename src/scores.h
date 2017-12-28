@@ -26,6 +26,9 @@ typedef struct {
     char died_from[25];
 } HighScore_t;
 
+void saveHighScore(const HighScore_t &score);
+void readHighScore(HighScore_t &score);
+
 void recordNewHighScore();
 void showScoresScreen();
 uint8_t highScoreGenderLabel();

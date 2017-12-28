@@ -101,8 +101,6 @@ set(
         ${source_dir}/globals.cpp
         ${source_dir}/helpers.cpp
         ${source_dir}/rng.cpp
-        ${source_dir}/save.cpp
-        ${source_dir}/scores.cpp
         ${source_dir}/main.cpp
         ${source_dir}/data_creatures.cpp
         ${source_dir}/data_player.cpp
@@ -120,6 +118,7 @@ set(
         ${source_dir}/game_death.cpp
         ${source_dir}/game_files.cpp
         ${source_dir}/game_objects.cpp
+        ${source_dir}/game_save.cpp
         ${source_dir}/identification.cpp
         ${source_dir}/inventory.cpp
         ${source_dir}/mage_spells.cpp
@@ -139,6 +138,7 @@ set(
         ${source_dir}/potions.cpp
         ${source_dir}/prayer.cpp
         ${source_dir}/recall.cpp
+        ${source_dir}/scores.cpp
         ${source_dir}/scrolls.cpp
         ${source_dir}/spells.cpp
         ${source_dir}/staves.cpp

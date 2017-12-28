@@ -58,3 +58,8 @@ bool outputPlayerCharacterToFile(char *filename);
 
 // game death
 void exitGame();
+
+// save/load
+bool saveGame();
+bool loadGame(bool &generate);
+void setFileptr(FILE *file);
