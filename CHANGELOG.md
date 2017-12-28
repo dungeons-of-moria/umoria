@@ -5,12 +5,12 @@
 
 ### Code
 
-Continuing the process of moving related functions to the same file, and
-creating separate headers so we can eventually delete `externs.h`.
+Continuing the process of moving related functions to the same file.
 
 - `types.h` now has just the two core `vtype_t` and `obj_desc_t` types.
 - The numbered `misc` and `moria` files no longer exist!
 - Moved `sets.cpp` functions elsewhere, allowing for most to become `static`.
+- `externs.h` now contains only `externs`.
 
 
 ## 5.7.8 (2017-12-24)
