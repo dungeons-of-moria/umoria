@@ -89,6 +89,7 @@ set(
         ${source_dir}/monster.h
         ${source_dir}/player.h
         ${source_dir}/recall.h
+        ${source_dir}/rng.h
         ${source_dir}/scores.h
         ${source_dir}/spells.h
         ${source_dir}/staves.h

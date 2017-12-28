@@ -116,10 +116,5 @@ void quaff();
 // prayer.c
 void pray();
 
-// rng.cpp
-uint32_t getRandomSeed();
-void setRandomSeed(uint32_t seed);
-int32_t rnd();
-
 // scrolls.c
 void scrollRead();

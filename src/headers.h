@@ -64,6 +64,7 @@
 #include "monster.h"
 #include "player.h"
 #include "recall.h"
+#include "rng.h"
 #include "scores.h"
 #include "spells.h"
 #include "staves.h"
