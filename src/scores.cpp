@@ -10,6 +10,13 @@
 #include "externs.h"
 #include "version.h"
 
+static uint8_t highScoreGenderLabel() {
+    if (playerIsMale()) {
+        return 'M';
+    }
+    return 'F';
+}
+
 // Enters a players name on the top twenty list -JWT-
 void recordNewHighScore() {
     clearScreen();
@@ -226,13 +233,6 @@ void showScoresScreen() {
     }
 
     (void) fclose(highscore_fp);
-}
-
-uint8_t highScoreGenderLabel() {
-    if (playerIsMale()) {
-        return 'M';
-    }
-    return 'F';
 }
 
 // Calculates the total number of points earned -JWT-

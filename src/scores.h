@@ -26,10 +26,10 @@ typedef struct {
     char died_from[25];
 } HighScore_t;
 
+// TODO: these are implemented in `game_save.cpp` so need moving.
 void saveHighScore(const HighScore_t &score);
 void readHighScore(HighScore_t &score);
 
 void recordNewHighScore();
 void showScoresScreen();
-uint8_t highScoreGenderLabel();
 int32_t playerCalculateTotalPoints();
