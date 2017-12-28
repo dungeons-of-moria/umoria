@@ -47,3 +47,5 @@ typedef struct {
 
     Files_t files = Files_t{};
 } Config_t;
+
+extern Config_t config;

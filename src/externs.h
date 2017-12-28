@@ -10,7 +10,6 @@
 
 extern int hack_monptr;
 
-extern Config_t config;
 extern Dungeon_t dg;
 
 extern bool screen_has_changed;
