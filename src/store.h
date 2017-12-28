@@ -38,6 +38,22 @@ typedef struct {
     uint8_t max_insults;
 } Owner_t;
 
+extern uint8_t race_gold_adjustments[PLAYER_MAX_RACES][PLAYER_MAX_RACES];
+
+extern Owner_t store_owners[MAX_OWNERS];
+extern Store_t stores[MAX_STORES];
+extern uint16_t store_choices[MAX_STORES][STORE_MAX_ITEM_TYPES];
+extern bool (*store_buy[MAX_STORES])(int);
+extern const char *speech_sale_accepted[14];
+extern const char *speech_selling_haggle_final[3];
+extern const char *speech_selling_haggle[16];
+extern const char *speech_buying_haggle_final[3];
+extern const char *speech_buying_haggle[15];
+extern const char *speech_insulted_haggling_done[5];
+extern const char *speech_get_out_of_my_store[5];
+extern const char *speech_haggling_try_again[10];
+extern const char *speech_sorry[5];
+
 // store
 void storeInitializeOwners();
 void storeEnter(int store_id);
