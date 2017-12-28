@@ -4,8 +4,6 @@
 // ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
 // for further details.
 
-// Scroll code
-
 #include "headers.h"
 #include "externs.h"
 

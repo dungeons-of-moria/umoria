@@ -91,6 +91,7 @@ set(
         ${source_dir}/recall.h
         ${source_dir}/rng.h
         ${source_dir}/scores.h
+        ${source_dir}/scrolls.h
         ${source_dir}/spells.h
         ${source_dir}/staves.h
         ${source_dir}/store.h

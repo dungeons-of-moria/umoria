@@ -109,6 +109,3 @@ extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 
 // moria.cpp - also includes the main dungeon game loop: playDungeon()
 void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
-
-// scrolls.c
-void scrollRead();

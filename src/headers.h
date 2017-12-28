@@ -66,6 +66,7 @@
 #include "recall.h"
 #include "rng.h"
 #include "scores.h"
+#include "scrolls.h"
 #include "spells.h"
 #include "staves.h"
 #include "store.h"
