@@ -8,6 +8,18 @@
 
 #pragma once
 
+extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
+extern char *special_item_names[SN_ARRAY_SIZE];
+
+// Following are arrays for descriptive pieces
+extern const char *colors[MAX_COLORS];
+extern const char *mushrooms[MAX_MUSHROOMS];
+extern const char *woods[MAX_WOODS];
+extern const char *metals[MAX_METALS];
+extern const char *rocks[MAX_ROCKS];
+extern const char *amulets[MAX_AMULETS];
+extern const char *syllables[MAX_SYLLABLES];
+
 void identifyGameObject();
 
 void magicInitializeItemNames();
