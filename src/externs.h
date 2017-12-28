@@ -8,9 +8,6 @@
 
 // Declarations for global variables and initialized data
 
-// Following are treasure arrays  and variables
-extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
-
 // Following are creature arrays and variables
 extern Recall_t creature_recall[MON_MAX_CREATURES]; // Monster memories. -CJS-
 extern const char *recall_description_attack_type[25];
