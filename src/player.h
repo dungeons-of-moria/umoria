@@ -146,6 +146,19 @@ typedef struct {
     bool carrying_light;         // `true` when player is carrying light
 } Player_t;
 
+extern Player_t py;
+extern bool teleport_player;
+
+extern ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
+extern Race_t character_races[PLAYER_MAX_RACES];
+extern Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS];
+
+extern Class_t classes[PLAYER_MAX_CLASSES];
+extern int16_t class_level_adj[PLAYER_MAX_CLASSES][CLASS_MAX_LEVEL_ADJUST];
+extern uint16_t class_base_provisions[PLAYER_MAX_CLASSES][5];
+
+extern uint8_t blows_table[7][6];
+
 bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();

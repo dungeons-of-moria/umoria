@@ -8,23 +8,11 @@
 
 // Declarations for global variables and initialized data
 
-extern bool teleport_player;
 
 // Converted to uint16_t when saving the game.
 extern int16_t missiles_counter;
 
-// Following are player variables
-extern Player_t py;
-
-extern ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
-extern Race_t character_races[PLAYER_MAX_RACES];
-extern Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS];
-
 extern uint8_t race_gold_adjustments[PLAYER_MAX_RACES][PLAYER_MAX_RACES];
-
-extern Class_t classes[PLAYER_MAX_CLASSES];
-extern int16_t class_level_adj[PLAYER_MAX_CLASSES][CLASS_MAX_LEVEL_ADJUST];
-extern uint16_t class_base_provisions[PLAYER_MAX_CLASSES][5];
 
 // Warriors don't have spells, so there is no entry for them.
 extern Spell_t magic_spells[PLAYER_MAX_CLASSES - 1][31];
@@ -70,5 +58,3 @@ extern const char *metals[MAX_METALS];
 extern const char *rocks[MAX_ROCKS];
 extern const char *amulets[MAX_AMULETS];
 extern const char *syllables[MAX_SYLLABLES];
-
-extern uint8_t blows_table[7][6];
