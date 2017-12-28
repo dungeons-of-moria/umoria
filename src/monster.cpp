@@ -9,6 +9,8 @@
 #include "headers.h"
 #include "externs.h"
 
+static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
+
 static bool monsterIsVisible(const Monster_t &monster) {
     bool visible = false;
 
@@ -1522,7 +1524,7 @@ bool monsterSleep(int y, int x) {
     return asleep;
 }
 
-bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
+static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed) {
     int item_pos_start;
     int item_pos_end;
     int32_t gold;

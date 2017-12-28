@@ -58,7 +58,6 @@ int monsterTakeHit(int monster_id, int damage);
 void printMonsterActionText(const std::string &name, const std::string &action);
 std::string monsterNameDescription(const std::string &real_name, bool is_lit);
 bool monsterSleep(int y, int x);
-bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
 
 // monster management
 bool compactMonsters();
