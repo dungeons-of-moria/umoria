@@ -9,7 +9,6 @@
 // Inventory and inventory items
 
 #include "headers.h"
-#include "externs.h"
 
 Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 

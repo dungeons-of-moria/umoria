@@ -9,7 +9,6 @@
 // The main command interpreter, updating player status
 
 #include "headers.h"
-#include "externs.h"
 
 // The Dungeon global
 // Yup, this initialization is ugly, we'll fix...eventually! -MRC-

@@ -9,7 +9,6 @@
 // Store: updating store inventory, pricing objects
 
 #include "headers.h"
-#include "externs.h"
 
 Store_t stores[MAX_STORES];
 

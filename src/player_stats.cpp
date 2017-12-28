@@ -9,7 +9,6 @@
 // Functions related to Player stats
 
 #include "headers.h"
-#include "externs.h"
 
 // I don't really like this, but for now, it's better than being a global -MRC-
 void playerInitializeBaseExperienceLevels() {

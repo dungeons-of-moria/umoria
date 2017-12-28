@@ -9,7 +9,6 @@
 // Monster memory info -CJS-
 
 #include "headers.h"
-#include "externs.h"
 
 // Monster memories
 Recall_t creature_recall[MON_MAX_CREATURES];

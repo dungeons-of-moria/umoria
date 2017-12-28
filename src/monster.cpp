@@ -9,7 +9,6 @@
 // Handle monster movement and attacks
 
 #include "headers.h"
-#include "externs.h"
 
 static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
 

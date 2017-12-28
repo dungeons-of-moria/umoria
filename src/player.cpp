@@ -9,7 +9,6 @@
 // Player specific variable definitions
 
 #include "headers.h"
-#include "externs.h"
 
 // Player record for most player related info
 Player_t py = Player_t{};

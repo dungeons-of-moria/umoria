@@ -7,7 +7,6 @@
 // See LICENSE and AUTHORS for more information.
 
 #include "headers.h"
-#include "externs.h"
 
 enum class StaffSpellTypes {
     light = 1,

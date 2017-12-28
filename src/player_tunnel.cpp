@@ -9,7 +9,6 @@
 // Player throw functions
 
 #include "headers.h"
-#include "externs.h"
 
 // Don't let the player tunnel somewhere illegal, this is necessary to
 // prevent the player from getting a free attack by trying to tunnel

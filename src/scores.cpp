@@ -9,7 +9,6 @@
 // Handle reading, writing, and displaying of high scores.
 
 #include "headers.h"
-#include "externs.h"
 #include "version.h"
 
 static uint8_t highScoreGenderLabel() {

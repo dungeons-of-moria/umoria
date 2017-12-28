@@ -9,7 +9,6 @@
 // Food code
 
 #include "headers.h"
-#include "externs.h"
 
 enum class FoodMagicTypes {
     poison = 1,

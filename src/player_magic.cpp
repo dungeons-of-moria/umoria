@@ -9,7 +9,6 @@
 // Player magic functions
 
 #include "headers.h"
-#include "externs.h"
 
 // Cure players confusion -RAK-
 bool playerCureConfusion() {

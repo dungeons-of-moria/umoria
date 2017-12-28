@@ -11,7 +11,6 @@
 #include <cstdlib>
 #include "headers.h"
 #include "curses.h"
-#include "externs.h"
 
 static bool curses_on = false;
 

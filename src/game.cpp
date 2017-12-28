@@ -9,7 +9,6 @@
 // Game initialization and maintenance related functions
 
 #include "headers.h"
-#include "externs.h"
 #include "version.h"
 
 // holds the previous rnd state

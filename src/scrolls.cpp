@@ -7,7 +7,6 @@
 // See LICENSE and AUTHORS for more information.
 
 #include "headers.h"
-#include "externs.h"
 
 // Note: naming of all the scroll functions needs verifying -MRC-
 

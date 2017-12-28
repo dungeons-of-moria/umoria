@@ -9,7 +9,6 @@
 // Player functions related to traps
 
 #include "headers.h"
-#include "externs.h"
 
 static int playerTrapDisarmAbility() {
     int ability = py.misc.disarm;

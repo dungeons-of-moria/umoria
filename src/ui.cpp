@@ -7,7 +7,6 @@
 // See LICENSE and AUTHORS for more information.
 
 #include "headers.h"
-#include "externs.h"
 
 static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : ",};
 #define BLANK_LENGTH 24

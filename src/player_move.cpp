@@ -9,7 +9,6 @@
 // Game initialization and maintenance related functions
 
 #include "headers.h"
-#include "externs.h"
 
 static void trapOpenPit(const Inventory_t &item, int dam) {
     printMessage("You fell into a pit!");

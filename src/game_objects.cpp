@@ -9,7 +9,6 @@
 // Game object management
 
 #include "headers.h"
-#include "externs.h"
 
 int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];

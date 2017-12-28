@@ -9,7 +9,6 @@
 // Player throw functions
 
 #include "headers.h"
-#include "externs.h"
 
 static void inventoryThrow(int item_id, Inventory_t *treasure) {
     Inventory_t *item = &inventory[item_id];

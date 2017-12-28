@@ -9,7 +9,6 @@
 // Code for mage spells
 
 #include "headers.h"
-#include "externs.h"
 
 // names based on spell_names[62] in data_player.cpp
 enum class MageSpellTypes {

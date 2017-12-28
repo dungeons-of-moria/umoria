@@ -9,7 +9,6 @@
 // Magical treasure
 
 #include "headers.h"
-#include "externs.h"
 
 Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 

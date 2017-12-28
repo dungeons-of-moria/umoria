@@ -9,7 +9,6 @@
 // Save and restore games and monster memory info
 
 #include "headers.h"
-#include "externs.h"
 #include "version.h"
 
 #include <sstream>

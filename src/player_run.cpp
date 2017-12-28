@@ -9,7 +9,6 @@
 // The running algorithm: -CJS-
 
 #include "headers.h"
-#include "externs.h"
 
 // Overview: You keep moving until something interesting happens. If you are in
 // an enclosed space, you follow corners. This is the usual corridor scheme. If

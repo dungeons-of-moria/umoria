@@ -9,7 +9,6 @@
 // Run the game: the main loop
 
 #include "headers.h"
-#include "externs.h"
 
 static void playDungeon();
 

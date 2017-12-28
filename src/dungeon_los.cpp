@@ -9,7 +9,6 @@
 // LOS (line-of-sight) and Looking functions
 
 #include "headers.h"
-#include "externs.h"
 
 // A simple, fast, integer-based line-of-sight algorithm.  By Joseph Hall,
 // 4116 Brewster Drive, Raleigh NC 27606.  Email to jnh@ecemwl.ncsu.edu.

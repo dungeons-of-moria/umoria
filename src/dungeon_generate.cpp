@@ -9,7 +9,6 @@
 // Initialize/create a dungeon or town level
 
 #include "headers.h"
-#include "externs.h"
 
 static Coord_t doors_tk[100];
 static int door_index;

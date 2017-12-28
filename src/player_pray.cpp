@@ -9,7 +9,6 @@
 // Code for priest spells
 
 #include "headers.h"
-#include "externs.h"
 
 static bool playerCanPray(int &item_pos_begin, int &item_pos_end) {
     if (py.flags.blind > 0) {

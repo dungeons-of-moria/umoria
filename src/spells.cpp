@@ -9,7 +9,6 @@
 // Player/creature spells, breaths, wands, scrolls, etc. code
 
 #include "headers.h"
-#include "externs.h"
 
 // Returns spell pointer -RAK-
 static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int &spell_chance, const char *prompt, int first_spell) {

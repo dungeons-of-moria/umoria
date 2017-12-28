@@ -7,7 +7,6 @@
 // See LICENSE and AUTHORS for more information.
 
 #include "headers.h"
-#include "externs.h"
 
 static void inventoryItemWeightText(char *text, int itemID) {
     int totalWeight = inventory[itemID].weight * inventory[itemID].items_count;

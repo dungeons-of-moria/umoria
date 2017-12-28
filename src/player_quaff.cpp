@@ -9,7 +9,6 @@
 // Code for potions
 
 #include "headers.h"
-#include "externs.h"
 
 enum class PotionSpellTypes {
     strength = 1,

@@ -9,7 +9,6 @@
 // Store: entering, command interpreter, buying, selling
 
 #include "headers.h"
-#include "externs.h"
 
 // Save the store's last increment value.
 static int16_t store_last_increment;

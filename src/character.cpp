@@ -9,7 +9,6 @@
 // Create a player character
 
 #include "headers.h"
-#include "externs.h"
 
 // Generates character's stats -JWT-
 static void characterGenerateStats() {

@@ -9,7 +9,6 @@
 // Monster management: generation, placement, cleanup
 
 #include "headers.h"
-#include "externs.h"
 
 Monster_t monsters[MON_TOTAL_ALLOCATIONS];
 int16_t monster_levels[MON_MAX_LEVELS + 1];

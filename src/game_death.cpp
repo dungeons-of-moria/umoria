@@ -9,7 +9,6 @@
 // Code executed when player dies
 
 #include "headers.h"
-#include "externs.h"
 
 // Prints the gravestone of the character -RAK-
 static void printTomb() {

@@ -9,7 +9,6 @@
 // The running algorithm: -CJS-
 
 #include "headers.h"
-#include "externs.h"
 #include "dice.h"
 
 static void playerBashAttack(int y, int x);

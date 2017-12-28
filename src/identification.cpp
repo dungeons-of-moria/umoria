@@ -10,7 +10,6 @@
 // ...mostly string handling code
 
 #include "headers.h"
-#include "externs.h"
 
 char magic_item_titles[MAX_TITLES][10];
 
