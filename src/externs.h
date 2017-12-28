@@ -9,7 +9,6 @@
 // Declarations for global variables and initialized data
 
 // Following are treasure arrays  and variables
-extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 
 // Following are creature arrays and variables

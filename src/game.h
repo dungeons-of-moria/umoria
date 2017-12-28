@@ -38,6 +38,7 @@ extern bool panic_save;
 extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 extern int16_t current_treasure_id;
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
+extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 
 void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
