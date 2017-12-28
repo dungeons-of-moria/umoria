@@ -10,8 +10,6 @@
 
 extern int hack_monptr;
 
-extern Dungeon_t dg;
-
 extern bool screen_has_changed;
 
 extern bool teleport_player;
@@ -59,7 +57,6 @@ extern const char *speech_haggling_try_again[10];
 extern const char *speech_sorry[5];
 
 // Following are treasure arrays  and variables
-extern DungeonObject_t game_objects[MAX_OBJECTS_IN_GAME];
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 extern Inventory_t treasure_list[LEVEL_MAX_OBJECTS];

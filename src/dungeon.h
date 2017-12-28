@@ -61,6 +61,9 @@ typedef struct {
     Tile_t floor[MAX_HEIGHT][MAX_WIDTH];
 } Dungeon_t;
 
+extern Dungeon_t dg;
+extern DungeonObject_t game_objects[MAX_OBJECTS_IN_GAME];
+
 void dungeonDisplayMap();
 
 bool coordInBounds(Coord_t coord);
