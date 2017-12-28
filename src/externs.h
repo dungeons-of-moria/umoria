@@ -8,10 +8,6 @@
 
 // Declarations for global variables and initialized data
 
-
-// Converted to uint16_t when saving the game.
-extern int16_t missiles_counter;
-
 extern uint8_t race_gold_adjustments[PLAYER_MAX_RACES][PLAYER_MAX_RACES];
 
 // Warriors don't have spells, so there is no entry for them.
@@ -36,7 +32,6 @@ extern const char *speech_sorry[5];
 // Following are treasure arrays  and variables
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
-extern Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 extern char *special_item_names[SN_ARRAY_SIZE];
 

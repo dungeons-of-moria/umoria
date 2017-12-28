@@ -8,4 +8,9 @@
 
 #pragma once
 
+extern Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
+
+// Converted to uint16_t when saving the game.
+extern int16_t missiles_counter;
+
 void magicTreasureMagicalAbility(int item_id, int level);
