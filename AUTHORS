@@ -1,0 +1,115 @@
+# Moria / Umoria Authors
+
+Robert Alan Koeneke created Moria from 1981-86. James E. Wilson took
+the VMS Moria sources and created Umoria from 1987-94.
+
+In 2008 Moria/Umoria was re-licensed under the GNU General Public License
+version 2.0. All new additions to the code will fall under this license.
+
+
+## Umoria 5.7.x
+
+Michael R. Cook (GPL v2)
+  Umoria restoration project:
+    Windows and macOS support
+    deprecation of old computer systems (Amiga, Atari ST, etc.)
+  major refactoring of the source code
+
+
+## VMS Moria / Umoria 4.8 - 5.6
+
+Many people have contributed to the game since Koeneke released Moria
+in 1983. Their names, license details, and contributions summary are
+presented below.
+
+
+Robert Alan Koeneke (GPL v2)
+  Moria creator
+
+James E. Wilson (GPL v2)
+  Umoria creator
+
+David J. Grabiner (GPL v2)
+  as maintainer
+
+Jimmey Wayne Todd Jr.
+  character generation
+  save/load code
+  various other features and functions
+
+D. G. Kneller (Public Domain)
+  MSDOS Moria port
+  reduced map display
+  16 bit integers
+
+Christopher J. Stuart (GPL v2)
+  recall
+  options
+  inventory
+  running code
+
+Curtis McCauley (GPL v2)
+  Macintosh Moria port for MPW C
+
+Stephen A. Jacobs (GPL v2)
+  Atari ST Moria port for MW C
+
+William Setzer (GPL v2)
+  object naming code
+
+Dan Bernstein (Public Domain)
+  UNIX hangup signal fix
+  many bug fixes
+
+Corey Gehman (GPL v2)
+  Amiga Moria port
+
+Ralph Waters (GPL v2)
+  VMS support code
+  IBM-PC Turbo C bug fixes
+
+Joshua Delahunty (GPL v2)
+  VMS support code
+
+Todd Pierzina (GPL v2)
+  VMS support code
+
+Joseph Hall (Public Domain)
+  line of sight code
+  monster compiler
+
+Eric Vaitl (GPL v2)
+  PC-Curses replacement for Turbo-C
+
+Scott Kolodzieski (GPL v2)
+  Atari ST port for GNU C
+
+Hildo Biersma (Public Domain)
+  Atari ST port for Turbo C
+
+Ben Schreiber (GPL v2)
+  Macintosh port for Think C
+
+Carlton Hommel (Public Domain)
+  the 'print items' utility
+
+Wayne Schlitt (GPL v2)
+  the 'calculate hits' utility
+
+Brian Johnson (GPL v2)
+  Linux support
+
+Ronald Cook (Public Domain)
+  lattice C support
+
+Eric Bazin (Public Domain)
+  merge monster memories
+
+Berthold Gunreben (GPL v2)
+  HP-UX support
+
+Andrew Chernov (Public Domain)
+  386 BSD support
+
+Harry Johnston (GPL v2)
+  specify an item by its numeric inscription
