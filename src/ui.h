@@ -31,6 +31,11 @@ typedef struct {
     int32_t x;
 } Coord_t;
 
+extern bool screen_has_changed;
+extern bool message_ready_to_print;
+extern vtype_t messages[MESSAGE_HISTORY_SIZE];
+extern int16_t last_message_id;
+
 // UI - IO
 bool terminalInitialize();
 void terminalRestore();

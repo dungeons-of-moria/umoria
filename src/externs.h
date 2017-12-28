@@ -10,13 +10,7 @@
 
 extern int hack_monptr;
 
-extern bool screen_has_changed;
-
 extern bool teleport_player;
-
-extern bool message_ready_to_print;
-extern vtype_t messages[MESSAGE_HISTORY_SIZE];
-extern int16_t last_message_id;
 
 // Converted to uint16_t when saving the game.
 extern int16_t missiles_counter;
