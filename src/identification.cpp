@@ -1,8 +1,10 @@
-// Copyright (c) 1989-94 James E. Wilson, Robert A. Koeneke
+// Copyright (c) 1981-86 Robert A. Koeneke
+// Copyright (c) 1987-94 James E. Wilson
 //
-// Umoria is free software released under a GPL v2 license and comes with
-// ABSOLUTELY NO WARRANTY. See https://www.gnu.org/licenses/gpl-2.0.html
-// for further details.
+// This work is free software released under the GNU General Public License
+// version 2.0, and comes with ABSOLUTELY NO WARRANTY.
+//
+// See LICENSE and AUTHORS for more information.
 
 // Handle object identification and descriptions
 // ...mostly string handling code

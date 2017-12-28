@@ -61,7 +61,7 @@ Scott Kolodzieski     - Atari ST port for Gnu C
 Hildo Biersma         - Atari ST port for Turbo C
 Ben Schreiber         - Macintosh port for Think C
 
-Copyright (c) Robert A. Koeneke, James E. Wilson, David J. Grabiner
+Copyright (c) Robert A. Koeneke, James E. Wilson
 
 Umoria is free software released under the GPL v2 license and comes
 with ABSOLUTELY NO WARRANTY. Read the LICENSE for full details.
