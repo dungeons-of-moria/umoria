@@ -512,7 +512,7 @@ void characterCreate() {
 
     putStringClearToEOL("[ press any key to continue, or Q to exit ]", Coord_t{23, 17});
     if (getKeyInput() == 'Q') {
-        exitGame();
+        exitProgram();
     }
     eraseLine(Coord_t{23, 0});
 }

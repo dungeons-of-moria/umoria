@@ -923,7 +923,11 @@ bool loadGame(bool &generate) {
     dg.game_turn = -1;
     putStringClearToEOL("Please try again without that save file.", Coord_t{1, 0});
 
-    exitGame();
+    // TODO: just check for a key press instead of calling printMessage?
+    // We have messages for the player to read, this will ask for a keypress
+    printMessage(CNIL);
+
+    exitProgram();
 
     return false; // not reached
 }

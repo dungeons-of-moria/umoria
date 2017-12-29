@@ -122,7 +122,7 @@ static void kingly() {
 
 // What happens upon dying -RAK-
 // Handles the gravestone and top-twenty routines -RAK-
-void exitGame() {
+void endGame() {
     printMessage(CNIL);
 
     // flush all input
@@ -137,22 +137,21 @@ void exitGame() {
         printTomb();
     }
 
+    // Save the memory at least.
     if (game.character_generated && !game.character_saved) {
-        // Save the memory at least.
         (void) saveGame();
     }
 
     // add score to score file if applicable
     if (game.character_generated) {
-        // Clear game.character_saved, strange thing to do, but it prevents
-        // getKeyInput() from recursively calling exitGame() when there has
+        // Clear `game.character_saved`, strange thing to do, but it prevents
+        // getKeyInput() from recursively calling endGame() when there has
         // been an eof on stdin detected.
         game.character_saved = false;
         recordNewHighScore();
         showScoresScreen();
     }
     eraseLine(Coord_t{23, 0});
-    terminalRestore();
 
-    exit(0);
+    exitProgram();
 }

@@ -46,7 +46,6 @@ bool terminalInitialize() {
     save_screen = newwin(0, 0, 0, 0);
     if (save_screen == nullptr) {
         (void) printf("Out of memory in starting up curses.\n");
-        exitGame();
         return false;
     }
 
@@ -343,7 +342,7 @@ char getKeyInput() {
             (void) refresh();
 
             if (!game.character_generated || game.character_saved) {
-                exitGame();
+                endGame();
             }
 
             playerDisturb(1, 0);
@@ -357,7 +356,7 @@ char getKeyInput() {
                     (void) strcpy(game.character_died_from, "panic: unexpected eof");
                     game.character_is_dead = true;
                 }
-                exitGame();
+                endGame();
             }
             return ESCAPE;
         }

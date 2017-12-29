@@ -322,3 +322,10 @@ bool getAllDirections(const char *prompt, int &direction) {
         terminalBellSound();
     }
 }
+
+// Restore the terminal and exit
+void exitProgram() {
+    flushInputBuffer();
+    terminalRestore();
+    exit(0);
+}

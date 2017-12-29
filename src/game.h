@@ -53,6 +53,8 @@ int getRandomDirection();
 bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
 
+void exitProgram();
+
 // game object management
 int popt();
 void pusht(uint8_t treasure_id);
@@ -67,7 +69,7 @@ void outputRandomLevelObjectsToFile();
 bool outputPlayerCharacterToFile(char *filename);
 
 // game death
-void exitGame();
+void endGame();
 
 // save/load
 bool saveGame();

@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
                 break;
             case 'd':
                 showScoresScreen();
-                exitGame();
+                exitProgram();
                 break;
             case 's':
                 // No NUMBER provided?

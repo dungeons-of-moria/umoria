@@ -79,7 +79,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     // until after loadGame() in case it was just a resurrection
     if (game.to_be_wizard) {
         if (!enterWizardMode()) {
-            exitGame();
+            endGame();
         }
     }
 
@@ -159,7 +159,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     }
 
     // Character gets buried.
-    exitGame();
+    endGame();
 }
 
 // Init players with some belongings -RAK-
@@ -1476,7 +1476,7 @@ static void commandSaveAndExit() {
         printMessage("Saving game...");
 
         if (saveGame()) {
-            exitGame();
+            endGame();
         }
 
         (void) strcpy(game.character_died_from, "(alive and well)");
