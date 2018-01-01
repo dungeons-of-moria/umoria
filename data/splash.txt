@@ -14,7 +14,7 @@
 
 
 
-          Umoria is free software released under the GPL v2 license
+                Umoria is free software released under GPL v2
                     and comes with ABSOLUTELY NO WARRANTY
 
       For more information: https://github.com/dungeons-of-moria/umoria
