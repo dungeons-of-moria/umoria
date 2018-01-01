@@ -213,7 +213,7 @@ void playerThrowItem() {
             if (tile.creature_id > 1) {
                 flag = true;
 
-                const Monster_t &m_ptr = monsters[tile.creature_id];
+                Monster_t const &m_ptr = monsters[tile.creature_id];
 
                 tbth -= current_distance;
 

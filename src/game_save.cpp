@@ -28,7 +28,7 @@ static void wr_bytes(uint8_t *value, int count);
 static void wr_string(char *str);
 static void wr_shorts(uint16_t *value, int count);
 static void wr_item(Inventory_t &item);
-static void wr_monster(Monster_t &monster);
+static void wr_monster(Monster_t const &monster);
 static bool rd_bool();
 static uint8_t rd_byte();
 static uint16_t rd_short();
@@ -1031,7 +1031,7 @@ static void wr_item(Inventory_t &item) {
     wr_byte(item.identification);
 }
 
-static void wr_monster(Monster_t &monster) {
+static void wr_monster(Monster_t const &monster) {
     DEBUG(fprintf(logfile, "MONSTER:\n"));
     wr_short((uint16_t) monster.hp);
     wr_short((uint16_t) monster.sleep_count);

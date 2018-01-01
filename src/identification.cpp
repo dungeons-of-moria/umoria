@@ -937,7 +937,7 @@ void objectBlockedByMonster(int monster_id) {
     vtype_t description = {'\0'};
     vtype_t msg = {'\0'};
 
-    const Monster_t &monster = monsters[monster_id];
+    Monster_t const &monster = monsters[monster_id];
     const char *name = creatures_list[monster.creature_id].name;
 
     if (monster.lit) {

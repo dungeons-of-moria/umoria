@@ -12,7 +12,7 @@
 
 static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
 
-static bool monsterIsVisible(const Monster_t &monster) {
+static bool monsterIsVisible(Monster_t const &monster) {
     bool visible = false;
 
     const Tile_t &tile = dg.floor[monster.y][monster.x];
@@ -554,7 +554,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
     }
 }
 
-static void monsterMovesOnPlayer(const Monster_t &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, int y, int x) {
+static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, int y, int x) {
     if (creature_id == 1) {
         // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
@@ -665,7 +665,7 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
     }
 }
 
-static bool monsterCanCastSpells(const Monster_t &monster, uint32_t spells) {
+static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     // 1 in x chance of casting spell
     if (randomNumber((int) (spells & CS_FREQ)) != 1) {
         return false;
@@ -974,7 +974,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
     return false;
 }
 
-static void monsterMultiplyCritter(const Monster_t &monster, int monster_id, uint32_t &rcmove) {
+static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uint32_t &rcmove) {
     int counter = 0;
 
     for (int y = monster.y - 1; y <= monster.y + 1; y++) {
@@ -998,7 +998,7 @@ static void monsterMultiplyCritter(const Monster_t &monster, int monster_id, uin
     }
 }
 
-static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint32_t &rcmove) {
+static void monsterMoveOutOfWall(Monster_t const &monster, int monster_id, uint32_t &rcmove) {
     // If the monster is already dead, don't kill it again!
     // This can happen for monsters moving faster than the player. They
     // will get multiple moves, but should not if they die on the first
@@ -1220,7 +1220,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     }
 }
 
-static void memoryUpdateRecall(const Monster_t &monster, bool wake, bool ignore, int rcmove) {
+static void memoryUpdateRecall(Monster_t const &monster, bool wake, bool ignore, int rcmove) {
     if (!monster.lit) {
         return;
     }

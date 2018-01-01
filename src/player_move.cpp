@@ -443,7 +443,7 @@ void playerMove(int direction, bool do_pickup) {
     }
 
     const Tile_t &tile = dg.floor[y][x];
-    const Monster_t &monster = monsters[tile.creature_id];
+    Monster_t const &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
     // disallow attacks against unlit creatures in walls because moving into

@@ -559,7 +559,7 @@ bool spellDetectMonsters() {
 
 // Update monster when light line spell touches it.
 static void spellLightLineTouchesMonster(int monster_id) {
-    const Monster_t &monster = monsters[monster_id];
+    Monster_t const &monster = monsters[monster_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
 
     // light up and draw monster
@@ -736,7 +736,7 @@ static void printBoltStrikesMonsterMessage(Creature_t const &creature, const std
 
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
 static void spellFireBoltTouchesMonster(Tile_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
-    const Monster_t &monster = monsters[tile.creature_id];
+    Monster_t const &monster = monsters[tile.creature_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
 
     // light up monster and draw monster, temporarily set
@@ -863,7 +863,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
                         if (tile->feature_id <= MAX_OPEN_SPACE) {
                             if (tile->creature_id > 1) {
-                                const Monster_t &monster = monsters[tile->creature_id];
+                                Monster_t const &monster = monsters[tile->creature_id];
                                 Creature_t const &creature = creatures_list[monster.creature_id];
 
                                 // lite up creature if visible, temp set permanent_light so that monsterUpdateVisibility works
@@ -1117,7 +1117,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
         if (tile.creature_id > 1) {
             finished = true;
 
-            const Monster_t &monster = monsters[tile.creature_id];
+            Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             auto name = monsterNameDescription(creature.name, monster.lit);
@@ -1156,7 +1156,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
         if (tile.creature_id > 1) {
             finished = true;
 
-            const Monster_t &monster = monsters[tile.creature_id];
+            Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.defenses & CD_UNDEAD) == 0) {
@@ -1384,7 +1384,7 @@ bool spellWallToMud(int y, int x, int direction) {
         }
 
         if (tile.creature_id > 1) {
-            const Monster_t &monster = monsters[tile.creature_id];
+            Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((CD_STONE & creature.defenses) != 0) {
@@ -1465,7 +1465,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
         }
 
         if (tile.creature_id > 1) {
-            const Monster_t &monster = monsters[tile.creature_id];
+            Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             if (randomNumber(MON_MAX_LEVELS) > creature.level) {
@@ -1684,7 +1684,7 @@ bool spellMassGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        const Monster_t &monster = monsters[id];
+        Monster_t const &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
@@ -1708,7 +1708,7 @@ bool spellGenocide() {
     bool killed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        const Monster_t &monster = monsters[id];
+        Monster_t const &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
         if (creature_char == creatures_list[monster.creature_id].sprite) {
@@ -1806,7 +1806,7 @@ bool spellMassPolymorph() {
     bool morphed = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        const Monster_t &monster = monsters[id];
+        Monster_t const &monster = monsters[id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT) {
             Creature_t const &creature = creatures_list[monster.creature_id];
@@ -1979,7 +1979,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     bool dispelled = false;
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
-        const Monster_t &monster = monsters[id];
+        Monster_t const &monster = monsters[id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
