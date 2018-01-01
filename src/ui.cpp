@@ -733,7 +733,7 @@ static void playerGainLevel() {
     printCharacterLevel();
     printCharacterTitle();
 
-    const Class_t &player_class = classes[py.misc.class_id];
+    Class_t const &player_class = classes[py.misc.class_id];
 
     if (player_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(A_INT);
