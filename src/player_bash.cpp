@@ -87,7 +87,7 @@ static void playerBashAttack(int y, int x) {
     int monster_id = dg.floor[y][x].creature_id;
 
     Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     monster.sleep_count = 0;
 

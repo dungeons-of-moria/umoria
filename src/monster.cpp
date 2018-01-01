@@ -16,7 +16,7 @@ static bool monsterIsVisible(const Monster_t &monster) {
     bool visible = false;
 
     const Tile_t &tile = dg.floor[monster.y][monster.x];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
         // Normal sight.
@@ -353,7 +353,7 @@ static void monsterPrintAttackDescription(char *msg, int attack_id) {
 }
 
 
-static void monsterConfuseOnAttack(const Creature_t &creature, Monster_t &monster, int attack_type, vtype_t monster_name, bool visible) {
+static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monster, int attack_type, vtype_t monster_name, bool visible) {
     if (py.flags.confuse_monster && attack_type != 99) {
         printMessage("Your hands stop glowing.");
         py.flags.confuse_monster = false;
@@ -388,7 +388,7 @@ static void monsterAttackPlayer(int monster_id) {
     }
 
     Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     vtype_t name = {'\0'};
     if (!monster.lit) {
@@ -846,7 +846,7 @@ static bool monsterCastSpell(int monster_id) {
     }
 
     Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     if (!monsterCanCastSpells(monster, creature.spells)) {
         return false;
@@ -1056,7 +1056,7 @@ static void monsterMoveOutOfWall(const Monster_t &monster, int monster_id, uint3
 }
 
 // Undead only get confused from turn undead, so they should flee
-static void monsterMoveUndead(const Creature_t &creature, int monster_id, uint32_t &rcmove) {
+static void monsterMoveUndead(Creature_t const &creature, int monster_id, uint32_t &rcmove) {
     int directions[9];
     monsterGetMoveDirection(monster_id, directions);
 
@@ -1072,7 +1072,7 @@ static void monsterMoveUndead(const Creature_t &creature, int monster_id, uint32
     }
 }
 
-static void monsterMoveConfused(const Creature_t &creature, int monster_id, uint32_t &rcmove) {
+static void monsterMoveConfused(Creature_t const &creature, int monster_id, uint32_t &rcmove) {
     int directions[9];
 
     directions[0] = randomNumber(9);
@@ -1087,7 +1087,7 @@ static void monsterMoveConfused(const Creature_t &creature, int monster_id, uint
     }
 }
 
-static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, const Creature_t &creature) {
+static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, Creature_t const &creature) {
     // Creature is confused or undead turned?
     if (monster.confused_amount != 0u) {
         if ((creature.defenses & CD_UNDEAD) != 0) {
@@ -1155,7 +1155,7 @@ static void monsterAttackWithoutMoving(int monster_id, uint32_t &rcmove, uint8_t
 // Move the critters about the dungeon -RAK-
 static void monsterMove(int monster_id, uint32_t &rcmove) {
     Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
@@ -1339,7 +1339,7 @@ void updateMonsters(bool attack) {
 // (Picking on my babies.) -RAK-
 int monsterTakeHit(int monster_id, int damage) {
     Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     monster.sleep_count = 0;
     monster.hp -= damage;
@@ -1503,7 +1503,7 @@ bool monsterSleep(int y, int x) {
             }
 
             Monster_t &monster = monsters[monster_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 

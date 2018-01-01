@@ -73,7 +73,7 @@ int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monste
     bool is_flask = item.category_id == TV_FLASK;
 
     if (is_ego_weapon && (is_projectile || is_hafted_sword || is_flask)) {
-        const Creature_t &creature = creatures_list[monster_id];
+        Creature_t const &creature = creatures_list[monster_id];
         Recall_t &memory = creature_recall[monster_id];
 
         // Slay Dragon

@@ -1079,7 +1079,7 @@ bool playerSavingThrow() {
     return randomNumber(100) <= saving;
 }
 
-void playerGainKillExperience(const Creature_t &creature) {
+void playerGainKillExperience(Creature_t const &creature) {
     uint16_t exp = creature.kill_exp_value * creature.level;
 
     int32_t quotient = exp / py.misc.level;
@@ -1137,7 +1137,7 @@ static void playerAttackMonster(int y, int x) {
     int creature_id = dg.floor[y][x].creature_id;
 
     Monster_t &monster = monsters[creature_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
     Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     monster.sleep_count = 0;

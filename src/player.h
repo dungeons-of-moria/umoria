@@ -190,7 +190,7 @@ void playerGainMana(int stat);
 int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int attack_type_id);
 bool playerSavingThrow();
 
-void playerGainKillExperience(const Creature_t &creature);
+void playerGainKillExperience(Creature_t const &creature);
 void playerOpenClosedObject();
 void playerCloseDoor();
 bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);

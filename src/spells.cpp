@@ -560,7 +560,7 @@ bool spellDetectMonsters() {
 // Update monster when light line spell touches it.
 static void spellLightLineTouchesMonster(int monster_id) {
     const Monster_t &monster = monsters[monster_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     // light up and draw monster
     monsterUpdateVisibility(monster_id);
@@ -723,7 +723,7 @@ static void spellGetAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &
     }
 }
 
-static void printBoltStrikesMonsterMessage(const Creature_t &creature, const std::string &bolt_name, bool is_lit) {
+static void printBoltStrikesMonsterMessage(Creature_t const &creature, const std::string &bolt_name, bool is_lit) {
     std::string monster_name;
     if (is_lit) {
         monster_name = "the " + std::string(creature.name);
@@ -737,7 +737,7 @@ static void printBoltStrikesMonsterMessage(const Creature_t &creature, const std
 // Light up, draw, and check for monster damage when Fire Bolt touches it.
 static void spellFireBoltTouchesMonster(Tile_t &tile, int damage, int harm_type, uint32_t weapon_id, const std::string &bolt_name) {
     const Monster_t &monster = monsters[tile.creature_id];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     // light up monster and draw monster, temporarily set
     // permanent_light so that `monsterUpdateVisibility()` will work
@@ -864,7 +864,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                         if (tile->feature_id <= MAX_OPEN_SPACE) {
                             if (tile->creature_id > 1) {
                                 const Monster_t &monster = monsters[tile->creature_id];
-                                const Creature_t &creature = creatures_list[monster.creature_id];
+                                Creature_t const &creature = creatures_list[monster.creature_id];
 
                                 // lite up creature if visible, temp set permanent_light so that monsterUpdateVisibility works
                                 bool saved_lit_status = tile->permanent_light;
@@ -966,7 +966,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
 
                     if (tile.creature_id > 1) {
                         Monster_t &monster = monsters[tile.creature_id];
-                        const Creature_t &creature = creatures_list[monster.creature_id];
+                        Creature_t const &creature = creatures_list[monster.creature_id];
 
                         int damage = damage_hp;
 
@@ -1118,7 +1118,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
             finished = true;
 
             const Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
@@ -1157,7 +1157,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
             finished = true;
 
             const Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.defenses & CD_UNDEAD) == 0) {
                 auto name = monsterNameDescription(creature.name, monster.lit);
@@ -1201,7 +1201,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
@@ -1251,7 +1251,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
@@ -1306,7 +1306,7 @@ bool spellSleepMonster(int y, int x, int direction) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
@@ -1385,7 +1385,7 @@ bool spellWallToMud(int y, int x, int direction) {
 
         if (tile.creature_id > 1) {
             const Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((CD_STONE & creature.defenses) != 0) {
                 auto name = monsterNameDescription(creature.name, monster.lit);
@@ -1466,7 +1466,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
 
         if (tile.creature_id > 1) {
             const Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             if (randomNumber(MON_MAX_LEVELS) > creature.level) {
                 finished = true;
@@ -1515,7 +1515,7 @@ bool spellBuildWall(int y, int x, int direction) {
             finished = true;
 
             Monster_t &monster = monsters[tile.creature_id];
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & CM_PHASE) == 0u) {
                 // monster does not move, can't escape the wall
@@ -1685,7 +1685,7 @@ bool spellMassGenocide() {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         const Monster_t &monster = monsters[id];
-        const Creature_t &creature = creatures_list[monster.creature_id];
+        Creature_t const &creature = creatures_list[monster.creature_id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
             killed = true;
@@ -1709,7 +1709,7 @@ bool spellGenocide() {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         const Monster_t &monster = monsters[id];
-        const Creature_t &creature = creatures_list[monster.creature_id];
+        Creature_t const &creature = creatures_list[monster.creature_id];
 
         if (creature_char == creatures_list[monster.creature_id].sprite) {
             if ((creature.movement & CM_WIN) == 0) {
@@ -1734,7 +1734,7 @@ bool spellSpeedAllMonsters(int speed) {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
-        const Creature_t &creature = creatures_list[monster.creature_id];
+        Creature_t const &creature = creatures_list[monster.creature_id];
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
@@ -1773,7 +1773,7 @@ bool spellSleepAllMonsters() {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
-        const Creature_t &creature = creatures_list[monster.creature_id];
+        Creature_t const &creature = creatures_list[monster.creature_id];
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
@@ -1809,7 +1809,7 @@ bool spellMassPolymorph() {
         const Monster_t &monster = monsters[id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT) {
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & CM_WIN) == 0) {
                 int y = monster.y;
@@ -1887,7 +1887,7 @@ bool spellChangePlayerHitPoints(int adjustment) {
 
 static void earthquakeHitsMonster(int monsterID) {
     Monster_t &monster = monsters[monsterID];
-    const Creature_t &creature = creatures_list[monster.creature_id];
+    Creature_t const &creature = creatures_list[monster.creature_id];
 
     if ((creature.movement & CM_PHASE) == 0u) {
         int damage;
@@ -1982,7 +1982,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
         const Monster_t &monster = monsters[id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
-            const Creature_t &creature = creatures_list[monster.creature_id];
+            Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
 
@@ -2014,7 +2014,7 @@ bool spellTurnUndead() {
 
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
-        const Creature_t &creature = creatures_list[monster.creature_id];
+        Creature_t const &creature = creatures_list[monster.creature_id];
 
         if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);

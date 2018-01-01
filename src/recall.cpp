@@ -74,7 +74,7 @@ static bool memoryMonsterKnown(const Recall_t &memory) {
     return false;
 }
 
-static void memoryWizardModeInit(Recall_t &memory, const Creature_t &creature) {
+static void memoryWizardModeInit(Recall_t &memory, Creature_t const &creature) {
     memory.kills = (uint16_t) MAX_SHORT;
     memory.wake = memory.ignore = MAX_UCHAR;
 
@@ -342,7 +342,7 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 }
 
 // Do we know how hard they are to kill? Armor class, hit die.
-static void memoryKillDifficulty(const Creature_t &creature, uint32_t monster_kills) {
+static void memoryKillDifficulty(Creature_t const &creature, uint32_t monster_kills) {
     // the higher the level of the monster, the fewer the kills you need
     // Original knowarmor macro inlined
     if (monster_kills <= 304u / (4u + creature.level)) {
@@ -408,7 +408,7 @@ static void memoryWeaknesses(uint32_t defense) {
 }
 
 // Do we know how aware it is?
-static void memoryAwareness(const Creature_t &creature, const Recall_t &memory) {
+static void memoryAwareness(Creature_t const &creature, const Recall_t &memory) {
     if (memory.wake * memory.wake > creature.sleep_counter || memory.ignore == MAX_UCHAR || (creature.sleep_counter == 0 && memory.kills >= 10)) {
         memoryPrint(" It ");
 
@@ -502,7 +502,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
     }
 }
 
-static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t &creature) {
+static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t const &creature) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
@@ -582,7 +582,7 @@ static void memoryAttackNumberAndDamage(const Recall_t &memory, const Creature_t
 // Print out what we have discovered about this monster.
 int memoryRecall(int monster_id) {
     Recall_t &memory = creature_recall[monster_id];
-    const Creature_t &creature = creatures_list[monster_id];
+    Creature_t const &creature = creatures_list[monster_id];
 
     Recall_t saved_memory{};
 
