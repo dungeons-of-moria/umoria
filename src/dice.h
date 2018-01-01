@@ -13,5 +13,5 @@ typedef struct {
     uint8_t sides;
 } Dice_t;
 
-int diceRoll(Dice_t die);
-int maxDiceRoll(const Dice_t &dice);
+int diceRoll(Dice_t const &dice);
+int maxDiceRoll(Dice_t const &dice);

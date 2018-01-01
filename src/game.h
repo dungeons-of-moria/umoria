@@ -43,7 +43,7 @@ extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
 void seedResetToOldSeed();
-int randomNumber(int max);
+int randomNumber(int const max);
 int randomNumberNormalDistribution(int mean, int standard);
 void setGameOptions();
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);

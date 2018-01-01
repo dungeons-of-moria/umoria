@@ -52,7 +52,7 @@ void seedResetToOldSeed() {
 }
 
 // Generates a random integer x where 1<=X<=MAXVAL -RAK-
-int randomNumber(int max) {
+int randomNumber(int const max) {
     return (rnd() % max) + 1;
 }
 
