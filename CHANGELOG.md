@@ -3,6 +3,10 @@
 ## HEAD
 
 
+- Add AUTHORS file containing all known author information.
+  This removes contributors section from `versions.txt`.
+
+
 ### Code
 
 Continuing the process of moving related functions to the same file.
@@ -10,7 +14,7 @@ Continuing the process of moving related functions to the same file.
 - `types.h` now has just the two core `vtype_t` and `obj_desc_t` types.
 - The numbered `misc` and `moria` files no longer exist!
 - Moved `sets.cpp` functions elsewhere, allowing for most to become `static`.
-- `externs.h` now contains only `externs`.
+- `externs.h` is now empty, so deleted!
 
 
 ## 5.7.8 (2017-12-24)
