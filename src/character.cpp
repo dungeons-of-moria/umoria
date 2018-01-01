@@ -303,7 +303,7 @@ static void characterSetGender() {
 
 // Computes character's age, height, and weight -JWT-
 static void characterSetAgeHeightWeight() {
-    Race_t &race = character_races[py.misc.race_id];
+    Race_t const &race = character_races[py.misc.race_id];
 
     py.misc.age = uint16_t(race.base_age + randomNumber(race.max_age));
 
