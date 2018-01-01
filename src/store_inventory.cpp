@@ -200,7 +200,7 @@ int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &ma
         return 0;
     }
 
-    const Owner_t &owner = store_owners[store.owner_id];
+    Owner_t const &owner = store_owners[store.owner_id];
 
     price = price * race_gold_adjustments[owner.race][py.misc.race_id] / 100;
     if (price < 1) {

@@ -374,7 +374,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
     int final_flag = 0;
 
     const Store_t &store = stores[store_id];
-    const Owner_t &owner = store_owners[store.owner_id];
+    Owner_t const &owner = store_owners[store.owner_id];
 
     int32_t max_sell, min_sell;
     int32_t cost = storeItemSellPrice(store, min_sell, max_sell, item);
@@ -550,7 +550,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
         sell = 3;
         flag = true;
     } else {
-        const Owner_t &owner = store_owners[store.owner_id];
+        Owner_t const &owner = store_owners[store.owner_id];
 
         cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
         cost = cost * (200 - race_gold_adjustments[owner.race][py.misc.race_id]) / 100;
