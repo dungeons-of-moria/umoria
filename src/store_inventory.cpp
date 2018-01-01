@@ -35,7 +35,7 @@ void storeMaintenance() {
                 turnaround += 1 + store.unique_items_counter - STORE_MAX_AUTO_BUY_ITEMS;
             }
             while (--turnaround >= 0) {
-                storeDestroyItem(store_id, randomNumber((int) store.unique_items_counter) - 1, false);
+                storeDestroyItem(store_id, randomNumber(store.unique_items_counter) - 1, false);
             }
         }
 
@@ -191,7 +191,7 @@ static int32_t getPickShovelBuyPrice(const Inventory_t &item) {
 }
 
 // Asking price for an item -RAK-
-int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &max_price, const Inventory_t &item) {
+int32_t storeItemSellPrice(Store_t const &store, int32_t &min_price, int32_t &max_price, const Inventory_t &item) {
     int32_t price = storeItemValue(item);
 
     // check `item.cost` in case it is cursed, check `price` in case it is damaged
@@ -218,7 +218,7 @@ int32_t storeItemSellPrice(const Store_t &store, int32_t &min_price, int32_t &ma
 }
 
 // Check to see if they will be carrying too many objects -RAK-
-bool storeCheckPlayerItemsCount(const Store_t &store, const Inventory_t &item) {
+bool storeCheckPlayerItemsCount(Store_t const &store, const Inventory_t &item) {
     if (store.unique_items_counter < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }

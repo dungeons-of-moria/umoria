@@ -13,7 +13,7 @@
 // Save the store's last increment value.
 static int16_t store_last_increment;
 
-static bool storeNoNeedToBargain(const Store_t &store, int32_t min_price);
+static bool storeNoNeedToBargain(Store_t const &store, int32_t min_price);
 static void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price);
 
 // Initializes the stores with owners -RAK-
@@ -373,7 +373,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
     int purchase = 0;
     int final_flag = 0;
 
-    const Store_t &store = stores[store_id];
+    Store_t const &store = stores[store_id];
     Owner_t const &owner = store_owners[store.owner_id];
 
     int32_t max_sell, min_sell;
@@ -543,7 +543,7 @@ static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item
     int sell = 0;
     int final_flag = 0;
 
-    const Store_t &store = stores[store_id];
+    Store_t const &store = stores[store_id];
     int32_t cost = storeItemValue(item);
 
     if (cost < 1) {
@@ -1055,7 +1055,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
 
 // Entering a store -RAK-
 void storeEnter(int store_id) {
-    const Store_t &store = stores[store_id];
+    Store_t const &store = stores[store_id];
 
     if (store.turns_left_before_closing >= dg.game_turn) {
         printMessage("The doors are locked.");
@@ -1134,7 +1134,7 @@ void storeEnter(int store_id) {
 }
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
-static bool storeNoNeedToBargain(const Store_t &store, int32_t min_price) {
+static bool storeNoNeedToBargain(Store_t const &store, int32_t min_price) {
     if (store.good_purchases == MAX_SHORT) {
         return true;
     }
