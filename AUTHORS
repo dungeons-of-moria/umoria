@@ -9,32 +9,37 @@ version 2.0. All new additions to the code will fall under this license.
 
 ## Umoria 5.7.x
 
-Michael R. Cook (GPL v2)
+Michael R. Cook [-MRC-] (GPL v2)
   Umoria restoration project:
     Windows and macOS support
     deprecation of old computer systems (Amiga, Atari ST, etc.)
   major refactoring of the source code
 
 
-## VMS Moria / Umoria 4.8 - 5.6
+## VMS Moria 0.1 - 4.8 / Umoria 4.8 - 5.6
 
 Many people have contributed to the game since Koeneke released Moria
 in 1983. Their names, license details, and contributions summary are
 presented below.
 
 
-Robert Alan Koeneke (GPL v2)
+Robert Alan Koeneke [-RAK-] (GPL v2)
   Moria creator
 
-James E. Wilson (GPL v2)
+James E. Wilson [-JEW-] (GPL v2)
   Umoria creator
 
-David J. Grabiner (GPL v2)
+David J. Grabiner [-DJG-] (GPL v2)
+  handle large items in chests
   as maintainer
 
-Jimmey Wayne Todd Jr.
+Jimmey Wayne Todd Jr. [-JWT-]
   character generation
   save/load code
+  add player to scores
+  player points
+  print player history
+  player adjustments (AC, damage, HP, to hit)
   various other features and functions
 
 D. G. Kneller (Public Domain)
@@ -42,7 +47,7 @@ D. G. Kneller (Public Domain)
   reduced map display
   16 bit integers
 
-Christopher J. Stuart (GPL v2)
+Christopher J. Stuart [-CJS-] (GPL v2)
   recall
   options
   inventory
@@ -57,7 +62,9 @@ Stephen A. Jacobs (GPL v2)
 William Setzer (GPL v2)
   object naming code
 
-Dan Bernstein (Public Domain)
+Dan Bernstein [-DJB-] (Public Domain)
+  "no need to bargain" functionality
+  update bargin info
   UNIX hangup signal fix
   many bug fixes
 
@@ -113,3 +120,12 @@ Andrew Chernov (Public Domain)
 
 Harry Johnston (GPL v2)
   specify an item by its numeric inscription
+
+Rene Weber [-RJW-] (GPL v2)
+  compiling and doc updates for Umoria v5.6
+
+
+The following signature is currently unknown but listed here for completeness.
+
+-RGM- (contributed > v4.8.5.2 and <= 4.8.7 )
+  created get_all_stats() for character class loop
