@@ -6,7 +6,7 @@
 //
 // See LICENSE and AUTHORS for more information.
 
-// Create a player character
+// Generate a new player character
 
 #include "headers.h"
 
@@ -17,54 +17,61 @@ static void characterGenerateStats() {
 
     do {
         total = 0;
-        for (int i = 0; i < 18; i++) {
+        for (auto i = 0; i < 18; i++) {
             // Roll 3,4,5 sided dice once each
             dice[i] = randomNumber(3 + i % 3);
             total += dice[i];
         }
     } while (total <= 42 || total >= 54);
 
-    for (int i = 0; i < 6; i++) {
-        py.stats.max[i] = (uint8_t) (5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
+    for (auto i = 0; i < 6; i++) {
+        py.stats.max[i] = uint8_t(5 + dice[3 * i] + dice[3 * i + 1] + dice[3 * i + 2]);
     }
+}
+
+static uint8_t decrementStat(int16_t const adjustment, uint8_t const current_stat) {
+    auto stat = current_stat;
+    for (auto i = 0; i > adjustment; i--) {
+        if (stat > 108) {
+            stat--;
+        } else if (stat > 88) {
+            stat += -randomNumber(6) - 2;
+        } else if (stat > 18) {
+            stat += -randomNumber(15) - 5;
+            if (stat < 18) {
+                stat = 18;
+            }
+        } else if (stat > 3) {
+            stat--;
+        }
+    }
+    return stat;
+}
+
+static uint8_t incrementStat(int16_t const adjustment, uint8_t const current_stat) {
+    auto stat = current_stat;
+    for (auto i = 0; i < adjustment; i++) {
+        if (stat < 18) {
+            stat++;
+        } else if (stat < 88) {
+            stat += randomNumber(15) + 5;
+        } else if (stat < 108) {
+            stat += randomNumber(6) + 2;
+        } else if (stat < 118) {
+            stat++;
+        }
+    }
+    return stat;
 }
 
 // Changes stats by given amount -JWT-
 // During character creation we adjust player stats based
 // on their Race and Class...with a little randomness!
-static void createModifyPlayerStat(uint8_t &stat, int16_t adjustment) {
-    auto new_stat = stat;
-
+static uint8_t createModifyPlayerStat(uint8_t const stat, int16_t const adjustment) {
     if (adjustment < 0) {
-        for (int i = 0; i > adjustment; i--) {
-            if (new_stat > 108) {
-                new_stat--;
-            } else if (new_stat > 88) {
-                new_stat += -randomNumber(6) - 2;
-            } else if (new_stat > 18) {
-                new_stat += -randomNumber(15) - 5;
-                if (new_stat < 18) {
-                    new_stat = 18;
-                }
-            } else if (new_stat > 3) {
-                new_stat--;
-            }
-        }
-    } else {
-        for (int i = 0; i < adjustment; i++) {
-            if (new_stat < 18) {
-                new_stat++;
-            } else if (new_stat < 88) {
-                new_stat += randomNumber(15) + 5;
-            } else if (new_stat < 108) {
-                new_stat += randomNumber(6) + 2;
-            } else if (new_stat < 118) {
-                new_stat++;
-            }
-        }
+        return decrementStat(adjustment, stat);
     }
-
-    stat = new_stat;
+    return incrementStat(adjustment, stat);
 }
 
 // generate all stats and modify for race. needed in a separate
@@ -73,16 +80,16 @@ static void characterGenerateStatsAndRace() {
     const Race_t &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
-    createModifyPlayerStat(py.stats.max[A_STR], race.str_adjustment);
-    createModifyPlayerStat(py.stats.max[A_INT], race.int_adjustment);
-    createModifyPlayerStat(py.stats.max[A_WIS], race.wis_adjustment);
-    createModifyPlayerStat(py.stats.max[A_DEX], race.dex_adjustment);
-    createModifyPlayerStat(py.stats.max[A_CON], race.con_adjustment);
-    createModifyPlayerStat(py.stats.max[A_CHR], race.chr_adjustment);
+    py.stats.max[A_STR] = createModifyPlayerStat(py.stats.max[A_STR], race.str_adjustment);
+    py.stats.max[A_INT] = createModifyPlayerStat(py.stats.max[A_INT], race.int_adjustment);
+    py.stats.max[A_WIS] = createModifyPlayerStat(py.stats.max[A_WIS], race.wis_adjustment);
+    py.stats.max[A_DEX] = createModifyPlayerStat(py.stats.max[A_DEX], race.dex_adjustment);
+    py.stats.max[A_CON] = createModifyPlayerStat(py.stats.max[A_CON], race.con_adjustment);
+    py.stats.max[A_CHR] = createModifyPlayerStat(py.stats.max[A_CHR], race.chr_adjustment);
 
     py.misc.level = 1;
 
-    for (int i = 0; i < 6; i++) {
+    for (auto i = 0; i < 6; i++) {
         py.stats.current[i] = py.stats.max[i];
         playerSetAndUseStat(i);
     }
@@ -108,10 +115,10 @@ static void displayCharacterRaces() {
     clearToBottom(20);
     putString("Choose a race (? for Help):", Coord_t{20, 2});
 
-    int y = 21;
-    int x = 2;
+    auto y = 21;
+    auto x = 2;
 
-    for (int i = 0; i < PLAYER_MAX_RACES; i++) {
+    for (auto i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
 
         (void) sprintf(description, "%c) %s", i + 'a', character_races[i].name);
@@ -134,7 +141,7 @@ static void characterChooseRace() {
     while (true) {
         moveCursor(Coord_t{20, 30});
 
-        char input = getKeyInput();
+        char const input = getKeyInput();
         race_id = input - 'a';
 
         if (race_id < PLAYER_MAX_RACES && race_id >= 0) {
@@ -157,7 +164,7 @@ static void characterChooseRace() {
 static void displayCharacterHistory() {
     putString("Character Background", Coord_t{14, 27});
 
-    for (int i = 0; i < 4; i++) {
+    for (auto i = 0; i < 4; i++) {
         putStringClearToEOL(py.misc.history[i], Coord_t{i + 15, 10});
     }
 }
@@ -175,13 +182,13 @@ static void playerClearHistory() {
 //   - Each race has init history beginning at (race-1)*3+1
 //   - All history parts are in ascending order
 static void characterGetHistory() {
-    int history_id = py.misc.race_id * 3 + 1;
-    int social_class = randomNumber(4);
+    auto history_id = py.misc.race_id * 3 + 1;
+    auto social_class = randomNumber(4);
 
     char history_block[240];
     history_block[0] = '\0';
 
-    int background_id = 0;
+    auto background_id = 0;
 
     // Get a block of history text
     do {
@@ -215,14 +222,14 @@ static void characterGetHistory() {
 
     // Process block of history text for pretty output
     int cursor_start = 0;
-    int cursor_end = (int) strlen(history_block) - 1;
+    auto cursor_end = (int) strlen(history_block) - 1;
     while (history_block[cursor_end] == ' ') {
         cursor_end--;
     }
 
     int line_number = 0;
     int new_cursor_start = 0;
-    int current_cursor_position;
+    int current_cursor_position = 0;
 
     bool flag = false;
     while (!flag) {
@@ -271,14 +278,12 @@ static void characterSetGender() {
     putString("Choose a sex (? for Help):", Coord_t{20, 2});
     putString("m) Male       f) Female", Coord_t{21, 2});
 
-    char input;
     bool is_set = false;
-
     while (!is_set) {
         moveCursor(Coord_t{20, 29});
 
         // speed not important here
-        input = getKeyInput();
+        char const input = getKeyInput();
 
         if (input == 'f' || input == 'F') {
             playerSetGender(false);
@@ -298,27 +303,27 @@ static void characterSetGender() {
 
 // Computes character's age, height, and weight -JWT-
 static void characterSetAgeHeightWeight() {
-    int race_id = py.misc.race_id;
-    py.misc.age = (uint16_t) (character_races[race_id].base_age + randomNumber((int) character_races[race_id].max_age));
+    auto race_id = py.misc.race_id;
+    py.misc.age = character_races[race_id].base_age + uint16_t(randomNumber(character_races[race_id].max_age));
 
     if (playerIsMale()) {
-        py.misc.height = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].male_height_base, (int) character_races[race_id].male_height_mod);
-        py.misc.weight = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].male_weight_base, (int) character_races[race_id].male_weight_mod);
+        py.misc.height = (uint16_t) randomNumberNormalDistribution(character_races[race_id].male_height_base, character_races[race_id].male_height_mod);
+        py.misc.weight = (uint16_t) randomNumberNormalDistribution(character_races[race_id].male_weight_base, character_races[race_id].male_weight_mod);
     } else {
-        py.misc.height = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].female_height_base, (int) character_races[race_id].female_height_mod);
-        py.misc.weight = (uint16_t) randomNumberNormalDistribution((int) character_races[race_id].female_weight_base, (int) character_races[race_id].female_weight_mod);
+        py.misc.height = (uint16_t) randomNumberNormalDistribution(character_races[race_id].female_height_base, character_races[race_id].female_height_mod);
+        py.misc.weight = (uint16_t) randomNumberNormalDistribution(character_races[race_id].female_weight_base, character_races[race_id].female_weight_mod);
     }
 
-    py.misc.disarm = (int16_t) (character_races[race_id].disarm_chance_base + playerDisarmAdjustment());
+    py.misc.disarm = character_races[race_id].disarm_chance_base + playerDisarmAdjustment();
 }
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
 // shown during the character creation screens.
-static int displayRaceClasses(int race_id, int *class_list) {
-    int y = 21;
-    int x = 2;
+static int displayRaceClasses(int const race_id, uint8_t *class_list) {
+    auto y = 21;
+    auto x = 2;
 
-    int class_id = 0;
+    auto class_id = 0;
 
     char description[80];
     uint32_t mask = 0x1;
@@ -326,7 +331,7 @@ static int displayRaceClasses(int race_id, int *class_list) {
     clearToBottom(20);
     putString("Choose a class (? for Help):", Coord_t{20, 2});
 
-    for (int i = 0; i < PLAYER_MAX_CLASSES; i++) {
+    for (uint8_t i = 0; i < PLAYER_MAX_CLASSES; i++) {
         if ((character_races[race_id].classes_bit_field & mask) != 0u) {
             (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
             putString(description, Coord_t{y, x});
@@ -345,89 +350,91 @@ static int displayRaceClasses(int race_id, int *class_list) {
     return class_id;
 }
 
-// Gets a character class -JWT-
-static void characterGetClass() {
-    int class_list[PLAYER_MAX_CLASSES];
-    for (int &entry : class_list) {
-        entry = 0;
+static void generateCharacterClass(uint8_t const class_id) {
+    py.misc.class_id = class_id;
+
+    const Class_t &klass = classes[py.misc.class_id];
+
+    clearToBottom(20);
+    putString(klass.title, Coord_t{5, 15});
+
+    // Adjust the stats for the class adjustment -RAK-
+    py.stats.max[A_STR] = createModifyPlayerStat(py.stats.max[A_STR], klass.strength);
+    py.stats.max[A_INT] = createModifyPlayerStat(py.stats.max[A_INT], klass.intelligence);
+    py.stats.max[A_WIS] = createModifyPlayerStat(py.stats.max[A_WIS], klass.wisdom);
+    py.stats.max[A_DEX] = createModifyPlayerStat(py.stats.max[A_DEX], klass.dexterity);
+    py.stats.max[A_CON] = createModifyPlayerStat(py.stats.max[A_CON], klass.constitution);
+    py.stats.max[A_CHR] = createModifyPlayerStat(py.stats.max[A_CHR], klass.charisma);
+
+    for (auto i = 0; i < 6; i++) {
+        py.stats.current[i] = py.stats.max[i];
+        playerSetAndUseStat(i);
     }
 
-    int class_count = displayRaceClasses(py.misc.race_id, class_list);
+    // Real values
+    py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
+    py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
+    py.misc.magical_ac = (int16_t) playerArmorClassAdjustment();
+    py.misc.ac = 0;
 
+    // Displayed values
+    py.misc.display_to_damage = py.misc.plusses_to_damage;
+    py.misc.display_to_hit = py.misc.plusses_to_hit;
+    py.misc.display_to_ac = py.misc.magical_ac;
+    py.misc.display_ac = py.misc.ac + py.misc.display_to_ac;
+
+    // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
+    py.misc.hit_die += klass.hit_points;
+    py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
+    py.misc.current_hp = py.misc.max_hp;
+    py.misc.current_hp_fraction = 0;
+
+    // Initialize hit_points array.
+    // Put bounds on total possible hp, only succeed
+    // if it is within 1/8 of average value.
+    auto min_value = (PLAYER_MAX_LEVEL * 3 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
+    auto max_value = (PLAYER_MAX_LEVEL * 5 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
+    py.base_hp_levels[0] = py.misc.hit_die;
+
+    do {
+        for (auto i = 1; i < PLAYER_MAX_LEVEL; i++) {
+            py.base_hp_levels[i] = (uint16_t) randomNumber(py.misc.hit_die);
+            py.base_hp_levels[i] += py.base_hp_levels[i - 1];
+        }
+    } while (py.base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || py.base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
+
+    py.misc.bth += klass.base_to_hit;
+    py.misc.bth_with_bows += klass.base_to_hit_with_bows; // RAK
+    py.misc.chance_in_search += klass.searching;
+    py.misc.disarm += klass.disarm_traps;
+    py.misc.fos += klass.fos;
+    py.misc.stealth_factor += klass.stealth;
+    py.misc.saving_throw += klass.saving_throw;
+    py.misc.experience_factor += klass.experience_factor;
+}
+
+// Gets a character class -JWT-
+static void characterGetClass() {
+    uint8_t class_list[PLAYER_MAX_CLASSES];
+    for (auto &entry : class_list) {
+        entry = 0;
+    }
+    auto class_count = displayRaceClasses(py.misc.race_id, class_list);
+
+    // Reset the class ID
     py.misc.class_id = 0;
 
-    int min_value, max_value;
     bool is_set = false;
 
     while (!is_set) {
         moveCursor(Coord_t{20, 31});
 
-        char input = getKeyInput();
+        char const input = getKeyInput();
         int class_id = input - 'a';
 
         if (class_id < class_count && class_id >= 0) {
             is_set = true;
-
-            py.misc.class_id = (uint8_t) class_list[class_id];
-
-            const Class_t &klass = classes[py.misc.class_id];
-
-            clearToBottom(20);
-            putString(klass.title, Coord_t{5, 15});
-
-            // Adjust the stats for the class adjustment -RAK-
-            createModifyPlayerStat(py.stats.max[A_STR], klass.strength);
-            createModifyPlayerStat(py.stats.max[A_INT], klass.intelligence);
-            createModifyPlayerStat(py.stats.max[A_WIS], klass.wisdom);
-            createModifyPlayerStat(py.stats.max[A_DEX], klass.dexterity);
-            createModifyPlayerStat(py.stats.max[A_CON], klass.constitution);
-            createModifyPlayerStat(py.stats.max[A_CHR], klass.charisma);
-
-            for (int i = 0; i < 6; i++) {
-                py.stats.current[i] = py.stats.max[i];
-                playerSetAndUseStat(i);
-            }
-
-            // Real values
-            py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
-            py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
-            py.misc.magical_ac = (int16_t) playerArmorClassAdjustment();
-            py.misc.ac = 0;
-
-            // Displayed values
-            py.misc.display_to_damage = py.misc.plusses_to_damage;
-            py.misc.display_to_hit = py.misc.plusses_to_hit;
-            py.misc.display_to_ac = py.misc.magical_ac;
-            py.misc.display_ac = py.misc.ac + py.misc.display_to_ac;
-
-            // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
-            py.misc.hit_die += klass.hit_points;
-            py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
-            py.misc.current_hp = py.misc.max_hp;
-            py.misc.current_hp_fraction = 0;
-
-            // Initialize hit_points array.
-            // Put bounds on total possible hp, only succeed
-            // if it is within 1/8 of average value.
-            min_value = (PLAYER_MAX_LEVEL * 3 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
-            max_value = (PLAYER_MAX_LEVEL * 5 / 8 * (py.misc.hit_die - 1)) + PLAYER_MAX_LEVEL;
-            py.base_hp_levels[0] = py.misc.hit_die;
-
-            do {
-                for (int i = 1; i < PLAYER_MAX_LEVEL; i++) {
-                    py.base_hp_levels[i] = (uint16_t) randomNumber((int) py.misc.hit_die);
-                    py.base_hp_levels[i] += py.base_hp_levels[i - 1];
-                }
-            } while (py.base_hp_levels[PLAYER_MAX_LEVEL - 1] < min_value || py.base_hp_levels[PLAYER_MAX_LEVEL - 1] > max_value);
-
-            py.misc.bth += klass.base_to_hit;
-            py.misc.bth_with_bows += klass.base_to_hit_with_bows; // RAK
-            py.misc.chance_in_search += klass.searching;
-            py.misc.disarm += klass.disarm_traps;
-            py.misc.fos += klass.fos;
-            py.misc.stealth_factor += klass.stealth;
-            py.misc.saving_throw += klass.saving_throw;
-            py.misc.experience_factor += klass.experience_factor;
+            generateCharacterClass(class_list[class_id]);
         } else if (input == '?') {
             displayTextHelpFile(config.files.welcome_screen);
         } else {
@@ -438,19 +445,19 @@ static void characterGetClass() {
 
 // Given a stat value, return a monetary value,
 // which affects the amount of gold a player has.
-static int monetaryValueCalculatedFromStat(uint8_t stat) {
-    return 5 * ((int) stat - 10);
+static int monetaryValueCalculatedFromStat(uint8_t const stat) {
+    return 5 * (stat - 10);
 }
 
 static void playerCalculateStartGold() {
-    int value = monetaryValueCalculatedFromStat(py.stats.max[A_STR]);
+    auto value = monetaryValueCalculatedFromStat(py.stats.max[A_STR]);
     value += monetaryValueCalculatedFromStat(py.stats.max[A_INT]);
     value += monetaryValueCalculatedFromStat(py.stats.max[A_WIS]);
     value += monetaryValueCalculatedFromStat(py.stats.max[A_CON]);
     value += monetaryValueCalculatedFromStat(py.stats.max[A_DEX]);
 
     // Social Class adjustment
-    int new_gold = py.misc.social_class * 6 + randomNumber(25) + 325;
+    auto new_gold = py.misc.social_class * 6 + randomNumber(25) + 325;
 
     // Stat adjustment
     new_gold -= value;
@@ -478,7 +485,7 @@ void characterCreate() {
     characterSetGender();
 
     // here we start a loop giving a player a choice of characters -RGM-
-    auto done = false;
+    bool done = false;
     while (!done) {
         characterGenerateStatsAndRace();
         characterGetHistory();
@@ -491,7 +498,7 @@ void characterCreate() {
         putString("Hit space to re-roll or ESC to accept characteristics: ", Coord_t{20, 2});
 
         while (true) {
-            auto input = getKeyInput();
+            char const input = getKeyInput();
             if (input == ESCAPE) {
                 done = true;
                 break;

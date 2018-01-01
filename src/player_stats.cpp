@@ -451,10 +451,10 @@ int playerArmorClassAdjustment() {
 }
 
 // Returns a character's adjustment to disarm -RAK-
-int playerDisarmAdjustment() {
-    int stat = py.stats.used[A_DEX];
+int16_t playerDisarmAdjustment() {
+    auto stat = py.stats.used[A_DEX];
 
-    int adjustment;
+    int16_t adjustment = 0;
 
     if (stat < 4) {
         adjustment = -8;

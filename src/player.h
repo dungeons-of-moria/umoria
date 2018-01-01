@@ -239,7 +239,7 @@ bool playerStatRestore(int stat);
 void playerStatBoost(int stat, int amount);
 int playerToHitAdjustment();
 int playerArmorClassAdjustment();
-int playerDisarmAdjustment();
+int16_t playerDisarmAdjustment();
 int playerDamageAdjustment();
 
 // player_throw.cpp
