@@ -77,7 +77,7 @@ static uint8_t createModifyPlayerStat(uint8_t const stat, int16_t const adjustme
 // generate all stats and modify for race. needed in a separate
 // module so looping of character selection would be allowed -RGM-
 static void characterGenerateStatsAndRace() {
-    const Race_t &race = character_races[py.misc.race_id];
+    Race_t const &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
     py.stats.max[A_STR] = createModifyPlayerStat(py.stats.max[A_STR], race.str_adjustment);
@@ -201,7 +201,7 @@ static void characterGetHistory() {
                     background_id++;
                 }
 
-                const Background_t &background = character_backgrounds[background_id];
+                Background_t const &background = character_backgrounds[background_id];
 
                 (void) strcat(history_block, background.info);
                 social_class += background.bonus - 50;
@@ -303,18 +303,26 @@ static void characterSetGender() {
 
 // Computes character's age, height, and weight -JWT-
 static void characterSetAgeHeightWeight() {
-    auto race_id = py.misc.race_id;
-    py.misc.age = character_races[race_id].base_age + uint16_t(randomNumber(character_races[race_id].max_age));
+    Race_t &race = character_races[py.misc.race_id];
 
+    py.misc.age = uint16_t(race.base_age + randomNumber(race.max_age));
+
+    int height_base, height_mod, weight_base, weight_mod;
     if (playerIsMale()) {
-        py.misc.height = (uint16_t) randomNumberNormalDistribution(character_races[race_id].male_height_base, character_races[race_id].male_height_mod);
-        py.misc.weight = (uint16_t) randomNumberNormalDistribution(character_races[race_id].male_weight_base, character_races[race_id].male_weight_mod);
+        height_base = race.male_height_base;
+        height_mod = race.male_height_mod;
+        weight_base = race.male_weight_base;
+        weight_mod = race.male_weight_mod;
     } else {
-        py.misc.height = (uint16_t) randomNumberNormalDistribution(character_races[race_id].female_height_base, character_races[race_id].female_height_mod);
-        py.misc.weight = (uint16_t) randomNumberNormalDistribution(character_races[race_id].female_weight_base, character_races[race_id].female_weight_mod);
+        height_base = race.female_height_base;
+        height_mod = race.female_height_mod;
+        weight_base = race.female_weight_base;
+        weight_mod = race.female_weight_mod;
     }
 
-    py.misc.disarm = character_races[race_id].disarm_chance_base + playerDisarmAdjustment();
+    py.misc.height = (uint16_t) randomNumberNormalDistribution(height_base, height_mod);
+    py.misc.weight = (uint16_t) randomNumberNormalDistribution(weight_base, weight_mod);
+    py.misc.disarm = race.disarm_chance_base + playerDisarmAdjustment();
 }
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
@@ -353,7 +361,7 @@ static int displayRaceClasses(int const race_id, uint8_t *class_list) {
 static void generateCharacterClass(uint8_t const class_id) {
     py.misc.class_id = class_id;
 
-    const Class_t &klass = classes[py.misc.class_id];
+    Class_t const &klass = classes[py.misc.class_id];
 
     clearToBottom(20);
     putString(klass.title, Coord_t{5, 15});
