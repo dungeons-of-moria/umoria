@@ -335,7 +335,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
 }
 
 void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
-    const DungeonObject_t &from = game_objects[from_item_id];
+    DungeonObject_t const &from = game_objects[from_item_id];
 
     to_item.id = (uint16_t) from_item_id;
     to_item.special_name_id = SN_NULL;

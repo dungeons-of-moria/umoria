@@ -99,8 +99,8 @@ void pusht(uint8_t treasure_id) {
 
 // Item too large to fit in chest? -DJG-
 // Use a DungeonObject_t since the item has not yet been created
-static bool itemBiggerThanChest(DungeonObject_t *obj) {
-    switch (obj->category_id) {
+static bool itemBiggerThanChest(DungeonObject_t const &obj) {
+    switch (obj.category_id) {
         case TV_CHEST:
         case TV_BOW:
         case TV_POLEARM:
@@ -111,7 +111,7 @@ static bool itemBiggerThanChest(DungeonObject_t *obj) {
         case TV_HAFTED:
         case TV_SWORD:
         case TV_DIGGING:
-            return (obj->weight > 150);
+            return (obj.weight > 150);
         default:
             return false;
     }
@@ -166,7 +166,7 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
                 object_id = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
             }
         }
-    } while (must_be_small && itemBiggerThanChest(&game_objects[sorted_objects[object_id]]));
+    } while (must_be_small && itemBiggerThanChest(game_objects[sorted_objects[object_id]]));
 
     return object_id;
 }
