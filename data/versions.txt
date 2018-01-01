@@ -13,55 +13,33 @@ Previous major releases:
             1988-05-26 : v4.87
             1987-10-26 : v4.85
 
+Maintainer: David J. Grabiner (grabiner@alumni.princeton.edu)
+
 Umoria 5.7.x developed and maintained by Michael R. Cook.
 Bug reports and contributions can be made to the Umoria repository:
 https://github.com/dungeons-of-moria/umoria
 
-Maintainer: David J. Grabiner (grabiner@alumni.princeton.edu)
-
-         Umoria is free software, released under the GPL v2 license.
+               Umoria is free software released under GPL v2.0
 
                             VMS Moria Version 4.8
 
-    Version 4.0  :  1985-01-20
-    Version 3.0  :  1984-11-20
-    Version 2.0  :  1984-07-10
-    Version 1.0  :  1984-05-01
-    Version 0.1  :  1983-03-25
+      Version 4.0  :  1985-01-20
+      Version 3.0  :  1984-11-20
+      Version 2.0  :  1984-07-10
+      Version 1.0  :  1984-05-01
+      Version 0.1  :  1983-03-25
 
+VMS Moria Modules :
 
-Modules :
-    V1.0  Dungeon Generator      - RAK
-          Character Generator    - RAK & JWT
-          Moria Module           - RAK
-          Miscellaneous          - RAK & JWT
-    V2.0  Town Level & Misc      - RAK
-    V3.0  Internal Help & Misc   - RAK
-    V4.0  Source Release Version - RAK
+      V1.0  Dungeon Generator      - RAK
+            Character Generator    - RAK & JWT
+            Moria Module           - RAK
+            Miscellaneous          - RAK & JWT
+      V2.0  Town Level & Misc      - RAK
+      V3.0  Internal Help & Misc   - RAK
+      V4.0  Source Release Version - RAK
 
+    Umoria is free software released under GNU General Public License v2.0
+                   See LICENSE and AUTHORS for more details
 
-Robert Alan Koeneke               Jimmey Wayne Todd Jr.
-Student/University of Oklahoma    Student/University of Oklahoma
-
-
-Other contributors:
-D. G. Kneller         - MSDOS Moria port, reduced map display, 16 bit integers
-Christopher J. Stuart - recall, options, inventory, running code, etc.
-Curtis McCauley       - Macintosh Moria port for MPW C
-Stephen A. Jacobs     - Atari ST Moria port for MW C
-William Setzer        - object naming code
-Dan Bernstein         - UNIX hangup signal fix, many bug fixes
-Corey Gehman          - Amiga Moria port
-Ralph Waters          - VMS support code, IBM-PC Turbo C bug fixes
-Johsua Delahunty      - VMS support code
-Todd Pierzina         - VMS support code
-Joseph Hall           - line of sight code, monster compiler
-Eric Vaitl            - PC-Curses replacement for Turbo C
-Scott Kolodzieski     - Atari ST port for Gnu C
-Hildo Biersma         - Atari ST port for Turbo C
-Ben Schreiber         - Macintosh port for Think C
-
-Copyright (c) Robert A. Koeneke, James E. Wilson
-
-Umoria is free software released under the GPL v2 license and comes
-with ABSOLUTELY NO WARRANTY. Read the LICENSE for full details.
+               Copyright (c) Robert A. Koeneke, James E. Wilson

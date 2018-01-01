@@ -187,6 +187,7 @@ set(
         ${PROJECT_SOURCE_DIR}/data/scores.dat
         ${PROJECT_SOURCE_DIR}/docs/manual.md
         ${PROJECT_SOURCE_DIR}/docs/faq.md
+        ${PROJECT_SOURCE_DIR}/AUTHORS
         ${PROJECT_SOURCE_DIR}/LICENSE
 )
 file(COPY ${support_files} DESTINATION "${build_dir}")
