@@ -681,7 +681,7 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
 
     for (int i = 0; i < number_of_choices; i++) {
         int spell_id = spell_ids[i];
-        const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
+        Spell_t const &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
         const char *p = nullptr;
         if (!comment) {

@@ -39,7 +39,7 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
             if (test_spell_id == number_of_choices) {
                 spell_id = -2;
             } else {
-                const Spell_t &spell = magic_spells[py.misc.class_id - 1][spell_id];
+                Spell_t const &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
                 vtype_t tmp_str = {'\0'};
                 (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], spell.mana_required, spellChanceOfSuccess(spell_id));

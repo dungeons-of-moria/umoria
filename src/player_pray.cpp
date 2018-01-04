@@ -236,7 +236,7 @@ void pray() {
         return;
     }
 
-    const Spell_t &spell = magic_spells[py.misc.class_id - 1][choice];
+    Spell_t const &spell = magic_spells[py.misc.class_id - 1][choice];
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `spellCreateFood()`, so this check is required. -MRC-
