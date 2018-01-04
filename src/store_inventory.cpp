@@ -15,13 +15,13 @@ Store_t stores[MAX_STORES];
 static void storeItemInsert(int store_id, int pos, int32_t i_cost, Inventory_t *item);
 static void storeItemCreate(int store_id, int16_t max_cost);
 
-static int32_t getWeaponArmorBuyPrice(const Inventory_t &item);
-static int32_t getAmmoBuyPrice(const Inventory_t &item);
-static int32_t getPotionScrollBuyPrice(const Inventory_t &item);
-static int32_t getFoodBuyPrice(const Inventory_t &item);
-static int32_t getRingAmuletBuyPrice(const Inventory_t &item);
-static int32_t getWandStaffBuyPrice(const Inventory_t &item);
-static int32_t getPickShovelBuyPrice(const Inventory_t &item);
+static int32_t getWeaponArmorBuyPrice(Inventory_t const &item);
+static int32_t getAmmoBuyPrice(Inventory_t const &item);
+static int32_t getPotionScrollBuyPrice(Inventory_t const &item);
+static int32_t getFoodBuyPrice(Inventory_t const &item);
+static int32_t getRingAmuletBuyPrice(Inventory_t const &item);
+static int32_t getWandStaffBuyPrice(Inventory_t const &item);
+static int32_t getPickShovelBuyPrice(Inventory_t const &item);
 
 // Initialize and up-keep the store's inventory. -RAK-
 void storeMaintenance() {
@@ -55,7 +55,7 @@ void storeMaintenance() {
 }
 
 // Returns the value for any given object -RAK-
-int32_t storeItemValue(const Inventory_t &item) {
+int32_t storeItemValue(Inventory_t const &item) {
     int32_t value;
 
     if ((item.identification & ID_DAMD) != 0) {
@@ -88,7 +88,7 @@ int32_t storeItemValue(const Inventory_t &item) {
     return value;
 }
 
-static int32_t getWeaponArmorBuyPrice(const Inventory_t &item) {
+static int32_t getWeaponArmorBuyPrice(Inventory_t const &item) {
     if (!spellItemIdentified(item)) {
         return game_objects[item.id].cost;
     }
@@ -108,7 +108,7 @@ static int32_t getWeaponArmorBuyPrice(const Inventory_t &item) {
     return item.cost + item.to_ac * 100;
 }
 
-static int32_t getAmmoBuyPrice(const Inventory_t &item) {
+static int32_t getAmmoBuyPrice(Inventory_t const &item) {
     if (!spellItemIdentified(item)) {
         return game_objects[item.id].cost;
     }
@@ -122,7 +122,7 @@ static int32_t getAmmoBuyPrice(const Inventory_t &item) {
     return item.cost + (item.to_hit + item.to_damage + item.to_ac) * 5;
 }
 
-static int32_t getPotionScrollBuyPrice(const Inventory_t &item) {
+static int32_t getPotionScrollBuyPrice(Inventory_t const &item) {
     if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return 20;
     }
@@ -130,7 +130,7 @@ static int32_t getPotionScrollBuyPrice(const Inventory_t &item) {
     return item.cost;
 }
 
-static int32_t getFoodBuyPrice(const Inventory_t &item) {
+static int32_t getFoodBuyPrice(Inventory_t const &item) {
     if (item.sub_category_id < ITEM_SINGLE_STACK_MIN + MAX_MUSHROOMS && !itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return 1;
     }
@@ -138,7 +138,7 @@ static int32_t getFoodBuyPrice(const Inventory_t &item) {
     return item.cost;
 }
 
-static int32_t getRingAmuletBuyPrice(const Inventory_t &item) {
+static int32_t getRingAmuletBuyPrice(Inventory_t const &item) {
     // player does not know what type of ring/amulet this is
     if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         return 45;
@@ -154,7 +154,7 @@ static int32_t getRingAmuletBuyPrice(const Inventory_t &item) {
     return item.cost;
 }
 
-static int32_t getWandStaffBuyPrice(const Inventory_t &item) {
+static int32_t getWandStaffBuyPrice(Inventory_t const &item) {
     if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         if (item.category_id == TV_WAND) {
             return 50;
@@ -170,7 +170,7 @@ static int32_t getWandStaffBuyPrice(const Inventory_t &item) {
     return item.cost;
 }
 
-static int32_t getPickShovelBuyPrice(const Inventory_t &item) {
+static int32_t getPickShovelBuyPrice(Inventory_t const &item) {
     if (!spellItemIdentified(item)) {
         return game_objects[item.id].cost;
     }
@@ -191,7 +191,7 @@ static int32_t getPickShovelBuyPrice(const Inventory_t &item) {
 }
 
 // Asking price for an item -RAK-
-int32_t storeItemSellPrice(Store_t const &store, int32_t &min_price, int32_t &max_price, const Inventory_t &item) {
+int32_t storeItemSellPrice(Store_t const &store, int32_t &min_price, int32_t &max_price, Inventory_t const &item) {
     int32_t price = storeItemValue(item);
 
     // check `item.cost` in case it is cursed, check `price` in case it is damaged
@@ -218,7 +218,7 @@ int32_t storeItemSellPrice(Store_t const &store, int32_t &min_price, int32_t &ma
 }
 
 // Check to see if they will be carrying too many objects -RAK-
-bool storeCheckPlayerItemsCount(Store_t const &store, const Inventory_t &item) {
+bool storeCheckPlayerItemsCount(Store_t const &store, Inventory_t const &item) {
     if (store.unique_items_counter < STORE_MAX_DISCRETE_ITEMS) {
         return true;
     }
@@ -230,7 +230,7 @@ bool storeCheckPlayerItemsCount(Store_t const &store, const Inventory_t &item) {
     bool store_check = false;
 
     for (int i = 0; i < store.unique_items_counter; i++) {
-        const Inventory_t &store_item = store.inventory[i].item;
+        Inventory_t const &store_item = store.inventory[i].item;
 
         // note: items with sub_category_id of gte ITEM_SINGLE_STACK_MAX only stack
         // if their `sub_category_id`s match

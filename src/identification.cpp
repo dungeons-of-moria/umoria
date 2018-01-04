@@ -385,7 +385,7 @@ void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item) {
     item.identification |= ID_KNOWN2;
 }
 
-bool spellItemIdentified(const Inventory_t &item) {
+bool spellItemIdentified(Inventory_t const &item) {
     return (item.identification & ID_KNOWN2) != 0;
 }
 
@@ -425,7 +425,7 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
 }
 
 // Somethings been sampled -CJS-
-void itemSetAsTried(const Inventory_t &item) {
+void itemSetAsTried(Inventory_t const &item) {
     int16_t id = objectPositionOffset(item.category_id, item.sub_category_id);
 
     if (id < 0) {
@@ -462,7 +462,7 @@ void itemIdentify(Inventory_t &item, int &item_id) {
     int j;
 
     for (int i = 0; i < py.unique_inventory_items; i++) {
-        const Inventory_t &t_ptr = inventory[i];
+        Inventory_t const &t_ptr = inventory[i];
 
         if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
             // make *item_id the smaller number
@@ -514,7 +514,7 @@ enum class ItemMiscUse {
 // The `add_prefix` param indicates that an article must be added.
 // Note that since out_val can easily exceed 80 characters, itemDescription
 // must always be called with a obj_desc_t as the first parameter.
-void itemDescription(obj_desc_t description, const Inventory_t &item, bool add_prefix) {
+void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_prefix) {
     int indexx = item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1);
 
     // base name, modifier string

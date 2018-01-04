@@ -66,7 +66,7 @@ void playerDetectInvisible(int adjustment) {
 }
 
 // Special damage due to magical abilities of object -RAK-
-int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id) {
+int itemMagicAbilityDamage(Inventory_t const &item, int total_damage, int monster_id) {
     bool is_ego_weapon = (item.flags & TR_EGO_WEAPON) != 0;
     bool is_projectile = item.category_id >= TV_SLING_AMMO && item.category_id <= TV_ARROW;
     bool is_hafted_sword = item.category_id >= TV_HAFTED && item.category_id <= TV_SWORD;

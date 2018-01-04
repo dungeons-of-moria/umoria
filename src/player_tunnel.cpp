@@ -30,7 +30,7 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 }
 
 // Compute the digging ability of player; based on strength, and type of tool used
-static int playerDiggingAbility(const Inventory_t &weapon) {
+static int playerDiggingAbility(Inventory_t const &weapon) {
     int diggingAbility = py.stats.used[A_STR];
 
     if ((weapon.flags & TR_TUNNEL) != 0u) {

@@ -60,8 +60,8 @@ void storeEnter(int store_id);
 
 // store_inventory
 void storeMaintenance();
-int32_t storeItemValue(const Inventory_t &item);
-int32_t storeItemSellPrice(Store_t const &store, int32_t &min_price, int32_t &max_price, const Inventory_t &item);
-bool storeCheckPlayerItemsCount(Store_t const &store, const Inventory_t &item);
+int32_t storeItemValue(Inventory_t const &item);
+int32_t storeItemSellPrice(Store_t const &store, int32_t &min_price, int32_t &max_price, Inventory_t const &item);
+bool storeCheckPlayerItemsCount(Store_t const &store, Inventory_t const &item);
 void storeCarryItem(int store_id, int &index_id, Inventory_t &item);
 void storeDestroyItem(int store_id, int item_id, bool only_one_of);

@@ -416,7 +416,7 @@ void playerChangeSpeed(int speed) {
 //
 // Only calculates properties with cumulative effect.  Properties that
 // depend on everything being worn are recalculated by playerRecalculateBonuses() -CJS-
-void playerAdjustBonusesForItem(const Inventory_t &item, int factor) {
+void playerAdjustBonusesForItem(Inventory_t const &item, int factor) {
     int amount = item.misc_use * factor;
 
     if ((item.flags & TR_STATS) != 0u) {
@@ -455,7 +455,7 @@ void playerAdjustBonusesForItem(const Inventory_t &item, int factor) {
 
 static void playerRecalculateBonusesFromInventory() {
     for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
-        const Inventory_t &item = inventory[i];
+        Inventory_t const &item = inventory[i];
 
         if (item.category_id != TV_NOTHING) {
             py.misc.plusses_to_hit += item.to_hit;
@@ -771,7 +771,7 @@ int playerCarryingLoadLimit() {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void playerStrength() {
-    const Inventory_t &item = inventory[EQUIPMENT_WIELD];
+    Inventory_t const &item = inventory[EQUIPMENT_WIELD];
 
     if (item.category_id != TV_NOTHING && py.stats.used[A_STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
@@ -1339,7 +1339,7 @@ void playerOpenClosedObject() {
     bool no_object = false;
 
     Tile_t const &tile = dg.floor[y][x];
-    const Inventory_t &item = treasure_list[tile.treasure_id];
+    Inventory_t const &item = treasure_list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
         objectBlockedByMonster(tile.creature_id);

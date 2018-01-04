@@ -174,7 +174,7 @@ void playerDiedFromString(vtype_t *description, const char *monster_name, uint32
 bool playerTestAttackHits(int attack_id, uint8_t level);
 
 void playerChangeSpeed(int speed);
-void playerAdjustBonusesForItem(const Inventory_t &item, int factor);
+void playerAdjustBonusesForItem(Inventory_t const &item, int factor);
 void playerRecalculateBonuses();
 void playerTakeOff(int item_id, int pack_position_id);
 bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
@@ -214,7 +214,7 @@ bool playerRemoveFear();
 bool playerProtectEvil();
 void playerBless(int adjustment);
 void playerDetectInvisible(int adjustment);
-int itemMagicAbilityDamage(const Inventory_t &item, int total_damage, int monster_id);
+int itemMagicAbilityDamage(Inventory_t const &item, int total_damage, int monster_id);
 
 // player_move.cpp
 void playerMove(int direction, bool do_pickup);

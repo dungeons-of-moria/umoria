@@ -10,7 +10,7 @@
 
 #include "headers.h"
 
-static void trapOpenPit(const Inventory_t &item, int dam) {
+static void trapOpenPit(Inventory_t const &item, int dam) {
     printMessage("You fell into a pit!");
 
     if (py.flags.free_fall) {
@@ -23,7 +23,7 @@ static void trapOpenPit(const Inventory_t &item, int dam) {
     playerTakesHit(dam, description);
 }
 
-static void trapArrow(const Inventory_t &item, int dam) {
+static void trapArrow(Inventory_t const &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description = {'\0'};
         itemDescription(description, item, true);
@@ -36,7 +36,7 @@ static void trapArrow(const Inventory_t &item, int dam) {
     printMessage("An arrow barely misses you.");
 }
 
-static void trapCoveredPit(const Inventory_t &item, int dam, int y, int x) {
+static void trapCoveredPit(Inventory_t const &item, int dam, int y, int x) {
     printMessage("You fell into a covered pit.");
 
     if (py.flags.free_fall) {
@@ -50,7 +50,7 @@ static void trapCoveredPit(const Inventory_t &item, int dam, int y, int x) {
     dungeonSetTrap(y, x, 0);
 }
 
-static void trapDoor(const Inventory_t &item, int dam) {
+static void trapDoor(Inventory_t const &item, int dam) {
     dg.generate_new_level = true;
     dg.current_level++;
 
@@ -92,7 +92,7 @@ static void trapHiddenObject(int y, int x) {
     printMessage("Hmmm, there was something under this rock.");
 }
 
-static void trapStrengthDart(const Inventory_t &item, int dam) {
+static void trapStrengthDart(Inventory_t const &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_str) {
             (void) playerStatRandomDecrease(A_STR);
@@ -181,7 +181,7 @@ static void trapConfuseGas() {
     py.flags.confused += randomNumber(15) + 15;
 }
 
-static void trapSlowDart(const Inventory_t &item, int dam) {
+static void trapSlowDart(Inventory_t const &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         obj_desc_t description = {'\0'};
         itemDescription(description, item, true);
@@ -199,7 +199,7 @@ static void trapSlowDart(const Inventory_t &item, int dam) {
     }
 }
 
-static void trapConstitutionDart(const Inventory_t &item, int dam) {
+static void trapConstitutionDart(Inventory_t const &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_con) {
             (void) playerStatRandomDecrease(A_CON);
@@ -251,7 +251,7 @@ static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
     trapChangeVisibility(y, x);
 
-    Inventory_t &item = treasure_list[dg.floor[y][x].treasure_id];
+    Inventory_t const &item = treasure_list[dg.floor[y][x].treasure_id];
 
     int damage = diceRoll(item.damage);
 

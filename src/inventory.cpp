@@ -214,7 +214,7 @@ bool executeDisenchantAttack() {
 }
 
 // this code must be identical to the inventoryCarryItem() code below
-bool inventoryCanCarryItemCount(const Inventory_t &item) {
+bool inventoryCanCarryItemCount(Inventory_t const &item) {
     if (py.unique_inventory_items < EQUIPMENT_WIELD) {
         return true;
     }
@@ -248,7 +248,7 @@ bool inventoryCanCarryItemCount(const Inventory_t &item) {
 }
 
 // return false if picking up an object would change the players speed
-bool inventoryCanCarryItem(const Inventory_t &item) {
+bool inventoryCanCarryItem(Inventory_t const &item) {
     int limit = playerCarryingLoadLimit();
     int newWeight = item.items_count * item.weight + py.inventory_weight;
 

@@ -366,7 +366,7 @@ static int storeReceiveOffer(int store_id, const char *comment, int32_t &new_off
 }
 
 // Haggling routine -RAK-
-static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &item) {
+static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &item) {
     bool did_not_haggle = false;
 
     price = 0;
@@ -528,7 +528,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, const Inventory_t &
 }
 
 // Haggling routine -RAK-
-static int storeSellHaggle(int store_id, int32_t &price, const Inventory_t &item) {
+static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item) {
     int32_t max_gold = 0;
     int32_t min_per = 0;
     int32_t max_per = 0;
