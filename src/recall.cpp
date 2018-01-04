@@ -56,7 +56,7 @@ static void memoryPrint(const char *p) {
 }
 
 // Do we know anything about this monster?
-static bool memoryMonsterKnown(const Recall_t &memory) {
+static bool memoryMonsterKnown(Recall_t const &memory) {
     if (game.wizard_mode) {
         return true;
     }
@@ -408,7 +408,7 @@ static void memoryWeaknesses(uint32_t defense) {
 }
 
 // Do we know how aware it is?
-static void memoryAwareness(Creature_t const &creature, const Recall_t &memory) {
+static void memoryAwareness(Creature_t const &creature, Recall_t const &memory) {
     if (memory.wake * memory.wake > creature.sleep_counter || memory.ignore == MAX_UCHAR || (creature.sleep_counter == 0 && memory.kills >= 10)) {
         memoryPrint(" It ");
 
@@ -502,7 +502,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
     }
 }
 
-static void memoryAttackNumberAndDamage(const Recall_t &memory, Creature_t const &creature) {
+static void memoryAttackNumberAndDamage(Recall_t const &memory, Creature_t const &creature) {
     // We know about attacks it has used on us, and maybe the damage they do.
     // known_attacks is the total number of known attacks, used for punctuation
     int known_attacks = 0;
