@@ -31,7 +31,7 @@ typedef struct {
 extern FILE *highscore_fp;
 
 // TODO: these are implemented in `game_save.cpp` so need moving.
-void saveHighScore(const HighScore_t &score);
+void saveHighScore(HighScore_t const &score);
 void readHighScore(HighScore_t &score);
 
 void recordNewHighScore();

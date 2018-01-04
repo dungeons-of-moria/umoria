@@ -1172,7 +1172,7 @@ void setFileptr(FILE *file) {
     fileptr = file;
 }
 
-void saveHighScore(const HighScore_t &score) {
+void saveHighScore(HighScore_t const &score) {
     DEBUG(logfile = fopen("IO_LOG", "a"));
     DEBUG(fprintf(logfile, "Saving score:\n"));
 
