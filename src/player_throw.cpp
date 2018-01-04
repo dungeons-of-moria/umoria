@@ -207,7 +207,7 @@ void playerThrowItem() {
         current_distance++;
         dungeonLiteSpot(old_y, old_x);
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (tile.feature_id <= MAX_OPEN_SPACE && !flag) {
             if (tile.creature_id > 1) {

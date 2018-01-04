@@ -1275,7 +1275,7 @@ static void openClosedDoor(int y, int x) {
 }
 
 static void openClosedChest(int y, int x) {
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool success = false;
@@ -1338,7 +1338,7 @@ void playerOpenClosedObject() {
 
     bool no_object = false;
 
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
     const Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {

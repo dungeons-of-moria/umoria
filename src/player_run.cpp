@@ -246,7 +246,7 @@ void playerEndRunning() {
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int &check_dir, int &option1, int &option2) {
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
 
     // Default: Square unseen. Treat as open.
     bool invisible = true;

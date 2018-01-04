@@ -321,7 +321,7 @@ static bool sv_write() {
 
     for (int y = 0; y < MAX_HEIGHT; y++) {
         for (int x = 0; x < MAX_WIDTH; x++) {
-            Tile_t &tile = dg.floor[y][x];
+            Tile_t const &tile = dg.floor[y][x];
 
             auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 

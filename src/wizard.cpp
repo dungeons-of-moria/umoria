@@ -302,8 +302,7 @@ void wizardGenerateObject() {
 
         if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
             // delete any object at location, before call popt()
-            Tile_t &tile = dg.floor[j][k];
-            if (tile.treasure_id != 0) {
+            if (dg.floor[j][k].treasure_id != 0) {
                 (void) dungeonDeleteObject(j, k);
             }
 

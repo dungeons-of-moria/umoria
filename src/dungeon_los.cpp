@@ -486,7 +486,7 @@ static bool lookSee(int x, int y, bool &transparent) {
         return false;
     }
 
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
     transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {

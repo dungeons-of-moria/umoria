@@ -139,7 +139,7 @@ void playerTunnel(int direction) {
     int x = py.col;
     (void) playerMovePosition(direction, y, x);
 
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
     Inventory_t &item = inventory[EQUIPMENT_WIELD];
 
     if (!playerCanTunnel(tile.treasure_id, tile.feature_id)) {

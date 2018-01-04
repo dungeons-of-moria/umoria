@@ -101,7 +101,7 @@ void drawCavePanel() {
 
 // We need to reset the view of things. -CJS-
 void dungeonResetView() {
-    const Tile_t &tile = dg.floor[py.row][py.col];
+    Tile_t const &tile = dg.floor[py.row][py.col];
 
     // Check for new panel
     if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {

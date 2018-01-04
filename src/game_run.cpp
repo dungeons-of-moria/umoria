@@ -2267,7 +2267,7 @@ static void dungeonJamDoor() {
     }
     (void) playerMovePosition(direction, y, x);
 
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
 
     if (tile.treasure_id == 0) {
         printMessage("That isn't a door!");

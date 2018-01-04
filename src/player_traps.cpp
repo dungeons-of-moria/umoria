@@ -114,7 +114,7 @@ void playerDisarmTrap() {
     int x = py.col;
     (void) playerMovePosition(dir, y, x);
 
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
 
     bool no_disarm = false;
 

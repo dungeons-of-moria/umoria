@@ -173,7 +173,7 @@ int coordCorridorWallsNextTo(Coord_t coord) {
 
 // Returns symbol for given row, column -RAK-
 char caveGetTileSymbol(Coord_t coord) {
-    const Tile_t &tile = dg.floor[coord.y][coord.x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
 
     if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
         return '@';

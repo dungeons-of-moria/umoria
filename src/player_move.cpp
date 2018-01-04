@@ -442,7 +442,7 @@ void playerMove(int direction, bool do_pickup) {
         return;
     }
 
-    const Tile_t &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[y][x];
     Monster_t const &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...

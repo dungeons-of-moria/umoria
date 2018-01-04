@@ -441,7 +441,7 @@ bool spellSurroundPlayerWithTraps() {
                 continue;
             }
 
-            const Tile_t &tile = dg.floor[y][x];
+            Tile_t const &tile = dg.floor[y][x];
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
@@ -502,7 +502,7 @@ bool spellDestroyAdjacentDoorsTraps() {
 
     for (int y = py.row - 1; y <= py.row + 1; y++) {
         for (int x = py.col - 1; x <= py.col + 1; x++) {
-            const Tile_t &tile = dg.floor[y][x];
+            Tile_t const &tile = dg.floor[y][x];
 
             if (tile.treasure_id == 0) {
                 continue;
@@ -950,7 +950,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
     for (int row = y - 2; row <= y + 2; row++) {
         for (int col = x - 2; col <= x + 2; col++) {
             if (coordInBounds(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance && los(y, x, row, col)) {
-                const Tile_t &tile = dg.floor[row][col];
+                Tile_t const &tile = dg.floor[row][col];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
                     (void) dungeonDeleteObject(row, col);
@@ -1107,7 +1107,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1146,7 +1146,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1190,7 +1190,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1240,7 +1240,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1295,7 +1295,7 @@ bool spellSleepMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1339,7 +1339,7 @@ bool spellWallToMud(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         // note, this ray can move through walls as it turns them to mud
         if (distance == OBJECT_BOLTS_MAX_RANGE) {
@@ -1457,7 +1457,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1564,7 +1564,7 @@ bool spellCloneMonster(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1658,7 +1658,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        const Tile_t &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[y][x];
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -1957,7 +1957,7 @@ void spellEarthquake() {
 void spellCreateFood() {
     // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
     // below, changes the tile values.
-    const Tile_t &tile = dg.floor[py.row][py.col];
+    Tile_t const &tile = dg.floor[py.row][py.col];
 
     // take no action here, don't want to destroy object under player
     if (tile.treasure_id != 0) {

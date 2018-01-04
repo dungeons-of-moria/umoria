@@ -15,7 +15,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
 static bool monsterIsVisible(Monster_t const &monster) {
     bool visible = false;
 
-    const Tile_t &tile = dg.floor[monster.y][monster.x];
+    Tile_t const &tile = dg.floor[monster.y][monster.x];
     Creature_t const &creature = creatures_list[monster.creature_id];
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
@@ -918,7 +918,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
         if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != y || pos_x != x)) {
-            const Tile_t &tile = dg.floor[pos_y][pos_x];
+            Tile_t const &tile = dg.floor[pos_y][pos_x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
                 // Creature there already?
