@@ -37,6 +37,7 @@ extern vtype_t messages[MESSAGE_HISTORY_SIZE];
 extern int16_t last_message_id;
 
 // UI - IO
+// TODO: should we use the the same Coord_t for the dungeon and UI?
 bool terminalInitialize();
 void terminalRestore();
 void terminalSaveScreen();
