@@ -56,7 +56,7 @@ void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
 // Drops an item from inventory to given location -RAK-
 void inventoryDropItem(int item_id, bool drop_all) {
     if (dg.floor[py.row][py.col].treasure_id != 0) {
-        (void) dungeonDeleteObject(py.row, py.col);
+        (void) dungeonDeleteObject(Coord_t{py.row, py.col});;
     }
 
     int treasureID = popt();

@@ -109,12 +109,12 @@ void dungeonResetView() {
     }
 
     // Move the light source
-    dungeonMoveCharacterLight(py.row, py.col, py.row, py.col);
+    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{py.row, py.col});
 
     // A room of light should be lit.
     if (tile.feature_id == TILE_LIGHT_FLOOR) {
         if (py.flags.blind < 1 && !tile.permanent_light) {
-            dungeonLightRoom(py.row, py.col);
+            dungeonLightRoom(Coord_t{py.row, py.col});
         }
         return;
     }
@@ -124,7 +124,7 @@ void dungeonResetView() {
         for (int i = py.row - 1; i <= py.row + 1; i++) {
             for (int j = py.col - 1; j <= py.col + 1; j++) {
                 if (dg.floor[i][j].feature_id == TILE_LIGHT_FLOOR && !dg.floor[i][j].permanent_light) {
-                    dungeonLightRoom(i, j);
+                    dungeonLightRoom(Coord_t{i, j});
                 }
             }
         }

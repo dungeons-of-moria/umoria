@@ -100,21 +100,21 @@ void dungeonDisplayMap() {
 }
 
 // Checks a co-ordinate for in bounds status -RAK-
-bool coordInBounds(Coord_t coord) {
-    bool valid_y = coord.y > 0 && coord.y < dg.height - 1;
-    bool valid_x = coord.x > 0 && coord.x < dg.width - 1;
+bool coordInBounds(Coord_t const &coord) {
+    bool y = coord.y > 0 && coord.y < dg.height - 1;
+    bool x = coord.x > 0 && coord.x < dg.width - 1;
 
-    return valid_y && valid_x;
+    return y && x;
 }
 
 // Distance between two points -RAK-
-int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
-    int dy = coord_a.y - coord_b.y;
+int coordDistanceBetween(Coord_t const &from, Coord_t const &to) {
+    int dy = from.y - to.y;
     if (dy < 0) {
         dy = -dy;
     }
 
-    int dx = coord_a.x - coord_b.x;
+    int dx = from.x - to.x;
     if (dx < 0) {
         dx = -dx;
     }
@@ -128,7 +128,7 @@ int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b) {
 // Checks points north, south, east, and west for a wall -RAK-
 // note that y,x is always coordInBounds(), i.e. 0 < y < dg.height-1,
 // and 0 < x < dg.width-1
-int coordWallsNextTo(Coord_t coord) {
+int coordWallsNextTo(Coord_t const &coord) {
     int walls = 0;
 
     if (dg.floor[coord.y - 1][coord.x].feature_id >= MIN_CAVE_WALL) {
@@ -153,13 +153,13 @@ int coordWallsNextTo(Coord_t coord) {
 // Checks all adjacent spots for corridors -RAK-
 // note that y, x is always coordInBounds(), hence no need to check that
 // j, k are coordInBounds(), even if they are 0 or cur_x-1 is still works
-int coordCorridorWallsNextTo(Coord_t coord) {
+int coordCorridorWallsNextTo(Coord_t const &coord) {
     int walls = 0;
 
-    for (int yy = coord.y - 1; yy <= coord.y + 1; yy++) {
-        for (int xx = coord.x - 1; xx <= coord.x + 1; xx++) {
-            int tile_id = dg.floor[yy][xx].feature_id;
-            int treasure_id = dg.floor[yy][xx].treasure_id;
+    for (int y = coord.y - 1; y <= coord.y + 1; y++) {
+        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
+            int tile_id = dg.floor[y][x].feature_id;
+            int treasure_id = dg.floor[y][x].treasure_id;
 
             // should fail if there is already a door present
             if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].category_id < TV_MIN_DOORS)) {
@@ -172,7 +172,7 @@ int coordCorridorWallsNextTo(Coord_t coord) {
 }
 
 // Returns symbol for given row, column -RAK-
-char caveGetTileSymbol(Coord_t coord) {
+char caveGetTileSymbol(Coord_t const &coord) {
     Tile_t const &tile = dg.floor[coord.y][coord.x];
 
     if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
@@ -213,27 +213,27 @@ char caveGetTileSymbol(Coord_t coord) {
 }
 
 // Tests a spot for light or field mark status -RAK-
-bool caveTileVisible(Coord_t coord) {
+bool caveTileVisible(Coord_t const &coord) {
     return dg.floor[coord.y][coord.x].permanent_light || dg.floor[coord.y][coord.x].temporary_light || dg.floor[coord.y][coord.x].field_mark;
 }
 
 // Places a particular trap at location y, x -RAK-
-void dungeonSetTrap(int y, int x, int sub_type_id) {
+void dungeonSetTrap(Coord_t const &coord, int sub_type_id) {
     int free_treasure_id = popt();
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
     inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
 }
 
 // Change a trap from invisible to visible -RAK-
 // Note: Secret doors are handled here
-void trapChangeVisibility(int y, int x) {
-    uint8_t treasure_id = dg.floor[y][x].treasure_id;
+void trapChangeVisibility(Coord_t const &coord) {
+    uint8_t treasure_id = dg.floor[coord.y][coord.x].treasure_id;
 
     Inventory_t &item = treasure_list[treasure_id];
 
     if (item.category_id == TV_INVIS_TRAP) {
         item.category_id = TV_VIS_TRAP;
-        dungeonLiteSpot(y, x);
+        dungeonLiteSpot(coord);
         return;
     }
 
@@ -242,20 +242,20 @@ void trapChangeVisibility(int y, int x) {
         item.id = OBJ_CLOSED_DOOR;
         item.category_id = game_objects[OBJ_CLOSED_DOOR].category_id;
         item.sprite = game_objects[OBJ_CLOSED_DOOR].sprite;
-        dungeonLiteSpot(y, x);
+        dungeonLiteSpot(coord);
     }
 }
 
 // Places rubble at location y, x -RAK-
-void dungeonPlaceRubble(int y, int x) {
+void dungeonPlaceRubble(Coord_t const &coord) {
     int free_treasure_id = popt();
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
-    dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
+    dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
     inventoryItemCopyTo(OBJ_RUBBLE, treasure_list[free_treasure_id]);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
-void dungeonPlaceGold(int y, int x) {
+void dungeonPlaceGold(Coord_t const &coord) {
     int free_treasure_id = popt();
 
     int gold_type_id = ((randomNumber(dg.current_level + 2) + 2) / 2) - 1;
@@ -268,27 +268,27 @@ void dungeonPlaceGold(int y, int x) {
         gold_type_id = MAX_GOLD_TYPES - 1;
     }
 
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
     inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
     treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
-    if (dg.floor[y][x].creature_id == 1) {
+    if (dg.floor[coord.y][coord.x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet.");
     }
 }
 
 // Places an object at given row, column co-ordinate -RAK-
-void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small) {
+void dungeonPlaceRandomObjectAt(Coord_t const &coord, bool must_be_small) {
     int free_treasure_id = popt();
 
-    dg.floor[y][x].treasure_id = (uint8_t) free_treasure_id;
+    dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
 
     int object_id = itemGetRandomObjectId(dg.current_level, must_be_small);
     inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
 
     magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
-    if (dg.floor[y][x].creature_id == 1) {
+    if (dg.floor[coord.y][coord.x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet."); // -CJS-
     }
 }
@@ -307,19 +307,19 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
 
         switch (object_type) {
             case 1:
-                dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
+                dungeonSetTrap(Coord_t{y, x}, randomNumber(MAX_TRAPS) - 1);
                 break;
             case 2:
                 // NOTE: object_type == 2 is no longer used - it used to be visible traps.
                 // FIXME: there was no `break` here so `case 3` catches it? -MRC-
             case 3:
-                dungeonPlaceRubble(y, x);
+                dungeonPlaceRubble(Coord_t{y, x});
                 break;
             case 4:
-                dungeonPlaceGold(y, x);
+                dungeonPlaceGold(Coord_t{y, x});
                 break;
             case 5:
-                dungeonPlaceRandomObjectAt(y, x, false);
+                dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
                 break;
             default:
                 break;
@@ -328,17 +328,19 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
 }
 
 // Creates objects nearby the coordinates given -RAK-
-void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
+void dungeonPlaceRandomObjectNear(Coord_t coord, int tries) {
     do {
         for (int i = 0; i <= 10; i++) {
-            int j = y - 3 + randomNumber(5);
-            int k = x - 4 + randomNumber(7);
+            Coord_t at = Coord_t{
+                    coord.y - 3 + randomNumber(5),
+                    coord.x - 4 + randomNumber(7)
+            };
 
-            if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
+            if (coordInBounds(at) && dg.floor[at.y][at.x].feature_id <= MAX_CAVE_FLOOR && dg.floor[at.y][at.x].treasure_id == 0) {
                 if (randomNumber(100) < 75) {
-                    dungeonPlaceRandomObjectAt(j, k, false);
+                    dungeonPlaceRandomObjectAt(at, false);
                 } else {
-                    dungeonPlaceGold(j, k);
+                    dungeonPlaceGold(at);
                 }
                 i = 9;
             }
@@ -350,19 +352,19 @@ void dungeonPlaceRandomObjectNear(int y, int x, int tries) {
 
 // Moves creature record from one space to another -RAK-
 // this always works correctly, even if y1==y2 and x1==x2
-void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2) {
-    int id = dg.floor[y1][x1].creature_id;
-    dg.floor[y1][x1].creature_id = 0;
-    dg.floor[y2][x2].creature_id = (uint8_t) id;
+void dungeonMoveCreatureRecord(Coord_t const &from, Coord_t const &to) {
+    int id = dg.floor[from.y][from.x].creature_id;
+    dg.floor[from.y][from.x].creature_id = 0;
+    dg.floor[to.y][to.x].creature_id = (uint8_t) id;
 }
 
 // Room is lit, make it appear -RAK-
-void dungeonLightRoom(int pos_y, int pos_x) {
+void dungeonLightRoom(Coord_t const &coord) {
     int height_middle = (SCREEN_HEIGHT / 2);
     int width_middle = (SCREEN_WIDTH / 2);
 
-    int top = (pos_y / height_middle) * height_middle;
-    int left = (pos_x / width_middle) * width_middle;
+    int top = (coord.y / height_middle) * height_middle;
+    int left = (coord.x / width_middle) * width_middle;
     int bottom = top + height_middle - 1;
     int right = left + width_middle - 1;
 
@@ -389,22 +391,22 @@ void dungeonLightRoom(int pos_y, int pos_x) {
 }
 
 // Lights up given location -RAK-
-void dungeonLiteSpot(int y, int x) {
-    if (!coordInsidePanel(Coord_t{y, x})) {
+void dungeonLiteSpot(Coord_t const &coord) {
+    if (!coordInsidePanel(coord)) {
         return;
     }
 
-    char symbol = caveGetTileSymbol(Coord_t{y, x});
-    panelPutTile(symbol, Coord_t{y, x});
+    char symbol = caveGetTileSymbol(coord);
+    panelPutTile(symbol, coord);
 }
 
 // Normal movement
 // When FIND_FLAG,  light only permanent features
-static void sub1_move_light(int y1, int x1, int y2, int x2) {
+static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
         // Turn off lamp light
-        for (int y = y1 - 1; y <= y1 + 1; y++) {
-            for (int x = x1 - 1; x <= x1 + 1; x++) {
+        for (int y = from.y - 1; y <= from.y + 1; y++) {
+            for (int x = from.x - 1; x <= from.x + 1; x++) {
                 dg.floor[y][x].temporary_light = false;
             }
         }
@@ -415,8 +417,8 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
         py.temporary_light_only = true;
     }
 
-    for (int y = y2 - 1; y <= y2 + 1; y++) {
-        for (int x = x2 - 1; x <= x2 + 1; x++) {
+    for (int y = to.y - 1; y <= to.y + 1; y++) {
+        for (int x = to.x - 1; x <= to.x + 1; x++) {
             Tile_t &tile = dg.floor[y][x];
 
             // only light up if normal movement
@@ -439,19 +441,19 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
     // From uppermost to bottom most lines player was on.
     int top, left, bottom, right;
 
-    if (y1 < y2) {
-        top = y1 - 1;
-        bottom = y2 + 1;
+    if (from.y < to.y) {
+        top = from.y - 1;
+        bottom = to.y + 1;
     } else {
-        top = y2 - 1;
-        bottom = y1 + 1;
+        top = to.y - 1;
+        bottom = from.y + 1;
     }
-    if (x1 < x2) {
-        left = x1 - 1;
-        right = x2 + 1;
+    if (from.x < to.x) {
+        left = from.x - 1;
+        right = to.x + 1;
     } else {
-        left = x2 - 1;
-        right = x1 + 1;
+        left = to.x - 1;
+        right = from.x + 1;
     }
 
     for (int y = top; y <= bottom; y++) {
@@ -464,10 +466,10 @@ static void sub1_move_light(int y1, int x1, int y2, int x2) {
 
 // When blinded,  move only the player symbol.
 // With no light,  movement becomes involved.
-static void sub3_move_light(int y1, int x1, int y2, int x2) {
+static void sub3_move_light(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
-        for (int y = y1 - 1; y <= y1 + 1; y++) {
-            for (int x = x1 - 1; x <= x1 + 1; x++) {
+        for (int y = from.y - 1; y <= from.y + 1; y++) {
+            for (int x = from.x - 1; x <= from.x + 1; x++) {
                 dg.floor[y][x].temporary_light = false;
                 panelPutTile(caveGetTileSymbol(Coord_t{y, x}), Coord_t{y, x});
             }
@@ -475,21 +477,21 @@ static void sub3_move_light(int y1, int x1, int y2, int x2) {
 
         py.temporary_light_only = false;
     } else if ((py.running_tracker == 0) || config.run_print_self) {
-        panelPutTile(caveGetTileSymbol(Coord_t{y1, x1}), Coord_t{y1, x1});
+        panelPutTile(caveGetTileSymbol(from), from);
     }
 
     if ((py.running_tracker == 0) || config.run_print_self) {
-        panelPutTile('@', Coord_t{y2, x2});
+        panelPutTile('@', to);
     }
 }
 
 // Package for moving the character's light about the screen
 // Four cases : Normal, Finding, Blind, and No light -RAK-
-void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2) {
+void dungeonMoveCharacterLight(Coord_t const &from, Coord_t const &to) {
     if (py.flags.blind > 0 || !py.carrying_light) {
-        sub3_move_light(y1, x1, y2, x2);
+        sub3_move_light(from, to);
     } else {
-        sub1_move_light(y1, x1, y2, x2);
+        sub1_move_light(from, to);
     }
 }
 
@@ -500,7 +502,7 @@ void dungeonDeleteMonster(int id) {
     dg.floor[monster->y][monster->x].creature_id = 0;
 
     if (monster->lit) {
-        dungeonLiteSpot((int) monster->y, (int) monster->x);
+        dungeonLiteSpot(Coord_t{monster->y, monster->x});
     }
 
     int last_id = next_free_monster_id - 1;
@@ -539,7 +541,7 @@ void dungeonDeleteMonsterFix1(int id) {
     dg.floor[monster.y][monster.x].creature_id = 0;
 
     if (monster.lit) {
-        dungeonLiteSpot((int) monster.y, (int) monster.x);
+        dungeonLiteSpot(Coord_t{monster.y, monster.x});
     }
 
     if (monster_multiply_total > 0) {
@@ -565,7 +567,7 @@ void dungeonDeleteMonsterFix2(int id) {
 }
 
 // Creates objects nearby the coordinates given -RAK-
-int dungeonSummonObject(int y, int x, int amount, int object_type) {
+int dungeonSummonObject(Coord_t coord, int amount, int object_type) {
     int real_type;
 
     if (object_type == 1 || object_type == 5) {
@@ -577,12 +579,14 @@ int dungeonSummonObject(int y, int x, int amount, int object_type) {
     int result = 0;
 
     do {
-        for (int i = 0; i <= 20; i++) {
-            int pos_y = y - 3 + randomNumber(5);
-            int pos_x = x - 3 + randomNumber(5);
+        for (int tries = 0; tries <= 20; tries++) {
+            Coord_t at = Coord_t{
+                    coord.y - 3 + randomNumber(5),
+                    coord.x - 3 + randomNumber(5),
+            };
 
-            if (coordInBounds(Coord_t{pos_y, pos_x}) && los(y, x, pos_y, pos_x)) {
-                if (dg.floor[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && dg.floor[pos_y][pos_x].treasure_id == 0) {
+            if (coordInBounds(at) && los(coord.y, coord.x, at.y, at.x)) {
+                if (dg.floor[at.y][at.x].feature_id <= MAX_OPEN_SPACE && dg.floor[at.y][at.x].treasure_id == 0) {
                     // object_type == 3 -> 50% objects, 50% gold
                     if (object_type == 3 || object_type == 7) {
                         if (randomNumber(100) < 50) {
@@ -593,18 +597,18 @@ int dungeonSummonObject(int y, int x, int amount, int object_type) {
                     }
 
                     if (real_type == 1) {
-                        dungeonPlaceRandomObjectAt(pos_y, pos_x, (object_type >= 4));
+                        dungeonPlaceRandomObjectAt(at, (object_type >= 4));
                     } else {
-                        dungeonPlaceGold(pos_y, pos_x);
+                        dungeonPlaceGold(at);
                     }
 
-                    dungeonLiteSpot(pos_y, pos_x);
+                    dungeonLiteSpot(at);
 
-                    if (caveTileVisible(Coord_t{pos_y, pos_x})) {
+                    if (caveTileVisible(at)) {
                         result += real_type;
                     }
 
-                    i = 20;
+                    tries = 20;
                 }
             }
         }
@@ -616,8 +620,8 @@ int dungeonSummonObject(int y, int x, int amount, int object_type) {
 }
 
 // Deletes object from given location -RAK-
-bool dungeonDeleteObject(int y, int x) {
-    Tile_t &tile = dg.floor[y][x];
+bool dungeonDeleteObject(Coord_t const &coord) {
+    Tile_t &tile = dg.floor[coord.y][coord.x];
 
     if (tile.feature_id == TILE_BLOCKED_FLOOR) {
         tile.feature_id = TILE_CORR_FLOOR;
@@ -628,7 +632,7 @@ bool dungeonDeleteObject(int y, int x) {
     tile.treasure_id = 0;
     tile.field_mark = false;
 
-    dungeonLiteSpot(y, x);
+    dungeonLiteSpot(coord);
 
-    return caveTileVisible(Coord_t{y, x});
+    return caveTileVisible(coord);
 }

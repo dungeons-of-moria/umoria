@@ -194,7 +194,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_
         if (py.flags.confused == 0) {
             playerMove(dir, false);
         } else {
-            dungeonLiteSpot(y, x);
+            dungeonLiteSpot(Coord_t{y, x});
         }
 
         return;

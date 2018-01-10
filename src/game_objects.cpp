@@ -50,7 +50,7 @@ static void compactObjects() {
                             chance = 10;
                     }
                     if (randomNumber(100) <= chance) {
-                        (void) dungeonDeleteObject(y, x);
+                        (void) dungeonDeleteObject(Coord_t{y, x});;
                         counter++;
                     }
                 }

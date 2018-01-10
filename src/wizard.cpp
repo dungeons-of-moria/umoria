@@ -303,7 +303,7 @@ void wizardGenerateObject() {
         if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
             // delete any object at location, before call popt()
             if (dg.floor[j][k].treasure_id != 0) {
-                (void) dungeonDeleteObject(j, k);
+                (void) dungeonDeleteObject(Coord_t{j, k});
             }
 
             // place the object
@@ -465,7 +465,7 @@ void wizardCreateObjects() {
         Tile_t &tile = dg.floor[py.row][py.col];
 
         if (tile.treasure_id != 0) {
-            (void) dungeonDeleteObject(py.row, py.col);
+            (void) dungeonDeleteObject(Coord_t{py.row, py.col});;
         }
 
         number = popt();

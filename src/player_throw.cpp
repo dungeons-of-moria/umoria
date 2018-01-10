@@ -142,7 +142,7 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
         int cur_pos = popt();
         dg.floor[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
         treasure_list[cur_pos] = *item;
-        dungeonLiteSpot(pos_y, pos_x);
+        dungeonLiteSpot(Coord_t{pos_y, pos_x});
     } else {
         obj_desc_t description = {'\0'};
         obj_desc_t msg = {'\0'};
@@ -205,7 +205,7 @@ void playerThrowItem() {
         }
 
         current_distance++;
-        dungeonLiteSpot(old_y, old_x);
+        dungeonLiteSpot(Coord_t{old_y, old_x});
 
         Tile_t const &tile = dg.floor[y][x];
 

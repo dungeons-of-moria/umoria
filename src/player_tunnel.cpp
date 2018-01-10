@@ -87,18 +87,18 @@ static void dungeonDigQuartzWall(int y, int x, int digging_ability) {
 
 static void dungeonDigRubble(int y, int x, int digging_ability) {
     if (digging_ability > randomNumber(180)) {
-        (void) dungeonDeleteObject(y, x);
+        (void) dungeonDeleteObject(Coord_t{y, x});;
         printMessage("You have removed the rubble.");
 
         if (randomNumber(10) == 1) {
-            dungeonPlaceRandomObjectAt(y, x, false);
+            dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
 
             if (caveTileVisible(Coord_t{y, x})) {
                 printMessage("You have found something!");
             }
         }
 
-        dungeonLiteSpot(y, x);
+        dungeonLiteSpot(Coord_t{y, x});
     } else {
         printMessageNoCommandInterrupt("You dig in the rubble.");
     }

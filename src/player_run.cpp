@@ -242,7 +242,7 @@ void playerEndRunning() {
 
     py.running_tracker = 0;
 
-    dungeonMoveCharacterLight(py.row, py.col, py.row, py.col);
+    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{py.row, py.col});
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int &check_dir, int &option1, int &option2) {

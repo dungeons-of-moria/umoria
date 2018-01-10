@@ -44,7 +44,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(py.row, py.col, (int) monster.y, (int) monster.x)) {
+        } else if (los(py.row, py.col, monster.y, monster.x)) {
             visible = monsterIsVisible(monster);
         }
     }
@@ -54,7 +54,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (!monster.lit) {
             playerDisturb(1, 0);
             monster.lit = true;
-            dungeonLiteSpot((int) monster.y, (int) monster.x);
+            dungeonLiteSpot(Coord_t{monster.y, monster.x});
 
             // notify inventoryExecuteCommand()
             screen_has_changed = true;
@@ -62,7 +62,7 @@ void monsterUpdateVisibility(int monster_id) {
     } else if (monster.lit) {
         // Turn it off.
         monster.lit = false;
-        dungeonLiteSpot((int) monster.y, (int) monster.x);
+        dungeonLiteSpot(Coord_t{monster.y, monster.x});
 
         // notify inventoryExecuteCommand()
         screen_has_changed = true;
@@ -514,7 +514,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
                 item.misc_use = (int16_t) (1 - randomNumber(2));
             }
             tile.feature_id = TILE_CORR_FLOOR;
-            dungeonLiteSpot(y, x);
+            dungeonLiteSpot(Coord_t{y, x});
             rcmove |= CM_OPEN_DOOR;
             do_move = false;
         }
@@ -529,7 +529,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
             // 50% chance of breaking door
             item.misc_use = (int16_t) (1 - randomNumber(2));
             tile.feature_id = TILE_CORR_FLOOR;
-            dungeonLiteSpot(y, x);
+            dungeonLiteSpot(Coord_t{y, x});
             printMessage("You hear a door burst open!");
             playerDisturb(1, 0);
         }
@@ -541,7 +541,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
         if (y == py.row && x == py.col) {
             printMessage("The rune of protection is broken!");
         }
-        (void) dungeonDeleteObject(y, x);
+        (void) dungeonDeleteObject(Coord_t{y, x});;
         return;
     }
 
@@ -596,16 +596,16 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
             rcmove |= CM_PICKS_UP;
-            (void) dungeonDeleteObject(y, x);
+            (void) dungeonDeleteObject(Coord_t{y, x});;
         }
     }
 
     // Move creature record
-    dungeonMoveCreatureRecord((int) monster.y, (int) monster.x, y, x);
+    dungeonMoveCreatureRecord(Coord_t{monster.y, monster.x}, Coord_t{y, x});
 
     if (monster.lit) {
         monster.lit = false;
-        dungeonLiteSpot((int) monster.y, (int) monster.x);
+        dungeonLiteSpot(Coord_t{monster.y, monster.x});
     }
 
     monster.y = (uint8_t) y;
@@ -675,7 +675,7 @@ static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     bool within_range = monster.distance_from_player <= MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    bool unobstructed = los(py.row, py.col, (int) monster.y, (int) monster.x);
+    bool unobstructed = los(py.row, py.col, monster.y, monster.x);
 
     return within_range && unobstructed;
 }
@@ -1442,7 +1442,7 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
     uint32_t dropped_item_id = 0;
 
     if (item_count > 0) {
-        dropped_item_id = (uint32_t) dungeonSummonObject(y, x, item_count, item_type);
+        dropped_item_id = (uint32_t) dungeonSummonObject(Coord_t{y, x}, item_count, item_type);
     }
 
     // maybe the player died in mid-turn

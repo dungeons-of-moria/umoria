@@ -47,7 +47,7 @@ static void trapCoveredPit(Inventory_t const &item, int dam, int y, int x) {
         playerTakesHit(dam, description);
     }
 
-    dungeonSetTrap(y, x, 0);
+    dungeonSetTrap(Coord_t{y, x}, 0);
 }
 
 static void trapDoor(Inventory_t const &item, int dam) {
@@ -85,9 +85,9 @@ static void trapSleepingGas() {
 }
 
 static void trapHiddenObject(int y, int x) {
-    (void) dungeonDeleteObject(y, x);
+    (void) dungeonDeleteObject(Coord_t{y, x});;
 
-    dungeonPlaceRandomObjectAt(y, x, false);
+    dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
 
     printMessage("Hmmm, there was something under this rock.");
 }
@@ -116,14 +116,14 @@ static void trapTeleport(int y, int x) {
     printMessage("You hit a teleport trap!");
 
     // Light up the teleport trap, before we teleport away.
-    dungeonMoveCharacterLight(y, x, y, x);
+    dungeonMoveCharacterLight(Coord_t{y, x}, Coord_t{y, x});
 }
 
 static void trapRockfall(int y, int x, int dam) {
     playerTakesHit(dam, "a falling rock");
 
-    (void) dungeonDeleteObject(y, x);
-    dungeonPlaceRubble(y, x);
+    (void) dungeonDeleteObject(Coord_t{y, x});;
+    dungeonPlaceRubble(Coord_t{y, x});
 
     printMessage("You are hit by falling rock.");
 }
@@ -137,7 +137,7 @@ static void trapCorrodeGas() {
 
 static void trapSummonMonster(int y, int x) {
     // Rune disappears.
-    (void) dungeonDeleteObject(y, x);
+    (void) dungeonDeleteObject(Coord_t{y, x});;
 
     int num = 2 + randomNumber(3);
 
@@ -249,7 +249,7 @@ enum class TrapTypes {
 // Player hit a trap.  (Chuckle) -RAK-
 static void playerStepsOnTrap(int y, int x) {
     playerEndRunning();
-    trapChangeVisibility(y, x);
+    trapChangeVisibility(Coord_t{y, x});
 
     Inventory_t const &item = treasure_list[dg.floor[y][x].treasure_id];
 
@@ -384,7 +384,7 @@ static void carry(int y, int x, bool pickup) {
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item.cost, description);
 
         printCharacterGoldValue();
-        (void) dungeonDeleteObject(y, x);
+        (void) dungeonDeleteObject(Coord_t{y, x});;
 
         printMessage(msg);
 
@@ -418,7 +418,7 @@ static void carry(int y, int x, bool pickup) {
             itemDescription(description, inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
-            (void) dungeonDeleteObject(y, x);
+            (void) dungeonDeleteObject(Coord_t{y, x});;
         }
     } else {
         itemDescription(description, item, true);
@@ -461,7 +461,7 @@ void playerMove(int direction, bool do_pickup) {
             py.col = (int16_t) x;
 
             // Move character record (-1)
-            dungeonMoveCreatureRecord(old_row, old_col, py.row, py.col);
+            dungeonMoveCreatureRecord(Coord_t{old_row, old_col}, Coord_t{py.row, py.col});
 
             // Check for new panel
             if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
@@ -483,7 +483,7 @@ void playerMove(int direction, bool do_pickup) {
                 // A room of light should be lit.
 
                 if (!tile.permanent_light && (py.flags.blind == 0)) {
-                    dungeonLightRoom(py.row, py.col);
+                    dungeonLightRoom(Coord_t{py.row, py.col});
                 }
             } else if (tile.perma_lit_room && py.flags.blind < 1) {
                 // In doorway of light-room?
@@ -491,14 +491,14 @@ void playerMove(int direction, bool do_pickup) {
                 for (int row = (py.row - 1); row <= (py.row + 1); row++) {
                     for (int col = (py.col - 1); col <= (py.col + 1); col++) {
                         if (dg.floor[row][col].feature_id == TILE_LIGHT_FLOOR && !dg.floor[row][col].permanent_light) {
-                            dungeonLightRoom(row, col);
+                            dungeonLightRoom(Coord_t{row, col});
                         }
                     }
                 }
             }
 
             // Move the light source
-            dungeonMoveCharacterLight(old_row, old_col, py.row, py.col);
+            dungeonMoveCharacterLight(Coord_t{old_row, old_col}, Coord_t{py.row, py.col});
 
             // An object is beneath them.
             if (tile.treasure_id != 0) {
@@ -507,8 +507,8 @@ void playerMove(int direction, bool do_pickup) {
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
                 if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                    dungeonMoveCreatureRecord(py.row, py.col, old_row, old_col);
-                    dungeonMoveCharacterLight(py.row, py.col, old_row, old_col);
+                    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{old_row, old_col});
+                    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{old_row, old_col});
 
                     py.row = (int16_t) old_row;
                     py.col = (int16_t) old_col;

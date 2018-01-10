@@ -38,7 +38,7 @@ static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, i
     if (total + 100 - level > randomNumber(100)) {
         printMessage("You have disarmed the trap.");
         py.misc.exp += misc_use;
-        (void) dungeonDeleteObject(y, x);
+        (void) dungeonDeleteObject(Coord_t{y, x});;
 
         // make sure we move onto the trap even if confused
         py.flags.confused = 0;
@@ -188,7 +188,7 @@ static void chestSummonMonster(int y, int x) {
 static void chestExplode(int y, int x) {
     printMessage("There is a sudden explosion!");
 
-    (void) dungeonDeleteObject(y, x);
+    (void) dungeonDeleteObject(Coord_t{y, x});;
 
     playerTakesHit(diceRoll(Dice_t{5, 8}), "an exploding chest");
 }

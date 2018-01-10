@@ -66,33 +66,33 @@ extern DungeonObject_t game_objects[MAX_OBJECTS_IN_GAME];
 
 void dungeonDisplayMap();
 
-bool coordInBounds(Coord_t coord);
-int coordDistanceBetween(Coord_t coord_a, Coord_t coord_b);
-int coordWallsNextTo(Coord_t coord);
-int coordCorridorWallsNextTo(Coord_t coord);
-char caveGetTileSymbol(Coord_t coord);
-bool caveTileVisible(Coord_t coord);
+bool coordInBounds(Coord_t const &coord);
+int coordDistanceBetween(Coord_t const &from, Coord_t const &to);
+int coordWallsNextTo(Coord_t const &coord);
+int coordCorridorWallsNextTo(Coord_t const &coord);
+char caveGetTileSymbol(Coord_t const &coord);
+bool caveTileVisible(Coord_t const &coord);
 
-void dungeonSetTrap(int y, int x, int sub_type_id);
-void trapChangeVisibility(int y, int x);
+void dungeonSetTrap(Coord_t const &coord, int sub_type_id);
+void trapChangeVisibility(Coord_t const &coord);
 
-void dungeonPlaceRubble(int y, int x);
-void dungeonPlaceGold(int y, int x);
+void dungeonPlaceRubble(Coord_t const &coord);
+void dungeonPlaceGold(Coord_t const &coord);
 
-void dungeonPlaceRandomObjectAt(int y, int x, bool must_be_small);
+void dungeonPlaceRandomObjectAt(Coord_t const &coord, bool must_be_small);
 void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number);
-void dungeonPlaceRandomObjectNear(int y, int x, int tries);
+void dungeonPlaceRandomObjectNear(Coord_t coord, int tries);
 
-void dungeonMoveCreatureRecord(int y1, int x1, int y2, int x2);
-void dungeonLightRoom(int pos_y, int pos_x);
-void dungeonLiteSpot(int y, int x);
-void dungeonMoveCharacterLight(int y1, int x1, int y2, int x2);
+void dungeonMoveCreatureRecord(Coord_t const &from, Coord_t const &to);
+void dungeonLightRoom(Coord_t const &coord);
+void dungeonLiteSpot(Coord_t const &coord);
+void dungeonMoveCharacterLight(Coord_t const &from, Coord_t const &to);
 
 void dungeonDeleteMonster(int id);
 void dungeonDeleteMonsterFix1(int id);
 void dungeonDeleteMonsterFix2(int id);
-int dungeonSummonObject(int y, int x, int amount, int object_type);
-bool dungeonDeleteObject(int y, int x);
+int dungeonSummonObject(Coord_t coord, int amount, int object_type);
+bool dungeonDeleteObject(Coord_t const &coord);
 
 // generate the dungeon
 void generateCave();

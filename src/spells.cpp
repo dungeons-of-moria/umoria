@@ -160,7 +160,7 @@ bool spellDetectTreasureWithinVicinity() {
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(Coord_t{y, x})) {
                 tile.field_mark = true;
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
                 detected = true;
             }
         }
@@ -179,7 +179,7 @@ bool spellDetectObjectsWithinVicinity() {
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(Coord_t{y, x})) {
                 tile.field_mark = true;
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
                 detected = true;
             }
         }
@@ -202,7 +202,7 @@ bool spellDetectTrapsWithinVicinity() {
 
             if (treasure_list[tile.treasure_id].category_id == TV_INVIS_TRAP) {
                 tile.field_mark = true;
-                trapChangeVisibility(y, x);
+                trapChangeVisibility(Coord_t{y, x});
                 detected = true;
             } else if (treasure_list[tile.treasure_id].category_id == TV_CHEST) {
                 Inventory_t &item = treasure_list[tile.treasure_id];
@@ -230,13 +230,13 @@ bool spellDetectSecretDoorssWithinVicinity() {
                 // Secret doors
 
                 tile.field_mark = true;
-                trapChangeVisibility(y, x);
+                trapChangeVisibility(Coord_t{y, x});
                 detected = true;
             } else if ((treasure_list[tile.treasure_id].category_id == TV_UP_STAIR || treasure_list[tile.treasure_id].category_id == TV_DOWN_STAIR) && !tile.field_mark) {
                 // Staircases
 
                 tile.field_mark = true;
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
                 detected = true;
             }
         }
@@ -285,7 +285,7 @@ bool spellLightArea(int y, int x) {
     bool lit = true;
 
     if (dg.floor[y][x].perma_lit_room && dg.current_level > 0) {
-        dungeonLightRoom(y, x);
+        dungeonLightRoom(Coord_t{y, x});
     }
 
     // Must always light immediate area, because one might be standing on
@@ -293,7 +293,7 @@ bool spellLightArea(int y, int x) {
     for (int i = y - 1; i <= y + 1; i++) {
         for (int j = x - 1; j <= x + 1; j++) {
             dg.floor[i][j].permanent_light = true;
-            dungeonLiteSpot(i, j);
+            dungeonLiteSpot(Coord_t{i, j});
         }
     }
 
@@ -320,7 +320,7 @@ bool spellDarkenArea(int y, int x) {
                     tile.permanent_light = false;
                     tile.feature_id = TILE_DARK_FLOOR;
 
-                    dungeonLiteSpot(row, col);
+                    dungeonLiteSpot(Coord_t{row, col});
 
                     if (!caveTileVisible(Coord_t{row, col})) {
                         darkened = true;
@@ -445,16 +445,16 @@ bool spellSurroundPlayerWithTraps() {
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
-                    (void) dungeonDeleteObject(y, x);
+                    (void) dungeonDeleteObject(Coord_t{y, x});;
                 }
 
-                dungeonSetTrap(y, x, randomNumber(MAX_TRAPS) - 1);
+                dungeonSetTrap(Coord_t{y, x}, randomNumber(MAX_TRAPS) - 1);
 
                 // don't let player gain exp from the newly created traps
                 treasure_list[tile.treasure_id].misc_use = 0;
 
                 // open pits are immediately visible, so call dungeonLiteSpot
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
             }
         }
     }
@@ -478,7 +478,7 @@ bool spellSurroundPlayerWithDoors() {
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
-                    (void) dungeonDeleteObject(y, x);
+                    (void) dungeonDeleteObject(Coord_t{y, x});;
                 }
 
                 int free_id = popt();
@@ -486,7 +486,7 @@ bool spellSurroundPlayerWithDoors() {
                 tile.treasure_id = (uint8_t) free_id;
 
                 inventoryItemCopyTo(OBJ_CLOSED_DOOR, treasure_list[free_id]);
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
 
                 created = true;
             }
@@ -511,7 +511,7 @@ bool spellDestroyAdjacentDoorsTraps() {
             Inventory_t &item = treasure_list[tile.treasure_id];
 
             if ((item.category_id >= TV_INVIS_TRAP && item.category_id <= TV_CLOSED_DOOR && item.category_id != TV_RUBBLE) || item.category_id == TV_SECRET_DOOR) {
-                if (dungeonDeleteObject(y, x)) {
+                if (dungeonDeleteObject(Coord_t{y, x})) {
                     destroyed = true;
                 }
             } else if (item.category_id == TV_CHEST && item.flags != 0) {
@@ -601,10 +601,10 @@ void spellLightLine(int x, int y, int direction) {
 
             if (tile.feature_id == TILE_LIGHT_FLOOR) {
                 if (coordInsidePanel(Coord_t{y, x})) {
-                    dungeonLightRoom(y, x);
+                    dungeonLightRoom(Coord_t{y, x});
                 }
             } else {
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
             }
         }
 
@@ -650,7 +650,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
             Inventory_t &item = treasure_list[tile->treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_VIS_TRAP) {
-                if (dungeonDeleteObject(y, x)) {
+                if (dungeonDeleteObject(Coord_t{y, x})) {
                     disarmed = true;
                 }
             } else if (item.category_id == TV_CLOSED_DOOR) {
@@ -658,7 +658,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
                 item.misc_use = 0;
             } else if (item.category_id == TV_SECRET_DOOR) {
                 tile->field_mark = true;
-                trapChangeVisibility(y, x);
+                trapChangeVisibility(Coord_t{y, x});
                 disarmed = true;
             } else if (item.category_id == TV_CHEST && item.flags != 0) {
                 disarmed = true;
@@ -792,7 +792,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 
         Tile_t &tile = dg.floor[y][x];
 
-        dungeonLiteSpot(old_y, old_x);
+        dungeonLiteSpot(Coord_t{old_y, old_x});
 
         if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
@@ -832,7 +832,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
         (void) playerMovePosition(direction, y, x);
         distance++;
 
-        dungeonLiteSpot(old_y, old_x);
+        dungeonLiteSpot(Coord_t{old_y, old_x});
 
         if (distance > OBJECT_BOLTS_MAX_RANGE) {
             finished = true;
@@ -858,7 +858,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
                         tile = &dg.floor[row][col];
 
                         if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
-                            (void) dungeonDeleteObject(row, col);
+                            (void) dungeonDeleteObject(Coord_t{row, col});
                         }
 
                         if (tile->feature_id <= MAX_OPEN_SPACE) {
@@ -906,7 +906,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
             for (int row = (y - 2); row <= (y + 2); row++) {
                 for (int col = (x - 2); col <= (x + 2); col++) {
                     if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance) {
-                        dungeonLiteSpot(row, col);
+                        dungeonLiteSpot(Coord_t{row, col});
                     }
                 }
             }
@@ -953,7 +953,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
                 Tile_t const &tile = dg.floor[row][col];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
-                    (void) dungeonDeleteObject(row, col);
+                    (void) dungeonDeleteObject(Coord_t{row, col});
                 }
 
                 if (tile.feature_id <= MAX_OPEN_SPACE) {
@@ -1044,7 +1044,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
     for (int row = (y - 2); row <= (y + 2); row++) {
         for (int col = (x - 2); col <= (x + 2); col++) {
             if (coordInBounds(Coord_t{row, col}) && coordInsidePanel(Coord_t{row, col}) && coordDistanceBetween(Coord_t{y, x}, Coord_t{row, col}) <= max_distance) {
-                dungeonLiteSpot(row, col);
+                dungeonLiteSpot(Coord_t{row, col});
             }
         }
     }
@@ -1370,16 +1370,16 @@ bool spellWallToMud(int y, int x, int direction) {
             }
 
             if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                (void) dungeonDeleteObject(y, x);
+                (void) dungeonDeleteObject(Coord_t{y, x});;
                 if (randomNumber(10) == 1) {
-                    dungeonPlaceRandomObjectAt(y, x, false);
+                    dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
                     if (caveTileVisible(Coord_t{y, x})) {
                         printMessage("You have found something!");
                     }
                 }
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
             } else {
-                (void) dungeonDeleteObject(y, x);
+                (void) dungeonDeleteObject(Coord_t{y, x});;
             }
         }
 
@@ -1427,7 +1427,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
             Inventory_t &item = treasure_list[tile->treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_CLOSED_DOOR || item.category_id == TV_VIS_TRAP || item.category_id == TV_OPEN_DOOR || item.category_id == TV_SECRET_DOOR) {
-                if (dungeonDeleteObject(y, x)) {
+                if (dungeonDeleteObject(Coord_t{y, x})) {
                     destroyed = true;
                     printMessage("There is a bright flash of light!");
                 }
@@ -1508,7 +1508,7 @@ bool spellBuildWall(int y, int x, int direction) {
         }
 
         if (tile.treasure_id != 0) {
-            (void) dungeonDeleteObject(y, x);
+            (void) dungeonDeleteObject(Coord_t{y, x});;
         }
 
         if (tile.creature_id > 1) {
@@ -1547,7 +1547,7 @@ bool spellBuildWall(int y, int x, int direction) {
 
         // Permanently light this wall if it is lit by player's lamp.
         tile.permanent_light = (tile.temporary_light || tile.permanent_light);
-        dungeonLiteSpot(y, x);
+        dungeonLiteSpot(Coord_t{y, x});
 
         built = true;
     }
@@ -1598,8 +1598,8 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
         }
     } while ((dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id != 0));
 
-    dungeonMoveCreatureRecord((int) monster.y, (int) monster.x, y, x);
-    dungeonLiteSpot((int) monster.y, (int) monster.x);
+    dungeonMoveCreatureRecord(Coord_t{monster.y, monster.x}, Coord_t{y, x});
+    dungeonLiteSpot(Coord_t{monster.y, monster.x});
 
     monster.y = (uint8_t) y;
     monster.x = (uint8_t) x;
@@ -1628,16 +1628,16 @@ void spellTeleportPlayerTo(int y, int x) {
         }
     } while (!coordInBounds(Coord_t{to_y, to_x}) || (dg.floor[to_y][to_x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[to_y][to_x].creature_id >= 2));
 
-    dungeonMoveCreatureRecord(py.row, py.col, to_y, to_x);
+    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{to_y, to_x});
 
     for (int row = py.row - 1; row <= py.row + 1; row++) {
         for (int col = py.col - 1; col <= py.col + 1; col++) {
             dg.floor[row][col].temporary_light = false;
-            dungeonLiteSpot(row, col);
+            dungeonLiteSpot(Coord_t{row, col});
         }
     }
 
-    dungeonLiteSpot(py.row, py.col);
+    dungeonLiteSpot(Coord_t{py.row, py.col});
 
     py.row = (int16_t) to_y;
     py.col = (int16_t) to_x;
@@ -1738,7 +1738,7 @@ bool spellSpeedAllMonsters(int speed) {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
             continue; // do nothing
         }
 
@@ -1777,7 +1777,7 @@ bool spellSleepAllMonsters() {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
             continue; // do nothing
         }
 
@@ -1923,7 +1923,7 @@ void spellEarthquake() {
                 Tile_t &tile = dg.floor[y][x];
 
                 if (tile.treasure_id != 0) {
-                    (void) dungeonDeleteObject(y, x);
+                    (void) dungeonDeleteObject(Coord_t{y, x});;
                 }
 
                 if (tile.creature_id > 1) {
@@ -1947,7 +1947,7 @@ void spellEarthquake() {
 
                     tile.field_mark = false;
                 }
-                dungeonLiteSpot(y, x);
+                dungeonLiteSpot(Coord_t{y, x});
             }
         }
     }
@@ -1969,7 +1969,7 @@ void spellCreateFood() {
         return;
     }
 
-    dungeonPlaceRandomObjectAt(py.row, py.col, false);
+    dungeonPlaceRandomObjectAt(Coord_t{py.row, py.col}, false);
     inventoryItemCopyTo(OBJ_MUSH, treasure_list[tile.treasure_id]);
 }
 
@@ -1981,7 +1981,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, monster.y, monster.x)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -2016,7 +2016,7 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(py.row, py.col, (int) monster.y, (int) monster.x)) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(py.row, py.col, monster.y, monster.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
@@ -2190,7 +2190,7 @@ static void replaceSpot(int y, int x, int typ) {
     tile.perma_lit_room = false; // this is no longer part of a room
 
     if (tile.treasure_id != 0) {
-        (void) dungeonDeleteObject(y, x);
+        (void) dungeonDeleteObject(Coord_t{y, x});;
     }
 
     if (tile.creature_id > 1) {

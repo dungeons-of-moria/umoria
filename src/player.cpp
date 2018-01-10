@@ -121,16 +121,16 @@ void playerTeleport(int new_distance) {
         }
     } while (dg.floor[new_y][new_x].feature_id >= MIN_CLOSED_SPACE || dg.floor[new_y][new_x].creature_id >= 2);
 
-    dungeonMoveCreatureRecord(py.row, py.col, new_y, new_x);
+    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{new_y, new_x});
 
     for (int y = py.row - 1; y <= py.row + 1; y++) {
         for (int x = py.col - 1; x <= py.col + 1; x++) {
             dg.floor[y][x].temporary_light = false;
-            dungeonLiteSpot(y, x);
+            dungeonLiteSpot(Coord_t{y, x});
         }
     }
 
-    dungeonLiteSpot(py.row, py.col);
+    dungeonLiteSpot(Coord_t{py.row, py.col});
 
     py.row = (int16_t) new_y;
     py.col = (int16_t) new_x;
@@ -732,14 +732,14 @@ void playerSearch(int y, int x, int chance) {
                 (void) sprintf(msg, "You have found %s", description);
                 printMessage(msg);
 
-                trapChangeVisibility(i, j);
+                trapChangeVisibility(Coord_t{i, j});
                 playerEndRunning();
             } else if (item.category_id == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
-                trapChangeVisibility(i, j);
+                trapChangeVisibility(Coord_t{i, j});
                 playerEndRunning();
             } else if (item.category_id == TV_CHEST) {
                 // Chest is trapped?
@@ -1269,7 +1269,7 @@ static void openClosedDoor(int y, int x) {
     if (item.misc_use == 0) {
         inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
         tile.feature_id = TILE_CORR_FLOOR;
-        dungeonLiteSpot(y, x);
+        dungeonLiteSpot(Coord_t{y, x});
         game.command_count = 0;
     }
 }
@@ -1384,7 +1384,7 @@ void playerCloseDoor() {
                 if (item.misc_use == 0) {
                     inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
                     tile.feature_id = TILE_BLOCKED_FLOOR;
-                    dungeonLiteSpot(y, x);
+                    dungeonLiteSpot(Coord_t{y, x});
                 } else {
                     printMessage("The door appears to be broken.");
                 }
@@ -1445,7 +1445,7 @@ bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance) {
         printMessage("You have found something!");
     }
 
-    dungeonLiteSpot(y, x);
+    dungeonLiteSpot(Coord_t{y, x});
 
     return true;
 }

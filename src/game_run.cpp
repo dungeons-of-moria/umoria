@@ -1600,7 +1600,7 @@ static void doWizardCommands(char com_val) {
             } else {
                 i = 1;
             }
-            dungeonPlaceRandomObjectNear(py.row, py.col, i);
+            dungeonPlaceRandomObjectNear(Coord_t{py.row, py.col}, i);
 
             drawDungeonPanel();
             break;
