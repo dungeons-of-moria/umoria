@@ -457,7 +457,7 @@ static bool _save_char(const std::string &filename) {
 
 // Certain checks are omitted for the wizard. -CJS-
 bool loadGame(bool &generate) {
-    Tile_t *tile;
+    Tile_t *tile = nullptr;
     int c;
     uint32_t time_saved = 0;
     uint8_t version_maj = 0;

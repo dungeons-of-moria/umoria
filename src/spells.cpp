@@ -639,7 +639,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
     int distance = 0;
     bool disarmed = false;
 
-    Tile_t *tile;
+    Tile_t *tile = nullptr;
 
     do {
         tile = &dg.floor[y][x];
@@ -1414,7 +1414,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
 
     int distance = 0;
 
-    Tile_t *tile;
+    Tile_t *tile = nullptr;
 
     do {
         (void) playerMovePosition(direction, y, x);

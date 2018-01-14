@@ -952,7 +952,7 @@ static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
 // Returns random co-ordinates -RAK-
 static void dungeonNewSpot(int16_t &y, int16_t &x) {
     int pos_y, pos_x;
-    Tile_t *tile;
+    Tile_t *tile = nullptr;
 
     do {
         pos_y = randomNumber(dg.height - 2);
