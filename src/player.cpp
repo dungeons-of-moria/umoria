@@ -1080,7 +1080,7 @@ bool playerSavingThrow() {
 }
 
 void playerGainKillExperience(Creature_t const &creature) {
-    uint16_t exp = creature.kill_exp_value * creature.level;
+    int32_t exp = creature.kill_exp_value * creature.level;
 
     int32_t quotient = exp / py.misc.level;
     int32_t remainder = exp % py.misc.level;
