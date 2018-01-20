@@ -3,18 +3,29 @@
 ## HEAD
 
 
+## 5.7.9 (2018-01-20)
+
 - Add AUTHORS file containing all known author information.
   This removes contributors section from `versions.txt`.
 
+### Bug Fixes
+
+- Kill experience points now calculated correctly.
+  When extracting a method the wrong `int` type was used when calculating the
+  `creature.kill_exp_value * creature.level`.
+  This bug was introduced in Umoria `5.7.3` with the commit: ccfa74783ad67eb3276ff3eca0f2509599012d33
 
 ### Code
 
-Continuing the process of moving related functions to the same file.
+Continuing the process of moving related functions to the same file, plus other
+changes. Highlights:
 
 - `types.h` now has just the two core `vtype_t` and `obj_desc_t` types.
 - The numbered `misc` and `moria` files no longer exist!
 - Moved `sets.cpp` functions elsewhere, allowing for most to become `static`.
 - `externs.h` is now empty, so deleted!
+- Add consistent `const` in various places.
+- Use more `Coord_t` in Dungeon related functions.
 
 
 ## 5.7.8 (2017-12-24)
