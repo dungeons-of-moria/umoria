@@ -8,10 +8,6 @@
 
 // Global constants used by Moria
 
-constexpr uint8_t MAX_UCHAR = std::numeric_limits<uint8_t>::max(); // maximum unsigned char: 255
-constexpr int16_t MAX_SHORT = std::numeric_limits<int16_t>::max(); // maximum short signed int: 32767
-constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();  // maximum long signed int: 0x7FFFFFFFL
-
 // Note to the Wizard:
 //
 // Tweaking these constants can *GREATLY* change the game.
@@ -27,9 +23,6 @@ constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();  // maximum lo
 // you change anything below, without understanding EXACTLY how the game
 // uses the number, the program may stop working correctly. Modify the
 // constants at your own risk. -JEW-
-
-constexpr uint8_t MORIA_MESSAGE_SIZE = 80;
-constexpr uint8_t OBJECT_DESCRIPTION_SIZE = 160;
 
 // message line location
 constexpr uint8_t MSG_LINE = 0;
@@ -226,10 +219,6 @@ constexpr char DELETE = 0x7f;
 
 #undef ESCAPE
 constexpr char ESCAPE = '\033'; // ESCAPE character -CJS-
-
-// This used to be NULL, but that was technically incorrect.
-// CNIL is used instead of null to help avoid lint errors.
-constexpr char *CNIL = 0;
 
 // Fval definitions: these describe the various types of dungeon floors and
 // walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
