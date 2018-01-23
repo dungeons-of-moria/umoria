@@ -427,28 +427,28 @@ void playerAdjustBonusesForItem(Inventory_t const &item, int factor) {
         }
     }
 
-    if ((TR_SEARCH & item.flags) != 0u) {
+    if ((item.flags & TR_SEARCH) != 0u) {
         py.misc.chance_in_search += amount;
         py.misc.fos -= amount;
     }
 
-    if ((TR_STEALTH & item.flags) != 0u) {
+    if ((item.flags & TR_STEALTH) != 0u) {
         py.misc.stealth_factor += amount;
     }
 
-    if ((TR_SPEED & item.flags) != 0u) {
+    if ((item.flags & TR_SPEED) != 0u) {
         playerChangeSpeed(-amount);
     }
 
-    if (((TR_BLIND & item.flags) != 0u) && factor > 0) {
+    if (((item.flags & TR_BLIND) != 0u) && factor > 0) {
         py.flags.blind += 1000;
     }
 
-    if (((TR_TIMID & item.flags) != 0u) && factor > 0) {
+    if (((item.flags & TR_TIMID) != 0u) && factor > 0) {
         py.flags.afraid += 50;
     }
 
-    if ((TR_INFRA & item.flags) != 0u) {
+    if ((item.flags & TR_INFRA) != 0u) {
         py.flags.see_infra += amount;
     }
 }
@@ -478,7 +478,7 @@ static void playerRecalculateBonusesFromInventory() {
 
                 py.misc.display_to_ac += item.to_ac;
                 py.misc.display_ac += item.ac;
-            } else if ((TR_CURSED & item.flags) == 0u) {
+            } else if ((item.flags & TR_CURSED) == 0u) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
                 py.misc.display_ac += item.ac;
@@ -489,7 +489,7 @@ static void playerRecalculateBonusesFromInventory() {
 
 static void playerRecalculateSustainStatsFromInventory() {
     for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
-        if ((TR_SUST_STAT & inventory[i].flags) == 0u) {
+        if ((inventory[i].flags & TR_SUST_STAT) == 0u) {
             continue;
         }
 
@@ -574,37 +574,37 @@ void playerRecalculateBonuses() {
 
     uint32_t item_flags = inventoryCollectAllItemFlags();
 
-    if ((TR_SLOW_DIGEST & item_flags) != 0u) {
+    if ((item_flags & TR_SLOW_DIGEST) != 0u) {
         py.flags.slow_digest = true;
     }
-    if ((TR_AGGRAVATE & item_flags) != 0u) {
+    if ((item_flags & TR_AGGRAVATE) != 0u) {
         py.flags.aggravate = true;
     }
-    if ((TR_TELEPORT & item_flags) != 0u) {
+    if ((item_flags & TR_TELEPORT) != 0u) {
         py.flags.teleport = true;
     }
-    if ((TR_REGEN & item_flags) != 0u) {
+    if ((item_flags & TR_REGEN) != 0u) {
         py.flags.regenerate_hp = true;
     }
-    if ((TR_RES_FIRE & item_flags) != 0u) {
+    if ((item_flags & TR_RES_FIRE) != 0u) {
         py.flags.resistant_to_fire = true;
     }
-    if ((TR_RES_ACID & item_flags) != 0u) {
+    if ((item_flags & TR_RES_ACID) != 0u) {
         py.flags.resistant_to_acid = true;
     }
-    if ((TR_RES_COLD & item_flags) != 0u) {
+    if ((item_flags & TR_RES_COLD) != 0u) {
         py.flags.resistant_to_cold = true;
     }
-    if ((TR_FREE_ACT & item_flags) != 0u) {
+    if ((item_flags & TR_FREE_ACT) != 0u) {
         py.flags.free_action = true;
     }
-    if ((TR_SEE_INVIS & item_flags) != 0u) {
+    if ((item_flags & TR_SEE_INVIS) != 0u) {
         py.flags.see_invisible = true;
     }
-    if ((TR_RES_LIGHT & item_flags) != 0u) {
+    if ((item_flags & TR_RES_LIGHT) != 0u) {
         py.flags.resistant_to_light = true;
     }
-    if ((TR_FFALL & item_flags) != 0u) {
+    if ((item_flags & TR_FFALL) != 0u) {
         py.flags.free_fall = true;
     }
 
@@ -1280,7 +1280,7 @@ static void openClosedChest(int y, int x) {
 
     bool success = false;
 
-    if ((CH_LOCKED & item.flags) != 0u) {
+    if ((item.flags & CH_LOCKED) != 0u) {
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
         } else if (playerLockPickingSkill() - item.depth_first_found > randomNumber(100)) {
@@ -1305,7 +1305,7 @@ static void openClosedChest(int y, int x) {
     }
 
     // Was chest still trapped?
-    if ((CH_LOCKED & item.flags) != 0) {
+    if ((item.flags & CH_LOCKED) != 0) {
         return;
     }
 

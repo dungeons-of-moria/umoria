@@ -597,7 +597,7 @@ int memoryRecall(int monster_id) {
     auto spells = (uint32_t) (memory.spells & creature.spells & ~CS_FREQ);
 
     // the CM_WIN property is always known, set it if a win monster
-    auto move = (uint32_t) (memory.movement | (CM_WIN & creature.movement));
+    auto move = (uint32_t) (memory.movement | (creature.movement & CM_WIN));
 
     uint16_t defense = memory.defenses & creature.defenses;
 

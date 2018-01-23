@@ -253,9 +253,9 @@ void printCharacterCurrentDepth() {
 
 // Prints status of hunger -RAK-
 void printCharacterHungerStatus() {
-    if ((PY_WEAK & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_WEAK) != 0u) {
         putString("Weak  ", Coord_t{23, 0});
-    } else if ((PY_HUNGRY & py.flags.status) != 0u) {
+    } else if ((py.flags.status & PY_HUNGRY) != 0u) {
         putString("Hungry", Coord_t{23, 0});
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 0});
@@ -264,7 +264,7 @@ void printCharacterHungerStatus() {
 
 // Prints Blind status -RAK-
 void printCharacterBlindStatus() {
-    if ((PY_BLIND & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_BLIND) != 0u) {
         putString("Blind", Coord_t{23, 7});
     } else {
         putString(&blank_string[BLANK_LENGTH - 5], Coord_t{23, 7});
@@ -273,7 +273,7 @@ void printCharacterBlindStatus() {
 
 // Prints Confusion status -RAK-
 void printCharacterConfusedState() {
-    if ((PY_CONFUSED & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_CONFUSED) != 0u) {
         putString("Confused", Coord_t{23, 13});
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 13});
@@ -282,7 +282,7 @@ void printCharacterConfusedState() {
 
 // Prints Fear status -RAK-
 void printCharacterFearState() {
-    if ((PY_FEAR & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_FEAR) != 0u) {
         putString("Afraid", Coord_t{23, 22});
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 22});
@@ -291,7 +291,7 @@ void printCharacterFearState() {
 
 // Prints Poisoned status -RAK-
 void printCharacterPoisonedState() {
-    if ((PY_POISONED & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_POISONED) != 0u) {
         putString("Poisoned", Coord_t{23, 29});
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 29});
@@ -307,7 +307,7 @@ void printCharacterMovementState() {
         return;
     }
 
-    if ((PY_REST & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_REST) != 0u) {
         char restString[16];
 
         if (py.flags.rest < 0) {
@@ -336,14 +336,14 @@ void printCharacterMovementState() {
 
         putString(repeatString, Coord_t{23, 38});
 
-        if ((PY_SEARCH & py.flags.status) != 0u) {
+        if ((py.flags.status & PY_SEARCH) != 0u) {
             putString("Search", Coord_t{23, 38});
         }
 
         return;
     }
 
-    if ((PY_SEARCH & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_SEARCH) != 0u) {
         putString("Searching", Coord_t{23, 38});
         return;
     }
@@ -357,7 +357,7 @@ void printCharacterSpeed() {
     int speed = py.flags.speed;
 
     // Search mode.
-    if ((PY_SEARCH & py.flags.status) != 0u) {
+    if ((py.flags.status & PY_SEARCH) != 0u) {
         speed--;
     }
 
@@ -426,19 +426,19 @@ void printCharacterStatsBlock() {
         printCharacterHungerStatus();
     }
 
-    if ((PY_BLIND & status) != 0u) {
+    if ((status & PY_BLIND) != 0u) {
         printCharacterBlindStatus();
     }
 
-    if ((PY_CONFUSED & status) != 0u) {
+    if ((status & PY_CONFUSED) != 0u) {
         printCharacterConfusedState();
     }
 
-    if ((PY_FEAR & status) != 0u) {
+    if ((status & PY_FEAR) != 0u) {
         printCharacterFearState();
     }
 
-    if ((PY_POISONED & status) != 0u) {
+    if ((status & PY_POISONED) != 0u) {
         printCharacterPoisonedState();
     }
 
@@ -447,7 +447,7 @@ void printCharacterStatsBlock() {
     }
 
     // if speed non zero, print it, modify speed if Searching
-    int16_t speed = py.flags.speed - (int16_t) ((PY_SEARCH & status) >> 8);
+    int16_t speed = py.flags.speed - (int16_t) ((status & PY_SEARCH) >> 8);
     if (speed != 0) {
         printCharacterSpeed();
     }

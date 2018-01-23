@@ -252,7 +252,7 @@ bool spellDetectInvisibleCreaturesWithinVicinity() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((CM_INVISIBLE & creatures_list[monster.creature_id].movement) != 0u)) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].movement & CM_INVISIBLE) != 0u)) {
             monster.lit = true;
 
             // works correctly even if hallucinating
@@ -537,7 +537,7 @@ bool spellDetectMonsters() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (CM_INVISIBLE & creatures_list[monster.creature_id].movement) == 0) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (creatures_list[monster.creature_id].movement & CM_INVISIBLE) == 0) {
             monster.lit = true;
             detected = true;
 
@@ -567,7 +567,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
 
     auto name = monsterNameDescription(creature.name, monster.lit);
 
-    if ((CD_LIGHT & creature.defenses) != 0) {
+    if ((creature.defenses & CD_LIGHT) != 0) {
         if (monster.lit) {
             creature_recall[monster.creature_id].defenses |= CD_LIGHT;
         }
@@ -1255,14 +1255,14 @@ bool spellConfuseMonster(int y, int x, int direction) {
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
                 if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
                     creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }
 
                 // Monsters which resisted the attack should wake up.
                 // Monsters with innate resistance ignore the attack.
-                if ((CD_NO_SLEEP & creature.defenses) == 0) {
+                if ((creature.defenses & CD_NO_SLEEP) == 0) {
                     monster.sleep_count = 0;
                 }
 
@@ -1310,7 +1310,7 @@ bool spellSleepMonster(int y, int x, int direction) {
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
                 if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
                     creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }
@@ -1387,7 +1387,7 @@ bool spellWallToMud(int y, int x, int direction) {
             Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
-            if ((CD_STONE & creature.defenses) != 0) {
+            if ((creature.defenses & CD_STONE) != 0) {
                 auto name = monsterNameDescription(creature.name, monster.lit);
 
                 // Should get these messages even if the monster is not visible.
@@ -1781,7 +1781,7 @@ bool spellSleepAllMonsters() {
             continue; // do nothing
         }
 
-        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
             if (monster.lit) {
                 if ((creature.defenses & CD_NO_SLEEP) != 0) {
                     creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
@@ -1832,7 +1832,7 @@ bool spellDetectEvil() {
     for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((CD_EVIL & creatures_list[monster.creature_id].defenses) != 0)) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].defenses & CD_EVIL) != 0)) {
             monster.lit = true;
 
             detected = true;
@@ -2016,7 +2016,7 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((CD_UNDEAD & creature.defenses) != 0) && los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature.defenses & CD_UNDEAD) != 0) && los(py.row, py.col, monster.y, monster.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
@@ -2259,7 +2259,7 @@ bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
     for (int id = EQUIPMENT_WIELD; id <= EQUIPMENT_OUTER; id++) {
-        if ((TR_CURSED & inventory[id].flags) != 0u) {
+        if ((inventory[id].flags & TR_CURSED) != 0u) {
             inventory[id].flags &= ~TR_CURSED;
             playerRecalculateBonuses();
             removed = true;

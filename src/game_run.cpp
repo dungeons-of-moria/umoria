@@ -377,7 +377,7 @@ static void playerDisableSuperHeroism() {
 static void playerUpdateHeroStatus() {
     // Heroism
     if (py.flags.heroism > 0) {
-        if ((PY_HERO & py.flags.status) == 0) {
+        if ((py.flags.status & PY_HERO) == 0) {
             playerActivateHeroism();
         }
 
@@ -390,7 +390,7 @@ static void playerUpdateHeroStatus() {
 
     // Super Heroism
     if (py.flags.super_heroism > 0) {
-        if ((PY_SHERO & py.flags.status) == 0) {
+        if ((py.flags.status & PY_SHERO) == 0) {
             playerActivateSuperHeroism();
         }
 
@@ -416,7 +416,7 @@ static int playerFoodConsumption() {
                 regen_amount = PLAYER_REGEN_WEAK;
             }
 
-            if ((PY_WEAK & py.flags.status) == 0) {
+            if ((py.flags.status & PY_WEAK) == 0) {
                 py.flags.status |= PY_WEAK;
                 printMessage("You are getting weak from hunger.");
                 playerDisturb(0, 0);
@@ -428,7 +428,7 @@ static int playerFoodConsumption() {
                 printMessage("You faint from the lack of food.");
                 playerDisturb(1, 0);
             }
-        } else if ((PY_HUNGRY & py.flags.status) == 0) {
+        } else if ((py.flags.status & PY_HUNGRY) == 0) {
             py.flags.status |= PY_HUNGRY;
             printMessage("You are getting hungry.");
             playerDisturb(0, 0);
@@ -475,7 +475,7 @@ static void playerUpdateBlindness() {
         return;
     }
 
-    if ((PY_BLIND & py.flags.status) == 0) {
+    if ((py.flags.status & PY_BLIND) == 0) {
         py.flags.status |= PY_BLIND;
 
         drawDungeonPanel();
@@ -507,7 +507,7 @@ static void playerUpdateConfusion() {
         return;
     }
 
-    if ((PY_CONFUSED & py.flags.status) == 0) {
+    if ((py.flags.status & PY_CONFUSED) == 0) {
         py.flags.status |= PY_CONFUSED;
         printCharacterConfusedState();
     }
@@ -531,7 +531,7 @@ static void playerUpdateFearState() {
         return;
     }
 
-    if ((PY_FEAR & py.flags.status) == 0) {
+    if ((py.flags.status & PY_FEAR) == 0) {
         if (py.flags.super_heroism + py.flags.heroism > 0) {
             py.flags.afraid = 0;
         } else {
@@ -558,7 +558,7 @@ static void playerUpdatePoisonedState() {
         return;
     }
 
-    if ((PY_POISONED & py.flags.status) == 0) {
+    if ((py.flags.status & PY_POISONED) == 0) {
         py.flags.status |= PY_POISONED;
         printCharacterPoisonedState();
     }
@@ -617,7 +617,7 @@ static void playerUpdateFastness() {
         return;
     }
 
-    if ((PY_FAST & py.flags.status) == 0) {
+    if ((py.flags.status & PY_FAST) == 0) {
         py.flags.status |= PY_FAST;
         playerChangeSpeed(-1);
 
@@ -641,7 +641,7 @@ static void playerUpdateSlowness() {
         return;
     }
 
-    if ((PY_SLOW & py.flags.status) == 0) {
+    if ((py.flags.status & PY_SLOW) == 0) {
         py.flags.status |= PY_SLOW;
         playerChangeSpeed(1);
 
@@ -729,7 +729,7 @@ static void playerUpdateInvulnerability() {
         return;
     }
 
-    if ((PY_INVULN & py.flags.status) == 0) {
+    if ((py.flags.status & PY_INVULN) == 0) {
         py.flags.status |= PY_INVULN;
         playerDisturb(0, 0);
 
@@ -759,7 +759,7 @@ static void playerUpdateBlessedness() {
         return;
     }
 
-    if ((PY_BLESSED & py.flags.status) == 0) {
+    if ((py.flags.status & PY_BLESSED) == 0) {
         py.flags.status |= PY_BLESSED;
         playerDisturb(0, 0);
 
@@ -818,7 +818,7 @@ static void playerUpdateDetectInvisible() {
         return;
     }
 
-    if ((PY_DET_INV & py.flags.status) == 0) {
+    if ((py.flags.status & PY_DET_INV) == 0) {
         py.flags.status |= PY_DET_INV;
         py.flags.see_invisible = true;
 
@@ -845,7 +845,7 @@ static void playerUpdateInfraVision() {
         return;
     }
 
-    if ((PY_TIM_INFRA & py.flags.status) == 0) {
+    if ((py.flags.status & PY_TIM_INFRA) == 0) {
         py.flags.status |= PY_TIM_INFRA;
         py.flags.see_infra++;
 

@@ -20,13 +20,13 @@ static bool monsterIsVisible(Monster_t const &monster) {
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
         // Normal sight.
-        if ((CM_INVISIBLE & creature.movement) == 0) {
+        if ((creature.movement & CM_INVISIBLE) == 0) {
             visible = true;
         } else if (py.flags.see_invisible) {
             visible = true;
             creature_recall[monster.creature_id].movement |= CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster.distance_from_player <= py.flags.see_infra && ((CD_INFRA & creature.defenses) != 0)) {
+    } else if (py.flags.see_infra > 0 && monster.distance_from_player <= py.flags.see_infra && ((creature.defenses & CD_INFRA) != 0)) {
         // Infra vision.
         visible = true;
         creature_recall[monster.creature_id].defenses |= CD_INFRA;
@@ -360,7 +360,7 @@ static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monste
 
         vtype_t msg = {'\0'};
 
-        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
@@ -1507,7 +1507,7 @@ bool monsterSleep(int y, int x) {
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((CD_NO_SLEEP & creature.defenses) != 0)) {
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
                 if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
                     creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
                 }

@@ -447,7 +447,7 @@ static void inventoryUnwieldItem() {
         return;
     }
 
-    if ((TR_CURSED & inventory[EQUIPMENT_WIELD].flags) != 0u) {
+    if ((inventory[EQUIPMENT_WIELD].flags & TR_CURSED) != 0u) {
         obj_desc_t description = {'\0'};
         itemDescription(description, inventory[EQUIPMENT_WIELD], false);
 
@@ -745,7 +745,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
                 item_id = -1;
-            } else if ((TR_CURSED & inventory[item_id].flags) != 0u) {
+            } else if ((inventory[item_id].flags & TR_CURSED) != 0u) {
                 item_id = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(inventory[item_id])) {
@@ -793,7 +793,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
 
             if (item_id >= 0 && inventory[slot].category_id != TV_NOTHING) {
-                if ((TR_CURSED & inventory[slot].flags) != 0u) {
+                if ((inventory[slot].flags & TR_CURSED) != 0u) {
                     inventoryItemIsCursedMessage(slot);
                     item_id = -1;
                 } else if (inventory[item_id].sub_category_id == ITEM_GROUP_MIN && inventory[item_id].items_count > 1 && !inventoryCanCarryItemCount(inventory[slot])) {
