@@ -24,9 +24,6 @@
 // uses the number, the program may stop working correctly. Modify the
 // constants at your own risk. -JEW-
 
-// message line location
-constexpr uint8_t MSG_LINE = 0;
-
 // How many messages to save in the buffer -CJS-
 constexpr uint8_t MESSAGE_HISTORY_SIZE = 22;
 
@@ -210,15 +207,6 @@ constexpr uint8_t A_DEX = 3;
 constexpr uint8_t A_CON = 4;
 constexpr uint8_t A_CHR = 5;
 
-constexpr char CTRL_KEY(char x) {
-    return static_cast<char>((x) & 0x1F);
-}
-
-#undef DELETE
-constexpr char DELETE = 0x7f;
-
-#undef ESCAPE
-constexpr char ESCAPE = '\033'; // ESCAPE character -CJS-
 
 // Fval definitions: these describe the various types of dungeon floors and
 // walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
@@ -242,9 +230,6 @@ constexpr uint8_t TILE_GRANITE_WALL = 12;
 constexpr uint8_t TILE_MAGMA_WALL = 13;
 constexpr uint8_t TILE_QUARTZ_WALL = 14;
 constexpr uint8_t TILE_BOUNDARY_WALL = 15;
-
-// Column for stats
-constexpr uint8_t STAT_COLUMN = 0;
 
 // Class spell types
 constexpr uint8_t SPELL_TYPE_NONE = 0;

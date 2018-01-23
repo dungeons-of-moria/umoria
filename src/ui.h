@@ -31,6 +31,22 @@ typedef struct {
     int32_t x;
 } Coord_t;
 
+// message line location
+constexpr uint8_t MSG_LINE = 0;
+
+// Column for stats
+constexpr uint8_t STAT_COLUMN = 0;
+
+constexpr char CTRL_KEY(char x) {
+    return static_cast<char>((x) & 0x1F);
+}
+
+#undef DELETE
+constexpr char DELETE = 0x7f;
+
+#undef ESCAPE
+constexpr char ESCAPE = '\033'; // ESCAPE character -CJS-
+
 extern bool screen_has_changed;
 extern bool message_ready_to_print;
 extern vtype_t messages[MESSAGE_HISTORY_SIZE];
