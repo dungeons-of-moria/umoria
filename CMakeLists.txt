@@ -99,6 +99,7 @@ set(
         ${source_dir}/ui.h
         ${source_dir}/version.h
         ${source_dir}/wizard.h
+        ${source_dir}/config.cpp
         ${source_dir}/globals.cpp
         ${source_dir}/helpers.cpp
         ${source_dir}/rng.cpp

@@ -31,7 +31,7 @@ static const char *objectDescription(char command) {
         case '$':
             return "$ - Treasure.";
         case '%':
-            if (!config.highlight_seams) {
+            if (!config::options::highlight_seams) {
                 return "% - Not used.";
             }
             return "% - A magma or quartz vein.";

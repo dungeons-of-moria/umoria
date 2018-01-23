@@ -54,7 +54,7 @@ bool coordOutsidePanel(Coord_t coord, bool force) {
         panelBounds();
 
         // stop movement if any
-        if (config.find_bound) {
+        if (config::options::find_bound) {
             playerEndRunning();
         }
 
@@ -312,7 +312,7 @@ void printCharacterMovementState() {
 
         if (py.flags.rest < 0) {
             (void) strcpy(restString, "Rest *");
-        } else if (config.display_counts) {
+        } else if (config::options::display_counts) {
             (void) sprintf(restString, "Rest %-5d", py.flags.rest);
         } else {
             (void) strcpy(restString, "Rest");
@@ -326,7 +326,7 @@ void printCharacterMovementState() {
     if (game.command_count > 0) {
         char repeatString[16];
 
-        if (config.display_counts) {
+        if (config::options::display_counts) {
             (void) sprintf(repeatString, "Repeat %-3d", game.command_count);
         } else {
             (void) strcpy(repeatString, "Repeat");

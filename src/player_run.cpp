@@ -212,7 +212,7 @@ void playerFindInitialize(int direction) {
     // in this case while moving, so the only problem is on the first turn
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
-    if (!py.temporary_light_only && !config.run_print_self) {
+    if (!py.temporary_light_only && !config::options::run_print_self) {
         panelPutTile(caveGetTileSymbol(Coord_t{py.row, py.col}), Coord_t{py.row, py.col});
     }
 
@@ -255,7 +255,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, i
         if (tile.treasure_id != 0) {
             int tileID = treasure_list[tile.treasure_id].category_id;
 
-            if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config.run_ignore_doors)) {
+            if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config::options::run_ignore_doors)) {
                 playerEndRunning();
                 return true;
             }
@@ -362,7 +362,7 @@ void playerAreaAffect(int direction, int y, int x) {
 
     // choose a direction.
 
-    if (option2 == 0 || (config.run_examine_corners && !config.run_cut_corners)) {
+    if (option2 == 0 || (config::options::run_examine_corners && !config::options::run_cut_corners)) {
         // There is only one option, or if two, then we always examine
         // potential corners and never cur known corners, so you step
         // into the straight option.
@@ -388,7 +388,7 @@ void playerAreaAffect(int direction, int y, int x) {
     if (!playerCanSeeDungeonWall(option, row, col) || !playerCanSeeDungeonWall(check_dir, row, col)) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
-        if (config.run_examine_corners && playerSeeNothing(option, row, col) && playerSeeNothing(option2, row, col)) {
+        if (config::options::run_examine_corners && playerSeeNothing(option, row, col) && playerSeeNothing(option2, row, col)) {
             // Can not see anything ahead and in the direction we are
             // turning, assume that it is a potential corner.
             find_direction = option;
@@ -397,7 +397,7 @@ void playerAreaAffect(int direction, int y, int x) {
             // STOP: we are next to an intersection or a room
             playerEndRunning();
         }
-    } else if (config.run_cut_corners) {
+    } else if (config::options::run_cut_corners) {
         // This corner is seen to be enclosed; we cut the corner.
         find_direction = option2;
         find_prevdir = option2;

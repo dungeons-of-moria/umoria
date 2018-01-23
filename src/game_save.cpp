@@ -60,37 +60,37 @@ static bool sv_write() {
 
     uint32_t l = 0;
 
-    if (config.run_cut_corners) {
+    if (config::options::run_cut_corners) {
         l |= 0x1;
     }
-    if (config.run_examine_corners) {
+    if (config::options::run_examine_corners) {
         l |= 0x2;
     }
-    if (config.run_print_self) {
+    if (config::options::run_print_self) {
         l |= 0x4;
     }
-    if (config.find_bound) {
+    if (config::options::find_bound) {
         l |= 0x8;
     }
-    if (config.prompt_to_pickup) {
+    if (config::options::prompt_to_pickup) {
         l |= 0x10;
     }
-    if (config.use_roguelike_keys) {
+    if (config::options::use_roguelike_keys) {
         l |= 0x20;
     }
-    if (config.show_inventory_weights) {
+    if (config::options::show_inventory_weights) {
         l |= 0x40;
     }
-    if (config.highlight_seams) {
+    if (config::options::highlight_seams) {
         l |= 0x80;
     }
-    if (config.run_ignore_doors) {
+    if (config::options::run_ignore_doors) {
         l |= 0x100;
     }
-    if (config.error_beep_sound) {
+    if (config::options::error_beep_sound) {
         l |= 0x200;
     }
-    if (config.display_counts) {
+    if (config::options::display_counts) {
         l |= 0x400;
     }
     if (game.character_is_dead) {
@@ -357,14 +357,14 @@ bool saveGame() {
     vtype_t input = {'\0'};
     std::string output;
 
-    while (!_save_char(config.files.save_game)) {
-        output = "Save file '" + config.files.save_game + "' fails.";
+    while (!_save_char(config::files::save_game)) {
+        output = "Save file '" + config::files::save_game + "' fails.";
         printMessage(output.c_str());
 
         int i = 0;
-        if (access(config.files.save_game.c_str(), 0) < 0 || !getInputConfirmation("File exists. Delete old save file?") || (i = unlink(config.files.save_game.c_str())) < 0) {
+        if (access(config::files::save_game.c_str(), 0) < 0 || !getInputConfirmation("File exists. Delete old save file?") || (i = unlink(config::files::save_game.c_str())) < 0) {
             if (i < 0) {
-                output = "Can't delete '" + config.files.save_game + "'";
+                output = "Can't delete '" + config::files::save_game + "'";
                 printMessage(output.c_str());
             }
             putStringClearToEOL("New Save file [ESC to give up]:", Coord_t{0, 0});
@@ -372,11 +372,11 @@ bool saveGame() {
                 return false;
             }
             if (input[0] != 0) {
-                // (void) strcpy(config.files.save_game, input);
-                config.files.save_game = input;
+                // (void) strcpy(config::files::save_game, input);
+                config::files::save_game = input;
             }
         }
-        output = "Saving with '" + config.files.save_game + "'...";
+        output = "Saving with '" + config::files::save_game + "'...";
         putStringClearToEOL(output, Coord_t{0, 0});
     }
 
@@ -405,11 +405,11 @@ static bool _save_char(const std::string &filename) {
 
     if (fd >= 0) {
         (void) close(fd);
-        fileptr = fopen(config.files.save_game.c_str(), "wb");
+        fileptr = fopen(config::files::save_game.c_str(), "wb");
     }
 
     DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Saving data to %s\n", config.files.save_game));
+    DEBUG(fprintf(logfile, "Saving data to %s\n", config::files::save_game));
 
     if (fileptr != nullptr) {
         xor_byte = 0;
@@ -470,20 +470,20 @@ bool loadGame(bool &generate) {
 
     // Not required for Mac, because the file name is obtained through a dialog.
     // There is no way for a nonexistent file to be specified. -BS-
-    if (access(config.files.save_game.c_str(), 0) != 0) {
+    if (access(config::files::save_game.c_str(), 0) != 0) {
         printMessage("Save file does not exist.");
         return false; // Don't bother with messages here. File absent.
     }
 
     clearScreen();
 
-    std::string filename = "Save file '" + config.files.save_game + "' present. Attempting restore.";
+    std::string filename = "Save file '" + config::files::save_game + "' present. Attempting restore.";
     putString(filename.c_str(), Coord_t{23, 0});
 
     // FIXME: check this if/else logic! -- MRC
     if (dg.game_turn >= 0) {
         printMessage("IMPOSSIBLE! Attempt to restore while still alive!");
-    } else if ((fd = open(config.files.save_game.c_str(), O_RDONLY, 0)) < 0 && (chmod(config.files.save_game.c_str(), 0400) < 0 || (fd = open(config.files.save_game.c_str(), O_RDONLY, 0)) < 0)) {
+    } else if ((fd = open(config::files::save_game.c_str(), O_RDONLY, 0)) < 0 && (chmod(config::files::save_game.c_str(), 0400) < 0 || (fd = open(config::files::save_game.c_str(), O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
         // Hence first try to read without doing a chmod.
 
@@ -494,7 +494,7 @@ bool loadGame(bool &generate) {
 
         (void) close(fd);
         fd = -1; // Make sure it isn't closed again
-        fileptr = fopen(config.files.save_game.c_str(), "rb");
+        fileptr = fopen(config::files::save_game.c_str(), "rb");
 
         if (fileptr == nullptr) {
             goto error;
@@ -504,7 +504,7 @@ bool loadGame(bool &generate) {
         putQIO();
 
         DEBUG(logfile = fopen("IO_LOG", "a"));
-        DEBUG(fprintf(logfile, "Reading data from %s\n", config.files.save_game));
+        DEBUG(fprintf(logfile, "Reading data from %s\n", config::files::save_game));
 
         // Note: setting these xor_byte is correct!
         xor_byte = 0;
@@ -543,17 +543,17 @@ bool loadGame(bool &generate) {
 
         l = rd_long();
 
-        config.run_cut_corners = (l & 0x1) != 0;
-        config.run_examine_corners = (l & 0x2) != 0;
-        config.run_print_self = (l & 0x4) != 0;
-        config.find_bound = (l & 0x8) != 0;
-        config.prompt_to_pickup = (l & 0x10) != 0;
-        config.use_roguelike_keys = (l & 0x20) != 0;
-        config.show_inventory_weights = (l & 0x40) != 0;
-        config.highlight_seams = (l & 0x80) != 0;
-        config.run_ignore_doors = (l & 0x100) != 0;
-        config.error_beep_sound = (l & 0x200) != 0;
-        config.display_counts = (l & 0x400) != 0;
+        config::options::run_cut_corners = (l & 0x1) != 0;
+        config::options::run_examine_corners = (l & 0x2) != 0;
+        config::options::run_print_self = (l & 0x4) != 0;
+        config::options::find_bound = (l & 0x8) != 0;
+        config::options::prompt_to_pickup = (l & 0x10) != 0;
+        config::options::use_roguelike_keys = (l & 0x20) != 0;
+        config::options::show_inventory_weights = (l & 0x40) != 0;
+        config::options::highlight_seams = (l & 0x80) != 0;
+        config::options::run_ignore_doors = (l & 0x100) != 0;
+        config::options::error_beep_sound = (l & 0x200) != 0;
+        config::options::display_counts = (l & 0x400) != 0;
 
         // Don't allow resurrection of game.total_winner characters.  It causes
         // problems because the character level is out of the allowed range.

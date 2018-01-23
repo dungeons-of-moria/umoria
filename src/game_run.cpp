@@ -66,13 +66,13 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     bool result = false;
     bool generate = false;
 
-    if (!start_new_game && (access(config.files.save_game.c_str(), 0) == 0) && loadGame(generate)) {
+    if (!start_new_game && (access(config::files::save_game.c_str(), 0) == 0) && loadGame(generate)) {
         result = true;
     }
 
     // Executing after game load to override saved game settings
     if (use_roguelike_keys) {
-        config.use_roguelike_keys = true;
+        config::options::use_roguelike_keys = true;
     }
 
     // enter wizard mode before showing the character display, but must wait
@@ -1063,7 +1063,7 @@ static void executeInputCommands(char &command, int &find_count) {
 
             // Get a count for a command.
             int repeat_count = 0;
-            if ((config.use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!config.use_roguelike_keys && lastInputCommand == '#')) {
+            if ((config::options::use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!config::options::use_roguelike_keys && lastInputCommand == '#')) {
                 repeat_count = getCommandRepeatCount(lastInputCommand);
             }
 
@@ -1076,7 +1076,7 @@ static void executeInputCommands(char &command, int &find_count) {
             panelMoveCursor(Coord_t{py.row, py.col});
 
             // Commands are always converted to rogue form. -CJS-
-            if (!config.use_roguelike_keys) {
+            if (!config::options::use_roguelike_keys) {
                 lastInputCommand = originalCommands(lastInputCommand);
             }
 
@@ -1466,7 +1466,7 @@ static void commandSaveAndExit() {
     if (game.total_winner) {
         printMessage("You are a Total Winner,  your character must be retired.");
 
-        if (config.use_roguelike_keys) {
+        if (config::options::use_roguelike_keys) {
             printMessage("Use 'Q' to when you are ready to quit.");
         } else {
             printMessage("Use <Control>-K when you are ready to quit.");
@@ -1640,10 +1640,10 @@ static void doWizardCommands(char com_val) {
             break;
         case '\\':
             // Display wizard help
-            if (config.use_roguelike_keys) {
-                displayTextHelpFile(config.files.help_roguelike_wizard);
+            if (config::options::use_roguelike_keys) {
+                displayTextHelpFile(config::files::help_roguelike_wizard);
             } else {
-                displayTextHelpFile(config.files.help_wizard);
+                displayTextHelpFile(config::files::help_wizard);
             }
             break;
         case CTRL_KEY('I'):
@@ -1693,7 +1693,7 @@ static void doWizardCommands(char com_val) {
             wizardCreateObjects();
             break;
         default:
-            if (config.use_roguelike_keys) {
+            if (config::options::use_roguelike_keys) {
                 putStringClearToEOL("Type '?' or '\\' for help.", Coord_t{0, 0});
             } else {
                 putStringClearToEOL("Type '?' or ^H for help.", Coord_t{0, 0});
@@ -1718,7 +1718,7 @@ static void doCommand(char command) {
             game.player_free_turn = true;
             break;
         case CTRL_KEY('V'): // (^V)iew license
-            displayTextHelpFile(config.files.license);
+            displayTextHelpFile(config::files::license);
             game.player_free_turn = true;
             break;
         case CTRL_KEY('W'): // (^W)izard mode
@@ -1815,10 +1815,10 @@ static void doCommand(char command) {
             dungeonGoDownLevel();
             break;
         case '?': // (?) help with commands
-            if (config.use_roguelike_keys) {
-                displayTextHelpFile(config.files.help_roguelike);
+            if (config::options::use_roguelike_keys) {
+                displayTextHelpFile(config::files::help_roguelike);
             } else {
-                displayTextHelpFile(config.files.help);
+                displayTextHelpFile(config::files::help);
             }
             game.player_free_turn = true;
             break;
@@ -1943,7 +1943,7 @@ static void doCommand(char command) {
             staffUse();
             break;
         case 'v': // (v)ersion of game
-            displayTextHelpFile(config.files.versions_history);
+            displayTextHelpFile(config::files::versions_history);
             game.player_free_turn = true;
             break;
         case 'w': // (w)ear or wield

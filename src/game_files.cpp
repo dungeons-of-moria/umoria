@@ -19,7 +19,7 @@
 //  so we don't have multiple people trying to write to it at the same time.
 //  Craig Norborg (doc)    Mon Aug 10 16:41:59 EST 1987
 bool initializeScoreFile() {
-    highscore_fp = fopen(config.files.scores.c_str(), (char *) "rb+");
+    highscore_fp = fopen(config::files::scores.c_str(), (char *) "rb+");
 
     return highscore_fp != nullptr;
 }
@@ -28,7 +28,7 @@ bool initializeScoreFile() {
 void displaySplashScreen() {
     vtype_t in_line = {'\0'};
 
-    FILE *file1 = fopen(config.files.splash_screen.c_str(), "r");
+    FILE *file1 = fopen(config::files::splash_screen.c_str(), "r");
     if (file1 != nullptr) {
         clearScreen();
         for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {

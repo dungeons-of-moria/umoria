@@ -119,28 +119,28 @@ int randomNumberNormalDistribution(int mean, int standard) {
 static struct {
     const char *o_prompt;
     bool *o_var;
-} options[] = {{"Running: cut known corners",            &config.run_cut_corners},
-               {"Running: examine potential corners",    &config.run_examine_corners},
-               {"Running: print self during run",        &config.run_print_self},
-               {"Running: stop when map sector changes", &config.find_bound},
-               {"Running: run through open doors",       &config.run_ignore_doors},
-               {"Prompt to pick up objects",             &config.prompt_to_pickup},
-               {"Rogue like commands",                   &config.use_roguelike_keys},
-               {"Show weights in inventory",             &config.show_inventory_weights},
-               {"Highlight and notice mineral seams",    &config.highlight_seams},
-               {"Beep for invalid character",            &config.error_beep_sound},
-               {"Display rest/repeat counts",            &config.display_counts},
-               {nullptr,                                 nullptr},
+} game_options[] = {{"Running: cut known corners",            &config::options::run_cut_corners},
+                    {"Running: examine potential corners",    &config::options::run_examine_corners},
+                    {"Running: print self during run",        &config::options::run_print_self},
+                    {"Running: stop when map sector changes", &config::options::find_bound},
+                    {"Running: run through open doors",       &config::options::run_ignore_doors},
+                    {"Prompt to pick up objects",             &config::options::prompt_to_pickup},
+                    {"Rogue like commands",                   &config::options::use_roguelike_keys},
+                    {"Show weights in inventory",             &config::options::show_inventory_weights},
+                    {"Highlight and notice mineral seams",    &config::options::highlight_seams},
+                    {"Beep for invalid character",            &config::options::error_beep_sound},
+                    {"Display rest/repeat counts",            &config::options::display_counts},
+                    {nullptr,                                 nullptr},
 };
 
-// Set or unset various boolean config.display_counts -CJS-
+// Set or unset various boolean config::options::display_counts -CJS-
 void setGameOptions() {
     putStringClearToEOL("  ESC when finished, y/n to set options, <return> or - to move cursor", Coord_t{0, 0});
 
     int max;
-    for (max = 0; options[max].o_prompt != nullptr; max++) {
+    for (max = 0; game_options[max].o_prompt != nullptr; max++) {
         vtype_t str = {'\0'};
-        (void) sprintf(str, "%-38s: %s", options[max].o_prompt, (*options[max].o_var ? "yes" : "no "));
+        (void) sprintf(str, "%-38s: %s", game_options[max].o_prompt, (*game_options[max].o_var ? "yes" : "no "));
         putStringClearToEOL(str, Coord_t{max + 1, 0});
     }
     eraseLine(Coord_t{max + 1, 0});
@@ -172,7 +172,7 @@ void setGameOptions() {
             case 'Y':
                 putString("yes", Coord_t{optionID + 1, 40});
 
-                *options[optionID].o_var = true;
+                *game_options[optionID].o_var = true;
 
                 if (optionID + 1 < max) {
                     optionID++;
@@ -184,7 +184,7 @@ void setGameOptions() {
             case 'N':
                 putString("no ", Coord_t{optionID + 1, 40});
 
-                *options[optionID].o_var = false;
+                *game_options[optionID].o_var = false;
 
                 if (optionID + 1 < max) {
                     optionID++;
@@ -285,7 +285,7 @@ bool getDirectionWithMemory(char *prompt, int &direction) {
 
         game.command_count = save;
 
-        if (config.use_roguelike_keys) {
+        if (config::options::use_roguelike_keys) {
             command = mapRoguelikeKeysToKeypad(command);
         }
 
@@ -310,7 +310,7 @@ bool getAllDirections(const char *prompt, int &direction) {
             return false;
         }
 
-        if (config.use_roguelike_keys) {
+        if (config::options::use_roguelike_keys) {
             command = mapRoguelikeKeysToKeypad(command);
         }
 

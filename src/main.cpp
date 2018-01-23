@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
     if (!initializeScoreFile()) {
-        std::cerr << "Can't open score file '" << config.files.scores << "'\n";
+        std::cerr << "Can't open score file '" << config::files::scores << "'\n";
         return 1;
     }
 
@@ -102,8 +102,8 @@ int main(int argc, char *argv[]) {
 
     // Auto-restart of saved file
     if (argv[0] != CNIL) {
-        // (void) strcpy(config.files.save_game, argv[0]);
-        config.files.save_game = argv[0];
+        // (void) strcpy(config::files::save_game, argv[0]);
+        config::files::save_game = argv[0];
     }
 
     startMoria(seed, new_game, roguelike_keys);

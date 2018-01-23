@@ -149,7 +149,7 @@ static void characterChooseRace() {
         }
 
         if (input == '?') {
-            displayTextHelpFile(config.files.welcome_screen);
+            displayTextHelpFile(config::files::welcome_screen);
         } else {
             terminalBellSound();
         }
@@ -294,7 +294,7 @@ static void characterSetGender() {
             putString("Male", Coord_t{4, 15});
             is_set = true;
         } else if (input == '?') {
-            displayTextHelpFile(config.files.welcome_screen);
+            displayTextHelpFile(config::files::welcome_screen);
         } else {
             terminalBellSound();
         }
@@ -444,7 +444,7 @@ static void characterGetClass() {
             is_set = true;
             generateCharacterClass(class_list[class_id]);
         } else if (input == '?') {
-            displayTextHelpFile(config.files.welcome_screen);
+            displayTextHelpFile(config::files::welcome_screen);
         } else {
             terminalBellSound();
         }

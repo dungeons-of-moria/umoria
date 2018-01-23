@@ -175,7 +175,7 @@ int coordCorridorWallsNextTo(Coord_t const &coord) {
 char caveGetTileSymbol(Coord_t const &coord) {
     Tile_t const &tile = dg.floor[coord.y][coord.x];
 
-    if (tile.creature_id == 1 && ((py.running_tracker == 0) || config.run_print_self)) {
+    if (tile.creature_id == 1 && ((py.running_tracker == 0) || config::options::run_print_self)) {
         return '@';
     }
 
@@ -203,7 +203,7 @@ char caveGetTileSymbol(Coord_t const &coord) {
         return '.';
     }
 
-    if (tile.feature_id == TILE_GRANITE_WALL || tile.feature_id == TILE_BOUNDARY_WALL || !config.highlight_seams) {
+    if (tile.feature_id == TILE_GRANITE_WALL || tile.feature_id == TILE_BOUNDARY_WALL || !config::options::highlight_seams) {
         return '#';
     }
 
@@ -410,10 +410,10 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
                 dg.floor[y][x].temporary_light = false;
             }
         }
-        if ((py.running_tracker != 0) && !config.run_print_self) {
+        if ((py.running_tracker != 0) && !config::options::run_print_self) {
             py.temporary_light_only = false;
         }
-    } else if ((py.running_tracker == 0) || config.run_print_self) {
+    } else if ((py.running_tracker == 0) || config::options::run_print_self) {
         py.temporary_light_only = true;
     }
 
@@ -476,11 +476,11 @@ static void sub3_move_light(Coord_t const &from, Coord_t const &to) {
         }
 
         py.temporary_light_only = false;
-    } else if ((py.running_tracker == 0) || config.run_print_self) {
+    } else if ((py.running_tracker == 0) || config::options::run_print_self) {
         panelPutTile(caveGetTileSymbol(from), from);
     }
 
-    if ((py.running_tracker == 0) || config.run_print_self) {
+    if ((py.running_tracker == 0) || config::options::run_print_self) {
         panelPutTile('@', to);
     }
 }

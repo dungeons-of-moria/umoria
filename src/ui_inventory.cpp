@@ -307,15 +307,15 @@ static void displayInventoryScreen(int new_screen) {
             line = 7;
             break;
         case INVEN_SCR:
-            screen_left = displayInventory(0, py.unique_inventory_items - 1, config.show_inventory_weights, screen_left, CNIL);
+            screen_left = displayInventory(0, py.unique_inventory_items - 1, config::options::show_inventory_weights, screen_left, CNIL);
             line = py.unique_inventory_items;
             break;
         case WEAR_SCR:
-            screen_left = displayInventory(wear_low, wear_high, config.show_inventory_weights, screen_left, CNIL);
+            screen_left = displayInventory(wear_low, wear_high, config::options::show_inventory_weights, screen_left, CNIL);
             line = wear_high - wear_low + 1;
             break;
         case EQUIP_SCR:
-            screen_left = displayEquipment(config.show_inventory_weights, screen_left);
+            screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
             line = py.equipment_count;
             break;
         default:
@@ -466,7 +466,7 @@ static void inventoryUnwieldItem() {
     inventory[EQUIPMENT_WIELD] = savedItem;
 
     if (screen_state == EQUIP_SCR) {
-        screen_left = displayEquipment(config.show_inventory_weights, screen_left);
+        screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
     }
 
     playerAdjustBonusesForItem(inventory[EQUIPMENT_AUX], -1);  // Subtract bonuses
@@ -951,7 +951,7 @@ static void inventoryDisplayAppropriateHeader() {
         int weightQuotient = py.inventory_weight / 10;
         int weightRemainder = py.inventory_weight % 10;
 
-        if (!config.show_inventory_weights || py.unique_inventory_items == 0) {
+        if (!config::options::show_inventory_weights || py.unique_inventory_items == 0) {
             (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
                            weightQuotient,
                            weightRemainder,

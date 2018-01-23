@@ -18,9 +18,6 @@ int hack_monptr = -1;
 // High score file pointer
 FILE *highscore_fp;
 
-// Game options as set on startup and with `=` set options command -CJS-
-Config_t config = Config_t{};
-
 Game_t game = Game_t{};
 
 // Track screen changes for inventory commands

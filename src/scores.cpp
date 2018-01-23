@@ -56,8 +56,8 @@ void recordNewHighScore() {
     }
     (void) strcpy(new_entry.died_from, tmp);
 
-    if ((highscore_fp = fopen(config.files.scores.c_str(), "rb+")) == nullptr) {
-        printMessage(("Error opening score file '" + config.files.scores + "'.").c_str());
+    if ((highscore_fp = fopen(config::files::scores.c_str(), "rb+")) == nullptr) {
+        printMessage(("Error opening score file '" + config::files::scores + "'.").c_str());
         printMessage(CNIL);
         return;
     }
@@ -174,8 +174,8 @@ void recordNewHighScore() {
 }
 
 void showScoresScreen() {
-    if ((highscore_fp = fopen(config.files.scores.c_str(), "rb")) == nullptr) {
-        printMessage(("Error opening score file '" + config.files.scores + "'.").c_str());
+    if ((highscore_fp = fopen(config::files::scores.c_str(), "rb")) == nullptr) {
+        printMessage(("Error opening score file '" + config::files::scores + "'.").c_str());
         printMessage(CNIL);
         return;
     }

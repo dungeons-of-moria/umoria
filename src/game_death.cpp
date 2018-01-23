@@ -12,7 +12,7 @@
 
 // Prints the gravestone of the character -RAK-
 static void printTomb() {
-    displayDeathFile(config.files.death_tomb);
+    displayDeathFile(config::files::death_tomb);
 
     std::string text;
 
@@ -94,7 +94,7 @@ static void printTomb() {
 
 // Let the player know they did good.
 static void printCrown() {
-    displayDeathFile(config.files.death_royal);
+    displayDeathFile(config::files::death_royal);
     if (playerIsMale()) {
         putString("King!", Coord_t{17, 45});
     } else {
