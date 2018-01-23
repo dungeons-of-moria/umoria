@@ -566,6 +566,3 @@ constexpr uint8_t GF_ACID = 3;
 constexpr uint8_t GF_FROST = 4;
 constexpr uint8_t GF_FIRE = 5;
 constexpr uint8_t GF_HOLY_ORB = 6;
-
-// Number of entries allowed in the score file.
-constexpr uint16_t MAX_HIGH_SCORE_ENTRIES = 1000;

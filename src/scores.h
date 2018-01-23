@@ -28,6 +28,9 @@ typedef struct {
     char died_from[25];
 } HighScore_t;
 
+// Number of entries allowed in the score file.
+constexpr uint16_t MAX_HIGH_SCORE_ENTRIES = 1000;
+
 extern FILE *highscore_fp;
 
 // TODO: these are implemented in `game_save.cpp` so need moving.
