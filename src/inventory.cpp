@@ -15,7 +15,7 @@ Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 uint32_t inventoryCollectAllItemFlags() {
     uint32_t flags = 0;
 
-    for (int i = EQUIPMENT_WIELD; i < EQUIPMENT_LIGHT; i++) {
+    for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
         flags |= inventory[i].flags;
     }
 
@@ -66,7 +66,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
     dg.floor[py.row][py.col].treasure_id = (uint8_t) treasureID;
 
-    if (item_id >= EQUIPMENT_WIELD) {
+    if (item_id >= player_equipment::EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);
     } else {
         if (drop_all || item.items_count == 1) {
@@ -110,7 +110,7 @@ static int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_perc
 }
 
 bool inventoryDiminishLightAttack(bool noticed) {
-    Inventory_t &item = inventory[EQUIPMENT_LIGHT];
+    Inventory_t &item = inventory[player_equipment::EQUIPMENT_LIGHT];
 
     if (item.misc_use > 0) {
         item.misc_use -= (250 + randomNumber(250));
@@ -155,25 +155,25 @@ bool executeDisenchantAttack() {
 
     switch (randomNumber(7)) {
         case 1:
-            item_id = EQUIPMENT_WIELD;
+            item_id = player_equipment::EQUIPMENT_WIELD;
             break;
         case 2:
-            item_id = EQUIPMENT_BODY;
+            item_id = player_equipment::EQUIPMENT_BODY;
             break;
         case 3:
-            item_id = EQUIPMENT_ARM;
+            item_id = player_equipment::EQUIPMENT_ARM;
             break;
         case 4:
-            item_id = EQUIPMENT_OUTER;
+            item_id = player_equipment::EQUIPMENT_OUTER;
             break;
         case 5:
-            item_id = EQUIPMENT_HANDS;
+            item_id = player_equipment::EQUIPMENT_HANDS;
             break;
         case 6:
-            item_id = EQUIPMENT_HEAD;
+            item_id = player_equipment::EQUIPMENT_HEAD;
             break;
         case 7:
-            item_id = EQUIPMENT_FEET;
+            item_id = player_equipment::EQUIPMENT_FEET;
             break;
         default:
             return false;
@@ -215,7 +215,7 @@ bool executeDisenchantAttack() {
 
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(Inventory_t const &item) {
-    if (py.unique_inventory_items < EQUIPMENT_WIELD) {
+    if (py.unique_inventory_items < player_equipment::EQUIPMENT_WIELD) {
         return true;
     }
 
@@ -365,34 +365,34 @@ static bool damageMinusAC(uint32_t typ_dam) {
     int itemsCount = 0;
     int items[6];
 
-    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        items[itemsCount] = EQUIPMENT_BODY;
+    if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
+        items[itemsCount] = player_equipment::EQUIPMENT_BODY;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        items[itemsCount] = EQUIPMENT_ARM;
+    if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
+        items[itemsCount] = player_equipment::EQUIPMENT_ARM;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        items[itemsCount] = EQUIPMENT_OUTER;
+    if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
+        items[itemsCount] = player_equipment::EQUIPMENT_OUTER;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        items[itemsCount] = EQUIPMENT_HANDS;
+    if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
+        items[itemsCount] = player_equipment::EQUIPMENT_HANDS;
         itemsCount++;
     }
 
-    if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        items[itemsCount] = EQUIPMENT_HEAD;
+    if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
+        items[itemsCount] = player_equipment::EQUIPMENT_HEAD;
         itemsCount++;
     }
 
     // also affect boots
-    if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        items[itemsCount] = EQUIPMENT_FEET;
+    if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
+        items[itemsCount] = player_equipment::EQUIPMENT_FEET;
         itemsCount++;
     }
 

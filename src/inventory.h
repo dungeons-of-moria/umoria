@@ -61,6 +61,22 @@ typedef struct {
     uint8_t identification;         // Identify information
 } Inventory_t;
 
+// magic numbers for players equipment inventory array
+enum player_equipment {
+    EQUIPMENT_WIELD = 22, // must be first item in equipment list
+    EQUIPMENT_HEAD,
+    EQUIPMENT_NECK,
+    EQUIPMENT_BODY,
+    EQUIPMENT_ARM,
+    EQUIPMENT_HANDS,
+    EQUIPMENT_RIGHT,
+    EQUIPMENT_LEFT,
+    EQUIPMENT_FEET,
+    EQUIPMENT_OUTER,
+    EQUIPMENT_LIGHT,
+    EQUIPMENT_AUX,
+};
+
 extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
 
 uint32_t inventoryCollectAllItemFlags();

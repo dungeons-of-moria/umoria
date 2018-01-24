@@ -952,7 +952,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     int first_item = py.unique_inventory_items;
     int last_item = -1;
 
-    char mask[EQUIPMENT_WIELD];
+    char mask[player_equipment::EQUIPMENT_WIELD];
 
     for (int counter = 0; counter < py.unique_inventory_items; counter++) {
         int flag = (*store_buy[store_id])(inventory[counter].category_id);

@@ -38,8 +38,8 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
     plus_to_hit = py.misc.plusses_to_hit + item.to_hit;
 
     // Add this back later if the correct throwing device. -CJS-
-    if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
-        plus_to_hit -= inventory[EQUIPMENT_WIELD].to_hit;
+    if (inventory[player_equipment::EQUIPMENT_WIELD].category_id != TV_NOTHING) {
+        plus_to_hit -= inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
     }
 
     distance = (((py.stats.used[A_STR] + 20) * 10) / weight);
@@ -51,16 +51,16 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
     // missile/weapon combo, this makes them much more useful
 
     // Using Bows, slings, or crossbows?
-    if (inventory[EQUIPMENT_WIELD].category_id != TV_BOW) {
+    if (inventory[player_equipment::EQUIPMENT_WIELD].category_id != TV_BOW) {
         return;
     }
 
-    switch (inventory[EQUIPMENT_WIELD].misc_use) {
+    switch (inventory[player_equipment::EQUIPMENT_WIELD].misc_use) {
         case 1:
             if (item.category_id == TV_SLING_AMMO) { // Sling and ammo
                 base_to_hit = py.misc.bth_with_bows;
-                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                plus_to_hit += 2 * inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
+                damage += inventory[player_equipment::EQUIPMENT_WIELD].to_damage;
                 damage = damage * 2;
                 distance = 20;
             }
@@ -68,8 +68,8 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         case 2:
             if (item.category_id == TV_ARROW) { // Short Bow and Arrow
                 base_to_hit = py.misc.bth_with_bows;
-                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                plus_to_hit += 2 * inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
+                damage += inventory[player_equipment::EQUIPMENT_WIELD].to_damage;
                 damage = damage * 2;
                 distance = 25;
             }
@@ -77,8 +77,8 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         case 3:
             if (item.category_id == TV_ARROW) { // Long Bow and Arrow
                 base_to_hit = py.misc.bth_with_bows;
-                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                plus_to_hit += 2 * inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
+                damage += inventory[player_equipment::EQUIPMENT_WIELD].to_damage;
                 damage = damage * 3;
                 distance = 30;
             }
@@ -86,8 +86,8 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         case 4:
             if (item.category_id == TV_ARROW) { // Composite Bow and Arrow
                 base_to_hit = py.misc.bth_with_bows;
-                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                plus_to_hit += 2 * inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
+                damage += inventory[player_equipment::EQUIPMENT_WIELD].to_damage;
                 damage = damage * 4;
                 distance = 35;
             }
@@ -95,8 +95,8 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         case 5:
             if (item.category_id == TV_BOLT) { // Light Crossbow and Bolt
                 base_to_hit = py.misc.bth_with_bows;
-                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                plus_to_hit += 2 * inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
+                damage += inventory[player_equipment::EQUIPMENT_WIELD].to_damage;
                 damage = damage * 3;
                 distance = 25;
             }
@@ -104,8 +104,8 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         case 6:
             if (item.category_id == TV_BOLT) { // Heavy Crossbow and Bolt
                 base_to_hit = py.misc.bth_with_bows;
-                plus_to_hit += 2 * inventory[EQUIPMENT_WIELD].to_hit;
-                damage += inventory[EQUIPMENT_WIELD].to_damage;
+                plus_to_hit += 2 * inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
+                damage += inventory[player_equipment::EQUIPMENT_WIELD].to_damage;
                 damage = damage * 4;
                 distance = 35;
             }

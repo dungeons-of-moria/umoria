@@ -218,7 +218,7 @@ static bool sv_write() {
     for (int i = 0; i < py.unique_inventory_items; i++) {
         wr_item(inventory[i]);
     }
-    for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+    for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         wr_item(inventory[i]);
     }
     wr_short((uint16_t) py.inventory_weight);
@@ -659,13 +659,13 @@ bool loadGame(bool &generate) {
             missiles_counter = rd_short();
             dg.game_turn = rd_long();
             py.unique_inventory_items = rd_short();
-            if (py.unique_inventory_items > EQUIPMENT_WIELD) {
+            if (py.unique_inventory_items > player_equipment::EQUIPMENT_WIELD) {
                 goto error;
             }
             for (int i = 0; i < py.unique_inventory_items; i++) {
                 rd_item(inventory[i]);
             }
-            for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+            for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
                 rd_item(inventory[i]);
             }
             py.inventory_weight = rd_short();

@@ -43,24 +43,24 @@ static int inventoryItemIdOfCursedEquipment() {
     int item_count = 0;
     int items[6];
 
-    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        items[item_count++] = EQUIPMENT_BODY;
+    if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
+        items[item_count++] = player_equipment::EQUIPMENT_BODY;
     }
-    if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        items[item_count++] = EQUIPMENT_ARM;
+    if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
+        items[item_count++] = player_equipment::EQUIPMENT_ARM;
     }
-    if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        items[item_count++] = EQUIPMENT_OUTER;
+    if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
+        items[item_count++] = player_equipment::EQUIPMENT_OUTER;
     }
-    if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        items[item_count++] = EQUIPMENT_HANDS;
+    if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
+        items[item_count++] = player_equipment::EQUIPMENT_HANDS;
     }
-    if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        items[item_count++] = EQUIPMENT_HEAD;
+    if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
+        items[item_count++] = player_equipment::EQUIPMENT_HEAD;
     }
     // also enchant boots
-    if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        items[item_count++] = EQUIPMENT_FEET;
+    if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
+        items[item_count++] = player_equipment::EQUIPMENT_FEET;
     }
 
     int item_id = 0;
@@ -69,25 +69,25 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if ((inventory[EQUIPMENT_BODY].flags & TR_CURSED) != 0u) {
-        item_id = EQUIPMENT_BODY;
-    } else if ((inventory[EQUIPMENT_ARM].flags & TR_CURSED) != 0u) {
-        item_id = EQUIPMENT_ARM;
-    } else if ((inventory[EQUIPMENT_OUTER].flags & TR_CURSED) != 0u) {
-        item_id = EQUIPMENT_OUTER;
-    } else if ((inventory[EQUIPMENT_HEAD].flags & TR_CURSED) != 0u) {
-        item_id = EQUIPMENT_HEAD;
-    } else if ((inventory[EQUIPMENT_HANDS].flags & TR_CURSED) != 0u) {
-        item_id = EQUIPMENT_HANDS;
-    } else if ((inventory[EQUIPMENT_FEET].flags & TR_CURSED) != 0u) {
-        item_id = EQUIPMENT_FEET;
+    if ((inventory[player_equipment::EQUIPMENT_BODY].flags & TR_CURSED) != 0u) {
+        item_id = player_equipment::EQUIPMENT_BODY;
+    } else if ((inventory[player_equipment::EQUIPMENT_ARM].flags & TR_CURSED) != 0u) {
+        item_id = player_equipment::EQUIPMENT_ARM;
+    } else if ((inventory[player_equipment::EQUIPMENT_OUTER].flags & TR_CURSED) != 0u) {
+        item_id = player_equipment::EQUIPMENT_OUTER;
+    } else if ((inventory[player_equipment::EQUIPMENT_HEAD].flags & TR_CURSED) != 0u) {
+        item_id = player_equipment::EQUIPMENT_HEAD;
+    } else if ((inventory[player_equipment::EQUIPMENT_HANDS].flags & TR_CURSED) != 0u) {
+        item_id = player_equipment::EQUIPMENT_HANDS;
+    } else if ((inventory[player_equipment::EQUIPMENT_FEET].flags & TR_CURSED) != 0u) {
+        item_id = player_equipment::EQUIPMENT_FEET;
     }
 
     return item_id;
 }
 
 static bool scrollEnchantWeaponToHit() {
-    Inventory_t &item = inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -111,7 +111,7 @@ static bool scrollEnchantWeaponToHit() {
 }
 
 static bool scrollEnchantWeaponToDamage() {
-    Inventory_t &item = inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -226,7 +226,7 @@ static bool scrollConfuseMonster() {
 }
 
 static bool scrollEnchantWeapon() {
-    Inventory_t &item = inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -274,7 +274,7 @@ static bool scrollEnchantWeapon() {
 }
 
 static bool scrollCurseWeapon() {
-    Inventory_t &item = inventory[EQUIPMENT_WIELD];
+    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -340,30 +340,30 @@ static bool scrollEnchantArmor() {
 static bool scrollCurseArmor() {
     int item_id;
 
-    if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING && randomNumber(4) == 1) {
-        item_id = EQUIPMENT_BODY;
-    } else if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = EQUIPMENT_ARM;
-    } else if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = EQUIPMENT_OUTER;
-    } else if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = EQUIPMENT_HEAD;
-    } else if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = EQUIPMENT_HANDS;
-    } else if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = EQUIPMENT_FEET;
-    } else if (inventory[EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        item_id = EQUIPMENT_BODY;
-    } else if (inventory[EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        item_id = EQUIPMENT_ARM;
-    } else if (inventory[EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        item_id = EQUIPMENT_OUTER;
-    } else if (inventory[EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        item_id = EQUIPMENT_HEAD;
-    } else if (inventory[EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        item_id = EQUIPMENT_HANDS;
-    } else if (inventory[EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        item_id = EQUIPMENT_FEET;
+    if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING && randomNumber(4) == 1) {
+        item_id = player_equipment::EQUIPMENT_BODY;
+    } else if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = player_equipment::EQUIPMENT_ARM;
+    } else if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = player_equipment::EQUIPMENT_OUTER;
+    } else if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = player_equipment::EQUIPMENT_HEAD;
+    } else if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = player_equipment::EQUIPMENT_HANDS;
+    } else if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = player_equipment::EQUIPMENT_FEET;
+    } else if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
+        item_id = player_equipment::EQUIPMENT_BODY;
+    } else if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
+        item_id = player_equipment::EQUIPMENT_ARM;
+    } else if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
+        item_id = player_equipment::EQUIPMENT_OUTER;
+    } else if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
+        item_id = player_equipment::EQUIPMENT_HEAD;
+    } else if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
+        item_id = player_equipment::EQUIPMENT_HANDS;
+    } else if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
+        item_id = player_equipment::EQUIPMENT_FEET;
     } else {
         item_id = 0;
     }

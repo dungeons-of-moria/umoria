@@ -95,29 +95,29 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
 // Return a string describing how a given equipment item is carried. -CJS-
 const char *playerItemWearingDescription(int body_location) {
     switch (body_location) {
-        case EQUIPMENT_WIELD:
+        case player_equipment::EQUIPMENT_WIELD:
             return "wielding";
-        case EQUIPMENT_HEAD:
+        case player_equipment::EQUIPMENT_HEAD:
             return "wearing on your head";
-        case EQUIPMENT_NECK:
+        case player_equipment::EQUIPMENT_NECK:
             return "wearing around your neck";
-        case EQUIPMENT_BODY:
+        case player_equipment::EQUIPMENT_BODY:
             return "wearing on your body";
-        case EQUIPMENT_ARM:
+        case player_equipment::EQUIPMENT_ARM:
             return "wearing on your arm";
-        case EQUIPMENT_HANDS:
+        case player_equipment::EQUIPMENT_HANDS:
             return "wearing on your hands";
-        case EQUIPMENT_RIGHT:
+        case player_equipment::EQUIPMENT_RIGHT:
             return "wearing on your right hand";
-        case EQUIPMENT_LEFT:
+        case player_equipment::EQUIPMENT_LEFT:
             return "wearing on your left hand";
-        case EQUIPMENT_FEET:
+        case player_equipment::EQUIPMENT_FEET:
             return "wearing on your feet";
-        case EQUIPMENT_OUTER:
+        case player_equipment::EQUIPMENT_OUTER:
             return "wearing about your body";
-        case EQUIPMENT_LIGHT:
+        case player_equipment::EQUIPMENT_LIGHT:
             return "using to light the way";
-        case EQUIPMENT_AUX:
+        case player_equipment::EQUIPMENT_AUX:
             return "holding ready by your side";
         default:
             return "carrying in your pack";
@@ -126,33 +126,33 @@ const char *playerItemWearingDescription(int body_location) {
 
 static const char *itemPositionDescription(int positionID, uint16_t weight) {
     switch (positionID) {
-        case EQUIPMENT_WIELD:
+        case player_equipment::EQUIPMENT_WIELD:
             if (py.stats.used[A_STR] * 15 < weight) {
                 return "Just lifting";
             }
 
             return "Wielding";
-        case EQUIPMENT_HEAD:
+        case player_equipment::EQUIPMENT_HEAD:
             return "On head";
-        case EQUIPMENT_NECK:
+        case player_equipment::EQUIPMENT_NECK:
             return "Around neck";
-        case EQUIPMENT_BODY:
+        case player_equipment::EQUIPMENT_BODY:
             return "On body";
-        case EQUIPMENT_ARM:
+        case player_equipment::EQUIPMENT_ARM:
             return "On arm";
-        case EQUIPMENT_HANDS:
+        case player_equipment::EQUIPMENT_HANDS:
             return "On hands";
-        case EQUIPMENT_RIGHT:
+        case player_equipment::EQUIPMENT_RIGHT:
             return "On right hand";
-        case EQUIPMENT_LEFT:
+        case player_equipment::EQUIPMENT_LEFT:
             return "On left hand";
-        case EQUIPMENT_FEET:
+        case player_equipment::EQUIPMENT_FEET:
             return "On feet";
-        case EQUIPMENT_OUTER:
+        case player_equipment::EQUIPMENT_OUTER:
             return "About body";
-        case EQUIPMENT_LIGHT:
+        case player_equipment::EQUIPMENT_LIGHT:
             return "Light source";
-        case EQUIPMENT_AUX:
+        case player_equipment::EQUIPMENT_AUX:
             return "Spare weapon";
         default:
             return "Unknown value";
@@ -162,7 +162,7 @@ static const char *itemPositionDescription(int positionID, uint16_t weight) {
 // Displays equipment items from r1 to end -RAK-
 // Keep display as far right as possible. -CJS-
 int displayEquipment(bool weighted, int column) {
-    vtype_t descriptions[PLAYER_INVENTORY_SIZE - EQUIPMENT_WIELD];
+    vtype_t descriptions[PLAYER_INVENTORY_SIZE - player_equipment::EQUIPMENT_WIELD];
 
     int len = 79 - column;
 
@@ -175,7 +175,7 @@ int displayEquipment(bool weighted, int column) {
 
     // Range of equipment
     int line = 0;
-    for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+    for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (inventory[i].category_id == TV_NOTHING) {
             continue;
         }
@@ -211,7 +211,7 @@ int displayEquipment(bool weighted, int column) {
 
     // Range of equipment
     line = 0;
-    for (int i = EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+    for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (inventory[i].category_id == TV_NOTHING) {
             continue;
         }
@@ -385,7 +385,7 @@ static bool inventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (py.unique_inventory_items >= EQUIPMENT_WIELD && (game.doing_inventory_command == 0)) {
+    if (py.unique_inventory_items >= player_equipment::EQUIPMENT_WIELD && (game.doing_inventory_command == 0)) {
         printMessage("You will have to drop something first.");
         return selecting;
     }
@@ -442,14 +442,14 @@ static bool inventoryWearWieldItem(bool selecting) {
 }
 
 static void inventoryUnwieldItem() {
-    if (inventory[EQUIPMENT_WIELD].category_id == TV_NOTHING && inventory[EQUIPMENT_AUX].category_id == TV_NOTHING) {
+    if (inventory[player_equipment::EQUIPMENT_WIELD].category_id == TV_NOTHING && inventory[player_equipment::EQUIPMENT_AUX].category_id == TV_NOTHING) {
         printMessage("But you are wielding no weapons.");
         return;
     }
 
-    if ((inventory[EQUIPMENT_WIELD].flags & TR_CURSED) != 0u) {
+    if ((inventory[player_equipment::EQUIPMENT_WIELD].flags & TR_CURSED) != 0u) {
         obj_desc_t description = {'\0'};
-        itemDescription(description, inventory[EQUIPMENT_WIELD], false);
+        itemDescription(description, inventory[player_equipment::EQUIPMENT_WIELD], false);
 
         obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "The %s you are wielding appears to be cursed.", description);
@@ -461,23 +461,23 @@ static void inventoryUnwieldItem() {
 
     game.player_free_turn = false;
 
-    Inventory_t savedItem = inventory[EQUIPMENT_AUX];
-    inventory[EQUIPMENT_AUX] = inventory[EQUIPMENT_WIELD];
-    inventory[EQUIPMENT_WIELD] = savedItem;
+    Inventory_t savedItem = inventory[player_equipment::EQUIPMENT_AUX];
+    inventory[player_equipment::EQUIPMENT_AUX] = inventory[player_equipment::EQUIPMENT_WIELD];
+    inventory[player_equipment::EQUIPMENT_WIELD] = savedItem;
 
     if (screen_state == EQUIP_SCR) {
         screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
     }
 
-    playerAdjustBonusesForItem(inventory[EQUIPMENT_AUX], -1);  // Subtract bonuses
-    playerAdjustBonusesForItem(inventory[EQUIPMENT_WIELD], 1); // Add bonuses
+    playerAdjustBonusesForItem(inventory[player_equipment::EQUIPMENT_AUX], -1);  // Subtract bonuses
+    playerAdjustBonusesForItem(inventory[player_equipment::EQUIPMENT_WIELD], 1); // Add bonuses
 
-    if (inventory[EQUIPMENT_WIELD].category_id != TV_NOTHING) {
+    if (inventory[player_equipment::EQUIPMENT_WIELD].category_id != TV_NOTHING) {
         obj_desc_t msgLabel = {'\0'};
         (void) strcpy(msgLabel, "Primary weapon   : ");
 
         obj_desc_t description = {'\0'};
-        itemDescription(description, inventory[EQUIPMENT_WIELD], true);
+        itemDescription(description, inventory[player_equipment::EQUIPMENT_WIELD], true);
 
         printMessage(strcat(msgLabel, description));
     } else {
@@ -562,38 +562,38 @@ static int inventoryGetSlotToWearEquipment(int item) {
         case TV_SWORD:
         case TV_DIGGING:
         case TV_SPIKE:
-            slot = EQUIPMENT_WIELD;
+            slot = player_equipment::EQUIPMENT_WIELD;
             break;
         case TV_LIGHT:
-            slot = EQUIPMENT_LIGHT;
+            slot = player_equipment::EQUIPMENT_LIGHT;
             break;
         case TV_BOOTS:
-            slot = EQUIPMENT_FEET;
+            slot = player_equipment::EQUIPMENT_FEET;
             break;
         case TV_GLOVES:
-            slot = EQUIPMENT_HANDS;
+            slot = player_equipment::EQUIPMENT_HANDS;
             break;
         case TV_CLOAK:
-            slot = EQUIPMENT_OUTER;
+            slot = player_equipment::EQUIPMENT_OUTER;
             break;
         case TV_HELM:
-            slot = EQUIPMENT_HEAD;
+            slot = player_equipment::EQUIPMENT_HEAD;
             break;
         case TV_SHIELD:
-            slot = EQUIPMENT_ARM;
+            slot = player_equipment::EQUIPMENT_ARM;
             break;
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
-            slot = EQUIPMENT_BODY;
+            slot = player_equipment::EQUIPMENT_BODY;
             break;
         case TV_AMULET:
-            slot = EQUIPMENT_NECK;
+            slot = player_equipment::EQUIPMENT_NECK;
             break;
         case TV_RING:
-            if (inventory[EQUIPMENT_RIGHT].category_id == TV_NOTHING) {
-                slot = EQUIPMENT_RIGHT;
-            } else if (inventory[EQUIPMENT_LEFT].category_id == TV_NOTHING) {
-                slot = EQUIPMENT_LEFT;
+            if (inventory[player_equipment::EQUIPMENT_RIGHT].category_id == TV_NOTHING) {
+                slot = player_equipment::EQUIPMENT_RIGHT;
+            } else if (inventory[player_equipment::EQUIPMENT_LEFT].category_id == TV_NOTHING) {
+                slot = player_equipment::EQUIPMENT_LEFT;
             } else {
                 slot = 0;
 
@@ -603,14 +603,14 @@ static int inventoryGetSlotToWearEquipment(int item) {
                     if (!getCommand("Put ring on which hand (l/r/L/R)?", query)) {
                         slot = -1;
                     } else if (query == 'l') {
-                        slot = EQUIPMENT_LEFT;
+                        slot = player_equipment::EQUIPMENT_LEFT;
                     } else if (query == 'r') {
-                        slot = EQUIPMENT_RIGHT;
+                        slot = player_equipment::EQUIPMENT_RIGHT;
                     } else {
                         if (query == 'L') {
-                            slot = EQUIPMENT_LEFT;
+                            slot = player_equipment::EQUIPMENT_LEFT;
                         } else if (query == 'R') {
-                            slot = EQUIPMENT_RIGHT;
+                            slot = player_equipment::EQUIPMENT_RIGHT;
                         } else {
                             terminalBellSound();
                         }
@@ -637,7 +637,7 @@ static void inventoryItemIsCursedMessage(int itemID) {
     obj_desc_t itemText = {'\0'};
     (void) sprintf(itemText, "The %s you are ", description);
 
-    if (itemID == EQUIPMENT_HEAD) {
+    if (itemID == player_equipment::EQUIPMENT_HEAD) {
         (void) strcat(itemText, "wielding ");
     } else {
         (void) strcat(itemText, "wearing ");
@@ -849,9 +849,9 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 playerAdjustBonusesForItem(*item, 1);
 
                 const char *text = nullptr;
-                if (slot == EQUIPMENT_WIELD) {
+                if (slot == player_equipment::EQUIPMENT_WIELD) {
                     text = "You are wielding";
-                } else if (slot == EQUIPMENT_LIGHT) {
+                } else if (slot == player_equipment::EQUIPMENT_LIGHT) {
                     text = "Your light source is";
                 } else {
                     text = "You are wearing";
@@ -861,7 +861,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 itemDescription(description, *item, true);
 
                 // Get the right equipment letter.
-                itemToTakeOff = EQUIPMENT_WIELD;
+                itemToTakeOff = player_equipment::EQUIPMENT_WIELD;
                 item_id = 0;
 
                 while (itemToTakeOff != slot) {
@@ -875,7 +875,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 printMessage(msg);
 
                 // this is a new weapon, so clear heavy flag
-                if (slot == EQUIPMENT_WIELD) {
+                if (slot == player_equipment::EQUIPMENT_WIELD) {
                     py.weapon_is_heavy = false;
                 }
                 playerStrength();
@@ -1099,7 +1099,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
     int screen_id = 1;
     bool full = false;
 
-    if (item_id_end > EQUIPMENT_WIELD) {
+    if (item_id_end > player_equipment::EQUIPMENT_WIELD) {
         full = true;
 
         if (py.unique_inventory_items == 0) {
@@ -1226,9 +1226,9 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                         int m;
 
                         // Note: loop to find the inventory item
-                        for (m = item_id_start; m < EQUIPMENT_WIELD && (inventory[m].inscription[0] != which || inventory[m].inscription[1] != '\0'); m++);
+                        for (m = item_id_start; m < player_equipment::EQUIPMENT_WIELD && (inventory[m].inscription[0] != which || inventory[m].inscription[1] != '\0'); m++);
 
-                        if (m < EQUIPMENT_WIELD) {
+                        if (m < player_equipment::EQUIPMENT_WIELD) {
                             command_key_id = m;
                         } else {
                             command_key_id = -1;

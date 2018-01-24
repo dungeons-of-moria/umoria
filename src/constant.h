@@ -95,20 +95,6 @@ constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
 constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
-// magic numbers for players equipment inventory array
-constexpr uint8_t EQUIPMENT_WIELD = 22; // must be first item in equipment list
-constexpr uint8_t EQUIPMENT_HEAD = 23;
-constexpr uint8_t EQUIPMENT_NECK = 24;
-constexpr uint8_t EQUIPMENT_BODY = 25;
-constexpr uint8_t EQUIPMENT_ARM = 26;
-constexpr uint8_t EQUIPMENT_HANDS = 27;
-constexpr uint8_t EQUIPMENT_RIGHT = 28;
-constexpr uint8_t EQUIPMENT_LEFT = 29;
-constexpr uint8_t EQUIPMENT_FEET = 30;
-constexpr uint8_t EQUIPMENT_OUTER = 31;
-constexpr uint8_t EQUIPMENT_LIGHT = 32;
-constexpr uint8_t EQUIPMENT_AUX = 33;
-
 // Attribute indexes -CJS-
 constexpr uint8_t A_STR = 0;
 constexpr uint8_t A_INT = 1;
@@ -116,7 +102,6 @@ constexpr uint8_t A_WIS = 2;
 constexpr uint8_t A_DEX = 3;
 constexpr uint8_t A_CON = 4;
 constexpr uint8_t A_CHR = 5;
-
 
 // Fval definitions: these describe the various types of dungeon floors and
 // walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL

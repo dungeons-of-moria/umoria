@@ -100,7 +100,7 @@ static void playerBashAttack(int y, int x) {
     }
 
     int base_to_hit = py.stats.used[A_STR];
-    base_to_hit += inventory[EQUIPMENT_ARM].weight / 2;
+    base_to_hit += inventory[player_equipment::EQUIPMENT_ARM].weight / 2;
     base_to_hit += py.misc.weight / 10;
 
     if (!monster.lit) {
@@ -114,8 +114,8 @@ static void playerBashAttack(int y, int x) {
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
-        int damage = diceRoll(inventory[EQUIPMENT_ARM].damage);
-        damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.used[A_STR], 0, damage, py_class_level_adj::CLASS_BTH);
+        int damage = diceRoll(inventory[player_equipment::EQUIPMENT_ARM].damage);
+        damage = playerWeaponCriticalBlow(inventory[player_equipment::EQUIPMENT_ARM].weight / 4 + py.stats.used[A_STR], 0, damage, py_class_level_adj::CLASS_BTH);
         damage += py.misc.weight / 60;
         damage += 3;
 
