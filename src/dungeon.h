@@ -8,6 +8,14 @@
 
 #pragma once
 
+// Dungeon size parameters
+constexpr uint8_t MAX_HEIGHT = 66; // Multiple of 11; >= 22
+constexpr uint8_t MAX_WIDTH = 198; // Multiple of 33; >= 66
+constexpr uint8_t SCREEN_HEIGHT = 22;
+constexpr uint8_t SCREEN_WIDTH = 66;
+constexpr uint8_t QUART_HEIGHT = (SCREEN_HEIGHT / 4);
+constexpr uint8_t QUART_WIDTH = (SCREEN_WIDTH / 4);
+
 // DungeonObject_t is a base data object.
 // This holds data for any non-living object in the game such as
 // stairs, rubble, doors, gold, potions, weapons, wands, etc.

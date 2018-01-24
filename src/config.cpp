@@ -40,4 +40,22 @@ namespace config {
         bool show_inventory_weights = false; // Display weights in inventory
         bool error_beep_sound = true;        // Beep for invalid characters
     }
+
+    // Dungeon generation values
+    // Note: The entire design of dungeon can be changed by only slight adjustments here.
+    namespace dungeon {
+        const uint8_t DUN_RANDOM_DIR = 9;       // 1/Chance of Random direction
+        const uint8_t DUN_DIR_CHANGE = 70;      // Chance of changing direction (99 max)
+        const uint8_t DUN_TUNNELING = 15;       // Chance of extra tunneling
+        const uint8_t DUN_ROOMS_MEAN = 32;      // Mean of # of rooms, standard dev2
+        const uint8_t DUN_ROOM_DOORS = 25;      // % chance of room doors
+        const uint8_t DUN_TUNNEL_DOORS = 15;    // % chance of doors at tunnel junctions
+        const uint8_t DUN_STREAMER_DENSITY = 5; // Density of streamers
+        const uint8_t DUN_STREAMER_WIDTH = 2;   // Width of streamers
+        const uint8_t DUN_MAGMA_STREAMER = 3;   // Number of magma streamers
+        const uint8_t DUN_MAGMA_TREASURE = 90;  // 1/x chance of treasure per magma
+        const uint8_t DUN_QUARTZ_STREAMER = 2;  // Number of quartz streamers
+        const uint8_t DUN_QUARTZ_TREASURE = 40; // 1/x chance of treasure per quartz
+        const uint16_t DUN_UNUSUAL_ROOMS = 300; // Level/x chance of unusual room
+    }
 }

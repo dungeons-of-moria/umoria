@@ -138,11 +138,11 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
     }
 
     // Place streamer into dungeon
-    int t1 = 2 * DUN_STREAMER_WIDTH + 1; // Constants
-    int t2 = DUN_STREAMER_WIDTH + 1;
+    int t1 = 2 * config::dungeon::DUN_STREAMER_WIDTH + 1; // Constants
+    int t2 = config::dungeon::DUN_STREAMER_WIDTH + 1;
 
     do {
-        for (int i = 0; i < DUN_STREAMER_DENSITY; i++) {
+        for (int i = 0; i < config::dungeon::DUN_STREAMER_DENSITY; i++) {
             int y = pos_y + randomNumber(t1) - t2;
             int x = pos_x + randomNumber(t1) - t2;
 
@@ -817,8 +817,8 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
             stop_flag = true;
         }
 
-        if (randomNumber(100) > DUN_DIR_CHANGE) {
-            if (randomNumber(DUN_RANDOM_DIR) == 1) {
+        if (randomNumber(100) > config::dungeon::DUN_DIR_CHANGE) {
+            if (randomNumber(config::dungeon::DUN_RANDOM_DIR) == 1) {
                 chanceOfRandomDirection(row_dir, col_dir);
             } else {
                 pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
@@ -829,7 +829,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
         int tmp_col = x_start + col_dir;
 
         while (!coordInBounds(Coord_t{tmp_row, tmp_col})) {
-            if (randomNumber(DUN_RANDOM_DIR) == 1) {
+            if (randomNumber(config::dungeon::DUN_RANDOM_DIR) == 1) {
                 chanceOfRandomDirection(row_dir, col_dir);
             } else {
                 pickCorrectDirection(row_dir, col_dir, y_start, x_start, y_end, x_end);
@@ -888,7 +888,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                     door_flag = true;
                 }
 
-                if (randomNumber(100) > DUN_TUNNELING) {
+                if (randomNumber(100) > config::dungeon::DUN_TUNNELING) {
                     // make sure that tunnel has gone a reasonable distance
                     // before stopping it, this helps prevent isolated rooms
                     tmp_row = y_start - start_row;
@@ -921,7 +921,7 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
         Tile_t &tile = dg.floor[walls_tk[i].y][walls_tk[i].x];
 
         if (tile.feature_id == TMP2_WALL) {
-            if (randomNumber(100) < DUN_ROOM_DOORS) {
+            if (randomNumber(100) < config::dungeon::DUN_ROOM_DOORS) {
                 dungeonPlaceDoor(walls_tk[i].y, walls_tk[i].x);
             } else {
                 // these have to be doorways to rooms
@@ -944,7 +944,7 @@ static bool dungeonIsNextTo(int y, int x) {
 
 // Places door at y, x position if at least 2 walls found
 static void dungeonPlaceDoorIfNextToTwoWalls(int y, int x) {
-    if (dg.floor[y][x].feature_id == TILE_CORR_FLOOR && randomNumber(100) > DUN_TUNNEL_DOORS && dungeonIsNextTo(y, x)) {
+    if (dg.floor[y][x].feature_id == TILE_CORR_FLOOR && randomNumber(100) > config::dungeon::DUN_TUNNEL_DOORS && dungeonIsNextTo(y, x)) {
         dungeonPlaceDoor(y, x);
     }
 }
@@ -990,7 +990,7 @@ static void dungeonGenerate() {
         }
     }
 
-    int random_room_count = randomNumberNormalDistribution(DUN_ROOMS_MEAN, 2);
+    int random_room_count = randomNumberNormalDistribution(config::dungeon::DUN_ROOMS_MEAN, 2);
     for (int i = 0; i < random_room_count; i++) {
         room_map[randomNumber(row_rooms) - 1][randomNumber(col_rooms) - 1] = true;
     }
@@ -1004,7 +1004,7 @@ static void dungeonGenerate() {
             if (room_map[row][col]) {
                 y_locations[location_id] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
                 x_locations[location_id] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
-                if (dg.current_level > randomNumber(DUN_UNUSUAL_ROOMS)) {
+                if (dg.current_level > randomNumber(config::dungeon::DUN_UNUSUAL_ROOMS)) {
                     int room_type = randomNumber(3);
 
                     if (room_type == 1) {
@@ -1049,11 +1049,11 @@ static void dungeonGenerate() {
 
     // Generate walls and streamers
     dungeonFillEmptyTilesWith(TILE_GRANITE_WALL);
-    for (int i = 0; i < DUN_MAGMA_STREAMER; i++) {
-        dungeonPlaceStreamerRock(TILE_MAGMA_WALL, DUN_MAGMA_TREASURE);
+    for (int i = 0; i < config::dungeon::DUN_MAGMA_STREAMER; i++) {
+        dungeonPlaceStreamerRock(TILE_MAGMA_WALL, config::dungeon::DUN_MAGMA_TREASURE);
     }
-    for (int i = 0; i < DUN_QUARTZ_STREAMER; i++) {
-        dungeonPlaceStreamerRock(TILE_QUARTZ_WALL, DUN_QUARTZ_TREASURE);
+    for (int i = 0; i < config::dungeon::DUN_QUARTZ_STREAMER; i++) {
+        dungeonPlaceStreamerRock(TILE_QUARTZ_WALL, config::dungeon::DUN_QUARTZ_TREASURE);
     }
     dungeonPlaceBoundaryWalls();
 

@@ -37,4 +37,20 @@ namespace config {
         extern bool show_inventory_weights;
         extern bool error_beep_sound;
     }
+
+    namespace dungeon {
+        extern const uint8_t DUN_RANDOM_DIR;
+        extern const uint8_t DUN_DIR_CHANGE;
+        extern const uint8_t DUN_TUNNELING;
+        extern const uint8_t DUN_ROOMS_MEAN;
+        extern const uint8_t DUN_ROOM_DOORS;
+        extern const uint8_t DUN_TUNNEL_DOORS;
+        extern const uint8_t DUN_STREAMER_DENSITY;
+        extern const uint8_t DUN_STREAMER_WIDTH;
+        extern const uint8_t DUN_MAGMA_STREAMER;
+        extern const uint8_t DUN_MAGMA_TREASURE;
+        extern const uint8_t DUN_QUARTZ_STREAMER;
+        extern const uint8_t DUN_QUARTZ_TREASURE;
+        extern const uint16_t DUN_UNUSUAL_ROOMS;
+    }
 }

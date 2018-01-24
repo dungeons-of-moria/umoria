@@ -27,30 +27,6 @@
 // How many messages to save in the buffer -CJS-
 constexpr uint8_t MESSAGE_HISTORY_SIZE = 22;
 
-// Dungeon size parameters
-constexpr uint8_t MAX_HEIGHT = 66; // Multiple of 11; >= 22
-constexpr uint8_t MAX_WIDTH = 198; // Multiple of 33; >= 66
-constexpr uint8_t SCREEN_HEIGHT = 22;
-constexpr uint8_t SCREEN_WIDTH = 66;
-constexpr uint8_t QUART_HEIGHT = (SCREEN_HEIGHT / 4);
-constexpr uint8_t QUART_WIDTH = (SCREEN_WIDTH / 4);
-
-// Dungeon generation values
-// Note: The entire design of dungeon can be changed by only slight adjustments here.
-constexpr uint8_t DUN_RANDOM_DIR = 9;       // 1/Chance of Random direction
-constexpr uint8_t DUN_DIR_CHANGE = 70;      // Chance of changing direction (99 max)
-constexpr uint8_t DUN_TUNNELING = 15;       // Chance of extra tunneling
-constexpr uint8_t DUN_ROOMS_MEAN = 32;      // Mean of # of rooms, standard dev2
-constexpr uint8_t DUN_ROOM_DOORS = 25;      // % chance of room doors
-constexpr uint8_t DUN_TUNNEL_DOORS = 15;    // % chance of doors at tunnel junctions
-constexpr uint8_t DUN_STREAMER_DENSITY = 5; // Density of streamers
-constexpr uint8_t DUN_STREAMER_WIDTH = 2;   // Width of streamers
-constexpr uint8_t DUN_MAGMA_STREAMER = 3;   // Number of magma streamers
-constexpr uint8_t DUN_MAGMA_TREASURE = 90;  // 1/x chance of treasure per magma
-constexpr uint8_t DUN_QUARTZ_STREAMER = 2;  // Number of quartz streamers
-constexpr uint8_t DUN_QUARTZ_TREASURE = 40; // 1/x chance of treasure per quartz
-constexpr uint16_t DUN_UNUSUAL_ROOMS = 300; // Level/x chance of unusual room
-
 // Store constants
 constexpr uint8_t MAX_OWNERS = 18;                // Number of owners to choose from
 constexpr uint8_t MAX_STORES = 6;                 // Number of different stores
