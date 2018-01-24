@@ -57,6 +57,7 @@
 #include "character.h"
 #include "dice.h"
 #include "ui.h"           // before dungeon.h
+#include "dungeon_tile.h"
 #include "dungeon.h"
 #include "game.h"
 #include "helpers.h"

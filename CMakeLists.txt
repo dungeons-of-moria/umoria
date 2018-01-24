@@ -79,6 +79,7 @@ set(
         ${source_dir}/curses.h
         ${source_dir}/dice.h
         ${source_dir}/dungeon.h
+        ${source_dir}/dungeon_tile.h
         ${source_dir}/game.h
         ${source_dir}/headers.h
         ${source_dir}/helpers.h

@@ -95,29 +95,6 @@ constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
 constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
-// Fval definitions: these describe the various types of dungeon floors and
-// walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
-// will have to be changed, also the save routines will have to be changed.
-constexpr uint8_t TILE_NULL_WALL = 0;
-constexpr uint8_t TILE_DARK_FLOOR = 1;
-constexpr uint8_t TILE_LIGHT_FLOOR = 2;
-constexpr uint8_t MAX_CAVE_ROOM = 2;
-constexpr uint8_t TILE_CORR_FLOOR = 3;
-constexpr uint8_t TILE_BLOCKED_FLOOR = 4; // a corridor space with cl/st/se door or rubble
-constexpr uint8_t MAX_CAVE_FLOOR = 4;
-
-constexpr uint8_t MAX_OPEN_SPACE = 3;
-constexpr uint8_t MIN_CLOSED_SPACE = 4;
-
-constexpr uint8_t TMP1_WALL = 8;
-constexpr uint8_t TMP2_WALL = 9;
-
-constexpr uint8_t MIN_CAVE_WALL = 12;
-constexpr uint8_t TILE_GRANITE_WALL = 12;
-constexpr uint8_t TILE_MAGMA_WALL = 13;
-constexpr uint8_t TILE_QUARTZ_WALL = 14;
-constexpr uint8_t TILE_BOUNDARY_WALL = 15;
-
 // Class spell types
 constexpr uint8_t SPELL_TYPE_NONE = 0;
 constexpr uint8_t SPELL_TYPE_MAGE = 1;
