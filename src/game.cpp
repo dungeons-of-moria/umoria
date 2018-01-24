@@ -14,6 +14,8 @@
 // holds the previous rnd state
 static uint32_t old_seed;
 
+Game_t game = Game_t{};
+
 // gets a new random seed for the random number generator
 void seedsInitialize(uint32_t seed) {
     uint32_t clock_var;

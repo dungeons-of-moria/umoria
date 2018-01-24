@@ -34,9 +34,6 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
     // Show the game splash screen
     displaySplashScreen();
 
-    // Some necessary initializations
-    // all made into constants or initialized in `globals.cpp`
-
     // Grab a random seed from the clock
     seedsInitialize(static_cast<uint32_t>(seed));
 

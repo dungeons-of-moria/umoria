@@ -11,6 +11,9 @@
 #include "headers.h"
 #include "version.h"
 
+// High score file pointer
+FILE *highscore_fp;
+
 static uint8_t highScoreGenderLabel() {
     if (playerIsMale()) {
         return 'M';

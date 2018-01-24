@@ -17,6 +17,9 @@ static bool curses_on = false;
 // Spare window for saving the screen. -CJS-
 static WINDOW *save_screen;
 
+int eof_flag = 0;             // Is used to signal EOF/HANGUP condition
+bool panic_save = false;      // True if playing from a panic save
+
 // Set up the terminal into a suitable state -MRC-
 static void moriaTerminalInitialize() {
     raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!

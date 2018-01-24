@@ -12,6 +12,13 @@ static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON 
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
+// Track screen changes for inventory commands
+bool screen_has_changed = false;
+
+bool message_ready_to_print;            // Set with first message
+vtype_t messages[MESSAGE_HISTORY_SIZE]; // Saved message history -CJS-
+int16_t last_message_id = 0;            // Index of last message held in saved messages array
+
 // Calculates current boundaries -RAK-
 static void panelBounds() {
     dg.panel.top = dg.panel.row * (SCREEN_HEIGHT / 2);

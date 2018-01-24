@@ -15,6 +15,8 @@ Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 // Current treasure heap ptr
 int16_t current_treasure_id;
 
+int16_t missiles_counter = 0; // Counter for missiles
+
 // Should the object be enchanted -RAK-
 static bool magicShouldBeEnchanted(int chance) {
     return randomNumber(100) <= chance;

@@ -10,6 +10,10 @@
 
 #include "headers.h"
 
+// A horrible hack, needed because compact_monster() is called from
+// deep within updateMonsters() via monsterPlaceNew() and monsterSummon()
+int hack_monptr = -1;
+
 static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
 
 static bool monsterIsVisible(Monster_t const &monster) {

@@ -13,6 +13,9 @@
 // Player record for most player related info
 Player_t py = Player_t{};
 
+// Handle teleport traps
+bool teleport_player;
+
 static void playerResetFlags() {
     py.flags.see_invisible = false;
     py.flags.teleport = false;
