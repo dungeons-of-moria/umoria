@@ -100,12 +100,12 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         // Spell and Mana based on class: Mage or Clerical realm.
         if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
             clearScreen(); // makes spell list easier to read
-            playerCalculateAllowedSpellsCount(A_INT);
-            playerGainMana(A_INT);
+            playerCalculateAllowedSpellsCount(py_attrs::A_INT);
+            playerGainMana(py_attrs::A_INT);
         } else if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
-            playerCalculateAllowedSpellsCount(A_WIS);
+            playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
             clearScreen(); // force out the 'learn prayer' message
-            playerGainMana(A_WIS);
+            playerGainMana(py_attrs::A_WIS);
         }
 
         // Set some default values -MRC-
@@ -1566,12 +1566,12 @@ static void doWizardCommands(char com_val) {
             (void) playerCureConfusion();
             (void) playerCurePoison();
             (void) playerRemoveFear();
-            (void) playerStatRestore(A_STR);
-            (void) playerStatRestore(A_INT);
-            (void) playerStatRestore(A_WIS);
-            (void) playerStatRestore(A_CON);
-            (void) playerStatRestore(A_DEX);
-            (void) playerStatRestore(A_CHR);
+            (void) playerStatRestore(py_attrs::A_STR);
+            (void) playerStatRestore(py_attrs::A_INT);
+            (void) playerStatRestore(py_attrs::A_WIS);
+            (void) playerStatRestore(py_attrs::A_CON);
+            (void) playerStatRestore(py_attrs::A_DEX);
+            (void) playerStatRestore(py_attrs::A_CHR);
 
             if (py.flags.slow > 1) {
                 py.flags.slow = 1;

@@ -42,7 +42,7 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         plus_to_hit -= inventory[player_equipment::EQUIPMENT_WIELD].to_hit;
     }
 
-    distance = (((py.stats.used[A_STR] + 20) * 10) / weight);
+    distance = (((py.stats.used[py_attrs::A_STR] + 20) * 10) / weight);
     if (distance > 10) {
         distance = 10;
     }

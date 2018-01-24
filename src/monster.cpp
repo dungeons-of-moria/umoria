@@ -1546,7 +1546,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
                 printMessage("You feel weaker for a moment, but it passes.");
             } else if (randomNumber(2) == 1) {
                 printMessage("You feel weaker.");
-                (void) playerStatRandomDecrease(A_STR);
+                (void) playerStatRandomDecrease(py_attrs::A_STR);
             } else {
                 noticed = false;
             }
@@ -1624,7 +1624,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             }
             break;
         case 12: // Steal Money
-            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[py_attrs::A_DEX]) {
                 printMessage("You quickly protect your money pouch!");
             } else {
                 gold = (py.misc.au / 10) + randomNumber(25);
@@ -1642,7 +1642,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             }
             break;
         case 13: // Steal Object
-            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[A_DEX]) {
+            if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[py_attrs::A_DEX]) {
                 printMessage("You grab hold of your backpack!");
             } else {
                 inventoryDestroyItem(randomNumber(py.unique_inventory_items) - 1);
@@ -1664,7 +1664,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
                 printMessage("You feel clumsy for a moment, but it passes.");
             } else {
                 printMessage("You feel more clumsy.");
-                (void) playerStatRandomDecrease(A_DEX);
+                (void) playerStatRandomDecrease(py_attrs::A_DEX);
             }
             break;
         case 16: // Lose constitution
@@ -1673,7 +1673,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
                 printMessage("Your body resists the effects of the disease.");
             } else {
                 printMessage("Your health is damaged!");
-                (void) playerStatRandomDecrease(A_CON);
+                (void) playerStatRandomDecrease(py_attrs::A_CON);
             }
             break;
         case 17: // Lose intelligence
@@ -1682,7 +1682,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             if (py.flags.sustain_int) {
                 printMessage("But your mind quickly clears.");
             } else {
-                (void) playerStatRandomDecrease(A_INT);
+                (void) playerStatRandomDecrease(py_attrs::A_INT);
             }
             break;
         case 18: // Lose wisdom
@@ -1691,7 +1691,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
                 printMessage("Your wisdom is sustained.");
             } else {
                 printMessage("Your wisdom is drained.");
-                (void) playerStatRandomDecrease(A_WIS);
+                (void) playerStatRandomDecrease(py_attrs::A_WIS);
             }
             break;
         case 19: // Lose experience

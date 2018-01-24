@@ -574,9 +574,9 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -743,11 +743,11 @@ static void playerGainLevel() {
     Class_t const &player_class = classes[py.misc.class_id];
 
     if (player_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
-        playerCalculateAllowedSpellsCount(A_INT);
-        playerGainMana(A_INT);
+        playerCalculateAllowedSpellsCount(py_attrs::A_INT);
+        playerGainMana(py_attrs::A_INT);
     } else if (player_class.class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
-        playerCalculateAllowedSpellsCount(A_WIS);
-        playerGainMana(A_WIS);
+        playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
+        playerGainMana(py_attrs::A_WIS);
     }
 }
 

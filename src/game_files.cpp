@@ -202,27 +202,27 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     (void) fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
     (void) fprintf(file1, " Age%11s %6d", colon, (int) py.misc.age);
-    statsAsString(py.stats.used[A_STR], statDescription);
+    statsAsString(py.stats.used[py_attrs::A_STR], statDescription);
     (void) fprintf(file1, "   STR : %s\n", statDescription);
     (void) fprintf(file1, " Race%9s %-23s", colon, character_races[py.misc.race_id].name);
     (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.height);
-    statsAsString(py.stats.used[A_INT], statDescription);
+    statsAsString(py.stats.used[py_attrs::A_INT], statDescription);
     (void) fprintf(file1, "   INT : %s\n", statDescription);
     (void) fprintf(file1, " Sex%10s %-23s", colon, (playerGetGenderLabel()));
     (void) fprintf(file1, " Weight%8s %6d", colon, (int) py.misc.weight);
-    statsAsString(py.stats.used[A_WIS], statDescription);
+    statsAsString(py.stats.used[py_attrs::A_WIS], statDescription);
     (void) fprintf(file1, "   WIS : %s\n", statDescription);
     (void) fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.class_id].title);
     (void) fprintf(file1, " Social Class : %6d", py.misc.social_class);
-    statsAsString(py.stats.used[A_DEX], statDescription);
+    statsAsString(py.stats.used[py_attrs::A_DEX], statDescription);
     (void) fprintf(file1, "   DEX : %s\n", statDescription);
     (void) fprintf(file1, " Title%8s %-23s", colon, playerRankTitle());
     (void) fprintf(file1, "%22s", blank);
-    statsAsString(py.stats.used[A_CON], statDescription);
+    statsAsString(py.stats.used[py_attrs::A_CON], statDescription);
     (void) fprintf(file1, "   CON : %s\n", statDescription);
     (void) fprintf(file1, "%34s", blank);
     (void) fprintf(file1, "%26s", blank);
-    statsAsString(py.stats.used[A_CHR], statDescription);
+    statsAsString(py.stats.used[py_attrs::A_CHR], statDescription);
     (void) fprintf(file1, "   CHR : %s\n\n", statDescription);
 
     (void) fprintf(file1, " + To Hit    : %6d", py.misc.display_to_hit);
@@ -255,9 +255,9 @@ static void writeCharacterSheetToFile(FILE *file1) {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

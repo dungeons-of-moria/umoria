@@ -2050,7 +2050,7 @@ void spellWardingGlyph() {
 // Lose a strength point. -RAK-
 void spellLoseSTR() {
     if (!py.flags.sustain_str) {
-        (void) playerStatRandomDecrease(A_STR);
+        (void) playerStatRandomDecrease(py_attrs::A_STR);
         printMessage("You feel very sick.");
     } else {
         printMessage("You feel sick for a moment,  it passes.");
@@ -2060,7 +2060,7 @@ void spellLoseSTR() {
 // Lose an intelligence point. -RAK-
 void spellLoseINT() {
     if (!py.flags.sustain_int) {
-        (void) playerStatRandomDecrease(A_INT);
+        (void) playerStatRandomDecrease(py_attrs::A_INT);
         printMessage("You become very dizzy.");
     } else {
         printMessage("You become dizzy for a moment,  it passes.");
@@ -2070,7 +2070,7 @@ void spellLoseINT() {
 // Lose a wisdom point. -RAK-
 void spellLoseWIS() {
     if (!py.flags.sustain_wis) {
-        (void) playerStatRandomDecrease(A_WIS);
+        (void) playerStatRandomDecrease(py_attrs::A_WIS);
         printMessage("You feel very naive.");
     } else {
         printMessage("You feel naive for a moment,  it passes.");
@@ -2080,7 +2080,7 @@ void spellLoseWIS() {
 // Lose a dexterity point. -RAK-
 void spellLoseDEX() {
     if (!py.flags.sustain_dex) {
-        (void) playerStatRandomDecrease(A_DEX);
+        (void) playerStatRandomDecrease(py_attrs::A_DEX);
         printMessage("You feel very sore.");
     } else {
         printMessage("You feel sore for a moment,  it passes.");
@@ -2090,7 +2090,7 @@ void spellLoseDEX() {
 // Lose a constitution point. -RAK-
 void spellLoseCON() {
     if (!py.flags.sustain_con) {
-        (void) playerStatRandomDecrease(A_CON);
+        (void) playerStatRandomDecrease(py_attrs::A_CON);
         printMessage("You feel very sick.");
     } else {
         printMessage("You feel sick for a moment,  it passes.");
@@ -2100,7 +2100,7 @@ void spellLoseCON() {
 // Lose a charisma point. -RAK-
 void spellLoseCHR() {
     if (!py.flags.sustain_chr) {
-        (void) playerStatRandomDecrease(A_CHR);
+        (void) playerStatRandomDecrease(py_attrs::A_CHR);
         printMessage("Your skin starts to itch.");
     } else {
         printMessage("Your skin starts to itch, but feels better now.");
@@ -2132,11 +2132,11 @@ void spellLoseEXP(int32_t adjustment) {
         Class_t const &character_class = classes[py.misc.class_id];
 
         if (character_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
-            playerCalculateAllowedSpellsCount(A_INT);
-            playerGainMana(A_INT);
+            playerCalculateAllowedSpellsCount(py_attrs::A_INT);
+            playerGainMana(py_attrs::A_INT);
         } else if (character_class.class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
-            playerCalculateAllowedSpellsCount(A_WIS);
-            playerGainMana(A_WIS);
+            playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
+            playerGainMana(py_attrs::A_WIS);
         }
         printCharacterLevel();
         printCharacterTitle();

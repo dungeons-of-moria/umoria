@@ -80,12 +80,12 @@ static void characterGenerateStatsAndRace() {
     Race_t const &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
-    py.stats.max[A_STR] = createModifyPlayerStat(py.stats.max[A_STR], race.str_adjustment);
-    py.stats.max[A_INT] = createModifyPlayerStat(py.stats.max[A_INT], race.int_adjustment);
-    py.stats.max[A_WIS] = createModifyPlayerStat(py.stats.max[A_WIS], race.wis_adjustment);
-    py.stats.max[A_DEX] = createModifyPlayerStat(py.stats.max[A_DEX], race.dex_adjustment);
-    py.stats.max[A_CON] = createModifyPlayerStat(py.stats.max[A_CON], race.con_adjustment);
-    py.stats.max[A_CHR] = createModifyPlayerStat(py.stats.max[A_CHR], race.chr_adjustment);
+    py.stats.max[py_attrs::A_STR] = createModifyPlayerStat(py.stats.max[py_attrs::A_STR], race.str_adjustment);
+    py.stats.max[py_attrs::A_INT] = createModifyPlayerStat(py.stats.max[py_attrs::A_INT], race.int_adjustment);
+    py.stats.max[py_attrs::A_WIS] = createModifyPlayerStat(py.stats.max[py_attrs::A_WIS], race.wis_adjustment);
+    py.stats.max[py_attrs::A_DEX] = createModifyPlayerStat(py.stats.max[py_attrs::A_DEX], race.dex_adjustment);
+    py.stats.max[py_attrs::A_CON] = createModifyPlayerStat(py.stats.max[py_attrs::A_CON], race.con_adjustment);
+    py.stats.max[py_attrs::A_CHR] = createModifyPlayerStat(py.stats.max[py_attrs::A_CHR], race.chr_adjustment);
 
     py.misc.level = 1;
 
@@ -367,12 +367,12 @@ static void generateCharacterClass(uint8_t const class_id) {
     putString(klass.title, Coord_t{5, 15});
 
     // Adjust the stats for the class adjustment -RAK-
-    py.stats.max[A_STR] = createModifyPlayerStat(py.stats.max[A_STR], klass.strength);
-    py.stats.max[A_INT] = createModifyPlayerStat(py.stats.max[A_INT], klass.intelligence);
-    py.stats.max[A_WIS] = createModifyPlayerStat(py.stats.max[A_WIS], klass.wisdom);
-    py.stats.max[A_DEX] = createModifyPlayerStat(py.stats.max[A_DEX], klass.dexterity);
-    py.stats.max[A_CON] = createModifyPlayerStat(py.stats.max[A_CON], klass.constitution);
-    py.stats.max[A_CHR] = createModifyPlayerStat(py.stats.max[A_CHR], klass.charisma);
+    py.stats.max[py_attrs::A_STR] = createModifyPlayerStat(py.stats.max[py_attrs::A_STR], klass.strength);
+    py.stats.max[py_attrs::A_INT] = createModifyPlayerStat(py.stats.max[py_attrs::A_INT], klass.intelligence);
+    py.stats.max[py_attrs::A_WIS] = createModifyPlayerStat(py.stats.max[py_attrs::A_WIS], klass.wisdom);
+    py.stats.max[py_attrs::A_DEX] = createModifyPlayerStat(py.stats.max[py_attrs::A_DEX], klass.dexterity);
+    py.stats.max[py_attrs::A_CON] = createModifyPlayerStat(py.stats.max[py_attrs::A_CON], klass.constitution);
+    py.stats.max[py_attrs::A_CHR] = createModifyPlayerStat(py.stats.max[py_attrs::A_CHR], klass.charisma);
 
     for (auto i = 0; i < 6; i++) {
         py.stats.current[i] = py.stats.max[i];
@@ -458,11 +458,11 @@ static int monetaryValueCalculatedFromStat(uint8_t const stat) {
 }
 
 static void playerCalculateStartGold() {
-    auto value = monetaryValueCalculatedFromStat(py.stats.max[A_STR]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[A_INT]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[A_WIS]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[A_CON]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[A_DEX]);
+    auto value = monetaryValueCalculatedFromStat(py.stats.max[py_attrs::A_STR]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[py_attrs::A_INT]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[py_attrs::A_WIS]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[py_attrs::A_CON]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[py_attrs::A_DEX]);
 
     // Social Class adjustment
     auto new_gold = py.misc.social_class * 6 + randomNumber(25) + 325;
@@ -471,7 +471,7 @@ static void playerCalculateStartGold() {
     new_gold -= value;
 
     // Charisma adjustment
-    new_gold += monetaryValueCalculatedFromStat(py.stats.max[A_CHR]);
+    new_gold += monetaryValueCalculatedFromStat(py.stats.max[py_attrs::A_CHR]);
 
     // She charmed the banker into it! -CJS-
     if (!playerIsMale()) {

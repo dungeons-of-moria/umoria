@@ -127,7 +127,7 @@ const char *playerItemWearingDescription(int body_location) {
 static const char *itemPositionDescription(int positionID, uint16_t weight) {
     switch (positionID) {
         case player_equipment::EQUIPMENT_WIELD:
-            if (py.stats.used[A_STR] * 15 < weight) {
+            if (py.stats.used[py_attrs::A_STR] * 15 < weight) {
                 return "Just lifting";
             }
 

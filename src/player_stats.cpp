@@ -105,14 +105,14 @@ static int playerAttackBlowsStrength(int strength, int weight) {
 int playerAttackBlows(int weight, int &weight_to_hit) {
     weight_to_hit = 0;
 
-    int player_strength = py.stats.used[A_STR];
+    int player_strength = py.stats.used[py_attrs::A_STR];
 
     if (player_strength * 15 < weight) {
         weight_to_hit = player_strength * 15 - weight;
         return 1;
     }
 
-    int dexterity = playerAttackBlowsDexterity(py.stats.used[A_DEX]);
+    int dexterity = playerAttackBlowsDexterity(py.stats.used[py_attrs::A_DEX]);
     int strength = playerAttackBlowsStrength(player_strength, weight);
 
     return (int) blows_table[strength][dexterity];
@@ -148,7 +148,7 @@ int playerStatAdjustmentWisdomIntelligence(int stat) {
 // Adjustment for charisma -RAK-
 // Percent decrease or increase in price of goods
 int playerStatAdjustmentCharisma() {
-    int charisma = py.stats.used[A_CHR];
+    int charisma = py.stats.used[py_attrs::A_CHR];
 
     if (charisma > 117) {
         return 90;
@@ -210,7 +210,7 @@ int playerStatAdjustmentCharisma() {
 
 // Returns a character's adjustment to hit points -JWT-
 int playerStatAdjustmentConstitution() {
-    int con = py.stats.used[A_CON];
+    int con = py.stats.used[py_attrs::A_CON];
 
     if (con < 7) {
         return (con - 7);
@@ -267,18 +267,18 @@ static uint8_t playerModifyStat(int stat, int16_t amount) {
 void playerSetAndUseStat(int stat) {
     py.stats.used[stat] = playerModifyStat(stat, py.stats.modified[stat]);
 
-    if (stat == A_STR) {
+    if (stat == py_attrs::A_STR) {
         py.flags.status |= PY_STR_WGT;
         playerRecalculateBonuses();
-    } else if (stat == A_DEX) {
+    } else if (stat == py_attrs::A_DEX) {
         playerRecalculateBonuses();
-    } else if (stat == A_INT && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
-        playerCalculateAllowedSpellsCount(A_INT);
-        playerGainMana(A_INT);
-    } else if (stat == A_WIS && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
-        playerCalculateAllowedSpellsCount(A_WIS);
-        playerGainMana(A_WIS);
-    } else if (stat == A_CON) {
+    } else if (stat == py_attrs::A_INT && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+        playerCalculateAllowedSpellsCount(py_attrs::A_INT);
+        playerGainMana(py_attrs::A_INT);
+    } else if (stat == py_attrs::A_WIS && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+        playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
+        playerGainMana(py_attrs::A_WIS);
+    } else if (stat == py_attrs::A_CON) {
         playerCalculateHitPoints();
     }
 }
@@ -376,7 +376,7 @@ void playerStatBoost(int stat, int amount) {
 int playerToHitAdjustment() {
     int total;
 
-    int dexterity = py.stats.used[A_DEX];
+    int dexterity = py.stats.used[py_attrs::A_DEX];
     if (dexterity < 4) {
         total = -3;
     } else if (dexterity < 6) {
@@ -397,7 +397,7 @@ int playerToHitAdjustment() {
         total = 5;
     }
 
-    int strength = py.stats.used[A_STR];
+    int strength = py.stats.used[py_attrs::A_STR];
     if (strength < 4) {
         total -= 3;
     } else if (strength < 5) {
@@ -421,7 +421,7 @@ int playerToHitAdjustment() {
 
 // Returns a character's adjustment to armor class -JWT-
 int playerArmorClassAdjustment() {
-    int stat = py.stats.used[A_DEX];
+    int stat = py.stats.used[py_attrs::A_DEX];
 
     int adjustment;
 
@@ -452,7 +452,7 @@ int playerArmorClassAdjustment() {
 
 // Returns a character's adjustment to disarm -RAK-
 int16_t playerDisarmAdjustment() {
-    auto stat = py.stats.used[A_DEX];
+    auto stat = py.stats.used[py_attrs::A_DEX];
 
     int16_t adjustment = 0;
 
@@ -487,7 +487,7 @@ int16_t playerDisarmAdjustment() {
 
 // Returns a character's adjustment to damage -JWT-
 int playerDamageAdjustment() {
-    int stat = py.stats.used[A_STR];
+    int stat = py.stats.used[py_attrs::A_STR];
 
     int adjustment;
 

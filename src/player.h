@@ -16,6 +16,16 @@ enum py_class_level_adj {
     CLASS_SAVE,
 };
 
+// Attribute indexes -CJS-
+enum py_attrs {
+    A_STR,
+    A_INT,
+    A_WIS,
+    A_DEX,
+    A_CON,
+    A_CHR,
+};
+
 // this depends on the fact that py_class_level_adj::CLASS_SAVE values are all the same,
 // if not, then should add a separate column for this
 constexpr uint8_t CLASS_MISC_HIT = 4;

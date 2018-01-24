@@ -95,7 +95,7 @@ static void trapHiddenObject(int y, int x) {
 static void trapStrengthDart(Inventory_t const &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_str) {
-            (void) playerStatRandomDecrease(A_STR);
+            (void) playerStatRandomDecrease(py_attrs::A_STR);
 
             obj_desc_t description = {'\0'};
             itemDescription(description, item, true);
@@ -202,7 +202,7 @@ static void trapSlowDart(Inventory_t const &item, int dam) {
 static void trapConstitutionDart(Inventory_t const &item, int dam) {
     if (playerTestBeingHit(125, 0, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT)) {
         if (!py.flags.sustain_con) {
-            (void) playerStatRandomDecrease(A_CON);
+            (void) playerStatRandomDecrease(py_attrs::A_CON);
 
             obj_desc_t description = {'\0'};
             itemDescription(description, item, true);

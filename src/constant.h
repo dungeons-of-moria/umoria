@@ -95,14 +95,6 @@ constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
 constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
-// Attribute indexes -CJS-
-constexpr uint8_t A_STR = 0;
-constexpr uint8_t A_INT = 1;
-constexpr uint8_t A_WIS = 2;
-constexpr uint8_t A_DEX = 3;
-constexpr uint8_t A_CON = 4;
-constexpr uint8_t A_CHR = 5;
-
 // Fval definitions: these describe the various types of dungeon floors and
 // walls, if numbers above 15 are ever used, then the test against MIN_CAVE_WALL
 // will have to be changed, also the save routines will have to be changed.

@@ -54,7 +54,7 @@ static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
 
 static bool staffPlayerCanUse(Inventory_t &item) {
     int chance = py.misc.saving_throw;
-    chance += playerStatAdjustmentWisdomIntelligence(A_INT);
+    chance += playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT);
     chance -= item.depth_first_found - 5;
     chance += class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3;
 
@@ -407,7 +407,7 @@ void wandAim() {
     Inventory_t &item = inventory[item_id];
 
     int player_class_lev_adj = class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3;
-    int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) - (int) item.depth_first_found + player_class_lev_adj;
+    int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) - (int) item.depth_first_found + player_class_lev_adj;
 
     if (py.flags.confused > 0) {
         chance = chance / 2;

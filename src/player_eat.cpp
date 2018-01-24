@@ -131,37 +131,37 @@ void playerEat() {
                 break;
 #endif
             case FoodMagicTypes::restore_str:
-                if (playerStatRestore(A_STR)) {
+                if (playerStatRestore(py_attrs::A_STR)) {
                     printMessage("You feel your strength returning.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::restore_con:
-                if (playerStatRestore(A_CON)) {
+                if (playerStatRestore(py_attrs::A_CON)) {
                     printMessage("You feel your health returning.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::restore_int:
-                if (playerStatRestore(A_INT)) {
+                if (playerStatRestore(py_attrs::A_INT)) {
                     printMessage("Your head spins a moment.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::restore_wis:
-                if (playerStatRestore(A_WIS)) {
+                if (playerStatRestore(py_attrs::A_WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::restore_dex:
-                if (playerStatRestore(A_DEX)) {
+                if (playerStatRestore(py_attrs::A_DEX)) {
                     printMessage("You feel more dexterous.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::restore_chr:
-                if (playerStatRestore(A_CHR)) {
+                if (playerStatRestore(py_attrs::A_CHR)) {
                     printMessage("Your skin stops itching.");
                     identified = true;
                 }
