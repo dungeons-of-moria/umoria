@@ -345,7 +345,7 @@ static bool sv_write() {
         wr_item(treasure_list[i]);
     }
     wr_short((uint16_t) next_free_monster_id);
-    for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
+    for (int i = config::monsters::MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
         wr_monster(monsters[i]);
     }
 
@@ -829,7 +829,7 @@ bool loadGame(bool &generate) {
         if (next_free_monster_id > MON_TOTAL_ALLOCATIONS) {
             goto error;
         }
-        for (int i = MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
+        for (int i = config::monsters::MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
             rd_monster(monsters[i]);
         }
 

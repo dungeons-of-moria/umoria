@@ -406,7 +406,7 @@ void playerChangeSpeed(int speed) {
     py.flags.speed += speed;
     py.flags.status |= PY_SPEED;
 
-    for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
+    for (int i = next_free_monster_id - 1; i >= config::monsters::MON_MIN_INDEX_ID; i--) {
         monsters[i].speed += speed;
     }
 }
@@ -763,7 +763,7 @@ void playerSearch(int y, int x, int chance) {
 
 // Computes current weight limit -RAK-
 int playerCarryingLoadLimit() {
-    int weight_cap = py.stats.used[A_STR] * PLAYER_WEIGHT_CAP + py.misc.weight;
+    int weight_cap = py.stats.used[A_STR] * config::player::PLAYER_WEIGHT_CAP + py.misc.weight;
 
     if (weight_cap > 3000) {
         weight_cap = 3000;

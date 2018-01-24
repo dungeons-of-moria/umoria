@@ -44,7 +44,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t &monster = monsters[monster_id];
 
-    if (monster.distance_from_player <= MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.y, monster.x})) {
+    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((py.flags.status & PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.y, monster.x})) {
         if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
@@ -541,7 +541,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
 }
 
 static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool &do_move, bool &do_turn, int y, int x) {
-    if (randomNumber(OBJECTS_RUNE_PROTECTION) < creatures_list[creature_id].level) {
+    if (randomNumber(config::treasure::OBJECTS_RUNE_PROTECTION) < creatures_list[creature_id].level) {
         if (y == py.row && x == py.col) {
             printMessage("The rune of protection is broken!");
         }
@@ -676,7 +676,7 @@ static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     }
 
     // Must be within certain range
-    bool within_range = monster.distance_from_player <= MON_MAX_SPELL_CAST_DISTANCE;
+    bool within_range = monster.distance_from_player <= config::monsters::MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
     bool unobstructed = los(py.row, py.col, monster.y, monster.x);
@@ -693,7 +693,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             spellTeleportAwayMonster(monster_id, 5);
             break;
         case 6: // Teleport Long
-            spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
+            spellTeleportAwayMonster(monster_id, config::monsters::MON_MAX_SIGHT);
             break;
         case 7: // Teleport To
             spellTeleportPlayerTo((int) monster.y, (int) monster.x);
@@ -995,7 +995,7 @@ static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uin
         counter++;
     }
 
-    if (counter < 4 && randomNumber(counter * MON_MULTIPLY_ADJUST) == 1) {
+    if (counter < 4 && randomNumber(counter * config::monsters::MON_MULTIPLY_ADJUST) == 1) {
         if (monsterMultiply(monster.y, monster.x, monster.creature_id, monster_id)) {
             rcmove |= CM_MULTIPLY;
         }
@@ -1164,7 +1164,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
-    if (((creature.movement & CM_MULTIPLY) != 0u) && MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % MON_MULTIPLY_ADJUST) == 0) {
+    if (((creature.movement & CM_MULTIPLY) != 0u) && config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % config::monsters::MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
@@ -1303,7 +1303,7 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
 // Creatures movement and attacking are done from here -RAK-
 void updateMonsters(bool attack) {
     // Process the monsters
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID && !game.character_is_dead; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID && !game.character_is_dead; id--) {
         Monster_t &monster = monsters[id];
 
         // Get rid of an eaten/breathed on monster.  Note: Be sure not to
@@ -1638,7 +1638,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
+                spellTeleportAwayMonster(monster_id, config::monsters::MON_MAX_SIGHT);
             }
             break;
         case 13: // Steal Object
@@ -1650,7 +1650,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             }
             if (randomNumber(2) == 1) {
                 printMessage("There is a puff of smoke!");
-                spellTeleportAwayMonster(monster_id, MON_MAX_SIGHT);
+                spellTeleportAwayMonster(monster_id, config::monsters::MON_MAX_SIGHT);
             }
             break;
         case 14: // Poison
@@ -1696,7 +1696,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             break;
         case 19: // Lose experience
             printMessage("You feel your life draining away!");
-            spellLoseEXP(damage + (py.misc.exp / 100) * MON_PLAYER_EXP_DRAINED_PER_HIT);
+            spellLoseEXP(damage + (py.misc.exp / 100) * config::monsters::MON_PLAYER_EXP_DRAINED_PER_HIT);
             break;
         case 20: // Aggravate monster
             (void) spellAggravateMonsters(20);

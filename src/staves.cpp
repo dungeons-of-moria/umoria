@@ -63,15 +63,15 @@ static bool staffPlayerCanUse(Inventory_t &item) {
     }
 
     // Give everyone a slight chance
-    if (chance < PLAYER_USE_DEVICE_DIFFICULTY && randomNumber(PLAYER_USE_DEVICE_DIFFICULTY - chance + 1) == 1) {
-        chance = PLAYER_USE_DEVICE_DIFFICULTY;
+    if (chance < config::player::PLAYER_USE_DEVICE_DIFFICULTY && randomNumber(config::player::PLAYER_USE_DEVICE_DIFFICULTY - chance + 1) == 1) {
+        chance = config::player::PLAYER_USE_DEVICE_DIFFICULTY;
     }
 
     if (chance < 1) {
         chance = 1;
     }
 
-    if (randomNumber(chance) < PLAYER_USE_DEVICE_DIFFICULTY) {
+    if (randomNumber(chance) < config::player::PLAYER_USE_DEVICE_DIFFICULTY) {
         printMessage("You failed to use the staff properly.");
         return false;
     }
@@ -413,15 +413,15 @@ void wandAim() {
         chance = chance / 2;
     }
 
-    if (chance < PLAYER_USE_DEVICE_DIFFICULTY && randomNumber(PLAYER_USE_DEVICE_DIFFICULTY - chance + 1) == 1) {
-        chance = PLAYER_USE_DEVICE_DIFFICULTY; // Give everyone a slight chance
+    if (chance < config::player::PLAYER_USE_DEVICE_DIFFICULTY && randomNumber(config::player::PLAYER_USE_DEVICE_DIFFICULTY - chance + 1) == 1) {
+        chance = config::player::PLAYER_USE_DEVICE_DIFFICULTY; // Give everyone a slight chance
     }
 
     if (chance <= 0) {
         chance = 1;
     }
 
-    if (randomNumber(chance) < PLAYER_USE_DEVICE_DIFFICULTY) {
+    if (randomNumber(chance) < config::player::PLAYER_USE_DEVICE_DIFFICULTY) {
         printMessage("You failed to use the wand properly.");
         return;
     }

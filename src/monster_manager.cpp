@@ -82,9 +82,9 @@ void monsterPlaceWinning() {
     do {
         y = randomNumber(dg.height - 2);
         x = randomNumber(dg.width - 2);
-    } while ((dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id != 0) || (dg.floor[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) <= MON_MAX_SIGHT));
+    } while ((dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id != 0) || (dg.floor[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) <= config::monsters::MON_MAX_SIGHT));
 
-    int creature_id = randomNumber(MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
+    int creature_id = randomNumber(config::monsters::MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
     // TODO: duplicate code -MRC-
     // The following code is now exactly the same as monsterPlaceNew() except here
@@ -133,7 +133,7 @@ static int monsterGetOneSuitableForLevel(int level) {
         level = MON_MAX_LEVELS;
     }
 
-    if (randomNumber(MON_CHANCE_OF_NASTY) == 1) {
+    if (randomNumber(config::monsters::MON_CHANCE_OF_NASTY) == 1) {
         auto abs_distribution = (int) std::abs((std::intmax_t) randomNumberNormalDistribution(0, 4));
         level += abs_distribution + 1;
         if (level > MON_MAX_LEVELS) {
@@ -209,7 +209,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
 
 // Places creature adjacent to given location -RAK-
 bool monsterSummon(int &y, int &x, bool sleeping) {
-    int monster_id = monsterGetOneSuitableForLevel(dg.current_level + MON_SUMMONED_LEVEL_ADJUST);
+    int monster_id = monsterGetOneSuitableForLevel(dg.current_level + config::monsters::MON_SUMMONED_LEVEL_ADJUST);
     return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
 }
 
@@ -247,7 +247,7 @@ bool compactMonsters() {
 
     bool delete_any = false;
     while (!delete_any) {
-        for (int i = next_free_monster_id - 1; i >= MON_MIN_INDEX_ID; i--) {
+        for (int i = next_free_monster_id - 1; i >= config::monsters::MON_MIN_INDEX_ID; i--) {
             if (cur_dis < monsters[i].distance_from_player && randomNumber(3) == 1) {
                 if ((creatures_list[monsters[i].creature_id].movement & CM_WIN) != 0u) {
                     // Never compact away the Balrog!!

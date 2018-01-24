@@ -138,8 +138,8 @@ static bool memoryDepthFoundAt(uint8_t level, uint16_t kills) {
         known = true;
 
         // The Balrog is a level 100 monster, but appears at 50 feet.
-        if (level > MON_ENDGAME_LEVEL) {
-            level = MON_ENDGAME_LEVEL;
+        if (level > config::monsters::MON_ENDGAME_LEVEL) {
+            level = config::monsters::MON_ENDGAME_LEVEL;
         }
 
         vtype_t desc = {'\0'};

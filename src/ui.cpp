@@ -753,8 +753,8 @@ static void playerGainLevel() {
 
 // Prints experience -RAK-
 void displayCharacterExperience() {
-    if (py.misc.exp > PLAYER_MAX_EXP) {
-        py.misc.exp = PLAYER_MAX_EXP;
+    if (py.misc.exp > config::player::PLAYER_MAX_EXP) {
+        py.misc.exp = config::player::PLAYER_MAX_EXP;
     }
 
     while ((py.misc.level < PLAYER_MAX_LEVEL) && (signed) (py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100) <= py.misc.exp) {

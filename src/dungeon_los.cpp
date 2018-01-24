@@ -376,7 +376,7 @@ void look() {
 static bool lookRay(int y, int from, int to) {
     // from is the larger angle of the ray, since we scan towards the
     // center line. If from is smaller, then the ray does not exist.
-    if (from <= to || y > MON_MAX_SIGHT) {
+    if (from <= to || y > config::monsters::MON_MAX_SIGHT) {
         return false;
     }
 
@@ -392,8 +392,8 @@ static bool lookRay(int y, int from, int to) {
     // Find last visible location along this line.
     // Maximum x such that (2x+1)/x > to/GRADF <=> x < GRADF(2x+1)/to
     auto max_x = (int) (((int32_t) GRADF * (2 * y + 1) - 1) / to);
-    if (max_x > MON_MAX_SIGHT) {
-        max_x = MON_MAX_SIGHT;
+    if (max_x > config::monsters::MON_MAX_SIGHT) {
+        max_x = config::monsters::MON_MAX_SIGHT;
     }
     if (max_x < x) {
         return false;

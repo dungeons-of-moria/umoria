@@ -249,7 +249,7 @@ bool spellDetectSecretDoorssWithinVicinity() {
 bool spellDetectInvisibleCreaturesWithinVicinity() {
     bool detected = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
         if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].movement & CM_INVISIBLE) != 0u)) {
@@ -412,7 +412,7 @@ bool spellIdentifyItem() {
 bool spellAggravateMonsters(int affect_distance) {
     bool aggravated = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
         monster.sleep_count = 0;
 
@@ -534,7 +534,7 @@ bool spellDestroyAdjacentDoorsTraps() {
 bool spellDetectMonsters() {
     bool detected = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
         if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (creatures_list[monster.creature_id].movement & CM_INVISIBLE) == 0) {
@@ -589,7 +589,7 @@ void spellLightLine(int x, int y, int direction) {
     while (!finished) {
         Tile_t &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             (void) playerMovePosition(direction, y, x);
             finished = true;
             continue; // we're done here, break out of the loop
@@ -675,7 +675,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
         (void) playerMovePosition(direction, y, x);
 
         distance++;
-    } while (distance <= OBJECT_BOLTS_MAX_RANGE && tile->feature_id <= MAX_OPEN_SPACE);
+    } while (distance <= config::treasure::OBJECT_BOLTS_MAX_RANGE && tile->feature_id <= MAX_OPEN_SPACE);
 
     return disarmed;
 }
@@ -794,7 +794,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 
         dungeonLiteSpot(Coord_t{old_y, old_x});
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -834,7 +834,7 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
 
         dungeonLiteSpot(Coord_t{old_y, old_x});
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE) {
             finished = true;
             continue;
         }
@@ -1109,7 +1109,7 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1148,7 +1148,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1192,7 +1192,7 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1242,7 +1242,7 @@ bool spellConfuseMonster(int y, int x, int direction) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1297,7 +1297,7 @@ bool spellSleepMonster(int y, int x, int direction) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1342,7 +1342,7 @@ bool spellWallToMud(int y, int x, int direction) {
         Tile_t const &tile = dg.floor[y][x];
 
         // note, this ray can move through walls as it turns them to mud
-        if (distance == OBJECT_BOLTS_MAX_RANGE) {
+        if (distance == config::treasure::OBJECT_BOLTS_MAX_RANGE) {
             finished = true;
         }
 
@@ -1441,7 +1441,7 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
-    } while ((distance <= OBJECT_BOLTS_MAX_RANGE) || tile->feature_id <= MAX_OPEN_SPACE);
+    } while ((distance <= config::treasure::OBJECT_BOLTS_MAX_RANGE) || tile->feature_id <= MAX_OPEN_SPACE);
 
     return destroyed;
 }
@@ -1459,7 +1459,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1502,7 +1502,7 @@ bool spellBuildWall(int y, int x, int direction) {
 
         Tile_t &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -1566,7 +1566,7 @@ bool spellCloneMonster(int y, int x, int direction) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
         } else if (tile.creature_id > 1) {
             monsters[tile.creature_id].sleep_count = 0;
@@ -1660,7 +1660,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
 
         Tile_t const &tile = dg.floor[y][x];
 
-        if (distance > OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
+        if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
             finished = true;
             continue;
         }
@@ -1669,7 +1669,7 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
             // wake it up
             monsters[tile.creature_id].sleep_count = 0;
 
-            spellTeleportAwayMonster((int) tile.creature_id, MON_MAX_SIGHT);
+            spellTeleportAwayMonster((int) tile.creature_id, config::monsters::MON_MAX_SIGHT);
 
             teleported = true;
         }
@@ -1683,11 +1683,11 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
 bool spellMassGenocide() {
     bool killed = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
             killed = true;
             dungeonDeleteMonster(id);
         }
@@ -1707,7 +1707,7 @@ bool spellGenocide() {
 
     bool killed = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
@@ -1732,13 +1732,13 @@ bool spellGenocide() {
 bool spellSpeedAllMonsters(int speed) {
     bool speedy = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
             continue; // do nothing
         }
 
@@ -1771,13 +1771,13 @@ bool spellSpeedAllMonsters(int speed) {
 bool spellSleepAllMonsters() {
     bool asleep = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
             continue; // do nothing
         }
 
@@ -1805,10 +1805,10 @@ bool spellSleepAllMonsters() {
 bool spellMassPolymorph() {
     bool morphed = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & CM_WIN) == 0) {
@@ -1829,7 +1829,7 @@ bool spellMassPolymorph() {
 bool spellDetectEvil() {
     bool detected = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
         if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].defenses & CD_EVIL) != 0)) {
@@ -1978,10 +1978,10 @@ void spellCreateFood() {
 bool spellDispelCreature(int creature_defense, int damage) {
     bool dispelled = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, monster.y, monster.x)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -2012,11 +2012,11 @@ bool spellDispelCreature(int creature_defense, int damage) {
 bool spellTurnUndead() {
     bool turned = false;
 
-    for (int id = next_free_monster_id - 1; id >= MON_MIN_INDEX_ID; id--) {
+    for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= MON_MAX_SIGHT && ((creature.defenses & CD_UNDEAD) != 0) && los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & CD_UNDEAD) != 0) && los(py.row, py.col, monster.y, monster.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {

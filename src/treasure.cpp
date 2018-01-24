@@ -24,7 +24,7 @@ static bool magicShouldBeEnchanted(int chance) {
 
 // Enchant a bonus based on degree desired -RAK-
 static int magicEnchantmentBonus(int base, int max_standard, int level) {
-    int stand_deviation = (LEVEL_STD_OBJECT_ADJUST * level / 100) + LEVEL_MIN_OBJECT_STD;
+    int stand_deviation = (config::treasure::LEVEL_STD_OBJECT_ADJUST * level / 100) + config::treasure::LEVEL_MIN_OBJECT_STD;
 
     // Check for level > max_standard since that may have generated an overflow.
     if (stand_deviation > max_standard || level > max_standard) {
@@ -832,13 +832,13 @@ static void cursedProjectiles(Inventory_t &item, int level) {
 // Chance of treasure having magic abilities -RAK-
 // Chance increases with each dungeon level
 void magicTreasureMagicalAbility(int item_id, int level) {
-    int chance = OBJECT_BASE_MAGIC + level;
-    if (chance > OBJECT_MAX_BASE_MAGIC) {
-        chance = OBJECT_MAX_BASE_MAGIC;
+    int chance = config::treasure::OBJECT_BASE_MAGIC + level;
+    if (chance > config::treasure::OBJECT_MAX_BASE_MAGIC) {
+        chance = config::treasure::OBJECT_MAX_BASE_MAGIC;
     }
 
-    int special = chance / OBJECT_CHANCE_SPECIAL;
-    int cursed = (10 * chance) / OBJECT_CHANCE_CURSED;
+    int special = chance / config::treasure::OBJECT_CHANCE_SPECIAL;
+    int cursed = (10 * chance) / config::treasure::OBJECT_CHANCE_CURSED;
 
     int magicAmount;
 

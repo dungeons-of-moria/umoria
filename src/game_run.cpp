@@ -194,7 +194,7 @@ static void initializeMonsterLevels() {
         level = 0;
     }
 
-    for (int i = 0; i < MON_MAX_CREATURES - MON_ENDGAME_MONSTERS; i++) {
+    for (int i = 0; i < MON_MAX_CREATURES - config::monsters::MON_ENDGAME_MONSTERS; i++) {
         monster_levels[creatures_list[i].level]++;
     }
 
@@ -401,16 +401,16 @@ static void playerUpdateHeroStatus() {
 
 static int playerFoodConsumption() {
     // Regenerate hp and mana
-    int regen_amount = PLAYER_REGEN_NORMAL;
+    int regen_amount = config::player::PLAYER_REGEN_NORMAL;
 
-    if (py.flags.food < PLAYER_FOOD_ALERT) {
-        if (py.flags.food < PLAYER_FOOD_WEAK) {
+    if (py.flags.food < config::player::PLAYER_FOOD_ALERT) {
+        if (py.flags.food < config::player::PLAYER_FOOD_WEAK) {
             if (py.flags.food < 0) {
                 regen_amount = 0;
-            } else if (py.flags.food < PLAYER_FOOD_FAINT) {
-                regen_amount = PLAYER_REGEN_FAINT;
-            } else if (py.flags.food < PLAYER_FOOD_WEAK) {
-                regen_amount = PLAYER_REGEN_WEAK;
+            } else if (py.flags.food < config::player::PLAYER_FOOD_FAINT) {
+                regen_amount = config::player::PLAYER_REGEN_FAINT;
+            } else if (py.flags.food < config::player::PLAYER_FOOD_WEAK) {
+                regen_amount = config::player::PLAYER_REGEN_WEAK;
             }
 
             if ((py.flags.status & PY_WEAK) == 0) {
@@ -420,7 +420,7 @@ static int playerFoodConsumption() {
                 printCharacterHungerStatus();
             }
 
-            if (py.flags.food < PLAYER_FOOD_FAINT && randomNumber(8) == 1) {
+            if (py.flags.food < config::player::PLAYER_FOOD_FAINT && randomNumber(8) == 1) {
                 py.flags.paralysis += randomNumber(5);
                 printMessage("You faint from the lack of food.");
                 playerDisturb(1, 0);
@@ -2056,7 +2056,7 @@ static bool validCountCommand(char command) {
 // Regenerate hit points -RAK-
 static void playerRegenerateHitPoints(int percent) {
     int old_chp = py.misc.current_hp;
-    int32_t new_chp = (int32_t) py.misc.max_hp * percent + PLAYER_REGEN_HPBASE;
+    int32_t new_chp = (int32_t) py.misc.max_hp * percent + config::player::PLAYER_REGEN_HPBASE;
 
     // div 65536
     py.misc.current_hp += new_chp >> 16;
@@ -2090,7 +2090,7 @@ static void playerRegenerateHitPoints(int percent) {
 // Regenerate mana points -RAK-
 static void playerRegenerateMana(int percent) {
     int old_cmana = py.misc.current_mana;
-    int32_t new_mana = (int32_t) py.misc.mana * percent + PLAYER_REGEN_MNBASE;
+    int32_t new_mana = (int32_t) py.misc.mana * percent + config::player::PLAYER_REGEN_MNBASE;
 
     // div 65536
     py.misc.current_mana += new_mana >> 16;
@@ -2340,13 +2340,13 @@ static void inventoryRefillLamp() {
     Inventory_t &item = inventory[EQUIPMENT_LIGHT];
     item.misc_use += inventory[item_pos_start].misc_use;
 
-    if (item.misc_use > OBJECT_LAMP_MAX_CAPACITY) {
-        item.misc_use = OBJECT_LAMP_MAX_CAPACITY;
+    if (item.misc_use > config::treasure::OBJECT_LAMP_MAX_CAPACITY) {
+        item.misc_use = config::treasure::OBJECT_LAMP_MAX_CAPACITY;
         printMessage("Your lamp overflows, spilling oil on the ground.");
         printMessage("Your lamp is full.");
-    } else if (item.misc_use > OBJECT_LAMP_MAX_CAPACITY / 2) {
+    } else if (item.misc_use > config::treasure::OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is more than half full.");
-    } else if (item.misc_use == OBJECT_LAMP_MAX_CAPACITY / 2) {
+    } else if (item.misc_use == config::treasure::OBJECT_LAMP_MAX_CAPACITY / 2) {
         printMessage("Your lamp is half full.");
     } else {
         printMessage("Your lamp is less than half full.");
@@ -2401,8 +2401,8 @@ static void playDungeon() {
         }
 
         // Check for creature generation
-        if (randomNumber(MON_CHANCE_OF_NEW) == 1) {
-            monsterPlaceNewWithinDistance(1, MON_MAX_SIGHT, false);
+        if (randomNumber(config::monsters::MON_CHANCE_OF_NEW) == 1) {
+            monsterPlaceNewWithinDistance(1, config::monsters::MON_MAX_SIGHT, false);
         }
 
         playerUpdateLightStatus();

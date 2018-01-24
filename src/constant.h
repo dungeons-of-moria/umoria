@@ -72,21 +72,6 @@ constexpr uint8_t LEVEL_OBJECTS_PER_ROOM = 7;     // Amount of objects for rooms
 constexpr uint8_t LEVEL_OBJECTS_PER_CORRIDOR = 2; // Amount of objects for corridors
 constexpr uint8_t LEVEL_TOTAL_GOLD_AND_GEMS = 2;  // Amount of gold (and gems)
 
-// Magic Treasure Generation constants
-// Note: Number of special objects, and degree of enchantments can be adjusted here.
-constexpr uint8_t LEVEL_STD_OBJECT_ADJUST = 125; // Adjust STD per level * 100
-constexpr uint8_t LEVEL_MIN_OBJECT_STD = 7;      // Minimum STD
-constexpr uint8_t LEVEL_TOWN_OBJECTS = 7;        // Town object generation level
-constexpr uint8_t OBJECT_BASE_MAGIC = 15;        // Base amount of magic
-constexpr uint8_t OBJECT_MAX_BASE_MAGIC = 70;    // Max amount of magic
-constexpr uint8_t OBJECT_CHANCE_SPECIAL = 6;     // magic_chance/# special magic
-constexpr uint8_t OBJECT_CHANCE_CURSED = 13;     // 10*magic_chance/# cursed items
-
-// Constants describing limits of certain objects
-constexpr uint16_t OBJECT_LAMP_MAX_CAPACITY = 15000; // Maximum amount that lamp can be filled
-constexpr uint8_t OBJECT_BOLTS_MAX_RANGE = 18;       // Maximum range of bolts and balls
-constexpr uint16_t OBJECTS_RUNE_PROTECTION = 3000;   // Rune of protection resistance
-
 // Creature constants
 constexpr uint16_t MON_MAX_CREATURES = 279; // Number of creatures defined for univ
 constexpr uint8_t MON_ATTACK_TYPES = 215;   // Number of monster attack types.
@@ -95,26 +80,10 @@ constexpr uint8_t MON_ATTACK_TYPES = 215;   // Number of monster attack types.
 // monsters messages while breeding/cloning monsters.
 constexpr uint8_t MON_TOTAL_ALLOCATIONS = 125;        // Max that can be allocated
 constexpr uint8_t MON_MAX_LEVELS = 40;                // Maximum level of creatures
-constexpr uint8_t MON_CHANCE_OF_NEW = 160;            // 1/x chance of new monster each round
-constexpr uint8_t MON_MAX_SIGHT = 20;                 // Maximum dis a creature can be seen
-constexpr uint8_t MON_MAX_SPELL_CAST_DISTANCE = 20;   // Maximum dis creature spell can be cast
-constexpr uint8_t MON_MAX_MULTIPLY_PER_LEVEL = 75;    // Maximum reproductions on a level
-constexpr uint8_t MON_MULTIPLY_ADJUST = 7;            // High value slows multiplication
-constexpr uint8_t MON_CHANCE_OF_NASTY = 50;           // 1/x chance of high level creature
-constexpr uint8_t MON_MIN_PER_LEVEL = 14;             // Minimum number of monsters/level
-constexpr uint8_t MON_MIN_TOWNSFOLK_DAY = 4;          // Number of people on town level (day)
-constexpr uint8_t MON_MIN_TOWNSFOLK_NIGHT = 8;        // Number of people on town level (night)
-constexpr uint8_t MON_ENDGAME_MONSTERS = 2;           // Total number of "win" creatures
-constexpr uint8_t MON_ENDGAME_LEVEL = 50;             // Level where winning creatures begin
-constexpr uint8_t MON_SUMMONED_LEVEL_ADJUST = 2;      // Adjust level of summoned creatures
-constexpr uint8_t MON_PLAYER_EXP_DRAINED_PER_HIT = 2; // Percent of player exp drained per hit
 constexpr uint8_t MON_MAX_ATTACKS = 4;                // Max num attacks (used in mons memory) -CJS-
-constexpr uint8_t MON_MIN_INDEX_ID = 2;               // Minimum index in m_list (1 = py, 0 = no mon)
 
 // Trap constants
 constexpr uint8_t MAX_TRAPS = 18; // Number of defined traps
-
-constexpr uint8_t SCARE_MONSTER = 99;
 
 // Descriptive constants
 constexpr uint8_t MAX_COLORS = 49;     // Used with potions
@@ -128,22 +97,9 @@ constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
 // Player constants
 constexpr uint8_t PLAYER_MAX_LEVEL = 40;            // Maximum possible character level
-constexpr int32_t PLAYER_MAX_EXP = 9999999L;        // Maximum amount of experience -CJS-
-constexpr uint8_t PLAYER_MAX_RACES = 8;             // Number of defined races
 constexpr uint8_t PLAYER_MAX_CLASSES = 6;           // Number of defined classes
-constexpr uint8_t PLAYER_USE_DEVICE_DIFFICULTY = 3; // x> Harder devices x< Easier devices
+constexpr uint8_t PLAYER_MAX_RACES = 8;             // Number of defined races
 constexpr uint8_t PLAYER_MAX_BACKGROUNDS = 128;     // Number of types of histories for univ
-constexpr uint16_t PLAYER_FOOD_FULL = 10000;        // Getting full
-constexpr uint16_t PLAYER_FOOD_MAX = 15000;         // Maximum food value, beyond is wasted
-constexpr uint16_t PLAYER_FOOD_FAINT = 300;         // Character begins fainting
-constexpr uint16_t PLAYER_FOOD_WEAK = 1000;         // Warn player that they're getting weak
-constexpr uint16_t PLAYER_FOOD_ALERT = 2000;        // Alert player that they're getting low on food
-constexpr uint8_t PLAYER_REGEN_FAINT = 33;          // Regen factor*2^16 when fainting
-constexpr uint8_t PLAYER_REGEN_WEAK = 98;           // Regen factor*2^16 when weak
-constexpr uint8_t PLAYER_REGEN_NORMAL = 197;        // Regen factor*2^16 when full
-constexpr uint16_t PLAYER_REGEN_HPBASE = 1442;      // Min amount hp regen*2^16
-constexpr uint16_t PLAYER_REGEN_MNBASE = 524;       // Min amount mana regen*2^16
-constexpr uint8_t PLAYER_WEIGHT_CAP = 130;          // "#"*(1/10 pounds) per strength point
 
 // class level adjustment constants
 constexpr uint8_t CLASS_BTH = 0;

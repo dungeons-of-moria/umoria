@@ -1078,14 +1078,14 @@ static void dungeonGenerate() {
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
     dungeonNewSpot(py.row, py.col);
 
-    monsterPlaceNewWithinDistance((randomNumber(8) + MON_MIN_PER_LEVEL + alloc_level), 0, true);
+    monsterPlaceNewWithinDistance((randomNumber(8) + config::monsters::MON_MIN_PER_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
     dungeonAllocateAndPlaceObject(setRooms, 5, randomNumberNormalDistribution(LEVEL_OBJECTS_PER_ROOM, 3));
     dungeonAllocateAndPlaceObject(setFloors, 5, randomNumberNormalDistribution(LEVEL_OBJECTS_PER_CORRIDOR, 3));
     dungeonAllocateAndPlaceObject(setFloors, 4, randomNumberNormalDistribution(LEVEL_TOTAL_GOLD_AND_GEMS, 3));
     dungeonAllocateAndPlaceObject(setFloors, 1, randomNumber(alloc_level));
 
-    if (dg.current_level >= MON_ENDGAME_LEVEL) {
+    if (dg.current_level >= config::monsters::MON_ENDGAME_LEVEL) {
         monsterPlaceWinning();
     }
 }
@@ -1147,7 +1147,7 @@ static void monsterLinker() {
     for (auto &monster : monsters) {
         monster = blank_monster;
     }
-    next_free_monster_id = MON_MIN_INDEX_ID;
+    next_free_monster_id = config::monsters::MON_MIN_INDEX_ID;
 }
 
 static void dungeonPlaceTownStores() {
@@ -1186,7 +1186,7 @@ static void lightTown() {
                 }
             }
         }
-        monsterPlaceNewWithinDistance(MON_MIN_TOWNSFOLK_NIGHT, 3, true);
+        monsterPlaceNewWithinDistance(config::monsters::MON_MIN_TOWNSFOLK_NIGHT, 3, true);
     } else {
         // ...it is day time
         for (int y = 0; y < dg.height; y++) {
@@ -1194,7 +1194,7 @@ static void lightTown() {
                 dg.floor[y][x].permanent_light = true;
             }
         }
-        monsterPlaceNewWithinDistance(MON_MIN_TOWNSFOLK_DAY, 3, true);
+        monsterPlaceNewWithinDistance(config::monsters::MON_MIN_TOWNSFOLK_DAY, 3, true);
     }
 }
 
