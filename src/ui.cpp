@@ -561,8 +561,8 @@ void printCharacterLevelExperience() {
 void printCharacterAbilities() {
     clearToBottom(14);
 
-    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.class_id][CLASS_BTH] * py.misc.level);
-    int xbthb = py.misc.bth_with_bows + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.class_id][CLASS_BTHB] * py.misc.level);
+    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTH] * py.misc.level);
+    int xbthb = py.misc.bth_with_bows + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTHB] * py.misc.level);
 
     // this results in a range from 0 to 29
     int xfos = 40 - py.misc.fos;
@@ -574,9 +574,9 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][CLASS_DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][CLASS_SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][CLASS_DEVICE] * py.misc.level / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

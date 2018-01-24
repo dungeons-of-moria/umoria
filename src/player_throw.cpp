@@ -221,11 +221,11 @@ void playerThrowItem() {
                 // off most bonuses, and reduce bth_with_bows depending on distance.
                 if (!m_ptr.lit) {
                     tbth /= current_distance + 2;
-                    tbth -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTHB] / 2;
+                    tbth -= py.misc.level * class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTHB] / 2;
                     tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
                 }
 
-                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr.creature_id].ac, CLASS_BTHB)) {
+                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr.creature_id].ac, py_class_level_adj::CLASS_BTHB)) {
                     int damage = m_ptr.creature_id;
 
                     obj_desc_t description = {'\0'};
@@ -243,7 +243,7 @@ void playerThrowItem() {
                     printMessage(msg);
 
                     tdam = itemMagicAbilityDamage(thrown_item, tdam, damage);
-                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, CLASS_BTHB);
+                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, py_class_level_adj::CLASS_BTHB);
 
                     if (tdam < 0) {
                         tdam = 0;

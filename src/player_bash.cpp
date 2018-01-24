@@ -106,16 +106,16 @@ static void playerBashAttack(int y, int x) {
     if (!monster.lit) {
         base_to_hit /= 2;
         base_to_hit -= py.stats.used[A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
-        base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTH] / 2;
+        base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[A_DEX], (int) creature.ac, CLASS_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[A_DEX], (int) creature.ac, py_class_level_adj::CLASS_BTH)) {
         vtype_t msg = {'\0'};
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
         int damage = diceRoll(inventory[EQUIPMENT_ARM].damage);
-        damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.used[A_STR], 0, damage, CLASS_BTH);
+        damage = playerWeaponCriticalBlow(inventory[EQUIPMENT_ARM].weight / 4 + py.stats.used[A_STR], 0, damage, py_class_level_adj::CLASS_BTH);
         damage += py.misc.weight / 60;
         damage += 3;
 

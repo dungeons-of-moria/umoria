@@ -15,7 +15,7 @@ static int playerTrapDisarmAbility() {
     ability += 2;
     ability *= playerDisarmAdjustment();
     ability += playerStatAdjustmentWisdomIntelligence(A_INT);
-    ability += class_level_adj[py.misc.class_id][CLASS_DISARM] * py.misc.level / 3;
+    ability += class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3;
 
     if (py.flags.blind > 0 || playerNoLight()) {
         ability = ability / 10;

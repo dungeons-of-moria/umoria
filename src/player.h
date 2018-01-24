@@ -8,6 +8,28 @@
 
 #pragma once
 
+enum py_class_level_adj {
+    CLASS_BTH,
+    CLASS_BTHB,
+    CLASS_DEVICE,
+    CLASS_DISARM,
+    CLASS_SAVE,
+};
+
+// this depends on the fact that py_class_level_adj::CLASS_SAVE values are all the same,
+// if not, then should add a separate column for this
+constexpr uint8_t CLASS_MISC_HIT = 4;
+constexpr uint8_t CLASS_MAX_LEVEL_ADJUST = 5;
+
+// Player constants
+constexpr uint8_t PLAYER_MAX_LEVEL = 40;            // Maximum possible character level
+constexpr uint8_t PLAYER_MAX_CLASSES = 6;           // Number of defined classes
+constexpr uint8_t PLAYER_MAX_RACES = 8;             // Number of defined races
+constexpr uint8_t PLAYER_MAX_BACKGROUNDS = 128;     // Number of types of histories for univ
+
+// Base to hit constants
+constexpr uint8_t BTH_PER_PLUS_TO_HIT_ADJUST = 3; // Adjust BTH per plus-to-hit
+
 constexpr uint8_t PLAYER_NAME_SIZE = 27;
 
 // ClassRankTitle_t of the player: Novice, Mage (5th), Paladin, etc.

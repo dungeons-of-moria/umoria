@@ -274,7 +274,7 @@ Class_t classes[PLAYER_MAX_CLASSES] = {
 
 // making it 16 bits wastes a little space, but saves much signed/unsigned
 // headaches in its use.
-// CLASS_MISC_HIT is identical to CLASS_SAVE, which takes advantage of
+// CLASS_MISC_HIT is identical to py_class_level_adj::CLASS_SAVE, which takes advantage of
 // the fact that the save values are independent of the class.
 // Columns: bth, bth_with_bows, device, disarm, save/misc hit
 int16_t class_level_adj[PLAYER_MAX_CLASSES][CLASS_MAX_LEVEL_ADJUST] = {

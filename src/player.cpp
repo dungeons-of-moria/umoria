@@ -1075,7 +1075,7 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 
 // Saving throws for player character. -RAK-
 bool playerSavingThrow() {
-    int class_level_adjustment = class_level_adj[py.misc.class_id][CLASS_SAVE] * py.misc.level / 3;
+    int class_level_adjustment = class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3;
 
     int saving = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(A_WIS) + class_level_adjustment;
 
@@ -1130,7 +1130,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 
     bth = py.misc.bth / 2;
     bth -= tot_tohit * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
-    bth -= py.misc.level * class_level_adj[py.misc.class_id][CLASS_BTH] / 2;
+    bth -= py.misc.level * class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTH] / 2;
 
     return bth;
 }
@@ -1164,7 +1164,7 @@ static void playerAttackMonster(int y, int x) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, CLASS_BTH)) {
+        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, py_class_level_adj::CLASS_BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;
@@ -1176,11 +1176,11 @@ static void playerAttackMonster(int y, int x) {
         if (item.category_id != TV_NOTHING) {
             damage = diceRoll(item.damage);
             damage = itemMagicAbilityDamage(item, damage, monster.creature_id);
-            damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, CLASS_BTH);
+            damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, py_class_level_adj::CLASS_BTH);
         } else {
             // Bare hands!?
             damage = diceRoll(Dice_t{1, 1});
-            damage = playerWeaponCriticalBlow(1, 0, damage, CLASS_BTH);
+            damage = playerWeaponCriticalBlow(1, 0, damage, py_class_level_adj::CLASS_BTH);
         }
 
         damage += py.misc.plusses_to_damage;
@@ -1241,7 +1241,7 @@ static int16_t playerLockPickingSkill() {
     skill += 2;
     skill *= playerDisarmAdjustment();
     skill += playerStatAdjustmentWisdomIntelligence(A_INT);
-    skill += class_level_adj[py.misc.class_id][CLASS_DISARM] * py.misc.level / 3;
+    skill += class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3;
 
     return skill;
 }

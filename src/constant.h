@@ -95,27 +95,6 @@ constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
 constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
-// Player constants
-constexpr uint8_t PLAYER_MAX_LEVEL = 40;            // Maximum possible character level
-constexpr uint8_t PLAYER_MAX_CLASSES = 6;           // Number of defined classes
-constexpr uint8_t PLAYER_MAX_RACES = 8;             // Number of defined races
-constexpr uint8_t PLAYER_MAX_BACKGROUNDS = 128;     // Number of types of histories for univ
-
-// class level adjustment constants
-constexpr uint8_t CLASS_BTH = 0;
-constexpr uint8_t CLASS_BTHB = 1;
-constexpr uint8_t CLASS_DEVICE = 2;
-constexpr uint8_t CLASS_DISARM = 3;
-constexpr uint8_t CLASS_SAVE = 4;
-
-// this depends on the fact that CLASS_SAVE values are all the same,
-// if not, then should add a separate column for this
-constexpr uint8_t CLASS_MISC_HIT = 4;
-constexpr uint8_t CLASS_MAX_LEVEL_ADJUST = 5;
-
-// Base to hit constants
-constexpr uint8_t BTH_PER_PLUS_TO_HIT_ADJUST = 3; // Adjust BTH per plus-to-hit
-
 // magic numbers for players equipment inventory array
 constexpr uint8_t EQUIPMENT_WIELD = 22; // must be first item in equipment list
 constexpr uint8_t EQUIPMENT_HEAD = 23;
