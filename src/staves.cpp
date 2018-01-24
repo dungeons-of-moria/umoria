@@ -286,15 +286,15 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = true;
                 break;
             case WandSpellTypes::lightning_bolt:
-                spellFireBolt(y, x, direction, diceRoll(Dice_t{4, 8}), GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(y, x, direction, diceRoll(Dice_t{4, 8}), magic_spell_flags::GF_LIGHTNING, spell_names[8]);
                 identified = true;
                 break;
             case WandSpellTypes::frost_bolt:
-                spellFireBolt(y, x, direction, diceRoll(Dice_t{6, 8}), GF_FROST, spell_names[14]);
+                spellFireBolt(y, x, direction, diceRoll(Dice_t{6, 8}), magic_spell_flags::GF_FROST, spell_names[14]);
                 identified = true;
                 break;
             case WandSpellTypes::fire_bolt:
-                spellFireBolt(y, x, direction, diceRoll(Dice_t{9, 8}), GF_FIRE, spell_names[22]);
+                spellFireBolt(y, x, direction, diceRoll(Dice_t{9, 8}), magic_spell_flags::GF_FIRE, spell_names[22]);
                 identified = true;
                 break;
             case WandSpellTypes::stone_to_mud:
@@ -325,7 +325,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = spellDestroyDoorsTrapsInDirection(y, x, direction);
                 break;
             case WandSpellTypes::magic_missile:
-                spellFireBolt(y, x, direction, diceRoll(Dice_t{2, 6}), GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(y, x, direction, diceRoll(Dice_t{2, 6}), magic_spell_flags::GF_MAGIC_MISSILE, spell_names[0]);
                 identified = true;
                 break;
             case WandSpellTypes::wall_building:
@@ -341,23 +341,23 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = spellDisarmAllInDirection(y, x, direction);
                 break;
             case WandSpellTypes::lightning_ball:
-                spellFireBall(y, x, direction, 32, GF_LIGHTNING, "Lightning Ball");
+                spellFireBall(y, x, direction, 32, magic_spell_flags::GF_LIGHTNING, "Lightning Ball");
                 identified = true;
                 break;
             case WandSpellTypes::cold_ball:
-                spellFireBall(y, x, direction, 48, GF_FROST, "Cold Ball");
+                spellFireBall(y, x, direction, 48, magic_spell_flags::GF_FROST, "Cold Ball");
                 identified = true;
                 break;
             case WandSpellTypes::fire_ball:
-                spellFireBall(y, x, direction, 72, GF_FIRE, spell_names[28]);
+                spellFireBall(y, x, direction, 72, magic_spell_flags::GF_FIRE, spell_names[28]);
                 identified = true;
                 break;
             case WandSpellTypes::stinking_cloud:
-                spellFireBall(y, x, direction, 12, GF_POISON_GAS, spell_names[6]);
+                spellFireBall(y, x, direction, 12, magic_spell_flags::GF_POISON_GAS, spell_names[6]);
                 identified = true;
                 break;
             case WandSpellTypes::acid_ball:
-                spellFireBall(y, x, direction, 60, GF_ACID, "Acid Ball");
+                spellFireBall(y, x, direction, 60, magic_spell_flags::GF_ACID, "Acid Ball");
                 identified = true;
                 break;
             case WandSpellTypes::wonder:

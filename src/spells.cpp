@@ -683,37 +683,37 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
 // Return flags for given type area affect -RAK-
 static void spellGetAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_type, bool (**destroy)(Inventory_t *)) {
     switch (spell_type) {
-        case GF_MAGIC_MISSILE:
+        case magic_spell_flags::GF_MAGIC_MISSILE:
             weapon_type = 0;
             harm_type = 0;
             *destroy = setNull;
             break;
-        case GF_LIGHTNING:
+        case magic_spell_flags::GF_LIGHTNING:
             weapon_type = CS_BR_LIGHT;
             harm_type = CD_LIGHT;
             *destroy = setLightningDestroyableItems;
             break;
-        case GF_POISON_GAS:
+        case magic_spell_flags::GF_POISON_GAS:
             weapon_type = CS_BR_GAS;
             harm_type = CD_POISON;
             *destroy = setNull;
             break;
-        case GF_ACID:
+        case magic_spell_flags::GF_ACID:
             weapon_type = CS_BR_ACID;
             harm_type = CD_ACID;
             *destroy = setAcidDestroyableItems;
             break;
-        case GF_FROST:
+        case magic_spell_flags::GF_FROST:
             weapon_type = CS_BR_FROST;
             harm_type = CD_FROST;
             *destroy = setFrostDestroyableItems;
             break;
-        case GF_FIRE:
+        case magic_spell_flags::GF_FIRE:
             weapon_type = CS_BR_FIRE;
             harm_type = CD_FIRE;
             *destroy = setFireDestroyableItems;
             break;
-        case GF_HOLY_ORB:
+        case magic_spell_flags::GF_HOLY_ORB:
             weapon_type = 0;
             harm_type = CD_EVIL;
             *destroy = setNull;
@@ -1014,19 +1014,19 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
                         }
 
                         switch (spell_type) {
-                            case GF_LIGHTNING:
+                            case magic_spell_flags::GF_LIGHTNING:
                                 damageLightningBolt(damage, spell_name.c_str());
                                 break;
-                            case GF_POISON_GAS:
+                            case magic_spell_flags::GF_POISON_GAS:
                                 damagePoisonedGas(damage, spell_name.c_str());
                                 break;
-                            case GF_ACID:
+                            case magic_spell_flags::GF_ACID:
                                 damageAcid(damage, spell_name.c_str());
                                 break;
-                            case GF_FROST:
+                            case magic_spell_flags::GF_FROST:
                                 damageCold(damage, spell_name.c_str());
                                 break;
-                            case GF_FIRE:
+                            case magic_spell_flags::GF_FIRE:
                                 damageFire(damage, spell_name.c_str());
                                 break;
                             default:

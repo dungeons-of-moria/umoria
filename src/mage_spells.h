@@ -8,5 +8,16 @@
 
 #pragma once
 
+// spell types used by get_flags(), breathe(), fire_bolt() and fire_ball()
+enum magic_spell_flags {
+    GF_MAGIC_MISSILE,
+    GF_LIGHTNING,
+    GF_POISON_GAS,
+    GF_ACID,
+    GF_FROST,
+    GF_FIRE,
+    GF_HOLY_ORB,
+};
+
 void getAndCastMagicSpell();
 int spellChanceOfSuccess(int spell_id);

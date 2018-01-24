@@ -404,12 +404,3 @@ constexpr uint8_t TV_DOWN_STAIR = 108;
 constexpr uint8_t TV_SECRET_DOOR = 109;
 constexpr uint8_t TV_STORE_DOOR = 110;
 constexpr uint8_t TV_MAX_VISIBLE = 110;
-
-// spell types used by get_flags(), breathe(), fire_bolt() and fire_ball()
-constexpr uint8_t GF_MAGIC_MISSILE = 0;
-constexpr uint8_t GF_LIGHTNING = 1;
-constexpr uint8_t GF_POISON_GAS = 2;
-constexpr uint8_t GF_ACID = 3;
-constexpr uint8_t GF_FROST = 4;
-constexpr uint8_t GF_FIRE = 5;
-constexpr uint8_t GF_HOLY_ORB = 6;
