@@ -224,7 +224,7 @@ void playerEat() {
 
     playerIngestFood(item->misc_use);
 
-    py.flags.status &= ~(PY_WEAK | PY_HUNGRY);
+    py.flags.status &= ~(config::player::status::PY_WEAK | config::player::status::PY_HUNGRY);
 
     printCharacterHungerStatus();
 

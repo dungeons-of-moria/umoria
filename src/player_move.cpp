@@ -475,7 +475,7 @@ void playerMove(int direction, bool do_pickup) {
 
             // Check to see if they've noticed something
             // fos may be negative if have good rings of searching
-            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || ((py.flags.status & PY_SEARCH) != 0u)) {
+            if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || ((py.flags.status & config::player::status::PY_SEARCH) != 0u)) {
                 playerSearch(py.row, py.col, py.misc.chance_in_search);
             }
 

@@ -960,7 +960,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
                     // must test status bit, not py.flags.blind here, flag could have
                     // been set by a previous monster, but the breath should still
                     // be visible until the blindness takes effect
-                    if (coordInsidePanel(Coord_t{row, col}) && ((py.flags.status & PY_BLIND) == 0u)) {
+                    if (coordInsidePanel(Coord_t{row, col}) && ((py.flags.status & config::player::status::PY_BLIND) == 0u)) {
                         panelPutTile('*', Coord_t{row, col});
                     }
 

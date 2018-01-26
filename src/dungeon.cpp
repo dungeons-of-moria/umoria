@@ -179,7 +179,7 @@ char caveGetTileSymbol(Coord_t const &coord) {
         return '@';
     }
 
-    if ((py.flags.status & PY_BLIND) != 0u) {
+    if ((py.flags.status & config::player::status::PY_BLIND) != 0u) {
         return ' ';
     }
 

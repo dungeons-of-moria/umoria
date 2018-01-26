@@ -108,5 +108,43 @@ namespace config {
         const uint16_t PLAYER_REGEN_HPBASE = 1442;      // Min amount hp regen*2^16
         const uint16_t PLAYER_REGEN_MNBASE = 524;       // Min amount mana regen*2^16
         const uint8_t PLAYER_WEIGHT_CAP = 130;          // "#"*(1/10 pounds) per strength point
+
+        // definitions for the player's status field
+        namespace status {
+            const uint32_t PY_HUNGRY = 0x00000001L;
+            const uint32_t PY_WEAK = 0x00000002L;
+            const uint32_t PY_BLIND = 0x00000004L;
+            const uint32_t PY_CONFUSED = 0x00000008L;
+            const uint32_t PY_FEAR = 0x00000010L;
+            const uint32_t PY_POISONED = 0x00000020L;
+            const uint32_t PY_FAST = 0x00000040L;
+            const uint32_t PY_SLOW = 0x00000080L;
+            const uint32_t PY_SEARCH = 0x00000100L;
+            const uint32_t PY_REST = 0x00000200L;
+            const uint32_t PY_STUDY = 0x00000400L;
+
+            const uint32_t PY_INVULN = 0x00001000L;
+            const uint32_t PY_HERO = 0x00002000L;
+            const uint32_t PY_SHERO = 0x00004000L;
+            const uint32_t PY_BLESSED = 0x00008000L;
+            const uint32_t PY_DET_INV = 0x00010000L;
+            const uint32_t PY_TIM_INFRA = 0x00020000L;
+            const uint32_t PY_SPEED = 0x00040000L;
+            const uint32_t PY_STR_WGT = 0x00080000L;
+            const uint32_t PY_PARALYSED = 0x00100000L;
+            const uint32_t PY_REPEAT = 0x00200000L;
+            const uint32_t PY_ARMOR = 0x00400000L;
+
+            const uint32_t PY_STATS = 0x3F000000L;
+            const uint32_t PY_STR = 0x01000000L; // these 6 stat flags must be adjacent
+            const uint32_t PY_INT = 0x02000000L;
+            const uint32_t PY_WIS = 0x04000000L;
+            const uint32_t PY_DEX = 0x08000000L;
+            const uint32_t PY_CON = 0x10000000L;
+            const uint32_t PY_CHR = 0x20000000L;
+
+            const uint32_t PY_HP = 0x40000000L;
+            const uint32_t PY_MANA = 0x80000000L;
+        }
     }
 }

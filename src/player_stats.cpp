@@ -35,11 +35,11 @@ void playerCalculateHitPoints() {
         hp = py.misc.level + 1;
     }
 
-    if ((py.flags.status & PY_HERO) != 0u) {
+    if ((py.flags.status & config::player::status::PY_HERO) != 0u) {
         hp += 10;
     }
 
-    if ((py.flags.status & PY_SHERO) != 0u) {
+    if ((py.flags.status & config::player::status::PY_SHERO) != 0u) {
         hp += 20;
     }
 
@@ -53,7 +53,7 @@ void playerCalculateHitPoints() {
         py.misc.max_hp = (int16_t) hp;
 
         // can't print hit points here, may be in store or inventory mode
-        py.flags.status |= PY_HP;
+        py.flags.status |= config::player::status::PY_HP;
     }
 }
 
@@ -268,7 +268,7 @@ void playerSetAndUseStat(int stat) {
     py.stats.used[stat] = playerModifyStat(stat, py.stats.modified[stat]);
 
     if (stat == py_attrs::A_STR) {
-        py.flags.status |= PY_STR_WGT;
+        py.flags.status |= config::player::status::PY_STR_WGT;
         playerRecalculateBonuses();
     } else if (stat == py_attrs::A_DEX) {
         playerRecalculateBonuses();
@@ -369,7 +369,7 @@ void playerStatBoost(int stat, int amount) {
     // can not call displayCharacterStats() here:
     //   might be in a store,
     //   might be in inventoryExecuteCommand()
-    py.flags.status |= (PY_STR << stat);
+    py.flags.status |= (config::player::status::PY_STR << stat);
 }
 
 // Returns a character's adjustment to hit. -JWT-

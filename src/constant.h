@@ -108,42 +108,6 @@ constexpr uint8_t NAME_OFFSET_PRAYERS = 31;
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
 
-// definitions for the player's status field
-constexpr uint32_t PY_HUNGRY = 0x00000001L;
-constexpr uint32_t PY_WEAK = 0x00000002L;
-constexpr uint32_t PY_BLIND = 0x00000004L;
-constexpr uint32_t PY_CONFUSED = 0x00000008L;
-constexpr uint32_t PY_FEAR = 0x00000010L;
-constexpr uint32_t PY_POISONED = 0x00000020L;
-constexpr uint32_t PY_FAST = 0x00000040L;
-constexpr uint32_t PY_SLOW = 0x00000080L;
-constexpr uint32_t PY_SEARCH = 0x00000100L;
-constexpr uint32_t PY_REST = 0x00000200L;
-constexpr uint32_t PY_STUDY = 0x00000400L;
-
-constexpr uint32_t PY_INVULN = 0x00001000L;
-constexpr uint32_t PY_HERO = 0x00002000L;
-constexpr uint32_t PY_SHERO = 0x00004000L;
-constexpr uint32_t PY_BLESSED = 0x00008000L;
-constexpr uint32_t PY_DET_INV = 0x00010000L;
-constexpr uint32_t PY_TIM_INFRA = 0x00020000L;
-constexpr uint32_t PY_SPEED = 0x00040000L;
-constexpr uint32_t PY_STR_WGT = 0x00080000L;
-constexpr uint32_t PY_PARALYSED = 0x00100000L;
-constexpr uint32_t PY_REPEAT = 0x00200000L;
-constexpr uint32_t PY_ARMOR = 0x00400000L;
-
-constexpr uint32_t PY_STATS = 0x3F000000L;
-constexpr uint32_t PY_STR = 0x01000000L; // these 6 stat flags must be adjacent
-constexpr uint32_t PY_INT = 0x02000000L;
-constexpr uint32_t PY_WIS = 0x04000000L;
-constexpr uint32_t PY_DEX = 0x08000000L;
-constexpr uint32_t PY_CON = 0x10000000L;
-constexpr uint32_t PY_CHR = 0x20000000L;
-
-constexpr uint32_t PY_HP = 0x40000000L;
-constexpr uint32_t PY_MANA = 0x80000000L;
-
 // definitions for objects that can be worn
 constexpr uint32_t TR_STATS = 0x0000003FL; // the stats must be the low 6 bits
 constexpr uint32_t TR_STR = 0x00000001L;

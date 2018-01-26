@@ -19,7 +19,7 @@ static void inventoryThrow(int item_id, Inventory_t *treasure) {
         treasure->items_count = 1;
         item->items_count--;
         py.inventory_weight -= item->weight;
-        py.flags.status |= PY_STR_WGT;
+        py.flags.status |= config::player::status::PY_STR_WGT;
     } else {
         inventoryDestroyItem(item_id);
     }

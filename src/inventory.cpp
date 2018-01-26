@@ -40,7 +40,7 @@ void inventoryDestroyItem(int item_id) {
         py.unique_inventory_items--;
     }
 
-    py.flags.status |= PY_STR_WGT;
+    py.flags.status |= config::player::status::PY_STR_WGT;
 }
 
 // Copies the object in the second argument over the first argument.
@@ -92,7 +92,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
         printMessage(prt2);
     }
 
-    py.flags.status |= PY_STR_WGT;
+    py.flags.status |= config::player::status::PY_STR_WGT;
 }
 
 // Destroys a type of item on a given percent chance -RAK-
@@ -299,7 +299,7 @@ int inventoryCarryItem(Inventory_t &new_item) {
     }
 
     py.inventory_weight += new_item.items_count * new_item.weight;
-    py.flags.status |= PY_STR_WGT;
+    py.flags.status |= config::player::status::PY_STR_WGT;
 
     return slot_id;
 }

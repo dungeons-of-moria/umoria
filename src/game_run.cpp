@@ -310,7 +310,7 @@ static void playerUpdateLightStatus() {
 }
 
 static void playerActivateHeroism() {
-    py.flags.status |= PY_HERO;
+    py.flags.status |= config::player::status::PY_HERO;
     playerDisturb(0, 0);
 
     py.misc.max_hp += 10;
@@ -324,7 +324,7 @@ static void playerActivateHeroism() {
 }
 
 static void playerDisableHeroism() {
-    py.flags.status &= ~PY_HERO;
+    py.flags.status &= ~config::player::status::PY_HERO;
     playerDisturb(0, 0);
 
     py.misc.max_hp -= 10;
@@ -341,7 +341,7 @@ static void playerDisableHeroism() {
 }
 
 static void playerActivateSuperHeroism() {
-    py.flags.status |= PY_SHERO;
+    py.flags.status |= config::player::status::PY_SHERO;
     playerDisturb(0, 0);
 
     py.misc.max_hp += 20;
@@ -355,7 +355,7 @@ static void playerActivateSuperHeroism() {
 }
 
 static void playerDisableSuperHeroism() {
-    py.flags.status &= ~PY_SHERO;
+    py.flags.status &= ~config::player::status::PY_SHERO;
     playerDisturb(0, 0);
 
     py.misc.max_hp -= 20;
@@ -374,7 +374,7 @@ static void playerDisableSuperHeroism() {
 static void playerUpdateHeroStatus() {
     // Heroism
     if (py.flags.heroism > 0) {
-        if ((py.flags.status & PY_HERO) == 0) {
+        if ((py.flags.status & config::player::status::PY_HERO) == 0) {
             playerActivateHeroism();
         }
 
@@ -387,7 +387,7 @@ static void playerUpdateHeroStatus() {
 
     // Super Heroism
     if (py.flags.super_heroism > 0) {
-        if ((py.flags.status & PY_SHERO) == 0) {
+        if ((py.flags.status & config::player::status::PY_SHERO) == 0) {
             playerActivateSuperHeroism();
         }
 
@@ -413,8 +413,8 @@ static int playerFoodConsumption() {
                 regen_amount = config::player::PLAYER_REGEN_WEAK;
             }
 
-            if ((py.flags.status & PY_WEAK) == 0) {
-                py.flags.status |= PY_WEAK;
+            if ((py.flags.status & config::player::status::PY_WEAK) == 0) {
+                py.flags.status |= config::player::status::PY_WEAK;
                 printMessage("You are getting weak from hunger.");
                 playerDisturb(0, 0);
                 printCharacterHungerStatus();
@@ -425,8 +425,8 @@ static int playerFoodConsumption() {
                 printMessage("You faint from the lack of food.");
                 playerDisturb(1, 0);
             }
-        } else if ((py.flags.status & PY_HUNGRY) == 0) {
-            py.flags.status |= PY_HUNGRY;
+        } else if ((py.flags.status & config::player::status::PY_HUNGRY) == 0) {
+            py.flags.status |= config::player::status::PY_HUNGRY;
             printMessage("You are getting hungry.");
             playerDisturb(0, 0);
             printCharacterHungerStatus();
@@ -454,7 +454,7 @@ static void playerUpdateRegeneration(int amount) {
         amount = amount * 3 / 2;
     }
 
-    if (((py.flags.status & PY_SEARCH) != 0u) || py.flags.rest != 0) {
+    if (((py.flags.status & config::player::status::PY_SEARCH) != 0u) || py.flags.rest != 0) {
         amount = amount * 2;
     }
 
@@ -472,8 +472,8 @@ static void playerUpdateBlindness() {
         return;
     }
 
-    if ((py.flags.status & PY_BLIND) == 0) {
-        py.flags.status |= PY_BLIND;
+    if ((py.flags.status & config::player::status::PY_BLIND) == 0) {
+        py.flags.status |= config::player::status::PY_BLIND;
 
         drawDungeonPanel();
         printCharacterBlindStatus();
@@ -486,7 +486,7 @@ static void playerUpdateBlindness() {
     py.flags.blind--;
 
     if (py.flags.blind == 0) {
-        py.flags.status &= ~PY_BLIND;
+        py.flags.status &= ~config::player::status::PY_BLIND;
 
         printCharacterBlindStatus();
         drawDungeonPanel();
@@ -504,15 +504,15 @@ static void playerUpdateConfusion() {
         return;
     }
 
-    if ((py.flags.status & PY_CONFUSED) == 0) {
-        py.flags.status |= PY_CONFUSED;
+    if ((py.flags.status & config::player::status::PY_CONFUSED) == 0) {
+        py.flags.status |= config::player::status::PY_CONFUSED;
         printCharacterConfusedState();
     }
 
     py.flags.confused--;
 
     if (py.flags.confused == 0) {
-        py.flags.status &= ~PY_CONFUSED;
+        py.flags.status &= ~config::player::status::PY_CONFUSED;
 
         printCharacterConfusedState();
         printMessage("You feel less confused now.");
@@ -528,11 +528,11 @@ static void playerUpdateFearState() {
         return;
     }
 
-    if ((py.flags.status & PY_FEAR) == 0) {
+    if ((py.flags.status & config::player::status::PY_FEAR) == 0) {
         if (py.flags.super_heroism + py.flags.heroism > 0) {
             py.flags.afraid = 0;
         } else {
-            py.flags.status |= PY_FEAR;
+            py.flags.status |= config::player::status::PY_FEAR;
             printCharacterFearState();
         }
     } else if (py.flags.super_heroism + py.flags.heroism > 0) {
@@ -542,7 +542,7 @@ static void playerUpdateFearState() {
     py.flags.afraid--;
 
     if (py.flags.afraid == 0) {
-        py.flags.status &= ~PY_FEAR;
+        py.flags.status &= ~config::player::status::PY_FEAR;
 
         printCharacterFearState();
         printMessage("You feel bolder now.");
@@ -555,15 +555,15 @@ static void playerUpdatePoisonedState() {
         return;
     }
 
-    if ((py.flags.status & PY_POISONED) == 0) {
-        py.flags.status |= PY_POISONED;
+    if ((py.flags.status & config::player::status::PY_POISONED) == 0) {
+        py.flags.status |= config::player::status::PY_POISONED;
         printCharacterPoisonedState();
     }
 
     py.flags.poisoned--;
 
     if (py.flags.poisoned == 0) {
-        py.flags.status &= ~PY_POISONED;
+        py.flags.status &= ~config::player::status::PY_POISONED;
 
         printCharacterPoisonedState();
         printMessage("You feel better.");
@@ -614,8 +614,8 @@ static void playerUpdateFastness() {
         return;
     }
 
-    if ((py.flags.status & PY_FAST) == 0) {
-        py.flags.status |= PY_FAST;
+    if ((py.flags.status & config::player::status::PY_FAST) == 0) {
+        py.flags.status |= config::player::status::PY_FAST;
         playerChangeSpeed(-1);
 
         printMessage("You feel yourself moving faster.");
@@ -625,7 +625,7 @@ static void playerUpdateFastness() {
     py.flags.fast--;
 
     if (py.flags.fast == 0) {
-        py.flags.status &= ~PY_FAST;
+        py.flags.status &= ~config::player::status::PY_FAST;
         playerChangeSpeed(1);
 
         printMessage("You feel yourself slow down.");
@@ -638,8 +638,8 @@ static void playerUpdateSlowness() {
         return;
     }
 
-    if ((py.flags.status & PY_SLOW) == 0) {
-        py.flags.status |= PY_SLOW;
+    if ((py.flags.status & config::player::status::PY_SLOW) == 0) {
+        py.flags.status |= config::player::status::PY_SLOW;
         playerChangeSpeed(1);
 
         printMessage("You feel yourself moving slower.");
@@ -649,7 +649,7 @@ static void playerUpdateSlowness() {
     py.flags.slow--;
 
     if (py.flags.slow == 0) {
-        py.flags.status &= ~PY_SLOW;
+        py.flags.status &= ~config::player::status::PY_SLOW;
         playerChangeSpeed(-1);
 
         printMessage("You feel yourself speed up.");
@@ -726,8 +726,8 @@ static void playerUpdateInvulnerability() {
         return;
     }
 
-    if ((py.flags.status & PY_INVULN) == 0) {
-        py.flags.status |= PY_INVULN;
+    if ((py.flags.status & config::player::status::PY_INVULN) == 0) {
+        py.flags.status |= config::player::status::PY_INVULN;
         playerDisturb(0, 0);
 
         py.misc.ac += 100;
@@ -740,7 +740,7 @@ static void playerUpdateInvulnerability() {
     py.flags.invulnerability--;
 
     if (py.flags.invulnerability == 0) {
-        py.flags.status &= ~PY_INVULN;
+        py.flags.status &= ~config::player::status::PY_INVULN;
         playerDisturb(0, 0);
 
         py.misc.ac -= 100;
@@ -756,8 +756,8 @@ static void playerUpdateBlessedness() {
         return;
     }
 
-    if ((py.flags.status & PY_BLESSED) == 0) {
-        py.flags.status |= PY_BLESSED;
+    if ((py.flags.status & config::player::status::PY_BLESSED) == 0) {
+        py.flags.status |= config::player::status::PY_BLESSED;
         playerDisturb(0, 0);
 
         py.misc.bth += 5;
@@ -772,7 +772,7 @@ static void playerUpdateBlessedness() {
     py.flags.blessed--;
 
     if (py.flags.blessed == 0) {
-        py.flags.status &= ~PY_BLESSED;
+        py.flags.status &= ~config::player::status::PY_BLESSED;
         playerDisturb(0, 0);
 
         py.misc.bth -= 5;
@@ -815,8 +815,8 @@ static void playerUpdateDetectInvisible() {
         return;
     }
 
-    if ((py.flags.status & PY_DET_INV) == 0) {
-        py.flags.status |= PY_DET_INV;
+    if ((py.flags.status & config::player::status::PY_DET_INV) == 0) {
+        py.flags.status |= config::player::status::PY_DET_INV;
         py.flags.see_invisible = true;
 
         // light but don't move creatures
@@ -826,7 +826,7 @@ static void playerUpdateDetectInvisible() {
     py.flags.detect_invisible--;
 
     if (py.flags.detect_invisible == 0) {
-        py.flags.status &= ~PY_DET_INV;
+        py.flags.status &= ~config::player::status::PY_DET_INV;
 
         // may still be able to see_invisible if wearing magic item
         playerRecalculateBonuses();
@@ -842,8 +842,8 @@ static void playerUpdateInfraVision() {
         return;
     }
 
-    if ((py.flags.status & PY_TIM_INFRA) == 0) {
-        py.flags.status |= PY_TIM_INFRA;
+    if ((py.flags.status & config::player::status::PY_TIM_INFRA) == 0) {
+        py.flags.status |= config::player::status::PY_TIM_INFRA;
         py.flags.see_infra++;
 
         // light but don't move creatures
@@ -853,7 +853,7 @@ static void playerUpdateInfraVision() {
     py.flags.timed_infra--;
 
     if (py.flags.timed_infra == 0) {
-        py.flags.status &= ~PY_TIM_INFRA;
+        py.flags.status &= ~config::player::status::PY_TIM_INFRA;
         py.flags.see_infra--;
 
         // unlight but don't move creatures
@@ -886,45 +886,45 @@ static void playerUpdateWordOfRecall() {
 }
 
 static void playerUpdateStatusFlags() {
-    if ((py.flags.status & PY_SPEED) != 0u) {
-        py.flags.status &= ~PY_SPEED;
+    if ((py.flags.status & config::player::status::PY_SPEED) != 0u) {
+        py.flags.status &= ~config::player::status::PY_SPEED;
         printCharacterSpeed();
     }
 
-    if (((py.flags.status & PY_PARALYSED) != 0u) && py.flags.paralysis < 1) {
+    if (((py.flags.status & config::player::status::PY_PARALYSED) != 0u) && py.flags.paralysis < 1) {
         printCharacterMovementState();
-        py.flags.status &= ~PY_PARALYSED;
+        py.flags.status &= ~config::player::status::PY_PARALYSED;
     } else if (py.flags.paralysis > 0) {
         printCharacterMovementState();
-        py.flags.status |= PY_PARALYSED;
+        py.flags.status |= config::player::status::PY_PARALYSED;
     } else if (py.flags.rest != 0) {
         printCharacterMovementState();
     }
 
-    if ((py.flags.status & PY_ARMOR) != 0) {
+    if ((py.flags.status & config::player::status::PY_ARMOR) != 0) {
         printCharacterCurrentArmorClass();
-        py.flags.status &= ~PY_ARMOR;
+        py.flags.status &= ~config::player::status::PY_ARMOR;
     }
 
-    if ((py.flags.status & PY_STATS) != 0) {
+    if ((py.flags.status & config::player::status::PY_STATS) != 0) {
         for (int n = 0; n < 6; n++) {
-            if (((PY_STR << n) & py.flags.status) != 0u) {
+            if (((config::player::status::PY_STR << n) & py.flags.status) != 0u) {
                 displayCharacterStats(n);
             }
         }
 
-        py.flags.status &= ~PY_STATS;
+        py.flags.status &= ~config::player::status::PY_STATS;
     }
 
-    if ((py.flags.status & PY_HP) != 0u) {
+    if ((py.flags.status & config::player::status::PY_HP) != 0u) {
         printCharacterMaxHitPoints();
         printCharacterCurrentHitPoints();
-        py.flags.status &= ~PY_HP;
+        py.flags.status &= ~config::player::status::PY_HP;
     }
 
-    if ((py.flags.status & PY_MANA) != 0u) {
+    if ((py.flags.status & config::player::status::PY_MANA) != 0u) {
         printCharacterCurrentMana();
-        py.flags.status &= ~PY_MANA;
+        py.flags.status &= ~config::player::status::PY_MANA;
     }
 }
 
@@ -1024,7 +1024,7 @@ static void executeInputCommands(char &command, int &find_count) {
 
     // Accept a command and execute it
     do {
-        if ((py.flags.status & PY_REPEAT) != 0u) {
+        if ((py.flags.status & config::player::status::PY_REPEAT) != 0u) {
             printCharacterMovementState();
         }
 
@@ -1548,7 +1548,7 @@ static void commandLocateOnMap() {
 }
 
 static void commandToggleSearch() {
-    if ((py.flags.status & PY_SEARCH) != 0u) {
+    if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
         playerSearchOff();
     } else {
         playerSearchOn();
@@ -2375,7 +2375,7 @@ static void playDungeon() {
     // must do this after `dg.panel.row` / `dg.panel.col` set to -1, because playerSearchOff() will
     // call dungeonResetView(), and so the panel_* variables must be valid before
     // playerSearchOff() is called
-    if ((py.flags.status & PY_SEARCH) != 0u) {
+    if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
         playerSearchOff();
     }
 
@@ -2448,11 +2448,11 @@ static void playDungeon() {
         }
 
         // See if we are too weak to handle the weapon or pack. -CJS-
-        if ((py.flags.status & PY_STR_WGT) != 0u) {
+        if ((py.flags.status & config::player::status::PY_STR_WGT) != 0u) {
             playerStrength();
         }
 
-        if ((py.flags.status & PY_STUDY) != 0u) {
+        if ((py.flags.status & config::player::status::PY_STUDY) != 0u) {
             printCharacterStudyInstruction();
         }
 

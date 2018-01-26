@@ -155,7 +155,7 @@ bool playerNoLight() {
 void playerDisturb(int major_disturbance, int light_disturbance) {
     game.command_count = 0;
 
-    if ((major_disturbance != 0) && ((py.flags.status & PY_SEARCH) != 0u)) {
+    if ((major_disturbance != 0) && ((py.flags.status & config::player::status::PY_SEARCH) != 0u)) {
         playerSearchOff();
     }
 
@@ -175,7 +175,7 @@ void playerDisturb(int major_disturbance, int light_disturbance) {
 void playerSearchOn() {
     playerChangeSpeed(1);
 
-    py.flags.status |= PY_SEARCH;
+    py.flags.status |= config::player::status::PY_SEARCH;
 
     printCharacterMovementState();
     printCharacterSpeed();
@@ -187,7 +187,7 @@ void playerSearchOff() {
     dungeonResetView();
     playerChangeSpeed(-1);
 
-    py.flags.status &= ~PY_SEARCH;
+    py.flags.status &= ~config::player::status::PY_SEARCH;
 
     printCharacterMovementState();
     printCharacterSpeed();
@@ -219,12 +219,12 @@ void playerRestOn() {
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
     if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num <= MAX_SHORT)) {
-        if ((py.flags.status & PY_SEARCH) != 0u) {
+        if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
             playerSearchOff();
         }
 
         py.flags.rest = (int16_t) rest_num;
-        py.flags.status |= PY_REST;
+        py.flags.status |= config::player::status::PY_REST;
         printCharacterMovementState();
         py.flags.food_digested--;
 
@@ -245,7 +245,7 @@ void playerRestOn() {
 
 void playerRestOff() {
     py.flags.rest = 0;
-    py.flags.status &= ~PY_REST;
+    py.flags.status &= ~config::player::status::PY_REST;
 
     printCharacterMovementState();
 
@@ -404,7 +404,7 @@ bool playerTestAttackHits(int attack_id, uint8_t level) {
 // the speed of all the monsters. This greatly simplified the logic.
 void playerChangeSpeed(int speed) {
     py.flags.speed += speed;
-    py.flags.status |= PY_SPEED;
+    py.flags.status |= config::player::status::PY_SPEED;
 
     for (int i = next_free_monster_id - 1; i >= config::monsters::MON_MIN_INDEX_ID; i--) {
         monsters[i].speed += speed;
@@ -572,7 +572,7 @@ void playerRecalculateBonuses() {
 
     // can't print AC here because might be in a store
     if (savedDisplayAC != py.misc.display_ac) {
-        py.flags.status |= PY_ARMOR;
+        py.flags.status |= config::player::status::PY_ARMOR;
     }
 
     uint32_t item_flags = inventoryCollectAllItemFlags();
@@ -624,7 +624,7 @@ void playerRecalculateBonuses() {
 
 // Remove item from equipment list -RAK-
 void playerTakeOff(int item_id, int pack_position_id) {
-    py.flags.status |= PY_STR_WGT;
+    py.flags.status |= config::player::status::PY_STR_WGT;
 
     Inventory_t &item = inventory[item_id];
 
@@ -808,7 +808,7 @@ void playerStrength() {
         py.pack_heaviness = (int16_t) limit;
     }
 
-    py.flags.status &= ~PY_STR_WGT;
+    py.flags.status &= ~config::player::status::PY_STR_WGT;
 }
 
 static bool playerCanRead() {
@@ -978,7 +978,7 @@ void playerGainSpells() {
     py.flags.new_spells_to_learn = (uint8_t) (new_spells + diff_spells);
 
     if (py.flags.new_spells_to_learn == 0) {
-        py.flags.status |= PY_STUDY;
+        py.flags.status |= config::player::status::PY_STUDY;
     }
 
     // set the mana for first level characters when they learn their first spell.
@@ -1035,14 +1035,14 @@ void playerGainMana(int stat) {
             py.misc.mana = (int16_t) new_mana;
 
             // can't print mana here, may be in store or inventory mode
-            py.flags.status |= PY_MANA;
+            py.flags.status |= config::player::status::PY_MANA;
         }
     } else if (py.misc.mana != 0) {
         py.misc.mana = 0;
         py.misc.current_mana = 0;
 
         // can't print mana here, may be in store or inventory mode
-        py.flags.status |= PY_MANA;
+        py.flags.status |= config::player::status::PY_MANA;
     }
 }
 
@@ -1223,7 +1223,7 @@ static void playerAttackMonster(int y, int x) {
         if (item.category_id >= TV_SLING_AMMO && item.category_id <= TV_SPIKE) {
             item.items_count--;
             py.inventory_weight -= item.weight;
-            py.flags.status |= PY_STR_WGT;
+            py.flags.status |= config::player::status::PY_STR_WGT;
 
             if (item.items_count == 0) {
                 py.equipment_count--;
@@ -1659,7 +1659,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
         }
 
         py.flags.new_spells_to_learn = (uint8_t) new_spells;
-        py.flags.status |= PY_STUDY;
+        py.flags.status |= config::player::status::PY_STUDY;
     }
 }
 

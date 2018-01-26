@@ -99,5 +99,42 @@ namespace config {
         extern const uint16_t PLAYER_REGEN_HPBASE;
         extern const uint16_t PLAYER_REGEN_MNBASE;
         extern const uint8_t PLAYER_WEIGHT_CAP;
+
+        namespace status {
+            extern const uint32_t PY_HUNGRY;
+            extern const uint32_t PY_WEAK;
+            extern const uint32_t PY_BLIND;
+            extern const uint32_t PY_CONFUSED;
+            extern const uint32_t PY_FEAR;
+            extern const uint32_t PY_POISONED;
+            extern const uint32_t PY_FAST;
+            extern const uint32_t PY_SLOW;
+            extern const uint32_t PY_SEARCH;
+            extern const uint32_t PY_REST;
+            extern const uint32_t PY_STUDY;
+
+            extern const uint32_t PY_INVULN;
+            extern const uint32_t PY_HERO;
+            extern const uint32_t PY_SHERO;
+            extern const uint32_t PY_BLESSED;
+            extern const uint32_t PY_DET_INV;
+            extern const uint32_t PY_TIM_INFRA;
+            extern const uint32_t PY_SPEED;
+            extern const uint32_t PY_STR_WGT;
+            extern const uint32_t PY_PARALYSED;
+            extern const uint32_t PY_REPEAT;
+            extern const uint32_t PY_ARMOR;
+
+            extern const uint32_t PY_STATS;
+            extern const uint32_t PY_STR; // these 6 stat flags must be adjacent
+            extern const uint32_t PY_INT;
+            extern const uint32_t PY_WIS;
+            extern const uint32_t PY_DEX;
+            extern const uint32_t PY_CON;
+            extern const uint32_t PY_CHR;
+
+            extern const uint32_t PY_HP;
+            extern const uint32_t PY_MANA;
+        }
     }
 }

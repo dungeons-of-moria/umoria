@@ -260,9 +260,9 @@ void printCharacterCurrentDepth() {
 
 // Prints status of hunger -RAK-
 void printCharacterHungerStatus() {
-    if ((py.flags.status & PY_WEAK) != 0u) {
+    if ((py.flags.status & config::player::status::PY_WEAK) != 0u) {
         putString("Weak  ", Coord_t{23, 0});
-    } else if ((py.flags.status & PY_HUNGRY) != 0u) {
+    } else if ((py.flags.status & config::player::status::PY_HUNGRY) != 0u) {
         putString("Hungry", Coord_t{23, 0});
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 0});
@@ -271,7 +271,7 @@ void printCharacterHungerStatus() {
 
 // Prints Blind status -RAK-
 void printCharacterBlindStatus() {
-    if ((py.flags.status & PY_BLIND) != 0u) {
+    if ((py.flags.status & config::player::status::PY_BLIND) != 0u) {
         putString("Blind", Coord_t{23, 7});
     } else {
         putString(&blank_string[BLANK_LENGTH - 5], Coord_t{23, 7});
@@ -280,7 +280,7 @@ void printCharacterBlindStatus() {
 
 // Prints Confusion status -RAK-
 void printCharacterConfusedState() {
-    if ((py.flags.status & PY_CONFUSED) != 0u) {
+    if ((py.flags.status & config::player::status::PY_CONFUSED) != 0u) {
         putString("Confused", Coord_t{23, 13});
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 13});
@@ -289,7 +289,7 @@ void printCharacterConfusedState() {
 
 // Prints Fear status -RAK-
 void printCharacterFearState() {
-    if ((py.flags.status & PY_FEAR) != 0u) {
+    if ((py.flags.status & config::player::status::PY_FEAR) != 0u) {
         putString("Afraid", Coord_t{23, 22});
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 22});
@@ -298,7 +298,7 @@ void printCharacterFearState() {
 
 // Prints Poisoned status -RAK-
 void printCharacterPoisonedState() {
-    if ((py.flags.status & PY_POISONED) != 0u) {
+    if ((py.flags.status & config::player::status::PY_POISONED) != 0u) {
         putString("Poisoned", Coord_t{23, 29});
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 29});
@@ -307,14 +307,14 @@ void printCharacterPoisonedState() {
 
 // Prints Searching, Resting, Paralysis, or 'count' status -RAK-
 void printCharacterMovementState() {
-    py.flags.status &= ~PY_REPEAT;
+    py.flags.status &= ~config::player::status::PY_REPEAT;
 
     if (py.flags.paralysis > 1) {
         putString("Paralysed", Coord_t{23, 38});
         return;
     }
 
-    if ((py.flags.status & PY_REST) != 0u) {
+    if ((py.flags.status & config::player::status::PY_REST) != 0u) {
         char restString[16];
 
         if (py.flags.rest < 0) {
@@ -339,18 +339,18 @@ void printCharacterMovementState() {
             (void) strcpy(repeatString, "Repeat");
         }
 
-        py.flags.status |= PY_REPEAT;
+        py.flags.status |= config::player::status::PY_REPEAT;
 
         putString(repeatString, Coord_t{23, 38});
 
-        if ((py.flags.status & PY_SEARCH) != 0u) {
+        if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
             putString("Search", Coord_t{23, 38});
         }
 
         return;
     }
 
-    if ((py.flags.status & PY_SEARCH) != 0u) {
+    if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
         putString("Searching", Coord_t{23, 38});
         return;
     }
@@ -364,7 +364,7 @@ void printCharacterSpeed() {
     int speed = py.flags.speed;
 
     // Search mode.
-    if ((py.flags.status & PY_SEARCH) != 0u) {
+    if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
         speed--;
     }
 
@@ -382,7 +382,7 @@ void printCharacterSpeed() {
 }
 
 void printCharacterStudyInstruction() {
-    py.flags.status &= ~PY_STUDY;
+    py.flags.status &= ~config::player::status::PY_STUDY;
 
     if (py.flags.new_spells_to_learn == 0) {
         putString(&blank_string[BLANK_LENGTH - 5], Coord_t{23, 59});
@@ -429,32 +429,32 @@ void printCharacterStatsBlock() {
 
     uint32_t status = py.flags.status;
 
-    if (((PY_HUNGRY | PY_WEAK) & status) != 0u) {
+    if (((config::player::status::PY_HUNGRY | config::player::status::PY_WEAK) & status) != 0u) {
         printCharacterHungerStatus();
     }
 
-    if ((status & PY_BLIND) != 0u) {
+    if ((status & config::player::status::PY_BLIND) != 0u) {
         printCharacterBlindStatus();
     }
 
-    if ((status & PY_CONFUSED) != 0u) {
+    if ((status & config::player::status::PY_CONFUSED) != 0u) {
         printCharacterConfusedState();
     }
 
-    if ((status & PY_FEAR) != 0u) {
+    if ((status & config::player::status::PY_FEAR) != 0u) {
         printCharacterFearState();
     }
 
-    if ((status & PY_POISONED) != 0u) {
+    if ((status & config::player::status::PY_POISONED) != 0u) {
         printCharacterPoisonedState();
     }
 
-    if (((PY_SEARCH | PY_REST) & status) != 0u) {
+    if (((config::player::status::PY_SEARCH | config::player::status::PY_REST) & status) != 0u) {
         printCharacterMovementState();
     }
 
     // if speed non zero, print it, modify speed if Searching
-    int16_t speed = py.flags.speed - (int16_t) ((status & PY_SEARCH) >> 8);
+    int16_t speed = py.flags.speed - (int16_t) ((status & config::player::status::PY_SEARCH) >> 8);
     if (speed != 0) {
         printCharacterSpeed();
     }
