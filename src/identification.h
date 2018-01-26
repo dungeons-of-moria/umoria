@@ -8,8 +8,69 @@
 
 #pragma once
 
+// indexes into the special name table
+enum special_name_ids {
+    SN_NULL,
+    SN_R,
+    SN_RA,
+    SN_RF,
+    SN_RC,
+    SN_RL,
+    SN_HA,
+    SN_DF,
+    SN_SA,
+    SN_SD,
+    SN_SE,
+    SN_SU,
+    SN_FT,
+    SN_FB,
+    SN_FREE_ACTION,
+    SN_SLAYING,
+    SN_CLUMSINESS,
+    SN_WEAKNESS,
+    SN_SLOW_DESCENT,
+    SN_SPEED,
+    SN_STEALTH,
+    SN_SLOWNESS,
+    SN_NOISE,
+    SN_GREAT_MASS,
+    SN_INTELLIGENCE,
+    SN_WISDOM,
+    SN_INFRAVISION,
+    SN_MIGHT,
+    SN_LORDLINESS,
+    SN_MAGI,
+    SN_BEAUTY,
+    SN_SEEING,
+    SN_REGENERATION,
+    SN_STUPIDITY,
+    SN_DULLNESS,
+    SN_BLINDNESS,
+    SN_TIMIDNESS,
+    SN_TELEPORTATION,
+    SN_UGLINESS,
+    SN_PROTECTION,
+    SN_IRRITATION,
+    SN_VULNERABILITY,
+    SN_ENVELOPING,
+    SN_FIRE,
+    SN_SLAY_EVIL,
+    SN_DRAGON_SLAYING,
+    SN_EMPTY,
+    SN_LOCKED,
+    SN_POISON_NEEDLE,
+    SN_GAS_TRAP,
+    SN_EXPLOSION_DEVICE,
+    SN_SUMMONING_RUNES,
+    SN_MULTIPLE_TRAPS,
+    SN_DISARMED,
+    SN_UNLOCKED,
+    SN_SLAY_ANIMAL,
+    SN_ARRAY_SIZE, // 56th item (size value for arrays)
+};
+
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
-extern const char *special_item_names[SN_ARRAY_SIZE];
+extern const char *special_item_names[special_name_ids::SN_ARRAY_SIZE];
 
 // Following are arrays for descriptive pieces
 extern const char *colors[MAX_COLORS];

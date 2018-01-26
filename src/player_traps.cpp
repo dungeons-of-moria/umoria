@@ -78,9 +78,9 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t &item) {
             item.flags &= ~CH_TRAPPED;
 
             if ((item.flags & CH_LOCKED) != 0u) {
-                item.special_name_id = SN_LOCKED;
+                item.special_name_id = special_name_ids::SN_LOCKED;
             } else {
-                item.special_name_id = SN_DISARMED;
+                item.special_name_id = special_name_ids::SN_DISARMED;
             }
 
             printMessage("You have disarmed the chest.");

@@ -338,7 +338,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
     DungeonObject_t const &from = game_objects[from_item_id];
 
     to_item.id = (uint16_t) from_item_id;
-    to_item.special_name_id = SN_NULL;
+    to_item.special_name_id = special_name_ids::SN_NULL;
     to_item.inscription[0] = '\0';
     to_item.flags = from.flags;
     to_item.category_id = from.category_id;

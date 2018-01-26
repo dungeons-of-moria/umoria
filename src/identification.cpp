@@ -489,7 +489,7 @@ void itemIdentify(Inventory_t &item, int &item_id) {
 // If an object has lost magical properties,
 // remove the appropriate portion of the name. -CJS-
 void itemRemoveMagicNaming(Inventory_t &item) {
-    item.special_name_id = SN_NULL;
+    item.special_name_id = special_name_ids::SN_NULL;
 }
 
 int bowDamageValue(int16_t misc_use) {
@@ -713,7 +713,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     // TODO(cook): `spellItemIdentified()` is called several times in this
     // function, but `item` is immutable, so we should be able to call and
     // assign it once, then use that value everywhere below.
-    if (item.special_name_id != SN_NULL && spellItemIdentified(item)) {
+    if (item.special_name_id != special_name_ids::SN_NULL && spellItemIdentified(item)) {
         (void) strcat(tmp_val, " ");
         (void) strcat(tmp_val, special_item_names[item.special_name_id]);
     }
