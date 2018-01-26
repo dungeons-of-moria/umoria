@@ -69,17 +69,17 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if ((inventory[player_equipment::EQUIPMENT_BODY].flags & TR_CURSED) != 0u) {
+    if ((inventory[player_equipment::EQUIPMENT_BODY].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_BODY;
-    } else if ((inventory[player_equipment::EQUIPMENT_ARM].flags & TR_CURSED) != 0u) {
+    } else if ((inventory[player_equipment::EQUIPMENT_ARM].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_ARM;
-    } else if ((inventory[player_equipment::EQUIPMENT_OUTER].flags & TR_CURSED) != 0u) {
+    } else if ((inventory[player_equipment::EQUIPMENT_OUTER].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if ((inventory[player_equipment::EQUIPMENT_HEAD].flags & TR_CURSED) != 0u) {
+    } else if ((inventory[player_equipment::EQUIPMENT_HEAD].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if ((inventory[player_equipment::EQUIPMENT_HANDS].flags & TR_CURSED) != 0u) {
+    } else if ((inventory[player_equipment::EQUIPMENT_HANDS].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if ((inventory[player_equipment::EQUIPMENT_FEET].flags & TR_CURSED) != 0u) {
+    } else if ((inventory[player_equipment::EQUIPMENT_FEET].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_FEET;
     }
 
@@ -101,7 +101,7 @@ static bool scrollEnchantWeaponToHit() {
     printMessage(msg);
 
     if (spellEnchantItem(item.to_hit, 10)) {
-        item.flags &= ~TR_CURSED;
+        item.flags &= ~config::treasure::flags::TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -135,7 +135,7 @@ static bool scrollEnchantWeaponToDamage() {
     }
 
     if (spellEnchantItem(item.to_damage, scroll_type)) {
-        item.flags &= ~TR_CURSED;
+        item.flags &= ~config::treasure::flags::TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -161,7 +161,7 @@ static bool scrollEnchantItemToAC() {
     printMessage(msg);
 
     if (spellEnchantItem(item.to_ac, 10)) {
-        item.flags &= ~TR_CURSED;
+        item.flags &= ~config::treasure::flags::TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -264,7 +264,7 @@ static bool scrollEnchantWeapon() {
     }
 
     if (enchanted) {
-        item.flags &= ~TR_CURSED;
+        item.flags &= ~config::treasure::flags::TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -297,7 +297,7 @@ static bool scrollCurseWeapon() {
     // must call playerRecalculateBonuses() after set (clear) flags, so that
     // all attributes will be properly turned off.
     playerAdjustBonusesForItem(item, -1);
-    item.flags = TR_CURSED;
+    item.flags = config::treasure::flags::TR_CURSED;
     playerRecalculateBonuses();
 
     return true;
@@ -328,7 +328,7 @@ static bool scrollEnchantArmor() {
     }
 
     if (enchanted) {
-        item.flags &= ~TR_CURSED;
+        item.flags &= ~config::treasure::flags::TR_CURSED;
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -383,7 +383,7 @@ static bool scrollCurseArmor() {
 
     itemRemoveMagicNaming(item);
 
-    item.flags = TR_CURSED;
+    item.flags = config::treasure::flags::TR_CURSED;
     item.to_hit = 0;
     item.to_damage = 0;
     item.to_ac = (int16_t) (-randomNumber(5) - randomNumber(5));

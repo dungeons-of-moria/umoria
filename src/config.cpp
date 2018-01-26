@@ -74,6 +74,46 @@ namespace config {
         const uint16_t OBJECT_LAMP_MAX_CAPACITY = 15000; // Maximum amount that lamp can be filled
         const uint8_t OBJECT_BOLTS_MAX_RANGE = 18;       // Maximum range of bolts and balls
         const uint16_t OBJECTS_RUNE_PROTECTION = 3000;   // Rune of protection resistance
+
+        // definitions for objects that can be worn
+        namespace flags {
+            const uint32_t TR_STATS = 0x0000003FL; // the stats must be the low 6 bits
+            const uint32_t TR_STR = 0x00000001L;
+            const uint32_t TR_INT = 0x00000002L;
+            const uint32_t TR_WIS = 0x00000004L;
+            const uint32_t TR_DEX = 0x00000008L;
+            const uint32_t TR_CON = 0x00000010L;
+            const uint32_t TR_CHR = 0x00000020L;
+            const uint32_t TR_SEARCH = 0x00000040L;
+            const uint32_t TR_SLOW_DIGEST = 0x00000080L;
+            const uint32_t TR_STEALTH = 0x00000100L;
+            const uint32_t TR_AGGRAVATE = 0x00000200L;
+            const uint32_t TR_TELEPORT = 0x00000400L;
+            const uint32_t TR_REGEN = 0x00000800L;
+            const uint32_t TR_SPEED = 0x00001000L;
+
+            const uint32_t TR_EGO_WEAPON = 0x0007E000L;
+            const uint32_t TR_SLAY_DRAGON = 0x00002000L;
+            const uint32_t TR_SLAY_ANIMAL = 0x00004000L;
+            const uint32_t TR_SLAY_EVIL = 0x00008000L;
+            const uint32_t TR_SLAY_UNDEAD = 0x00010000L;
+            const uint32_t TR_FROST_BRAND = 0x00020000L;
+            const uint32_t TR_FLAME_TONGUE = 0x00040000L;
+
+            const uint32_t TR_RES_FIRE = 0x00080000L;
+            const uint32_t TR_RES_ACID = 0x00100000L;
+            const uint32_t TR_RES_COLD = 0x00200000L;
+            const uint32_t TR_SUST_STAT = 0x00400000L;
+            const uint32_t TR_FREE_ACT = 0x00800000L;
+            const uint32_t TR_SEE_INVIS = 0x01000000L;
+            const uint32_t TR_RES_LIGHT = 0x02000000L;
+            const uint32_t TR_FFALL = 0x04000000L;
+            const uint32_t TR_BLIND = 0x08000000L;
+            const uint32_t TR_TIMID = 0x10000000L;
+            const uint32_t TR_TUNNEL = 0x20000000L;
+            const uint32_t TR_INFRA = 0x40000000L;
+            const uint32_t TR_CURSED = 0x80000000L;
+        }
     }
 
     namespace monsters {

@@ -108,44 +108,6 @@ constexpr uint8_t NAME_OFFSET_PRAYERS = 31;
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
 
-// definitions for objects that can be worn
-constexpr uint32_t TR_STATS = 0x0000003FL; // the stats must be the low 6 bits
-constexpr uint32_t TR_STR = 0x00000001L;
-constexpr uint32_t TR_INT = 0x00000002L;
-constexpr uint32_t TR_WIS = 0x00000004L;
-constexpr uint32_t TR_DEX = 0x00000008L;
-constexpr uint32_t TR_CON = 0x00000010L;
-constexpr uint32_t TR_CHR = 0x00000020L;
-constexpr uint32_t TR_SEARCH = 0x00000040L;
-constexpr uint32_t TR_SLOW_DIGEST = 0x00000080L;
-constexpr uint32_t TR_STEALTH = 0x00000100L;
-constexpr uint32_t TR_AGGRAVATE = 0x00000200L;
-constexpr uint32_t TR_TELEPORT = 0x00000400L;
-constexpr uint32_t TR_REGEN = 0x00000800L;
-constexpr uint32_t TR_SPEED = 0x00001000L;
-
-constexpr uint32_t TR_EGO_WEAPON = 0x0007E000L;
-constexpr uint32_t TR_SLAY_DRAGON = 0x00002000L;
-constexpr uint32_t TR_SLAY_ANIMAL = 0x00004000L;
-constexpr uint32_t TR_SLAY_EVIL = 0x00008000L;
-constexpr uint32_t TR_SLAY_UNDEAD = 0x00010000L;
-constexpr uint32_t TR_FROST_BRAND = 0x00020000L;
-constexpr uint32_t TR_FLAME_TONGUE = 0x00040000L;
-
-constexpr uint32_t TR_RES_FIRE = 0x00080000L;
-constexpr uint32_t TR_RES_ACID = 0x00100000L;
-constexpr uint32_t TR_RES_COLD = 0x00200000L;
-constexpr uint32_t TR_SUST_STAT = 0x00400000L;
-constexpr uint32_t TR_FREE_ACT = 0x00800000L;
-constexpr uint32_t TR_SEE_INVIS = 0x01000000L;
-constexpr uint32_t TR_RES_LIGHT = 0x02000000L;
-constexpr uint32_t TR_FFALL = 0x04000000L;
-constexpr uint32_t TR_BLIND = 0x08000000L;
-constexpr uint32_t TR_TIMID = 0x10000000L;
-constexpr uint32_t TR_TUNNEL = 0x20000000L;
-constexpr uint32_t TR_INFRA = 0x40000000L;
-constexpr uint32_t TR_CURSED = 0x80000000L;
-
 // definitions for chests
 constexpr uint32_t CH_LOCKED = 0x00000001L;
 constexpr uint32_t CH_TRAPPED = 0x000001F0L;

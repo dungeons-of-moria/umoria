@@ -457,7 +457,7 @@ static bool setFlammableItems(Inventory_t *item) {
         case TV_CLOAK:
         case TV_SOFT_ARMOR:
             // Items of (RF) should not be destroyed.
-            return (item->flags & TR_RES_FIRE) == 0;
+            return (item->flags & config::treasure::flags::TR_RES_FIRE) == 0;
         case TV_STAFF:
         case TV_SCROLL1:
         case TV_SCROLL2:
@@ -481,7 +481,7 @@ static bool setAcidAffectedItems(Inventory_t *item) {
         case TV_GLOVES:
         case TV_CLOAK:
         case TV_SOFT_ARMOR:
-            return (item->flags & TR_RES_ACID) == 0;
+            return (item->flags & config::treasure::flags::TR_RES_ACID) == 0;
         default:
             return false;
     }
@@ -508,7 +508,7 @@ bool setAcidDestroyableItems(Inventory_t *item) {
         case TV_SHIELD:
         case TV_HARD_ARMOR:
         case TV_SOFT_ARMOR:
-            return (item->flags & TR_RES_ACID) == 0;
+            return (item->flags & config::treasure::flags::TR_RES_ACID) == 0;
         case TV_STAFF:
         case TV_SCROLL1:
         case TV_SCROLL2:
@@ -531,7 +531,7 @@ bool setFireDestroyableItems(Inventory_t *item) {
         case TV_GLOVES:
         case TV_CLOAK:
         case TV_SOFT_ARMOR:
-            return (item->flags & TR_RES_FIRE) == 0;
+            return (item->flags & config::treasure::flags::TR_RES_FIRE) == 0;
         case TV_STAFF:
         case TV_SCROLL1:
         case TV_SCROLL2:
@@ -549,7 +549,7 @@ bool setFireDestroyableItems(Inventory_t *item) {
 
 // Corrode the unsuspecting person's armor -RAK-
 void damageCorrodingGas(const char *creature_name) {
-    if (!damageMinusAC((uint32_t) TR_RES_ACID)) {
+    if (!damageMinusAC((uint32_t) config::treasure::flags::TR_RES_ACID)) {
         playerTakesHit(randomNumber(8), creature_name);
     }
 
@@ -616,7 +616,7 @@ void damageLightningBolt(int damage, const char *creature_name) {
 void damageAcid(int damage, const char *creature_name) {
     int flag = 0;
 
-    if (damageMinusAC((uint32_t) TR_RES_ACID)) {
+    if (damageMinusAC((uint32_t) config::treasure::flags::TR_RES_ACID)) {
         flag = 1;
     }
 

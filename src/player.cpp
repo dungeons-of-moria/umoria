@@ -422,7 +422,7 @@ void playerChangeSpeed(int speed) {
 void playerAdjustBonusesForItem(Inventory_t const &item, int factor) {
     int amount = item.misc_use * factor;
 
-    if ((item.flags & TR_STATS) != 0u) {
+    if ((item.flags & config::treasure::flags::TR_STATS) != 0u) {
         for (int i = 0; i < 6; i++) {
             if (((1 << i) & item.flags) != 0u) {
                 playerStatBoost(i, amount);
@@ -430,28 +430,28 @@ void playerAdjustBonusesForItem(Inventory_t const &item, int factor) {
         }
     }
 
-    if ((item.flags & TR_SEARCH) != 0u) {
+    if ((item.flags & config::treasure::flags::TR_SEARCH) != 0u) {
         py.misc.chance_in_search += amount;
         py.misc.fos -= amount;
     }
 
-    if ((item.flags & TR_STEALTH) != 0u) {
+    if ((item.flags & config::treasure::flags::TR_STEALTH) != 0u) {
         py.misc.stealth_factor += amount;
     }
 
-    if ((item.flags & TR_SPEED) != 0u) {
+    if ((item.flags & config::treasure::flags::TR_SPEED) != 0u) {
         playerChangeSpeed(-amount);
     }
 
-    if (((item.flags & TR_BLIND) != 0u) && factor > 0) {
+    if (((item.flags & config::treasure::flags::TR_BLIND) != 0u) && factor > 0) {
         py.flags.blind += 1000;
     }
 
-    if (((item.flags & TR_TIMID) != 0u) && factor > 0) {
+    if (((item.flags & config::treasure::flags::TR_TIMID) != 0u) && factor > 0) {
         py.flags.afraid += 50;
     }
 
-    if ((item.flags & TR_INFRA) != 0u) {
+    if ((item.flags & config::treasure::flags::TR_INFRA) != 0u) {
         py.flags.see_infra += amount;
     }
 }
@@ -481,7 +481,7 @@ static void playerRecalculateBonusesFromInventory() {
 
                 py.misc.display_to_ac += item.to_ac;
                 py.misc.display_ac += item.ac;
-            } else if ((item.flags & TR_CURSED) == 0u) {
+            } else if ((item.flags & config::treasure::flags::TR_CURSED) == 0u) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
                 py.misc.display_ac += item.ac;
@@ -492,7 +492,7 @@ static void playerRecalculateBonusesFromInventory() {
 
 static void playerRecalculateSustainStatsFromInventory() {
     for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
-        if ((inventory[i].flags & TR_SUST_STAT) == 0u) {
+        if ((inventory[i].flags & config::treasure::flags::TR_SUST_STAT) == 0u) {
             continue;
         }
 
@@ -577,37 +577,37 @@ void playerRecalculateBonuses() {
 
     uint32_t item_flags = inventoryCollectAllItemFlags();
 
-    if ((item_flags & TR_SLOW_DIGEST) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_SLOW_DIGEST) != 0u) {
         py.flags.slow_digest = true;
     }
-    if ((item_flags & TR_AGGRAVATE) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_AGGRAVATE) != 0u) {
         py.flags.aggravate = true;
     }
-    if ((item_flags & TR_TELEPORT) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_TELEPORT) != 0u) {
         py.flags.teleport = true;
     }
-    if ((item_flags & TR_REGEN) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_REGEN) != 0u) {
         py.flags.regenerate_hp = true;
     }
-    if ((item_flags & TR_RES_FIRE) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_RES_FIRE) != 0u) {
         py.flags.resistant_to_fire = true;
     }
-    if ((item_flags & TR_RES_ACID) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_RES_ACID) != 0u) {
         py.flags.resistant_to_acid = true;
     }
-    if ((item_flags & TR_RES_COLD) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_RES_COLD) != 0u) {
         py.flags.resistant_to_cold = true;
     }
-    if ((item_flags & TR_FREE_ACT) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_FREE_ACT) != 0u) {
         py.flags.free_action = true;
     }
-    if ((item_flags & TR_SEE_INVIS) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_SEE_INVIS) != 0u) {
         py.flags.see_invisible = true;
     }
-    if ((item_flags & TR_RES_LIGHT) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_RES_LIGHT) != 0u) {
         py.flags.resistant_to_light = true;
     }
-    if ((item_flags & TR_FFALL) != 0u) {
+    if ((item_flags & config::treasure::flags::TR_FFALL) != 0u) {
         py.flags.free_fall = true;
     }
 
@@ -1319,7 +1319,7 @@ static void openClosedChest(int y, int x) {
         // Chest treasure is allocated as if a creature had been killed.
         // clear the cursed chest/monster win flag, so that people
         // can not win by opening a cursed chest
-        treasure_list[tile.treasure_id].flags &= ~TR_CURSED;
+        treasure_list[tile.treasure_id].flags &= ~config::treasure::flags::TR_CURSED;
 
         (void) monsterDeath(y, x, treasure_list[tile.treasure_id].flags);
 

@@ -33,7 +33,7 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 static int playerDiggingAbility(Inventory_t const &weapon) {
     int diggingAbility = py.stats.used[py_attrs::A_STR];
 
-    if ((weapon.flags & TR_TUNNEL) != 0u) {
+    if ((weapon.flags & config::treasure::flags::TR_TUNNEL) != 0u) {
         diggingAbility += 25 + weapon.misc_use * 50;
     } else {
         diggingAbility += maxDiceRoll(weapon.damage) + weapon.to_hit + weapon.to_damage;

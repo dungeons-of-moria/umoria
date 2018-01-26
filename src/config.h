@@ -65,6 +65,45 @@ namespace config {
         extern const uint16_t OBJECT_LAMP_MAX_CAPACITY;
         extern const uint8_t OBJECT_BOLTS_MAX_RANGE;
         extern const uint16_t OBJECTS_RUNE_PROTECTION;
+        
+        namespace flags {
+            extern const uint32_t TR_STATS;
+            extern const uint32_t TR_STR;
+            extern const uint32_t TR_INT;
+            extern const uint32_t TR_WIS;
+            extern const uint32_t TR_DEX;
+            extern const uint32_t TR_CON;
+            extern const uint32_t TR_CHR;
+            extern const uint32_t TR_SEARCH;
+            extern const uint32_t TR_SLOW_DIGEST;
+            extern const uint32_t TR_STEALTH;
+            extern const uint32_t TR_AGGRAVATE;
+            extern const uint32_t TR_TELEPORT;
+            extern const uint32_t TR_REGEN;
+            extern const uint32_t TR_SPEED;
+
+            extern const uint32_t TR_EGO_WEAPON;
+            extern const uint32_t TR_SLAY_DRAGON;
+            extern const uint32_t TR_SLAY_ANIMAL;
+            extern const uint32_t TR_SLAY_EVIL;
+            extern const uint32_t TR_SLAY_UNDEAD;
+            extern const uint32_t TR_FROST_BRAND;
+            extern const uint32_t TR_FLAME_TONGUE;
+
+            extern const uint32_t TR_RES_FIRE;
+            extern const uint32_t TR_RES_ACID;
+            extern const uint32_t TR_RES_COLD;
+            extern const uint32_t TR_SUST_STAT;
+            extern const uint32_t TR_FREE_ACT;
+            extern const uint32_t TR_SEE_INVIS;
+            extern const uint32_t TR_RES_LIGHT;
+            extern const uint32_t TR_FFALL;
+            extern const uint32_t TR_BLIND;
+            extern const uint32_t TR_TIMID;
+            extern const uint32_t TR_TUNNEL;
+            extern const uint32_t TR_INFRA;
+            extern const uint32_t TR_CURSED;
+        }
     }
 
     namespace monsters {

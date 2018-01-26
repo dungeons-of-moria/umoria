@@ -2259,8 +2259,8 @@ bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
     for (int id = player_equipment::EQUIPMENT_WIELD; id <= player_equipment::EQUIPMENT_OUTER; id++) {
-        if ((inventory[id].flags & TR_CURSED) != 0u) {
-            inventory[id].flags &= ~TR_CURSED;
+        if ((inventory[id].flags & config::treasure::flags::TR_CURSED) != 0u) {
+            inventory[id].flags &= ~config::treasure::flags::TR_CURSED;
             playerRecalculateBonuses();
             removed = true;
         }

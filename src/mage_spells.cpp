@@ -125,7 +125,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::remove_curse:
             for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
-                inventory[id].flags = (uint32_t) (inventory[id].flags & ~TR_CURSED);
+                inventory[id].flags = (uint32_t) (inventory[id].flags & ~config::treasure::flags::TR_CURSED);
             }
             break;
         case MageSpellTypes::frost_bolt:

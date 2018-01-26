@@ -441,7 +441,7 @@ void itemSetAsTried(Inventory_t const &item) {
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
 void itemIdentify(Inventory_t &item, int &item_id) {
-    if ((item.flags & TR_CURSED) != 0u) {
+    if ((item.flags & config::treasure::flags::TR_CURSED) != 0u) {
         itemAppendToInscription(item, ID_DAMD);
     }
 
@@ -780,9 +780,9 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
             if (misc_type == ItemMiscUse::plusses) {
                 (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
             } else if (misc_type == ItemMiscUse::flags) {
-                if ((item.flags & TR_STR) != 0u) {
+                if ((item.flags & config::treasure::flags::TR_STR) != 0u) {
                     (void) sprintf(tmp_str, " (%c%d to STR)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
-                } else if ((item.flags & TR_STEALTH) != 0u) {
+                } else if ((item.flags & config::treasure::flags::TR_STEALTH) != 0u) {
                     (void) sprintf(tmp_str, " (%c%d to stealth)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
                 }
             }
