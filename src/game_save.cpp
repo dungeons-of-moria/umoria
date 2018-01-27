@@ -341,7 +341,7 @@ static bool sv_write() {
     wr_byte(prev_char);
 
     wr_short((uint16_t) current_treasure_id);
-    for (int i = MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
+    for (int i = config::treasure::MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
         wr_item(treasure_list[i]);
     }
     wr_short((uint16_t) next_free_monster_id);
@@ -822,7 +822,7 @@ bool loadGame(bool &generate) {
         if (current_treasure_id > LEVEL_MAX_OBJECTS) {
             goto error;
         }
-        for (int i = MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
+        for (int i = config::treasure::MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
             rd_item(treasure_list[i]);
         }
         next_free_monster_id = rd_short();

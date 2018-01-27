@@ -125,7 +125,7 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
 
     if (level >= TREASURE_MAX_LEVELS) {
         level = TREASURE_MAX_LEVELS;
-    } else if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
+    } else if (randomNumber(config::treasure::TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
         level = level * TREASURE_MAX_LEVELS / randomNumber(TREASURE_MAX_LEVELS) + 1;
         if (level > TREASURE_MAX_LEVELS) {
             level = TREASURE_MAX_LEVELS;

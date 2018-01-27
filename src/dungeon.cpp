@@ -260,7 +260,7 @@ void dungeonPlaceGold(Coord_t const &coord) {
 
     int gold_type_id = ((randomNumber(dg.current_level + 2) + 2) / 2) - 1;
 
-    if (randomNumber(TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
+    if (randomNumber(config::treasure::TREASURE_CHANCE_OF_GREAT_ITEM) == 1) {
         gold_type_id += randomNumber(dg.current_level + 1);
     }
 

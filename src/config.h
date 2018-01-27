@@ -70,10 +70,17 @@ namespace config {
             extern const uint16_t OBJ_WIZARD;
 
             extern const uint8_t MAX_GOLD_TYPES;
+
+            extern const uint8_t LEVEL_OBJECTS_PER_ROOM;
+            extern const uint8_t LEVEL_OBJECTS_PER_CORRIDOR;
+            extern const uint8_t LEVEL_TOTAL_GOLD_AND_GEMS;
         }
     }
 
     namespace treasure {
+        extern const uint8_t MIN_TREASURE_LIST_ID;
+        extern const uint8_t TREASURE_CHANCE_OF_GREAT_ITEM;
+
         extern const uint8_t LEVEL_STD_OBJECT_ADJUST;
         extern const uint8_t LEVEL_MIN_OBJECT_STD;
         extern const uint8_t LEVEL_TOWN_OBJECTS;

@@ -39,7 +39,6 @@ constexpr uint8_t COST_ADJUSTMENT = 100;          // Adjust prices for buying an
 
 // Treasure constants
 constexpr uint8_t TREASURE_MAX_LEVELS = 50;           // Maximum level of magic in dungeon
-constexpr uint8_t TREASURE_CHANCE_OF_GREAT_ITEM = 12; // 1/n Chance of item being a Great Item
 
 // Note that the following constants are all related, if you change one, you
 // must also change all succeeding ones.
@@ -51,10 +50,6 @@ constexpr uint16_t OBJECT_IDENT_SIZE = 448; // 7*64, see object_offset() in desc
 // With LEVEL_MAX_OBJECTS set to 150, it's possible to get compacting
 // objects during level generation, although it is extremely rare.
 constexpr uint8_t LEVEL_MAX_OBJECTS = 175;        // Max objects per level
-constexpr uint8_t MIN_TREASURE_LIST_ID = 1;       // Minimum treasure_list index used
-constexpr uint8_t LEVEL_OBJECTS_PER_ROOM = 7;     // Amount of objects for rooms
-constexpr uint8_t LEVEL_OBJECTS_PER_CORRIDOR = 2; // Amount of objects for corridors
-constexpr uint8_t LEVEL_TOTAL_GOLD_AND_GEMS = 2;  // Amount of gold (and gems)
 
 // Creature constants
 constexpr uint16_t MON_MAX_CREATURES = 279; // Number of creatures defined for univ

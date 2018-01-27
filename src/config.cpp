@@ -75,11 +75,18 @@ namespace config {
             const uint16_t OBJ_WIZARD = 419;
 
             const uint8_t MAX_GOLD_TYPES = 18; // Number of different types of gold
+
+            const uint8_t LEVEL_OBJECTS_PER_ROOM = 7;     // Amount of objects for rooms
+            const uint8_t LEVEL_OBJECTS_PER_CORRIDOR = 2; // Amount of objects for corridors
+            const uint8_t LEVEL_TOTAL_GOLD_AND_GEMS = 2;  // Amount of gold (and gems)
         }
     }
 
     // Note: Number of special objects, and degree of enchantments can be adjusted here.
     namespace treasure {
+        const uint8_t MIN_TREASURE_LIST_ID = 1;           // Minimum treasure_list index used
+        const uint8_t TREASURE_CHANCE_OF_GREAT_ITEM = 12; // 1/n Chance of item being a Great Item
+
         // Magic Treasure Generation constants
         const uint8_t LEVEL_STD_OBJECT_ADJUST = 125; // Adjust STD per level * 100
         const uint8_t LEVEL_MIN_OBJECT_STD = 7;      // Minimum STD
