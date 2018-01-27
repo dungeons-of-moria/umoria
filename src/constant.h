@@ -190,20 +190,6 @@ constexpr uint16_t CD_NO_SLEEP = 0x1000;
 constexpr uint16_t CD_INFRA = 0x2000;
 constexpr uint16_t CD_MAX_HP = 0x4000;
 
-// id's used for object description, stored in objects_identified array
-constexpr uint8_t OD_TRIED = 0x1;
-constexpr uint8_t OD_KNOWN1 = 0x2;
-
-// id's used for item description, stored in i_ptr->ident
-constexpr uint8_t ID_MAGIK = 0x1;
-constexpr uint8_t ID_DAMD = 0x2;
-constexpr uint8_t ID_EMPTY = 0x4;
-constexpr uint8_t ID_KNOWN2 = 0x8;
-constexpr uint8_t ID_STORE_BOUGHT = 0x10;
-constexpr uint8_t ID_SHOW_HIT_DAM = 0x20;
-constexpr uint8_t ID_NO_SHOW_P1 = 0x40;
-constexpr uint8_t ID_SHOW_P1 = 0x80;
-
 // defines for treasure type values (tval)
 constexpr int8_t TV_NEVER = -1; // used by find_range() for non-search
 constexpr uint8_t TV_NOTHING = 0;

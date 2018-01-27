@@ -58,7 +58,7 @@ void storeMaintenance() {
 int32_t storeItemValue(Inventory_t const &item) {
     int32_t value;
 
-    if ((item.identification & ID_DAMD) != 0) {
+    if ((item.identification & config::identification::ID_DAMD) != 0) {
         // don't purchase known cursed items
         value = 0;
     } else if ((item.category_id >= TV_BOW && item.category_id <= TV_SWORD) || (item.category_id >= TV_BOOTS && item.category_id <= TV_SOFT_ARMOR)) {

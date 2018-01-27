@@ -176,7 +176,7 @@ static void initializeCharacterInventory() {
 
         // must set this bit to display to_hit/to_damage for stiletto
         if (item.category_id == TV_SWORD) {
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
         }
 
         (void) inventoryCarryItem(item);
@@ -948,7 +948,7 @@ static void playerDetectEnchantment() {
             (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
             playerDisturb(0, 0);
             printMessage(tmp_str);
-            itemAppendToInscription(item, ID_MAGIK);
+            itemAppendToInscription(item, config::identification::ID_MAGIK);
         }
     }
 }
@@ -2132,7 +2132,7 @@ static bool itemEnchanted(Inventory_t const &item) {
         return false;
     }
 
-    if ((item.identification & ID_MAGIK) != 0) {
+    if ((item.identification & config::identification::ID_MAGIK) != 0) {
         return false;
     }
 

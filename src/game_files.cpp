@@ -174,7 +174,7 @@ void outputRandomLevelObjectsToFile() {
         itemIdentifyAsStoreBought(item);
 
         if ((item.flags & config::treasure::flags::TR_CURSED) != 0u) {
-            itemAppendToInscription(item, ID_DAMD);
+            itemAppendToInscription(item, config::identification::ID_DAMD);
         }
 
         itemDescription(input, item, true);

@@ -236,7 +236,7 @@ static void magicalGloves(Inventory_t &item, int special, int level) {
         item.special_name_id = special_name_ids::SN_FREE_ACTION;
         item.cost += 1000;
     } else {
-        item.identification |= ID_SHOW_HIT_DAM;
+        item.identification |= config::identification::ID_SHOW_HIT_DAM;
         item.to_hit += 1 + randomNumber(3);
         item.to_damage += 1 + randomNumber(3);
         item.special_name_id = special_name_ids::SN_SLAYING;
@@ -253,7 +253,7 @@ static void cursedGloves(Inventory_t &item, int special, int level) {
             item.flags |= config::treasure::flags::TR_STR;
             item.special_name_id = special_name_ids::SN_WEAKNESS;
         }
-        item.identification |= ID_SHOW_P1;
+        item.identification |= config::identification::ID_SHOW_P1;
         item.misc_use = (int16_t) -magicEnchantmentBonus(1, 10, level);
     }
 
@@ -278,13 +278,13 @@ static void magicalBoots(Inventory_t &item, int special, int level) {
     } else if (magicType == 1) {
         item.flags |= config::treasure::flags::TR_SPEED;
         item.special_name_id = special_name_ids::SN_SPEED;
-        item.identification |= ID_SHOW_P1;
+        item.identification |= config::identification::ID_SHOW_P1;
         item.misc_use = 1;
         item.cost += 5000;
     } else {
         // 2 - 5
         item.flags |= config::treasure::flags::TR_STEALTH;
-        item.identification |= ID_SHOW_P1;
+        item.identification |= config::identification::ID_SHOW_P1;
         item.misc_use = (int16_t) randomNumber(3);
         item.special_name_id = special_name_ids::SN_STEALTH;
         item.cost += 500;
@@ -298,7 +298,7 @@ static void cursedBoots(Inventory_t &item, int level) {
         case 1:
             item.flags |= config::treasure::flags::TR_SPEED;
             item.special_name_id = special_name_ids::SN_SLOWNESS;
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = -1;
             break;
         case 2:
@@ -324,7 +324,7 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
     }
 
     if (item.sub_category_id < 6) {
-        item.identification |= ID_SHOW_P1;
+        item.identification |= config::identification::ID_SHOW_P1;
 
         int magicType = randomNumber(3);
 
@@ -352,35 +352,35 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
 
     switch (randomNumber(6)) {
         case 1:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) randomNumber(3);
             item.flags |= (config::treasure::flags::TR_FREE_ACT | config::treasure::flags::TR_CON | config::treasure::flags::TR_DEX | config::treasure::flags::TR_STR);
             item.special_name_id = special_name_ids::SN_MIGHT;
             item.cost += 1000 + item.misc_use * 500;
             break;
         case 2:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) randomNumber(3);
             item.flags |= (config::treasure::flags::TR_CHR | config::treasure::flags::TR_WIS);
             item.special_name_id = special_name_ids::SN_LORDLINESS;
             item.cost += 1000 + item.misc_use * 500;
             break;
         case 3:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) randomNumber(3);
             item.flags |= (config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID | config::treasure::flags::TR_RES_FIRE | config::treasure::flags::TR_INT);
             item.special_name_id = special_name_ids::SN_MAGI;
             item.cost += 3000 + item.misc_use * 500;
             break;
         case 4:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) randomNumber(3);
             item.flags |= config::treasure::flags::TR_CHR;
             item.special_name_id = special_name_ids::SN_BEAUTY;
             item.cost += 750;
             break;
         case 5:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) (5 * (1 + randomNumber(4)));
             item.flags |= (config::treasure::flags::TR_SEE_INVIS | config::treasure::flags::TR_SEARCH);
             item.special_name_id = special_name_ids::SN_SEEING;
@@ -407,13 +407,13 @@ static void cursedHelms(Inventory_t &item, int special, int level) {
 
     switch (randomNumber(7)) {
         case 1:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) -randomNumber(5);
             item.flags |= config::treasure::flags::TR_INT;
             item.special_name_id = special_name_ids::SN_STUPIDITY;
             break;
         case 2:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) -randomNumber(5);
             item.flags |= config::treasure::flags::TR_WIS;
             item.special_name_id = special_name_ids::SN_DULLNESS;
@@ -427,7 +427,7 @@ static void cursedHelms(Inventory_t &item, int special, int level) {
             item.special_name_id = special_name_ids::SN_TIMIDNESS;
             break;
         case 5:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) -randomNumber(5);
             item.flags |= config::treasure::flags::TR_STR;
             item.special_name_id = special_name_ids::SN_WEAKNESS;
@@ -437,7 +437,7 @@ static void cursedHelms(Inventory_t &item, int special, int level) {
             item.special_name_id = special_name_ids::SN_TELEPORTATION;
             break;
         case 7:
-            item.identification |= ID_SHOW_P1;
+            item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) -randomNumber(5);
             item.flags |= config::treasure::flags::TR_CHR;
             item.special_name_id = special_name_ids::SN_UGLINESS;
@@ -513,10 +513,10 @@ static void processRings(Inventory_t &item, int level, int cursed) {
         case 27:
         case 28:
         case 29:
-            item.identification |= ID_NO_SHOW_P1;
+            item.identification |= config::identification::ID_NO_SHOW_P1;
             break;
         case 30: // Slaying
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
             item.to_damage += magicEnchantmentBonus(1, 25, level);
             item.to_hit += magicEnchantmentBonus(1, 25, level);
             item.cost += (item.to_hit + item.to_damage) * 100;
@@ -680,7 +680,7 @@ static void magicalCloak(Inventory_t &item, int special, int level) {
     }
 
     item.to_ac += magicEnchantmentBonus(1, 20, level);
-    item.identification |= ID_SHOW_P1;
+    item.identification |= config::identification::ID_SHOW_P1;
     item.misc_use = (int16_t) randomNumber(3);
     item.flags |= config::treasure::flags::TR_STEALTH;
     item.special_name_id = special_name_ids::SN_STEALTH;
@@ -695,7 +695,7 @@ static void cursedCloak(Inventory_t &item, int level) {
             item.flags |= config::treasure::flags::TR_AGGRAVATE;
             item.special_name_id = special_name_ids::SN_IRRITATION;
             item.to_ac -= magicEnchantmentBonus(1, 10, level);
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
             item.to_hit -= magicEnchantmentBonus(1, 10, level);
             item.to_damage -= magicEnchantmentBonus(1, 10, level);
             item.cost = 0;
@@ -708,7 +708,7 @@ static void cursedCloak(Inventory_t &item, int level) {
         default:
             item.special_name_id = special_name_ids::SN_ENVELOPING;
             item.to_ac -= magicEnchantmentBonus(1, 10, level);
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
             item.to_hit -= magicEnchantmentBonus(2, 40, level + 10);
             item.to_damage -= magicEnchantmentBonus(2, 40, level + 10);
             item.cost = 0;
@@ -864,7 +864,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_POLEARM:
         case TV_SWORD:
             // always show to_hit/to_damage values if identified
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 magicalSword(item, special, level);
@@ -874,7 +874,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_BOW:
             // always show to_hit/to_damage values if identified
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 magicalBow(item, level);
@@ -884,7 +884,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             break;
         case TV_DIGGING:
             // always show to_hit/to_damage values if identified
-            item.identification |= ID_SHOW_HIT_DAM;
+            item.identification |= config::identification::ID_SHOW_HIT_DAM;
 
             if (magicShouldBeEnchanted(chance)) {
                 if (randomNumber(3) < 3) {
@@ -970,7 +970,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_ARROW:
             if (item.category_id == TV_SLING_AMMO || item.category_id == TV_BOLT || item.category_id == TV_ARROW) {
                 // always show to_hit/to_damage values if identified
-                item.identification |= ID_SHOW_HIT_DAM;
+                item.identification |= config::identification::ID_SHOW_HIT_DAM;
 
                 if (magicShouldBeEnchanted(chance)) {
                     magicalProjectiles(item, special, level);

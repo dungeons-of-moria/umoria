@@ -333,7 +333,7 @@ void wizardCreateObjects() {
     item.id = OBJ_WIZARD;
     item.special_name_id = 0;
     itemReplaceInscription(item, "wizard item");
-    item.identification = ID_KNOWN2 | ID_STORE_BOUGHT;
+    item.identification = config::identification::ID_KNOWN2 | config::identification::ID_STORE_BOUGHT;
 
     putStringClearToEOL("Tval   : ", Coord_t{0, 0});
     if (!getStringInput(input, Coord_t{0, 9}, 3)) {

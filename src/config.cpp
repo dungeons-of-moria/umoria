@@ -187,4 +187,20 @@ namespace config {
             const uint32_t PY_MANA = 0x80000000L;
         }
     }
+
+    namespace identification {
+        // id's used for object description, stored in objects_identified array
+        const uint8_t OD_TRIED = 0x1;
+        const uint8_t OD_KNOWN1 = 0x2;
+
+        // id's used for item description, stored in i_ptr->ident
+        const uint8_t ID_MAGIK = 0x1;
+        const uint8_t ID_DAMD = 0x2;
+        const uint8_t ID_EMPTY = 0x4;
+        const uint8_t ID_KNOWN2 = 0x8;
+        const uint8_t ID_STORE_BOUGHT = 0x10;
+        const uint8_t ID_SHOW_HIT_DAM = 0x20;
+        const uint8_t ID_NO_SHOW_P1 = 0x40;
+        const uint8_t ID_SHOW_P1 = 0x80;
+    }
 }

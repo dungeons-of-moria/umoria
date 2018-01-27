@@ -65,7 +65,7 @@ namespace config {
         extern const uint16_t OBJECT_LAMP_MAX_CAPACITY;
         extern const uint8_t OBJECT_BOLTS_MAX_RANGE;
         extern const uint16_t OBJECTS_RUNE_PROTECTION;
-        
+
         namespace flags {
             extern const uint32_t TR_STATS;
             extern const uint32_t TR_STR;
@@ -175,5 +175,19 @@ namespace config {
             extern const uint32_t PY_HP;
             extern const uint32_t PY_MANA;
         }
+    }
+
+    namespace identification {
+        extern const uint8_t OD_TRIED;
+        extern const uint8_t OD_KNOWN1;
+
+        extern const uint8_t ID_MAGIK;
+        extern const uint8_t ID_DAMD;
+        extern const uint8_t ID_EMPTY;
+        extern const uint8_t ID_KNOWN2;
+        extern const uint8_t ID_STORE_BOUGHT;
+        extern const uint8_t ID_SHOW_HIT_DAM;
+        extern const uint8_t ID_NO_SHOW_P1;
+        extern const uint8_t ID_SHOW_P1;
     }
 }

@@ -333,15 +333,15 @@ int16_t objectPositionOffset(int category_id, int sub_category_id) {
 }
 
 static void clearObjectTriedFlag(int16_t id) {
-    objects_identified[id] &= ~OD_TRIED;
+    objects_identified[id] &= ~config::identification::OD_TRIED;
 }
 
 static void setObjectTriedFlag(int16_t id) {
-    objects_identified[id] |= OD_TRIED;
+    objects_identified[id] |= config::identification::OD_TRIED;
 }
 
 static bool isObjectKnown(int16_t id) {
-    return (objects_identified[id] & OD_KNOWN1) != 0;
+    return (objects_identified[id] & config::identification::OD_KNOWN1) != 0;
 }
 
 // Remove "Secret" symbol for identity of object
@@ -355,7 +355,7 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
     id <<= 6;
     id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
-    objects_identified[id] |= OD_KNOWN1;
+    objects_identified[id] |= config::identification::OD_KNOWN1;
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -363,8 +363,8 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
 
 // Remove an automatically generated inscription. -CJS-
 static void unsample(Inventory_t &item) {
-    // this also used to clear ID_DAMD flag, but I think it should remain set
-    item.identification &= ~(ID_MAGIK | ID_EMPTY);
+    // this also used to clear config::identification::ID_DAMD flag, but I think it should remain set
+    item.identification &= ~(config::identification::ID_MAGIK | config::identification::ID_EMPTY);
 
     int16_t id = objectPositionOffset(item.category_id, item.sub_category_id);
 
@@ -382,28 +382,28 @@ static void unsample(Inventory_t &item) {
 // Remove "Secret" symbol for identity of plusses
 void spellItemIdentifyAndRemoveRandomInscription(Inventory_t &item) {
     unsample(item);
-    item.identification |= ID_KNOWN2;
+    item.identification |= config::identification::ID_KNOWN2;
 }
 
 bool spellItemIdentified(Inventory_t const &item) {
-    return (item.identification & ID_KNOWN2) != 0;
+    return (item.identification & config::identification::ID_KNOWN2) != 0;
 }
 
 void spellItemRemoveIdentification(Inventory_t &item) {
-    item.identification &= ~ID_KNOWN2;
+    item.identification &= ~config::identification::ID_KNOWN2;
 }
 
 void itemIdentificationClearEmpty(Inventory_t &item) {
-    item.identification &= ~ID_EMPTY;
+    item.identification &= ~config::identification::ID_EMPTY;
 }
 
 void itemIdentifyAsStoreBought(Inventory_t &item) {
-    item.identification |= ID_STORE_BOUGHT;
+    item.identification |= config::identification::ID_STORE_BOUGHT;
     spellItemIdentifyAndRemoveRandomInscription(item);
 }
 
 static bool itemStoreBought(int identification) {
-    return (identification & ID_STORE_BOUGHT) != 0;
+    return (identification & config::identification::ID_STORE_BOUGHT) != 0;
 }
 
 // Items which don't have a 'color' are always known / itemSetAsIdentified(),
@@ -412,10 +412,10 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
     int16_t id = objectPositionOffset(category_id, sub_category_id);
 
     if (id < 0) {
-        return OD_KNOWN1 != 0u;
+        return config::identification::OD_KNOWN1 != 0u;
     }
     if (itemStoreBought(identification)) {
-        return OD_KNOWN1 != 0u;
+        return config::identification::OD_KNOWN1 != 0u;
     }
 
     id <<= 6;
@@ -442,7 +442,7 @@ void itemSetAsTried(Inventory_t const &item) {
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
 void itemIdentify(Inventory_t &item, int &item_id) {
     if ((item.flags & config::treasure::flags::TR_CURSED) != 0u) {
-        itemAppendToInscription(item, ID_DAMD);
+        itemAppendToInscription(item, config::identification::ID_DAMD);
     }
 
     if (itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
@@ -726,7 +726,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
         auto abs_to_hit = (int) std::abs((std::intmax_t) item.to_hit);
         auto abs_to_damage = (int) std::abs((std::intmax_t) item.to_damage);
 
-        if ((item.identification & ID_SHOW_HIT_DAM) != 0) {
+        if ((item.identification & config::identification::ID_SHOW_HIT_DAM) != 0) {
             (void) sprintf(tmp_str, " (%c%d,%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit, (item.to_damage < 0) ? '-' : '+', abs_to_damage);
         } else if (item.to_hit != 0) {
             (void) sprintf(tmp_str, " (%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit);
@@ -756,9 +756,9 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     }
 
     // override defaults, check for `misc_type` flags in the `item.identification` field
-    if ((item.identification & ID_NO_SHOW_P1) != 0) {
+    if ((item.identification & config::identification::ID_NO_SHOW_P1) != 0) {
         misc_type = ItemMiscUse::ignored;
-    } else if ((item.identification & ID_SHOW_P1) != 0) {
+    } else if ((item.identification & config::identification::ID_SHOW_P1) != 0) {
         misc_type = ItemMiscUse::z_plusses;
     }
 
@@ -823,19 +823,19 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
         indexx += (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
         // don't print tried string for store bought items
-        if (((objects_identified[indexx] & OD_TRIED) != 0) && !itemStoreBought(item.identification)) {
+        if (((objects_identified[indexx] & config::identification::OD_TRIED) != 0) && !itemStoreBought(item.identification)) {
             (void) strcat(tmp_str, "tried ");
         }
     }
 
-    if ((item.identification & (ID_MAGIK | ID_EMPTY | ID_DAMD)) != 0) {
-        if ((item.identification & ID_MAGIK) != 0) {
+    if ((item.identification & (config::identification::ID_MAGIK | config::identification::ID_EMPTY | config::identification::ID_DAMD)) != 0) {
+        if ((item.identification & config::identification::ID_MAGIK) != 0) {
             (void) strcat(tmp_str, "magik ");
         }
-        if ((item.identification & ID_EMPTY) != 0) {
+        if ((item.identification & config::identification::ID_EMPTY) != 0) {
             (void) strcat(tmp_str, "empty ");
         }
-        if ((item.identification & ID_DAMD) != 0) {
+        if ((item.identification & config::identification::ID_DAMD) != 0) {
             (void) strcat(tmp_str, "damned ");
         }
     }
