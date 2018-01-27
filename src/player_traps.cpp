@@ -71,13 +71,13 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t &item) {
         return;
     }
 
-    if ((item.flags & CH_TRAPPED) != 0u) {
+    if ((item.flags & config::treasure::chests::CH_TRAPPED) != 0u) {
         int level = item.depth_first_found;
 
         if ((total - level) > randomNumber(100)) {
-            item.flags &= ~CH_TRAPPED;
+            item.flags &= ~config::treasure::chests::CH_TRAPPED;
 
-            if ((item.flags & CH_LOCKED) != 0u) {
+            if ((item.flags & config::treasure::chests::CH_LOCKED) != 0u) {
                 item.special_name_id = special_name_ids::SN_LOCKED;
             } else {
                 item.special_name_id = special_name_ids::SN_DISARMED;
@@ -198,23 +198,23 @@ static void chestExplode(int y, int x) {
 void chestTrap(int y, int x) {
     uint32_t flags = treasure_list[dg.floor[y][x].treasure_id].flags;
 
-    if ((flags & CH_LOSE_STR) != 0u) {
+    if ((flags & config::treasure::chests::CH_LOSE_STR) != 0u) {
         chestLooseStrength();
     }
 
-    if ((flags & CH_POISON) != 0u) {
+    if ((flags & config::treasure::chests::CH_POISON) != 0u) {
         chestPoison();
     }
 
-    if ((flags & CH_PARALYSED) != 0u) {
+    if ((flags & config::treasure::chests::CH_PARALYSED) != 0u) {
         chestParalysed();
     }
 
-    if ((flags & CH_SUMMON) != 0u) {
+    if ((flags & config::treasure::chests::CH_SUMMON) != 0u) {
         chestSummonMonster(y, x);
     }
 
-    if ((flags & CH_EXPLODE) != 0u) {
+    if ((flags & config::treasure::chests::CH_EXPLODE) != 0u) {
         chestExplode(y, x);
     }
 }

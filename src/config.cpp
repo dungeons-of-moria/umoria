@@ -114,6 +114,17 @@ namespace config {
             const uint32_t TR_INFRA = 0x40000000L;
             const uint32_t TR_CURSED = 0x80000000L;
         }
+
+        // definitions for chests
+        namespace chests {
+            const uint32_t CH_LOCKED = 0x00000001L;
+            const uint32_t CH_TRAPPED = 0x000001F0L;
+            const uint32_t CH_LOSE_STR = 0x00000010L;
+            const uint32_t CH_POISON = 0x00000020L;
+            const uint32_t CH_PARALYSED = 0x00000040L;
+            const uint32_t CH_EXPLODE = 0x00000080L;
+            const uint32_t CH_SUMMON = 0x00000100L;
+        }
     }
 
     namespace monsters {

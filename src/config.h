@@ -104,6 +104,16 @@ namespace config {
             extern const uint32_t TR_INFRA;
             extern const uint32_t TR_CURSED;
         }
+
+        namespace chests {
+            extern const uint32_t CH_LOCKED;
+            extern const uint32_t CH_TRAPPED;
+            extern const uint32_t CH_LOSE_STR;
+            extern const uint32_t CH_POISON;
+            extern const uint32_t CH_PARALYSED;
+            extern const uint32_t CH_EXPLODE;
+            extern const uint32_t CH_SUMMON;
+        }
     }
 
     namespace monsters {

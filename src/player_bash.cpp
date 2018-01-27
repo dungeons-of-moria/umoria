@@ -222,10 +222,10 @@ static void playerBashClosedChest(Inventory_t &item) {
         return;
     }
 
-    if (((item.flags & CH_LOCKED) != 0u) && randomNumber(10) == 1) {
+    if (((item.flags & config::treasure::chests::CH_LOCKED) != 0u) && randomNumber(10) == 1) {
         printMessage("The lock breaks open!");
 
-        item.flags &= ~CH_LOCKED;
+        item.flags &= ~config::treasure::chests::CH_LOCKED;
 
         return;
     }

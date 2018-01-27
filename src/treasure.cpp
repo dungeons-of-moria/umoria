@@ -727,44 +727,44 @@ static void magicalChests(Inventory_t &item, int level) {
             item.special_name_id = special_name_ids::SN_EMPTY;
             break;
         case 2:
-            item.flags |= CH_LOCKED;
+            item.flags |= config::treasure::chests::CH_LOCKED;
             item.special_name_id = special_name_ids::SN_LOCKED;
             break;
         case 3:
         case 4:
-            item.flags |= (CH_LOSE_STR | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_LOSE_STR | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_POISON_NEEDLE;
             break;
         case 5:
         case 6:
-            item.flags |= (CH_POISON | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_POISON | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_POISON_NEEDLE;
             break;
         case 7:
         case 8:
         case 9:
-            item.flags |= (CH_PARALYSED | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_PARALYSED | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_GAS_TRAP;
             break;
         case 10:
         case 11:
-            item.flags |= (CH_EXPLODE | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_EXPLODE | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_EXPLOSION_DEVICE;
             break;
         case 12:
         case 13:
         case 14:
-            item.flags |= (CH_SUMMON | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_SUMMON | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_SUMMONING_RUNES;
             break;
         case 15:
         case 16:
         case 17:
-            item.flags |= (CH_PARALYSED | CH_POISON | CH_LOSE_STR | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_PARALYSED | config::treasure::chests::CH_POISON | config::treasure::chests::CH_LOSE_STR | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_MULTIPLE_TRAPS;
             break;
         default:
-            item.flags |= (CH_SUMMON | CH_EXPLODE | CH_LOCKED);
+            item.flags |= (config::treasure::chests::CH_SUMMON | config::treasure::chests::CH_EXPLODE | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_MULTIPLE_TRAPS;
             break;
     }

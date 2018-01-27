@@ -108,15 +108,6 @@ constexpr uint8_t NAME_OFFSET_PRAYERS = 31;
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
 
-// definitions for chests
-constexpr uint32_t CH_LOCKED = 0x00000001L;
-constexpr uint32_t CH_TRAPPED = 0x000001F0L;
-constexpr uint32_t CH_LOSE_STR = 0x00000010L;
-constexpr uint32_t CH_POISON = 0x00000020L;
-constexpr uint32_t CH_PARALYSED = 0x00000040L;
-constexpr uint32_t CH_EXPLODE = 0x00000080L;
-constexpr uint32_t CH_SUMMON = 0x00000100L;
-
 // defines for treasure type values (tval)
 constexpr int8_t TV_NEVER = -1; // used by find_range() for non-search
 constexpr uint8_t TV_NOTHING = 0;

@@ -748,7 +748,7 @@ void playerSearch(int y, int x, int chance) {
                 // Chest is trapped?
 
                 // mask out the treasure bits
-                if ((item.flags & CH_TRAPPED) > 1) {
+                if ((item.flags & config::treasure::chests::CH_TRAPPED) > 1) {
                     if (!spellItemIdentified(item)) {
                         spellItemIdentifyAndRemoveRandomInscription(item);
                         printMessage("You have discovered a trap on the chest!");
@@ -1283,7 +1283,7 @@ static void openClosedChest(int y, int x) {
 
     bool success = false;
 
-    if ((item.flags & CH_LOCKED) != 0u) {
+    if ((item.flags & config::treasure::chests::CH_LOCKED) != 0u) {
         if (py.flags.confused > 0) {
             printMessage("You are too confused to pick the lock.");
         } else if (playerLockPickingSkill() - item.depth_first_found > randomNumber(100)) {
@@ -1301,14 +1301,14 @@ static void openClosedChest(int y, int x) {
     }
 
     if (success) {
-        item.flags &= ~CH_LOCKED;
+        item.flags &= ~config::treasure::chests::CH_LOCKED;
         item.special_name_id = special_name_ids::SN_EMPTY;
         spellItemIdentifyAndRemoveRandomInscription(item);
         item.cost = 0;
     }
 
     // Was chest still trapped?
-    if ((item.flags & CH_LOCKED) != 0) {
+    if ((item.flags & config::treasure::chests::CH_LOCKED) != 0) {
         return;
     }
 
