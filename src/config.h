@@ -310,4 +310,10 @@ namespace config {
         extern const uint8_t NAME_OFFSET_SPELLS;
         extern const uint8_t NAME_OFFSET_PRAYERS;
     }
+
+    namespace stores {
+        extern const uint8_t STORE_MAX_AUTO_BUY_ITEMS;
+        extern const uint8_t STORE_MIN_AUTO_SELL_ITEMS;
+        extern const uint8_t STORE_STOCK_TURN_AROUND;
+    }
 }

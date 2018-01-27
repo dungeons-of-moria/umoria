@@ -328,4 +328,10 @@ namespace config {
         const uint8_t NAME_OFFSET_SPELLS = 0;
         const uint8_t NAME_OFFSET_PRAYERS = 31;
     }
+
+    namespace stores {
+        const uint8_t STORE_MAX_AUTO_BUY_ITEMS = 18;  // Max diff objects in stock for auto buy
+        const uint8_t STORE_MIN_AUTO_SELL_ITEMS = 10; // Min diff objects in stock for auto sell
+        const uint8_t STORE_STOCK_TURN_AROUND = 9;    // Amount of buying and selling normally
+    }
 }

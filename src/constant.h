@@ -32,9 +32,6 @@ constexpr uint8_t MAX_OWNERS = 18;                // Number of owners to choose 
 constexpr uint8_t MAX_STORES = 6;                 // Number of different stores
 constexpr uint8_t STORE_MAX_DISCRETE_ITEMS = 24;  // Max number of discrete objects in inventory
 constexpr uint8_t STORE_MAX_ITEM_TYPES = 26;      // Number of items to choose stock from
-constexpr uint8_t STORE_MAX_AUTO_BUY_ITEMS = 18;  // Max diff objects in stock for auto buy
-constexpr uint8_t STORE_MIN_AUTO_SELL_ITEMS = 10; // Min diff objects in stock for auto sell
-constexpr uint8_t STORE_STOCK_TURN_AROUND = 9;    // Amount of buying and selling normally
 constexpr uint8_t COST_ADJUSTMENT = 100;          // Adjust prices for buying and selling
 
 // Treasure constants

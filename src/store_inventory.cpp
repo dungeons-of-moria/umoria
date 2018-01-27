@@ -29,20 +29,20 @@ void storeMaintenance() {
         Store_t &store = stores[store_id];
 
         store.insults_counter = 0;
-        if (store.unique_items_counter >= STORE_MIN_AUTO_SELL_ITEMS) {
-            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store.unique_items_counter >= STORE_MAX_AUTO_BUY_ITEMS) {
-                turnaround += 1 + store.unique_items_counter - STORE_MAX_AUTO_BUY_ITEMS;
+        if (store.unique_items_counter >= config::stores::STORE_MIN_AUTO_SELL_ITEMS) {
+            int turnaround = randomNumber(config::stores::STORE_STOCK_TURN_AROUND);
+            if (store.unique_items_counter >= config::stores::STORE_MAX_AUTO_BUY_ITEMS) {
+                turnaround += 1 + store.unique_items_counter - config::stores::STORE_MAX_AUTO_BUY_ITEMS;
             }
             while (--turnaround >= 0) {
                 storeDestroyItem(store_id, randomNumber(store.unique_items_counter) - 1, false);
             }
         }
 
-        if (store.unique_items_counter <= STORE_MAX_AUTO_BUY_ITEMS) {
-            int turnaround = randomNumber(STORE_STOCK_TURN_AROUND);
-            if (store.unique_items_counter < STORE_MIN_AUTO_SELL_ITEMS) {
-                turnaround += STORE_MIN_AUTO_SELL_ITEMS - store.unique_items_counter;
+        if (store.unique_items_counter <= config::stores::STORE_MAX_AUTO_BUY_ITEMS) {
+            int turnaround = randomNumber(config::stores::STORE_STOCK_TURN_AROUND);
+            if (store.unique_items_counter < config::stores::STORE_MIN_AUTO_SELL_ITEMS) {
+                turnaround += config::stores::STORE_MIN_AUTO_SELL_ITEMS - store.unique_items_counter;
             }
 
             int16_t max_cost = store_owners[store.owner_id].max_cost;
