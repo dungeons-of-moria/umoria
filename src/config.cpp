@@ -75,6 +75,7 @@ namespace config {
             const uint16_t OBJ_WIZARD = 419;
 
             const uint8_t MAX_GOLD_TYPES = 18; // Number of different types of gold
+            const uint8_t MAX_TRAPS = 18; // Number of defined traps
 
             const uint8_t LEVEL_OBJECTS_PER_ROOM = 7;     // Amount of objects for rooms
             const uint8_t LEVEL_OBJECTS_PER_CORRIDOR = 2; // Amount of objects for corridors

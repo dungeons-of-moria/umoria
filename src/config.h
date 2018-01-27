@@ -70,6 +70,7 @@ namespace config {
             extern const uint16_t OBJ_WIZARD;
 
             extern const uint8_t MAX_GOLD_TYPES;
+            extern const uint8_t MAX_TRAPS;
 
             extern const uint8_t LEVEL_OBJECTS_PER_ROOM;
             extern const uint8_t LEVEL_OBJECTS_PER_CORRIDOR;

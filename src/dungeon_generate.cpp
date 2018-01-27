@@ -303,7 +303,7 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
             int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
 
             if (dg.floor[y1][x1].feature_id != TILE_NULL_WALL && dg.floor[y1][x1].feature_id <= MAX_CAVE_FLOOR && dg.floor[y1][x1].treasure_id == 0) {
-                dungeonSetTrap(Coord_t{y1, x1}, randomNumber(MAX_TRAPS) - 1);
+                dungeonSetTrap(Coord_t{y1, x1}, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
                 placed = true;
             }
         }

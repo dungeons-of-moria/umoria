@@ -58,9 +58,6 @@ constexpr uint8_t MON_TOTAL_ALLOCATIONS = 125;        // Max that can be allocat
 constexpr uint8_t MON_MAX_LEVELS = 40;                // Maximum level of creatures
 constexpr uint8_t MON_MAX_ATTACKS = 4;                // Max num attacks (used in mons memory) -CJS-
 
-// Trap constants
-constexpr uint8_t MAX_TRAPS = 18; // Number of defined traps
-
 // definitions for the pseudo-normal distribution generation
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
