@@ -182,7 +182,7 @@ static bool staffDischarge(Inventory_t &item) {
                 }
                 break;
             case StaffSpellTypes::dispel_evil:
-                identified = spellDispelCreature(CD_EVIL, 60);
+                identified = spellDispelCreature(config::monsters::defense::CD_EVIL, 60);
                 break;
             case StaffSpellTypes::darkness:
                 identified = spellDarkenArea(py.row, py.col);

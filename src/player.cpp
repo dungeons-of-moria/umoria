@@ -257,7 +257,7 @@ void playerRestOff() {
 
 // For "DIED_FROM" string
 void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move) {
-    if ((move & CM_WIN) != 0u) {
+    if ((move & config::monsters::move::CM_WIN) != 0u) {
         (void) sprintf(*description, "The %s", monster_name);
     } else if (isVowel(monster_name[0])) {
         (void) sprintf(*description, "an %s", monster_name);
@@ -1193,7 +1193,7 @@ static void playerAttackMonster(int y, int x) {
 
             printMessage("Your hands stop glowing.");
 
-            if (((creature.defenses & CD_NO_SLEEP) != 0) || randomNumber(MON_MAX_LEVELS) < creature.level) {
+            if (((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0) || randomNumber(MON_MAX_LEVELS) < creature.level) {
                 (void) sprintf(msg, "%s is unaffected.", name);
             } else {
                 (void) sprintf(msg, "%s appears confused.", name);
@@ -1206,7 +1206,7 @@ static void playerAttackMonster(int y, int x) {
             printMessage(msg);
 
             if (monster.lit && randomNumber(4) == 1) {
-                creature_recall[monster.creature_id].defenses |= creature.defenses & CD_NO_SLEEP;
+                creature_recall[monster.creature_id].defenses |= creature.defenses & config::monsters::defense::CD_NO_SLEEP;
             }
         }
 

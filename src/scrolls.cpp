@@ -546,7 +546,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 30:
-                identified = spellDispelCreature(CD_UNDEAD, 60);
+                identified = spellDispelCreature(config::monsters::defense::CD_UNDEAD, 60);
                 break;
             case 33:
                 identified = scrollEnchantWeapon();

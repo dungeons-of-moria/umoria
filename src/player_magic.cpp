@@ -77,38 +77,38 @@ int itemMagicAbilityDamage(Inventory_t const &item, int total_damage, int monste
         Recall_t &memory = creature_recall[monster_id];
 
         // Slay Dragon
-        if (((creature.defenses & CD_DRAGON) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_DRAGON) != 0u)) {
-            memory.defenses |= CD_DRAGON;
+        if (((creature.defenses & config::monsters::defense::CD_DRAGON) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_DRAGON) != 0u)) {
+            memory.defenses |= config::monsters::defense::CD_DRAGON;
             return total_damage * 4;
         }
 
         // Slay Undead
-        if (((creature.defenses & CD_UNDEAD) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_UNDEAD) != 0u)) {
-            memory.defenses |= CD_UNDEAD;
+        if (((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_UNDEAD) != 0u)) {
+            memory.defenses |= config::monsters::defense::CD_UNDEAD;
             return total_damage * 3;
         }
 
         // Slay Animal
-        if (((creature.defenses & CD_ANIMAL) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_ANIMAL) != 0u)) {
-            memory.defenses |= CD_ANIMAL;
+        if (((creature.defenses & config::monsters::defense::CD_ANIMAL) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_ANIMAL) != 0u)) {
+            memory.defenses |= config::monsters::defense::CD_ANIMAL;
             return total_damage * 2;
         }
 
         // Slay Evil
-        if (((creature.defenses & CD_EVIL) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_EVIL) != 0u)) {
-            memory.defenses |= CD_EVIL;
+        if (((creature.defenses & config::monsters::defense::CD_EVIL) != 0) && ((item.flags & config::treasure::flags::TR_SLAY_EVIL) != 0u)) {
+            memory.defenses |= config::monsters::defense::CD_EVIL;
             return total_damage * 2;
         }
 
         // Frost
-        if (((creature.defenses & CD_FROST) != 0) && ((item.flags & config::treasure::flags::TR_FROST_BRAND) != 0u)) {
-            memory.defenses |= CD_FROST;
+        if (((creature.defenses & config::monsters::defense::CD_FROST) != 0) && ((item.flags & config::treasure::flags::TR_FROST_BRAND) != 0u)) {
+            memory.defenses |= config::monsters::defense::CD_FROST;
             return total_damage * 3 / 2;
         }
 
         // Fire
-        if (((creature.defenses & CD_FIRE) != 0) && ((item.flags & config::treasure::flags::TR_FLAME_TONGUE) != 0u)) {
-            memory.defenses |= CD_FIRE;
+        if (((creature.defenses & config::monsters::defense::CD_FIRE) != 0) && ((item.flags & config::treasure::flags::TR_FLAME_TONGUE) != 0u)) {
+            memory.defenses |= config::monsters::defense::CD_FIRE;
             return total_damage * 3 / 2;
         }
     }

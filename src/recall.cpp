@@ -78,17 +78,17 @@ static void memoryWizardModeInit(Recall_t &memory, Creature_t const &creature) {
     memory.kills = (uint16_t) MAX_SHORT;
     memory.wake = memory.ignore = MAX_UCHAR;
 
-    uint32_t move = (uint32_t) ((creature.movement & CM_4D2_OBJ) != 0) * 8;
-    move += (uint32_t) ((creature.movement & CM_2D2_OBJ) != 0) * 4;
-    move += (uint32_t) ((creature.movement & CM_1D2_OBJ) != 0) * 2;
-    move += (uint32_t) ((creature.movement & CM_90_RANDOM) != 0);
-    move += (uint32_t) ((creature.movement & CM_60_RANDOM) != 0);
+    uint32_t move = (uint32_t) ((creature.movement & config::monsters::move::CM_4D2_OBJ) != 0) * 8;
+    move += (uint32_t) ((creature.movement & config::monsters::move::CM_2D2_OBJ) != 0) * 4;
+    move += (uint32_t) ((creature.movement & config::monsters::move::CM_1D2_OBJ) != 0) * 2;
+    move += (uint32_t) ((creature.movement & config::monsters::move::CM_90_RANDOM) != 0);
+    move += (uint32_t) ((creature.movement & config::monsters::move::CM_60_RANDOM) != 0);
 
-    memory.movement = (uint32_t) ((creature.movement & ~CM_TREASURE) | (move << CM_TR_SHIFT));
+    memory.movement = (uint32_t) ((creature.movement & ~config::monsters::move::CM_TREASURE) | (move << config::monsters::move::CM_TR_SHIFT));
     memory.defenses = creature.defenses;
 
-    if ((creature.spells & CS_FREQ) != 0u) {
-        memory.spells = (uint32_t) (creature.spells | CS_FREQ);
+    if ((creature.spells & config::monsters::spells::CS_FREQ) != 0u) {
+        memory.spells = (uint32_t) (creature.spells | config::monsters::spells::CS_FREQ);
     } else {
         memory.spells = creature.spells;
     }
@@ -99,7 +99,7 @@ static void memoryWizardModeInit(Recall_t &memory, Creature_t const &creature) {
     }
 
     // A little hack to enable the display of info for Quylthulgs.
-    if ((memory.movement & CM_ONLY_MAGIC) != 0u) {
+    if ((memory.movement & config::monsters::move::CM_ONLY_MAGIC) != 0u) {
         memory.attacks[0] = MAX_UCHAR;
     }
 }
@@ -154,7 +154,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     monster_speed -= 10;
 
-    if ((rc_move & CM_ALL_MV_FLAGS) != 0u) {
+    if ((rc_move & config::monsters::move::CM_ALL_MV_FLAGS) != 0u) {
         if (is_known) {
             memoryPrint(", and");
         } else {
@@ -164,15 +164,15 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
 
         memoryPrint(" moves");
 
-        if ((rc_move & CM_RANDOM_MOVE) != 0u) {
-            memoryPrint(recall_description_how_much[(rc_move & CM_RANDOM_MOVE) >> 3]);
+        if ((rc_move & config::monsters::move::CM_RANDOM_MOVE) != 0u) {
+            memoryPrint(recall_description_how_much[(rc_move & config::monsters::move::CM_RANDOM_MOVE) >> 3]);
             memoryPrint(" erratically");
         }
 
         if (monster_speed == 1) {
             memoryPrint(" at normal speed");
         } else {
-            if ((rc_move & CM_RANDOM_MOVE) != 0u) {
+            if ((rc_move & config::monsters::move::CM_RANDOM_MOVE) != 0u) {
                 memoryPrint(", and");
             }
 
@@ -194,7 +194,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
         }
     }
 
-    if ((rc_move & CM_ATTACK_ONLY) != 0u) {
+    if ((rc_move & config::monsters::move::CM_ATTACK_ONLY) != 0u) {
         if (is_known) {
             memoryPrint(", but");
         } else {
@@ -205,7 +205,7 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
         memoryPrint(" does not deign to chase intruders");
     }
 
-    if ((rc_move & CM_ONLY_MAGIC) != 0u) {
+    if ((rc_move & config::monsters::move::CM_ONLY_MAGIC) != 0u) {
         if (is_known) {
             memoryPrint(", but");
         } else {
@@ -224,13 +224,13 @@ static bool memoryMovement(uint32_t rc_move, int monster_speed, bool is_known) {
 static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, uint8_t level) {
     memoryPrint(" A kill of this");
 
-    if ((creature_defense & CD_ANIMAL) != 0) {
+    if ((creature_defense & config::monsters::defense::CD_ANIMAL) != 0) {
         memoryPrint(" natural");
     }
-    if ((creature_defense & CD_EVIL) != 0) {
+    if ((creature_defense & config::monsters::defense::CD_EVIL) != 0) {
         memoryPrint(" evil");
     }
-    if ((creature_defense & CD_UNDEAD) != 0) {
+    if ((creature_defense & config::monsters::defense::CD_UNDEAD) != 0) {
         memoryPrint(" undead");
     }
 
@@ -287,18 +287,18 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 
     uint32_t spell_flags = memory_spell_flags;
 
-    for (int i = 0; (spell_flags & CS_BREATHE) != 0u; i++) {
-        if ((spell_flags & (CS_BR_LIGHT << i)) != 0u) {
-            spell_flags &= ~(CS_BR_LIGHT << i);
+    for (int i = 0; (spell_flags & config::monsters::spells::CS_BREATHE) != 0u; i++) {
+        if ((spell_flags & (config::monsters::spells::CS_BR_LIGHT << i)) != 0u) {
+            spell_flags &= ~(config::monsters::spells::CS_BR_LIGHT << i);
 
             if (known) {
-                if ((monster_spell_flags & CS_FREQ) != 0u) {
+                if ((monster_spell_flags & config::monsters::spells::CS_FREQ) != 0u) {
                     memoryPrint(" It can breathe ");
                 } else {
                     memoryPrint(" It is resistant to ");
                 }
                 known = false;
-            } else if ((spell_flags & CS_BREATHE) != 0u) {
+            } else if ((spell_flags & config::monsters::spells::CS_BREATHE) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" and ");
@@ -309,19 +309,19 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
 
     known = true;
 
-    for (int i = 0; (spell_flags & CS_SPELLS) != 0u; i++) {
-        if ((spell_flags & (CS_TEL_SHORT << i)) != 0u) {
-            spell_flags &= ~(CS_TEL_SHORT << i);
+    for (int i = 0; (spell_flags & config::monsters::spells::CS_SPELLS) != 0u; i++) {
+        if ((spell_flags & (config::monsters::spells::CS_TEL_SHORT << i)) != 0u) {
+            spell_flags &= ~(config::monsters::spells::CS_TEL_SHORT << i);
 
             if (known) {
-                if ((memory_spell_flags & CS_BREATHE) != 0u) {
+                if ((memory_spell_flags & config::monsters::spells::CS_BREATHE) != 0u) {
                     memoryPrint(", and is also");
                 } else {
                     memoryPrint(" It is");
                 }
                 memoryPrint(" magical, casting spells which ");
                 known = false;
-            } else if ((spell_flags & CS_SPELLS) != 0u) {
+            } else if ((spell_flags & config::monsters::spells::CS_SPELLS) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" or ");
@@ -330,11 +330,11 @@ static void memoryMagicSkills(uint32_t memory_spell_flags, uint32_t monster_spel
         }
     }
 
-    if ((memory_spell_flags & (CS_BREATHE | CS_SPELLS)) != 0u) {
+    if ((memory_spell_flags & (config::monsters::spells::CS_BREATHE | config::monsters::spells::CS_SPELLS)) != 0u) {
         // Could offset by level
-        if ((monster_spell_flags & CS_FREQ) > 5) {
+        if ((monster_spell_flags & config::monsters::spells::CS_FREQ) > 5) {
             vtype_t temp = {'\0'};
-            (void) sprintf(temp, "; 1 time in %d", creature_spell_flags & CS_FREQ);
+            (void) sprintf(temp, "; 1 time in %d", creature_spell_flags & config::monsters::spells::CS_FREQ);
             memoryPrint(temp);
         }
         memoryPrint(".");
@@ -354,7 +354,7 @@ static void memoryKillDifficulty(Creature_t const &creature, uint32_t monster_ki
     (void) sprintf(description, " It has an armor rating of %d", creature.ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature.defenses & CD_MAX_HP) != 0 ? " maximized" : ""), creature.hit_die.dice, creature.hit_die.sides);
+    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature.defenses & config::monsters::defense::CD_MAX_HP) != 0 ? " maximized" : ""), creature.hit_die.dice, creature.hit_die.sides);
     memoryPrint(description);
 }
 
@@ -362,14 +362,14 @@ static void memoryKillDifficulty(Creature_t const &creature, uint32_t monster_ki
 static void memorySpecialAbilities(uint32_t move) {
     bool known = true;
 
-    for (int i = 0; (move & CM_SPECIAL) != 0u; i++) {
-        if ((move & (CM_INVISIBLE << i)) != 0u) {
-            move &= ~(CM_INVISIBLE << i);
+    for (int i = 0; (move & config::monsters::move::CM_SPECIAL) != 0u; i++) {
+        if ((move & (config::monsters::move::CM_INVISIBLE << i)) != 0u) {
+            move &= ~(config::monsters::move::CM_INVISIBLE << i);
 
             if (known) {
                 memoryPrint(" It can ");
                 known = false;
-            } else if ((move & CM_SPECIAL) != 0u) {
+            } else if ((move & config::monsters::move::CM_SPECIAL) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" and ");
@@ -387,13 +387,13 @@ static void memorySpecialAbilities(uint32_t move) {
 static void memoryWeaknesses(uint32_t defense) {
     bool known = true;
 
-    for (int i = 0; (defense & CD_WEAKNESS) != 0u; i++) {
-        if ((defense & (CD_FROST << i)) != 0u) {
-            defense &= ~(CD_FROST << i);
+    for (int i = 0; (defense & config::monsters::defense::CD_WEAKNESS) != 0u; i++) {
+        if ((defense & (config::monsters::defense::CD_FROST << i)) != 0u) {
+            defense &= ~(config::monsters::defense::CD_FROST << i);
             if (known) {
                 memoryPrint(" It is susceptible to ");
                 known = false;
-            } else if ((defense & CD_WEAKNESS) != 0u) {
+            } else if ((defense & config::monsters::defense::CD_WEAKNESS) != 0u) {
                 memoryPrint(", ");
             } else {
                 memoryPrint(" and ");
@@ -444,21 +444,21 @@ static void memoryAwareness(Creature_t const &creature, Recall_t const &memory) 
 
 // Do we know what it might carry?
 static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
-    if ((memory_move & (CM_CARRY_OBJ | CM_CARRY_GOLD)) == 0u) {
+    if ((memory_move & (config::monsters::move::CM_CARRY_OBJ | config::monsters::move::CM_CARRY_GOLD)) == 0u) {
         return;
     }
 
     memoryPrint(" It may");
 
-    auto carrying_chance = (uint32_t) ((memory_move & CM_TREASURE) >> CM_TR_SHIFT);
+    auto carrying_chance = (uint32_t) ((memory_move & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
 
     if (carrying_chance == 1) {
-        if ((creature_move & CM_TREASURE) == CM_60_RANDOM) {
+        if ((creature_move & config::monsters::move::CM_TREASURE) == config::monsters::move::CM_60_RANDOM) {
             memoryPrint(" sometimes");
         } else {
             memoryPrint(" often");
         }
-    } else if (carrying_chance == 2 && (creature_move & CM_TREASURE) == (CM_60_RANDOM | CM_90_RANDOM)) {
+    } else if (carrying_chance == 2 && (creature_move & config::monsters::move::CM_TREASURE) == (config::monsters::move::CM_60_RANDOM | config::monsters::move::CM_90_RANDOM)) {
         memoryPrint(" often");
     }
 
@@ -466,14 +466,14 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
 
     const char *p = nullptr;
 
-    if ((memory_move & CM_SMALL_OBJ) != 0u) {
+    if ((memory_move & config::monsters::move::CM_SMALL_OBJ) != 0u) {
         p = " small objects";
     } else {
         p = " objects";
     }
 
     if (carrying_chance == 1) {
-        if ((memory_move & CM_SMALL_OBJ) != 0u) {
+        if ((memory_move & config::monsters::move::CM_SMALL_OBJ) != 0u) {
             p = " a small object";
         } else {
             p = " an object";
@@ -486,9 +486,9 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
         memoryPrint(msg);
     }
 
-    if ((memory_move & CM_CARRY_OBJ) != 0u) {
+    if ((memory_move & config::monsters::move::CM_CARRY_OBJ) != 0u) {
         memoryPrint(p);
-        if ((memory_move & CM_CARRY_GOLD) != 0u) {
+        if ((memory_move & config::monsters::move::CM_CARRY_GOLD) != 0u) {
             memoryPrint(" or treasure");
             if (carrying_chance > 1) {
                 memoryPrint("s");
@@ -594,10 +594,10 @@ int memoryRecall(int monster_id) {
     roff_print_line = 0;
     roff_buffer_pointer = roff_buffer;
 
-    auto spells = (uint32_t) (memory.spells & creature.spells & ~CS_FREQ);
+    auto spells = (uint32_t) (memory.spells & creature.spells & ~config::monsters::spells::CS_FREQ);
 
-    // the CM_WIN property is always known, set it if a win monster
-    auto move = (uint32_t) (memory.movement | (creature.movement & CM_WIN));
+    // the config::monsters::move::CM_WIN property is always known, set it if a win monster
+    auto move = (uint32_t) (memory.movement | (creature.movement & config::monsters::move::CM_WIN));
 
     uint16_t defense = memory.defenses & creature.defenses;
 
@@ -629,12 +629,12 @@ int memoryRecall(int monster_id) {
 
     memoryWeaknesses(defense);
 
-    if ((defense & CD_INFRA) != 0) {
+    if ((defense & config::monsters::defense::CD_INFRA) != 0) {
         memoryPrint(" It is warm blooded");
     }
 
-    if ((defense & CD_NO_SLEEP) != 0) {
-        if ((defense & CD_INFRA) != 0) {
+    if ((defense & config::monsters::defense::CD_NO_SLEEP) != 0) {
+        if ((defense & config::monsters::defense::CD_INFRA) != 0) {
             memoryPrint(", and");
         } else {
             memoryPrint(" It");
@@ -642,7 +642,7 @@ int memoryRecall(int monster_id) {
         memoryPrint(" cannot be charmed or slept");
     }
 
-    if ((defense & (CD_NO_SLEEP | CD_INFRA)) != 0) {
+    if ((defense & (config::monsters::defense::CD_NO_SLEEP | config::monsters::defense::CD_INFRA)) != 0) {
         memoryPrint(".");
     }
 
@@ -653,7 +653,7 @@ int memoryRecall(int monster_id) {
     memoryAttackNumberAndDamage(memory, creature);
 
     // Always know the win creature.
-    if ((creature.movement & CM_WIN) != 0u) {
+    if ((creature.movement & config::monsters::move::CM_WIN) != 0u) {
         memoryPrint(" Killing one of these wins the game!");
     }
 

@@ -45,7 +45,7 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     monster.x = (uint8_t) x;
     monster.creature_id = (uint16_t) creature_id;
 
-    if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
+    if ((creatures_list[creature_id].defenses & config::monsters::defense::CD_MAX_HP) != 0) {
         monster.hp = (int16_t) maxDiceRoll(creatures_list[creature_id].hit_die);
     } else {
         monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
@@ -105,7 +105,7 @@ void monsterPlaceWinning() {
     monster.x = (uint8_t) x;
     monster.creature_id = (uint16_t) creature_id;
 
-    if ((creatures_list[creature_id].defenses & CD_MAX_HP) != 0) {
+    if ((creatures_list[creature_id].defenses & config::monsters::defense::CD_MAX_HP) != 0) {
         monster.hp = (int16_t) maxDiceRoll(creatures_list[creature_id].hit_die);
     } else {
         monster.hp = (int16_t) diceRoll(creatures_list[creature_id].hit_die);
@@ -221,7 +221,7 @@ bool monsterSummonUndead(int &y, int &x) {
     do {
         monster_id = randomNumber(max_levels) - 1;
         for (int i = 0; i <= 19;) {
-            if ((creatures_list[monster_id].defenses & CD_UNDEAD) != 0) {
+            if ((creatures_list[monster_id].defenses & config::monsters::defense::CD_UNDEAD) != 0) {
                 i = 20;
                 max_levels = 0;
             } else {
@@ -249,7 +249,7 @@ bool compactMonsters() {
     while (!delete_any) {
         for (int i = next_free_monster_id - 1; i >= config::monsters::MON_MIN_INDEX_ID; i--) {
             if (cur_dis < monsters[i].distance_from_player && randomNumber(3) == 1) {
-                if ((creatures_list[monsters[i].creature_id].movement & CM_WIN) != 0u) {
+                if ((creatures_list[monsters[i].creature_id].movement & config::monsters::move::CM_WIN) != 0u) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
                     // in case this is called from within updateMonsters(), this is a horrible

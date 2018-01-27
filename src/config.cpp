@@ -132,6 +132,83 @@ namespace config {
         const uint8_t MON_PLAYER_EXP_DRAINED_PER_HIT = 2; // Percent of player exp drained per hit
         const uint8_t MON_MIN_INDEX_ID = 2;               // Minimum index in m_list (1 = py, 0 = no mon)
         const uint8_t SCARE_MONSTER = 99;
+
+        // definitions for creatures, cmove field
+        namespace move {
+            const uint32_t CM_ALL_MV_FLAGS = 0x0000003FL;
+            const uint32_t CM_ATTACK_ONLY = 0x00000001L;
+            const uint32_t CM_MOVE_NORMAL = 0x00000002L;
+            const uint32_t CM_ONLY_MAGIC = 0x00000004L; // For Quylthulgs, which have no physical movement.
+
+            const uint32_t CM_RANDOM_MOVE = 0x00000038L;
+            const uint32_t CM_20_RANDOM = 0x00000008L;
+            const uint32_t CM_40_RANDOM = 0x00000010L;
+            const uint32_t CM_75_RANDOM = 0x00000020L;
+
+            const uint32_t CM_SPECIAL = 0x003F0000L;
+            const uint32_t CM_INVISIBLE = 0x00010000L;
+            const uint32_t CM_OPEN_DOOR = 0x00020000L;
+            const uint32_t CM_PHASE = 0x00040000L;
+            const uint32_t CM_EATS_OTHER = 0x00080000L;
+            const uint32_t CM_PICKS_UP = 0x00100000L;
+            const uint32_t CM_MULTIPLY = 0x00200000L;
+
+            const uint32_t CM_SMALL_OBJ = 0x00800000L;
+            const uint32_t CM_CARRY_OBJ = 0x01000000L;
+            const uint32_t CM_CARRY_GOLD = 0x02000000L;
+            const uint32_t CM_TREASURE = 0x7C000000L;
+            const uint32_t CM_TR_SHIFT = 26; // used for recall of treasure
+            const uint32_t CM_60_RANDOM = 0x04000000L;
+            const uint32_t CM_90_RANDOM = 0x08000000L;
+            const uint32_t CM_1D2_OBJ = 0x10000000L;
+            const uint32_t CM_2D2_OBJ = 0x20000000L;
+            const uint32_t CM_4D2_OBJ = 0x40000000L;
+            const uint32_t CM_WIN = 0x80000000L;
+        }
+
+        // creature spell definitions
+        namespace spells {
+            const uint32_t CS_FREQ = 0x0000000FL;
+            const uint32_t CS_SPELLS = 0x0001FFF0L;
+            const uint32_t CS_TEL_SHORT = 0x00000010L;
+            const uint32_t CS_TEL_LONG = 0x00000020L;
+            const uint32_t CS_TEL_TO = 0x00000040L;
+            const uint32_t CS_LGHT_WND = 0x00000080L;
+            const uint32_t CS_SER_WND = 0x00000100L;
+            const uint32_t CS_HOLD_PER = 0x00000200L;
+            const uint32_t CS_BLIND = 0x00000400L;
+            const uint32_t CS_CONFUSE = 0x00000800L;
+            const uint32_t CS_FEAR = 0x00001000L;
+            const uint32_t CS_SUMMON_MON = 0x00002000L;
+            const uint32_t CS_SUMMON_UND = 0x00004000L;
+            const uint32_t CS_SLOW_PER = 0x00008000L;
+            const uint32_t CS_DRAIN_MANA = 0x00010000L;
+
+            const uint32_t CS_BREATHE = 0x00F80000L;  // may also just indicate resistance
+            const uint32_t CS_BR_LIGHT = 0x00080000L; // if no spell frequency set
+            const uint32_t CS_BR_GAS = 0x00100000L;
+            const uint32_t CS_BR_ACID = 0x00200000L;
+            const uint32_t CS_BR_FROST = 0x00400000L;
+            const uint32_t CS_BR_FIRE = 0x00800000L;
+        }
+
+        // creature defense flags
+        namespace defense {
+            const uint16_t CD_DRAGON = 0x0001;
+            const uint16_t CD_ANIMAL = 0x0002;
+            const uint16_t CD_EVIL = 0x0004;
+            const uint16_t CD_UNDEAD = 0x0008;
+            const uint16_t CD_WEAKNESS = 0x03F0;
+            const uint16_t CD_FROST = 0x0010;
+            const uint16_t CD_FIRE = 0x0020;
+            const uint16_t CD_POISON = 0x0040;
+            const uint16_t CD_ACID = 0x0080;
+            const uint16_t CD_LIGHT = 0x0100;
+            const uint16_t CD_STONE = 0x0200;
+            const uint16_t CD_NO_SLEEP = 0x1000;
+            const uint16_t CD_INFRA = 0x2000;
+            const uint16_t CD_MAX_HP = 0x4000;
+        }
     }
 
     namespace player {

@@ -173,13 +173,13 @@ static void playerRecitePrayer(int prayer_type) {
             playerBless(randomNumber(48) + 48);
             break;
         case PriestSpellTypes::dispel_undead:
-            (void) spellDispelCreature(CD_UNDEAD, (3 * py.misc.level));
+            (void) spellDispelCreature(config::monsters::defense::CD_UNDEAD, (3 * py.misc.level));
             break;
         case PriestSpellTypes::heal:
             (void) spellChangePlayerHitPoints(200);
             break;
         case PriestSpellTypes::dispel_evil:
-            (void) spellDispelCreature(CD_EVIL, (3 * py.misc.level));
+            (void) spellDispelCreature(config::monsters::defense::CD_EVIL, (3 * py.misc.level));
             break;
         case PriestSpellTypes::glyph_of_warding:
             spellWardingGlyph();
@@ -193,7 +193,7 @@ static void playerRecitePrayer(int prayer_type) {
                 (void) playerStatRestore(i);
             }
 
-            (void) spellDispelCreature(CD_EVIL, (4 * py.misc.level));
+            (void) spellDispelCreature(config::monsters::defense::CD_EVIL, (4 * py.misc.level));
             (void) spellTurnUndead();
 
             if (py.flags.invulnerability < 3) {

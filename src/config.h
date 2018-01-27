@@ -122,6 +122,81 @@ namespace config {
         extern const uint8_t MON_PLAYER_EXP_DRAINED_PER_HIT;
         extern const uint8_t MON_MIN_INDEX_ID;
         extern const uint8_t SCARE_MONSTER;
+
+        namespace move {
+            extern const uint32_t CM_ALL_MV_FLAGS;
+            extern const uint32_t CM_ATTACK_ONLY;
+            extern const uint32_t CM_MOVE_NORMAL;
+            extern const uint32_t CM_ONLY_MAGIC;
+
+            extern const uint32_t CM_RANDOM_MOVE;
+            extern const uint32_t CM_20_RANDOM;
+            extern const uint32_t CM_40_RANDOM;
+            extern const uint32_t CM_75_RANDOM;
+
+            extern const uint32_t CM_SPECIAL;
+            extern const uint32_t CM_INVISIBLE;
+            extern const uint32_t CM_OPEN_DOOR;
+            extern const uint32_t CM_PHASE;
+            extern const uint32_t CM_EATS_OTHER;
+            extern const uint32_t CM_PICKS_UP;
+            extern const uint32_t CM_MULTIPLY;
+
+            extern const uint32_t CM_SMALL_OBJ;
+            extern const uint32_t CM_CARRY_OBJ;
+            extern const uint32_t CM_CARRY_GOLD;
+            extern const uint32_t CM_TREASURE;
+            extern const uint32_t CM_TR_SHIFT;
+            extern const uint32_t CM_60_RANDOM;
+            extern const uint32_t CM_90_RANDOM;
+            extern const uint32_t CM_1D2_OBJ;
+            extern const uint32_t CM_2D2_OBJ;
+            extern const uint32_t CM_4D2_OBJ;
+            extern const uint32_t CM_WIN;
+        }
+
+        namespace spells {
+            extern const uint32_t CS_FREQ;
+            extern const uint32_t CS_SPELLS;
+            extern const uint32_t CS_TEL_SHORT;
+            extern const uint32_t CS_TEL_LONG;
+            extern const uint32_t CS_TEL_TO;
+            extern const uint32_t CS_LGHT_WND;
+            extern const uint32_t CS_SER_WND;
+            extern const uint32_t CS_HOLD_PER;
+            extern const uint32_t CS_BLIND;
+            extern const uint32_t CS_CONFUSE;
+            extern const uint32_t CS_FEAR;
+            extern const uint32_t CS_SUMMON_MON;
+            extern const uint32_t CS_SUMMON_UND;
+            extern const uint32_t CS_SLOW_PER;
+            extern const uint32_t CS_DRAIN_MANA;
+
+            extern const uint32_t CS_BREATHE;
+            extern const uint32_t CS_BR_LIGHT;
+            extern const uint32_t CS_BR_GAS;
+            extern const uint32_t CS_BR_ACID;
+            extern const uint32_t CS_BR_FROST;
+            extern const uint32_t CS_BR_FIRE;
+        }
+
+        // creature defense flags
+        namespace defense {
+            extern const uint16_t CD_DRAGON;
+            extern const uint16_t CD_ANIMAL;
+            extern const uint16_t CD_EVIL;
+            extern const uint16_t CD_UNDEAD;
+            extern const uint16_t CD_WEAKNESS;
+            extern const uint16_t CD_FROST;
+            extern const uint16_t CD_FIRE;
+            extern const uint16_t CD_POISON;
+            extern const uint16_t CD_ACID;
+            extern const uint16_t CD_LIGHT;
+            extern const uint16_t CD_STONE;
+            extern const uint16_t CD_NO_SLEEP;
+            extern const uint16_t CD_INFRA;
+            extern const uint16_t CD_MAX_HP;
+        }
     }
 
     namespace player {

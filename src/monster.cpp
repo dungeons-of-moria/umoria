@@ -24,16 +24,16 @@ static bool monsterIsVisible(Monster_t const &monster) {
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
         // Normal sight.
-        if ((creature.movement & CM_INVISIBLE) == 0) {
+        if ((creature.movement & config::monsters::move::CM_INVISIBLE) == 0) {
             visible = true;
         } else if (py.flags.see_invisible) {
             visible = true;
-            creature_recall[monster.creature_id].movement |= CM_INVISIBLE;
+            creature_recall[monster.creature_id].movement |= config::monsters::move::CM_INVISIBLE;
         }
-    } else if (py.flags.see_infra > 0 && monster.distance_from_player <= py.flags.see_infra && ((creature.defenses & CD_INFRA) != 0)) {
+    } else if (py.flags.see_infra > 0 && monster.distance_from_player <= py.flags.see_infra && ((creature.defenses & config::monsters::defense::CD_INFRA) != 0)) {
         // Infra vision.
         visible = true;
-        creature_recall[monster.creature_id].defenses |= CD_INFRA;
+        creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_INFRA;
     }
 
     return visible;
@@ -364,7 +364,7 @@ static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monste
 
         vtype_t msg = {'\0'};
 
-        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
             (void) sprintf(msg, "%sis unaffected.", monster_name);
         } else {
             (void) sprintf(msg, "%sappears confused.", monster_name);
@@ -378,7 +378,7 @@ static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monste
         printMessage(msg);
 
         if (visible && !game.character_is_dead && randomNumber(4) == 1) {
-            creature_recall[monster.creature_id].defenses |= creature.defenses & CD_NO_SLEEP;
+            creature_recall[monster.creature_id].defenses |= creature.defenses & config::monsters::defense::CD_NO_SLEEP;
         }
     }
 
@@ -412,9 +412,9 @@ static void monsterAttackPlayer(int monster_id) {
         uint8_t attack_desc = monster_attacks[damage_type_id].description_id;
         Dice_t dice = monster_attacks[damage_type_id].dice;
 
-        if (py.flags.protect_evil > 0 && ((creature.defenses & CD_EVIL) != 0) && py.misc.level + 1 > creature.level) {
+        if (py.flags.protect_evil > 0 && ((creature.defenses & config::monsters::defense::CD_EVIL) != 0) && py.misc.level + 1 > creature.level) {
             if (monster.lit) {
-                creature_recall[monster.creature_id].defenses |= CD_EVIL;
+                creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_EVIL;
             }
             attack_type = 99;
             attack_desc = 99;
@@ -479,7 +479,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     // Creature can open doors.
-    if ((move_bits & CM_OPEN_DOOR) != 0u) {
+    if ((move_bits & config::monsters::move::CM_OPEN_DOOR) != 0u) {
         bool door_is_stuck = false;
 
         if (item.category_id == TV_CLOSED_DOOR) {
@@ -519,7 +519,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
             }
             tile.feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(Coord_t{y, x});
-            rcmove |= CM_OPEN_DOOR;
+            rcmove |= config::monsters::move::CM_OPEN_DOOR;
             do_move = false;
         }
     } else if (item.category_id == TV_CLOSED_DOOR) {
@@ -553,7 +553,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
 
     // If the creature moves only to attack, don't let it
     // move if the glyph prevents it from attacking
-    if ((move_bits & CM_ATTACK_ONLY) != 0u) {
+    if ((move_bits & config::monsters::move::CM_ATTACK_ONLY) != 0u) {
         do_turn = true;
     }
 }
@@ -573,9 +573,9 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if (((move_bits & CM_EATS_OTHER) != 0u) && creatures_list[monster.creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
+        if (((move_bits & config::monsters::move::CM_EATS_OTHER) != 0u) && creatures_list[monster.creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
             if (monsters[creature_id].lit) {
-                rcmove |= CM_EATS_OTHER;
+                rcmove |= config::monsters::move::CM_EATS_OTHER;
             }
 
             // It ate an already processed monster. Handle normally.
@@ -595,11 +595,11 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
 
 static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &do_turn, uint32_t &rcmove, int y, int x) {
     // Pick up or eat an object
-    if ((move_bits & CM_PICKS_UP) != 0u) {
+    if ((move_bits & config::monsters::move::CM_PICKS_UP) != 0u) {
         uint8_t treasure_id = dg.floor[y][x].treasure_id;
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
-            rcmove |= CM_PICKS_UP;
+            rcmove |= config::monsters::move::CM_PICKS_UP;
             (void) dungeonDeleteObject(Coord_t{y, x});;
         }
     }
@@ -643,10 +643,10 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
         // Floor is open?
         if (tile.feature_id <= MAX_OPEN_SPACE) {
             do_move = true;
-        } else if ((move_bits & CM_PHASE) != 0u) {
+        } else if ((move_bits & config::monsters::move::CM_PHASE) != 0u) {
             // Creature moves through walls?
             do_move = true;
-            rcmove |= CM_PHASE;
+            rcmove |= config::monsters::move::CM_PHASE;
         } else if (tile.treasure_id != 0) {
             // Creature can open doors?
             monsterOpenDoor(tile, monster.hp, move_bits, do_turn, do_move, rcmove, y, x);
@@ -671,7 +671,7 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
 
 static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     // 1 in x chance of casting spell
-    if (randomNumber((int) (spells & CS_FREQ)) != 1) {
+    if (randomNumber((int) (spells & config::monsters::spells::CS_FREQ)) != 1) {
         return false;
     }
 
@@ -874,7 +874,7 @@ static bool monsterCastSpell(int monster_id) {
 
     // Extract all possible spells into spell_choice
     int spell_choice[30];
-    auto spell_flags = (uint32_t) (creature.spells & ~CS_FREQ);
+    auto spell_flags = (uint32_t) (creature.spells & ~config::monsters::spells::CS_FREQ);
 
     int id = 0;
     while (spell_flags != 0) {
@@ -901,7 +901,7 @@ static bool monsterCastSpell(int monster_id) {
 
     if (monster.lit) {
         creature_recall[monster.creature_id].spells |= 1L << (thrown_spell - 1);
-        if ((creature_recall[monster.creature_id].spells & CS_FREQ) != CS_FREQ) {
+        if ((creature_recall[monster.creature_id].spells & config::monsters::spells::CS_FREQ) != config::monsters::spells::CS_FREQ) {
             creature_recall[monster.creature_id].spells++;
         }
         if (game.character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
@@ -928,7 +928,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
                 // Creature there already?
                 if (tile.creature_id > 1) {
                     // Some critters are cannibalistic!
-                    bool cannibalistic = (creatures_list[creature_id].movement & CM_EATS_OTHER) != 0;
+                    bool cannibalistic = (creatures_list[creature_id].movement & config::monsters::move::CM_EATS_OTHER) != 0;
 
                     // Check the experience level -CJS-
                     bool experienced = creatures_list[creature_id].kill_exp_value >= creatures_list[monsters[tile.creature_id].creature_id].kill_exp_value;
@@ -997,7 +997,7 @@ static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uin
 
     if (counter < 4 && randomNumber(counter * config::monsters::MON_MULTIPLY_ADJUST) == 1) {
         if (monsterMultiply(monster.y, monster.x, monster.creature_id, monster_id)) {
-            rcmove |= CM_MULTIPLY;
+            rcmove |= config::monsters::move::CM_MULTIPLY;
         }
     }
 }
@@ -1071,7 +1071,7 @@ static void monsterMoveUndead(Creature_t const &creature, int monster_id, uint32
     directions[4] = randomNumber(9);
 
     // don't move if it's is not supposed to move!
-    if ((creature.movement & CM_ATTACK_ONLY) == 0u) {
+    if ((creature.movement & config::monsters::move::CM_ATTACK_ONLY) == 0u) {
         makeMove(monster_id, directions, rcmove);
     }
 }
@@ -1086,7 +1086,7 @@ static void monsterMoveConfused(Creature_t const &creature, int monster_id, uint
     directions[4] = randomNumber(9);
 
     // don't move if it's is not supposed to move!
-    if ((creature.movement & CM_ATTACK_ONLY) == 0u) {
+    if ((creature.movement & config::monsters::move::CM_ATTACK_ONLY) == 0u) {
         makeMove(monster_id, directions, rcmove);
     }
 }
@@ -1094,7 +1094,7 @@ static void monsterMoveConfused(Creature_t const &creature, int monster_id, uint
 static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, Creature_t const &creature) {
     // Creature is confused or undead turned?
     if (monster.confused_amount != 0u) {
-        if ((creature.defenses & CD_UNDEAD) != 0) {
+        if ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) {
             monsterMoveUndead(creature, monster_id, rcmove);
         } else {
             monsterMoveConfused(creature, monster_id, rcmove);
@@ -1104,7 +1104,7 @@ static bool monsterDoMove(int monster_id, uint32_t &rcmove, Monster_t &monster, 
     }
 
     // Creature may cast a spell
-    if ((creature.spells & CS_FREQ) != 0u) {
+    if ((creature.spells & config::monsters::spells::CS_FREQ) != 0u) {
         return monsterCastSpell(monster_id);
     }
 
@@ -1138,7 +1138,7 @@ static void monsterMoveNormally(int monster_id, uint32_t &rcmove) {
         monsterGetMoveDirection(monster_id, directions);
     }
 
-    rcmove |= CM_MOVE_NORMAL;
+    rcmove |= config::monsters::move::CM_MOVE_NORMAL;
 
     makeMove(monster_id, directions, rcmove);
 }
@@ -1152,7 +1152,7 @@ static void monsterAttackWithoutMoving(int monster_id, uint32_t &rcmove, uint8_t
     } else {
         // Learn that the monster does does not move when
         // it should have moved, but didn't.
-        rcmove |= CM_ATTACK_ONLY;
+        rcmove |= config::monsters::move::CM_ATTACK_ONLY;
     }
 }
 
@@ -1164,13 +1164,13 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
-    if (((creature.movement & CM_MULTIPLY) != 0u) && config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % config::monsters::MON_MULTIPLY_ADJUST) == 0) {
+    if (((creature.movement & config::monsters::move::CM_MULTIPLY) != 0u) && config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % config::monsters::MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (((creature.movement & CM_PHASE) == 0u) && dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
+    if (((creature.movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
         monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
@@ -1180,36 +1180,36 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     }
 
     // 75% random movement
-    if (((creature.movement & CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
-        monsterMoveRandomly(monster_id, rcmove, CM_75_RANDOM);
+    if (((creature.movement & config::monsters::move::CM_75_RANDOM) != 0u) && randomNumber(100) < 75) {
+        monsterMoveRandomly(monster_id, rcmove, config::monsters::move::CM_75_RANDOM);
         return;
     }
 
     // 40% random movement
-    if (((creature.movement & CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
-        monsterMoveRandomly(monster_id, rcmove, CM_40_RANDOM);
+    if (((creature.movement & config::monsters::move::CM_40_RANDOM) != 0u) && randomNumber(100) < 40) {
+        monsterMoveRandomly(monster_id, rcmove, config::monsters::move::CM_40_RANDOM);
         return;
     }
 
     // 20% random movement
-    if (((creature.movement & CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
-        monsterMoveRandomly(monster_id, rcmove, CM_20_RANDOM);
+    if (((creature.movement & config::monsters::move::CM_20_RANDOM) != 0u) && randomNumber(100) < 20) {
+        monsterMoveRandomly(monster_id, rcmove, config::monsters::move::CM_20_RANDOM);
         return;
     }
 
     // Normal movement
-    if ((creature.movement & CM_MOVE_NORMAL) != 0u) {
+    if ((creature.movement & config::monsters::move::CM_MOVE_NORMAL) != 0u) {
         monsterMoveNormally(monster_id, rcmove);
         return;
     }
 
     // Attack, but don't move
-    if ((creature.movement & CM_ATTACK_ONLY) != 0u) {
+    if ((creature.movement & config::monsters::move::CM_ATTACK_ONLY) != 0u) {
         monsterAttackWithoutMoving(monster_id, rcmove, monster.distance_from_player);
         return;
     }
 
-    if (((creature.movement & CM_ONLY_MAGIC) != 0u) && monster.distance_from_player < 2) {
+    if (((creature.movement & config::monsters::move::CM_ONLY_MAGIC) != 0u) && monster.distance_from_player < 2) {
         // A little hack for Quylthulgs, so that one will eventually
         // notice that they have no physical attacks.
         if (creature_recall[monster.creature_id].attacks[0] < MAX_UCHAR) {
@@ -1219,7 +1219,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
         // Another little hack for Quylthulgs, so that one can
         // eventually learn their speed.
         if (creature_recall[monster.creature_id].attacks[0] > 20) {
-            creature_recall[monster.creature_id].movement |= CM_ONLY_MAGIC;
+            creature_recall[monster.creature_id].movement |= config::monsters::move::CM_ONLY_MAGIC;
         }
     }
 }
@@ -1253,7 +1253,7 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & CM_PHASE) == 0u) && dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL)) {
+        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL)) {
             if (monster.sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster.sleep_count = 0;
@@ -1356,14 +1356,14 @@ int monsterTakeHit(int monster_id, int damage) {
 
     Recall_t &memory = creature_recall[monster.creature_id];
 
-    if ((py.flags.blind < 1 && monster.lit) || ((creature.movement & CM_WIN) != 0u)) {
-        auto tmp = (uint32_t) ((memory.movement & CM_TREASURE) >> CM_TR_SHIFT);
+    if ((py.flags.blind < 1 && monster.lit) || ((creature.movement & config::monsters::move::CM_WIN) != 0u)) {
+        auto tmp = (uint32_t) ((memory.movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
 
-        if (tmp > ((treasure_flags & CM_TREASURE) >> CM_TR_SHIFT)) {
-            treasure_flags = (uint32_t) ((treasure_flags & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
+        if (tmp > ((treasure_flags & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT)) {
+            treasure_flags = (uint32_t) ((treasure_flags & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
         }
 
-        memory.movement = (uint32_t) ((memory.movement & ~CM_TREASURE) | treasure_flags);
+        memory.movement = (uint32_t) ((memory.movement & ~config::monsters::move::CM_TREASURE) | treasure_flags);
 
         if (memory.kills < MAX_SHORT) {
             memory.kills++;
@@ -1390,17 +1390,17 @@ int monsterTakeHit(int monster_id, int damage) {
 static int monsterDeathItemDropType(uint32_t flags) {
     int object;
 
-    if ((flags & CM_CARRY_OBJ) != 0u) {
+    if ((flags & config::monsters::move::CM_CARRY_OBJ) != 0u) {
         object = 1;
     } else {
         object = 0;
     }
 
-    if ((flags & CM_CARRY_GOLD) != 0u) {
+    if ((flags & config::monsters::move::CM_CARRY_GOLD) != 0u) {
         object += 2;
     }
 
-    if ((flags & CM_SMALL_OBJ) != 0u) {
+    if ((flags & config::monsters::move::CM_SMALL_OBJ) != 0u) {
         object += 4;
     }
 
@@ -1410,23 +1410,23 @@ static int monsterDeathItemDropType(uint32_t flags) {
 static int monsterDeathItemDropCount(uint32_t flags) {
     int count = 0;
 
-    if (((flags & CM_60_RANDOM) != 0u) && randomNumber(100) < 60) {
+    if (((flags & config::monsters::move::CM_60_RANDOM) != 0u) && randomNumber(100) < 60) {
         count++;
     }
 
-    if (((flags & CM_90_RANDOM) != 0u) && randomNumber(100) < 90) {
+    if (((flags & config::monsters::move::CM_90_RANDOM) != 0u) && randomNumber(100) < 90) {
         count++;
     }
 
-    if ((flags & CM_1D2_OBJ) != 0u) {
+    if ((flags & config::monsters::move::CM_1D2_OBJ) != 0u) {
         count += randomNumber(2);
     }
 
-    if ((flags & CM_2D2_OBJ) != 0u) {
+    if ((flags & config::monsters::move::CM_2D2_OBJ) != 0u) {
         count += diceRoll(Dice_t{2, 2});
     }
 
-    if ((flags & CM_4D2_OBJ) != 0u) {
+    if ((flags & config::monsters::move::CM_4D2_OBJ) != 0u) {
         count += diceRoll(Dice_t{4, 2});
     }
 
@@ -1450,7 +1450,7 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
     }
 
     // maybe the player died in mid-turn
-    if (((flags & CM_WIN) != 0u) && !game.character_is_dead) {
+    if (((flags & config::monsters::move::CM_WIN) != 0u) && !game.character_is_dead) {
         game.total_winner = true;
 
         printCharacterWinner();
@@ -1466,19 +1466,19 @@ uint32_t monsterDeath(int y, int x, uint32_t flags) {
     uint32_t return_flags = 0;
 
     if ((dropped_item_id & 255) != 0u) {
-        return_flags |= CM_CARRY_OBJ;
+        return_flags |= config::monsters::move::CM_CARRY_OBJ;
 
         if ((item_type & 0x04) != 0) {
-            return_flags |= CM_SMALL_OBJ;
+            return_flags |= config::monsters::move::CM_SMALL_OBJ;
         }
     }
 
     if (dropped_item_id >= 256) {
-        return_flags |= CM_CARRY_GOLD;
+        return_flags |= config::monsters::move::CM_CARRY_GOLD;
     }
 
     int number_of_items = (dropped_item_id % 256) + (dropped_item_id / 256);
-    number_of_items = number_of_items << CM_TR_SHIFT;
+    number_of_items = number_of_items << config::monsters::move::CM_TR_SHIFT;
 
     return return_flags | number_of_items;
 }
@@ -1511,9 +1511,9 @@ bool monsterSleep(int y, int x) {
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
+                if (monster.lit && ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
+                    creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");

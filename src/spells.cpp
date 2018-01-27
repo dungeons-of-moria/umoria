@@ -252,7 +252,7 @@ bool spellDetectInvisibleCreaturesWithinVicinity() {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].movement & CM_INVISIBLE) != 0u)) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].movement & config::monsters::move::CM_INVISIBLE) != 0u)) {
             monster.lit = true;
 
             // works correctly even if hallucinating
@@ -537,7 +537,7 @@ bool spellDetectMonsters() {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (creatures_list[monster.creature_id].movement & CM_INVISIBLE) == 0) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (creatures_list[monster.creature_id].movement & config::monsters::move::CM_INVISIBLE) == 0) {
             monster.lit = true;
             detected = true;
 
@@ -567,9 +567,9 @@ static void spellLightLineTouchesMonster(int monster_id) {
 
     auto name = monsterNameDescription(creature.name, monster.lit);
 
-    if ((creature.defenses & CD_LIGHT) != 0) {
+    if ((creature.defenses & config::monsters::defense::CD_LIGHT) != 0) {
         if (monster.lit) {
-            creature_recall[monster.creature_id].defenses |= CD_LIGHT;
+            creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_LIGHT;
         }
 
         if (monsterTakeHit(monster_id, diceRoll(Dice_t{2, 8})) >= 0) {
@@ -689,33 +689,33 @@ static void spellGetAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &
             *destroy = setNull;
             break;
         case magic_spell_flags::GF_LIGHTNING:
-            weapon_type = CS_BR_LIGHT;
-            harm_type = CD_LIGHT;
+            weapon_type = config::monsters::spells::CS_BR_LIGHT;
+            harm_type = config::monsters::defense::CD_LIGHT;
             *destroy = setLightningDestroyableItems;
             break;
         case magic_spell_flags::GF_POISON_GAS:
-            weapon_type = CS_BR_GAS;
-            harm_type = CD_POISON;
+            weapon_type = config::monsters::spells::CS_BR_GAS;
+            harm_type = config::monsters::defense::CD_POISON;
             *destroy = setNull;
             break;
         case magic_spell_flags::GF_ACID:
-            weapon_type = CS_BR_ACID;
-            harm_type = CD_ACID;
+            weapon_type = config::monsters::spells::CS_BR_ACID;
+            harm_type = config::monsters::defense::CD_ACID;
             *destroy = setAcidDestroyableItems;
             break;
         case magic_spell_flags::GF_FROST:
-            weapon_type = CS_BR_FROST;
-            harm_type = CD_FROST;
+            weapon_type = config::monsters::spells::CS_BR_FROST;
+            harm_type = config::monsters::defense::CD_FROST;
             *destroy = setFrostDestroyableItems;
             break;
         case magic_spell_flags::GF_FIRE:
-            weapon_type = CS_BR_FIRE;
-            harm_type = CD_FIRE;
+            weapon_type = config::monsters::spells::CS_BR_FIRE;
+            harm_type = config::monsters::defense::CD_FIRE;
             *destroy = setFireDestroyableItems;
             break;
         case magic_spell_flags::GF_HOLY_ORB:
             weapon_type = 0;
-            harm_type = CD_EVIL;
+            harm_type = config::monsters::defense::CD_EVIL;
             *destroy = setNull;
             break;
         default:
@@ -987,11 +987,11 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
                             uint32_t treasure_id = monsterDeath((int) monster.y, (int) monster.x, creature.movement);
 
                             if (monster.lit) {
-                                auto tmp = (uint32_t) ((creature_recall[monster.creature_id].movement & CM_TREASURE) >> CM_TR_SHIFT);
-                                if (tmp > ((treasure_id & CM_TREASURE) >> CM_TR_SHIFT)) {
-                                    treasure_id = (uint32_t) ((treasure_id & ~CM_TREASURE) | (tmp << CM_TR_SHIFT));
+                                auto tmp = (uint32_t) ((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
+                                if (tmp > ((treasure_id & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT)) {
+                                    treasure_id = (uint32_t) ((treasure_id & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
                                 }
-                                creature_recall[monster.creature_id].movement = (uint32_t) (treasure_id | (creature_recall[monster.creature_id].movement & ~CM_TREASURE));
+                                creature_recall[monster.creature_id].movement = (uint32_t) (treasure_id | (creature_recall[monster.creature_id].movement & ~config::monsters::move::CM_TREASURE));
                             }
 
                             // It ate an already processed monster. Handle normally.
@@ -1159,7 +1159,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
             Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
-            if ((creature.defenses & CD_UNDEAD) == 0) {
+            if ((creature.defenses & config::monsters::defense::CD_UNDEAD) == 0) {
                 auto name = monsterNameDescription(creature.name, monster.lit);
 
                 if (monsterTakeHit((int) tile.creature_id, 75) >= 0) {
@@ -1171,7 +1171,7 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
                 drained = true;
             } else {
-                creature_recall[monster.creature_id].defenses |= CD_UNDEAD;
+                creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_UNDEAD;
             }
         }
     }
@@ -1255,14 +1255,14 @@ bool spellConfuseMonster(int y, int x, int direction) {
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
+                if (monster.lit && ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
+                    creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_NO_SLEEP;
                 }
 
                 // Monsters which resisted the attack should wake up.
                 // Monsters with innate resistance ignore the attack.
-                if ((creature.defenses & CD_NO_SLEEP) == 0) {
+                if ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) == 0) {
                     monster.sleep_count = 0;
                 }
 
@@ -1310,9 +1310,9 @@ bool spellSleepMonster(int y, int x, int direction) {
 
             auto name = monsterNameDescription(creature.name, monster.lit);
 
-            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                if (monster.lit && ((creature.defenses & CD_NO_SLEEP) != 0)) {
-                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
+            if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
+                if (monster.lit && ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
+                    creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_NO_SLEEP;
                 }
 
                 printMonsterActionText(name, "is unaffected.");
@@ -1387,17 +1387,17 @@ bool spellWallToMud(int y, int x, int direction) {
             Monster_t const &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
-            if ((creature.defenses & CD_STONE) != 0) {
+            if ((creature.defenses & config::monsters::defense::CD_STONE) != 0) {
                 auto name = monsterNameDescription(creature.name, monster.lit);
 
                 // Should get these messages even if the monster is not visible.
                 int creature_id = monsterTakeHit((int) tile.creature_id, 100);
                 if (creature_id >= 0) {
-                    creature_recall[creature_id].defenses |= CD_STONE;
+                    creature_recall[creature_id].defenses |= config::monsters::defense::CD_STONE;
                     printMonsterActionText(name, "dissolves!");
                     displayCharacterExperience(); // print msg before calling prt_exp
                 } else {
-                    creature_recall[monster.creature_id].defenses |= CD_STONE;
+                    creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_STONE;
                     printMonsterActionText(name, "grunts in pain!");
                 }
                 finished = true;
@@ -1517,10 +1517,10 @@ bool spellBuildWall(int y, int x, int direction) {
             Monster_t &monster = monsters[tile.creature_id];
             Creature_t const &creature = creatures_list[monster.creature_id];
 
-            if ((creature.movement & CM_PHASE) == 0u) {
+            if ((creature.movement & config::monsters::move::CM_PHASE) == 0u) {
                 // monster does not move, can't escape the wall
                 int damage;
-                if ((creature.movement & CM_ATTACK_ONLY) != 0u) {
+                if ((creature.movement & config::monsters::move::CM_ATTACK_ONLY) != 0u) {
                     // this will kill everything
                     damage = 3000;
                 } else {
@@ -1687,7 +1687,7 @@ bool spellMassGenocide() {
         Monster_t const &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && (creature.movement & CM_WIN) == 0) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && (creature.movement & config::monsters::move::CM_WIN) == 0) {
             killed = true;
             dungeonDeleteMonster(id);
         }
@@ -1712,7 +1712,7 @@ bool spellGenocide() {
         Creature_t const &creature = creatures_list[monster.creature_id];
 
         if (creature_char == creatures_list[monster.creature_id].sprite) {
-            if ((creature.movement & CM_WIN) == 0) {
+            if ((creature.movement & config::monsters::move::CM_WIN) == 0) {
                 killed = true;
                 dungeonDeleteMonster(id);
             } else {
@@ -1781,10 +1781,10 @@ bool spellSleepAllMonsters() {
             continue; // do nothing
         }
 
-        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & CD_NO_SLEEP) != 0)) {
+        if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
             if (monster.lit) {
-                if ((creature.defenses & CD_NO_SLEEP) != 0) {
-                    creature_recall[monster.creature_id].defenses |= CD_NO_SLEEP;
+                if ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0) {
+                    creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_NO_SLEEP;
                 }
                 printMonsterActionText(name, "is unaffected.");
             }
@@ -1811,7 +1811,7 @@ bool spellMassPolymorph() {
         if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
-            if ((creature.movement & CM_WIN) == 0) {
+            if ((creature.movement & config::monsters::move::CM_WIN) == 0) {
                 int y = monster.y;
                 int x = monster.x;
                 dungeonDeleteMonster(id);
@@ -1832,7 +1832,7 @@ bool spellDetectEvil() {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].defenses & CD_EVIL) != 0)) {
+        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].defenses & config::monsters::defense::CD_EVIL) != 0)) {
             monster.lit = true;
 
             detected = true;
@@ -1889,9 +1889,9 @@ static void earthquakeHitsMonster(int monsterID) {
     Monster_t &monster = monsters[monsterID];
     Creature_t const &creature = creatures_list[monster.creature_id];
 
-    if ((creature.movement & CM_PHASE) == 0u) {
+    if ((creature.movement & config::monsters::move::CM_PHASE) == 0u) {
         int damage;
-        if ((creature.movement & CM_ATTACK_ONLY) != 0u) {
+        if ((creature.movement & config::monsters::move::CM_ATTACK_ONLY) != 0u) {
             // this will kill everything
             damage = 3000;
         } else {
@@ -2016,12 +2016,12 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & CD_UNDEAD) != 0) && los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.row, py.col, monster.y, monster.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
                 if (monster.lit) {
-                    creature_recall[monster.creature_id].defenses |= CD_UNDEAD;
+                    creature_recall[monster.creature_id].defenses |= config::monsters::defense::CD_UNDEAD;
 
                     turned = true;
 
