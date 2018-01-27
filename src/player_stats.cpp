@@ -272,10 +272,10 @@ void playerSetAndUseStat(int stat) {
         playerRecalculateBonuses();
     } else if (stat == py_attrs::A_DEX) {
         playerRecalculateBonuses();
-    } else if (stat == py_attrs::A_INT && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+    } else if (stat == py_attrs::A_INT && classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(py_attrs::A_INT);
         playerGainMana(py_attrs::A_INT);
-    } else if (stat == py_attrs::A_WIS && classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+    } else if (stat == py_attrs::A_WIS && classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
         playerGainMana(py_attrs::A_WIS);
     } else if (stat == py_attrs::A_CON) {

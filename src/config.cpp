@@ -291,4 +291,15 @@ namespace config {
         const uint8_t ID_NO_SHOW_P1 = 0x40;
         const uint8_t ID_SHOW_P1 = 0x80;
     }
+
+    namespace spells {
+        // Class spell types
+        const uint8_t SPELL_TYPE_NONE = 0;
+        const uint8_t SPELL_TYPE_MAGE = 1;
+        const uint8_t SPELL_TYPE_PRIEST = 2;
+
+        // offsets to spell names in spell_names[] array
+        const uint8_t NAME_OFFSET_SPELLS = 0;
+        const uint8_t NAME_OFFSET_PRAYERS = 31;
+    }
 }

@@ -275,4 +275,13 @@ namespace config {
         extern const uint8_t ID_NO_SHOW_P1;
         extern const uint8_t ID_SHOW_P1;
     }
+
+    namespace spells {
+        extern const uint8_t SPELL_TYPE_NONE;
+        extern const uint8_t SPELL_TYPE_MAGE;
+        extern const uint8_t SPELL_TYPE_PRIEST;
+
+        extern const uint8_t NAME_OFFSET_SPELLS;
+        extern const uint8_t NAME_OFFSET_PRAYERS;
+    }
 }

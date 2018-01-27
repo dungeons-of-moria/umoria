@@ -20,7 +20,7 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
     bool spell_found = false;
     bool redraw = false;
 
-    int offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+    int offset = (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE ? config::spells::NAME_OFFSET_SPELLS : config::spells::NAME_OFFSET_PRAYERS);
 
     char choice;
 
@@ -81,7 +81,7 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
 
         if (spell_id == -2) {
             vtype_t tmp_str = {'\0'};
-            (void) sprintf(tmp_str, "You don't know that %s.", (offset == NAME_OFFSET_SPELLS ? "spell" : "prayer"));
+            (void) sprintf(tmp_str, "You don't know that %s.", (offset == config::spells::NAME_OFFSET_SPELLS ? "spell" : "prayer"));
             printMessage(tmp_str);
         }
     }
@@ -135,7 +135,7 @@ int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_ch
     }
 
     if ((result != 0) && magic_spells[py.misc.class_id - 1][spell_id].mana_required > py.misc.current_mana) {
-        if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+        if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
             result = (int) getInputConfirmation("You summon your limited strength to cast this one! Confirm?");
         } else {
             result = (int) getInputConfirmation("The gods may think you presumptuous for this! Confirm?");
@@ -2131,10 +2131,10 @@ void spellLoseEXP(int32_t adjustment) {
 
         Class_t const &character_class = classes[py.misc.class_id];
 
-        if (character_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+        if (character_class.class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
             playerCalculateAllowedSpellsCount(py_attrs::A_INT);
             playerGainMana(py_attrs::A_INT);
-        } else if (character_class.class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+        } else if (character_class.class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
             playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
             playerGainMana(py_attrs::A_WIS);
         }

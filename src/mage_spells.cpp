@@ -61,7 +61,7 @@ static bool canReadSpells() {
         return false;
     }
 
-    if (classes[py.misc.class_id].class_to_use_mage_spells != SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].class_to_use_mage_spells != config::spells::SPELL_TYPE_MAGE) {
         printMessage("You can't cast spells!");
         return false;
     }
@@ -271,7 +271,7 @@ int spellChanceOfSuccess(int spell_id) {
     int chance = spell.failure_chance - 3 * (py.misc.level - spell.level_required);
 
     int stat;
-    if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+    if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
         stat = py_attrs::A_INT;
     } else {
         stat = py_attrs::A_WIS;

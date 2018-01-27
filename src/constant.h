@@ -95,15 +95,6 @@ constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
 constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
-// Class spell types
-constexpr uint8_t SPELL_TYPE_NONE = 0;
-constexpr uint8_t SPELL_TYPE_MAGE = 1;
-constexpr uint8_t SPELL_TYPE_PRIEST = 2;
-
-// offsets to spell names in spell_names[] array
-constexpr uint8_t NAME_OFFSET_SPELLS = 0;
-constexpr uint8_t NAME_OFFSET_PRAYERS = 31;
-
 // definitions for the pseudo-normal distribution generation
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table

@@ -26,7 +26,7 @@ static bool playerCanPray(int &item_pos_begin, int &item_pos_end) {
         return false;
     }
 
-    if (classes[py.misc.class_id].class_to_use_mage_spells != SPELL_TYPE_PRIEST) {
+    if (classes[py.misc.class_id].class_to_use_mage_spells != config::spells::SPELL_TYPE_PRIEST) {
         printMessage("Pray hard enough and your prayers may be answered.");
         return false;
     }

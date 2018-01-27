@@ -851,7 +851,7 @@ static uint32_t playerDetermineLearnableSpells() {
 // gain spells when player wants to -JW-
 void playerGainSpells() {
     // Priests don't need light because they get spells from their god, so only
-    // fail when can't see if player has SPELL_TYPE_MAGE spells. This check is done below.
+    // fail when can't see if player has config::spells::SPELL_TYPE_MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
         printMessage("You are too confused.");
         return;
@@ -865,16 +865,16 @@ void playerGainSpells() {
 
     int stat, offset;
 
-    if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
-        // People with SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
+    if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
+        // People with config::spells::SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
         if (!playerCanRead()) {
             return;
         }
         stat = py_attrs::A_INT;
-        offset = NAME_OFFSET_SPELLS;
+        offset = config::spells::NAME_OFFSET_SPELLS;
     } else {
         stat = py_attrs::A_WIS;
-        offset = NAME_OFFSET_PRAYERS;
+        offset = config::spells::NAME_OFFSET_PRAYERS;
     }
 
     int last_known = lastKnownSpell();
@@ -1625,10 +1625,10 @@ void playerCalculateAllowedSpellsCount(int stat) {
 
     if (stat == py_attrs::A_INT) {
         magic_type_str = "spell";
-        offset = NAME_OFFSET_SPELLS;
+        offset = config::spells::NAME_OFFSET_SPELLS;
     } else {
         magic_type_str = "prayer";
-        offset = NAME_OFFSET_PRAYERS;
+        offset = config::spells::NAME_OFFSET_PRAYERS;
     }
 
     // check to see if know any spells greater than level, eliminate them

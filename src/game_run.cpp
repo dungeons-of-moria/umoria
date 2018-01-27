@@ -98,11 +98,11 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         py.flags.food_digested = 2;
 
         // Spell and Mana based on class: Mage or Clerical realm.
-        if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+        if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
             clearScreen(); // makes spell list easier to read
             playerCalculateAllowedSpellsCount(py_attrs::A_INT);
             playerGainMana(py_attrs::A_INT);
-        } else if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+        } else if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
             playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
             clearScreen(); // force out the 'learn prayer' message
             playerGainMana(py_attrs::A_WIS);
@@ -2181,11 +2181,11 @@ static void examineBook() {
 
         uint8_t treasure_type = inventory[item_id].category_id;
 
-        if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+        if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
             if (treasure_type != TV_MAGIC_BOOK) {
                 can_read = false;
             }
-        } else if (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+        } else if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
             if (treasure_type != TV_PRAYER_BOOK) {
                 can_read = false;
             }

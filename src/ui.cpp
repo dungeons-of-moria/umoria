@@ -675,7 +675,7 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
         col = 31;
     }
 
-    int consecutive_offset = (classes[py.misc.class_id].class_to_use_mage_spells == SPELL_TYPE_MAGE ? NAME_OFFSET_SPELLS : NAME_OFFSET_PRAYERS);
+    int consecutive_offset = (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE ? config::spells::NAME_OFFSET_SPELLS : config::spells::NAME_OFFSET_PRAYERS);
 
     eraseLine(Coord_t{1, col});
     putString("Name", Coord_t{1, col + 5});
@@ -742,10 +742,10 @@ static void playerGainLevel() {
 
     Class_t const &player_class = classes[py.misc.class_id];
 
-    if (player_class.class_to_use_mage_spells == SPELL_TYPE_MAGE) {
+    if (player_class.class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
         playerCalculateAllowedSpellsCount(py_attrs::A_INT);
         playerGainMana(py_attrs::A_INT);
-    } else if (player_class.class_to_use_mage_spells == SPELL_TYPE_PRIEST) {
+    } else if (player_class.class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
         playerCalculateAllowedSpellsCount(py_attrs::A_WIS);
         playerGainMana(py_attrs::A_WIS);
     }
