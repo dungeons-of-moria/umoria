@@ -69,6 +69,15 @@ enum special_name_ids {
     SN_ARRAY_SIZE, // 56th item (size value for arrays)
 };
 
+constexpr uint8_t MAX_COLORS = 49;     // Used with potions
+constexpr uint8_t MAX_MUSHROOMS = 22;  // Used with mushrooms
+constexpr uint8_t MAX_WOODS = 25;      // Used with staffs
+constexpr uint8_t MAX_METALS = 25;     // Used with wands
+constexpr uint8_t MAX_ROCKS = 32;      // Used with rings
+constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
+constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
+constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
+
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
 extern const char *special_item_names[special_name_ids::SN_ARRAY_SIZE];
 

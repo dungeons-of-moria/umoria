@@ -85,16 +85,6 @@ constexpr uint8_t MON_MAX_ATTACKS = 4;                // Max num attacks (used i
 // Trap constants
 constexpr uint8_t MAX_TRAPS = 18; // Number of defined traps
 
-// Descriptive constants
-constexpr uint8_t MAX_COLORS = 49;     // Used with potions
-constexpr uint8_t MAX_MUSHROOMS = 22;  // Used with mushrooms
-constexpr uint8_t MAX_WOODS = 25;      // Used with staffs
-constexpr uint8_t MAX_METALS = 25;     // Used with wands
-constexpr uint8_t MAX_ROCKS = 32;      // Used with rings
-constexpr uint8_t MAX_AMULETS = 11;    // Used with amulets
-constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
-constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
-
 // definitions for the pseudo-normal distribution generation
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
