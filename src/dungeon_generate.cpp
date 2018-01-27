@@ -162,14 +162,14 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
 static void dungeonPlaceOpenDoor(int y, int x) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[cur_pos]);
     dg.floor[y][x].feature_id = TILE_CORR_FLOOR;
 }
 
 static void dungeonPlaceBrokenDoor(int y, int x) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[cur_pos]);
     dg.floor[y][x].feature_id = TILE_CORR_FLOOR;
     treasure_list[cur_pos].misc_use = 1;
 }
@@ -177,14 +177,14 @@ static void dungeonPlaceBrokenDoor(int y, int x) {
 static void dungeonPlaceClosedDoor(int y, int x) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
     dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceLockedDoor(int y, int x) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
     dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].misc_use = (int16_t) (randomNumber(10) + 10);
 }
@@ -192,7 +192,7 @@ static void dungeonPlaceLockedDoor(int y, int x) {
 static void dungeonPlaceStuckDoor(int y, int x) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
     dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
     treasure_list[cur_pos].misc_use = (int16_t) (-randomNumber(10) - 10);
 }
@@ -200,7 +200,7 @@ static void dungeonPlaceStuckDoor(int y, int x) {
 static void dungeonPlaceSecretDoor(int y, int x) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_SECRET_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_SECRET_DOOR, treasure_list[cur_pos]);
     dg.floor[y][x].feature_id = TILE_BLOCKED_FLOOR;
 }
 
@@ -236,7 +236,7 @@ static void dungeonPlaceUpStairs(int y, int x) {
 
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_UP_STAIR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_UP_STAIR, treasure_list[cur_pos]);
 }
 
 // Place a down staircase at given y, x -RAK-
@@ -247,7 +247,7 @@ static void dungeonPlaceDownStairs(int y, int x) {
 
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(OBJ_DOWN_STAIR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_DOWN_STAIR, treasure_list[cur_pos]);
 }
 
 // Places a staircase 1=up, 2=down -RAK-
@@ -1131,13 +1131,13 @@ static void dungeonBuildStore(int store_id, int y, int x) {
     int cur_pos = popt();
     dg.floor[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
 
-    inventoryItemCopyTo(OBJ_STORE_DOOR + store_id, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_STORE_DOOR + store_id, treasure_list[cur_pos]);
 }
 
 // Link all free space in treasure list together
 static void treasureLinker() {
     for (auto &item : treasure_list) {
-        inventoryItemCopyTo(OBJ_NOTHING, item);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, item);
     }
     current_treasure_id = MIN_TREASURE_LIST_ID;
 }

@@ -94,7 +94,7 @@ void pusht(uint8_t treasure_id) {
     }
     current_treasure_id--;
 
-    inventoryItemCopyTo(OBJ_NOTHING, treasure_list[current_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, treasure_list[current_treasure_id]);
 }
 
 // Item too large to fit in chest? -DJG-

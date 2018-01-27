@@ -481,7 +481,7 @@ void itemIdentify(Inventory_t &item, int &item_id) {
                 inventory[j] = inventory[j + 1];
             }
 
-            inventoryItemCopyTo(OBJ_NOTHING, inventory[j]);
+            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[j]);
         }
     }
 }

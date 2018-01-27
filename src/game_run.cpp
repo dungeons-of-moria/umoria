@@ -165,7 +165,7 @@ static void initializeCharacterInventory() {
 
     // this is needed for bash to work right, it can't hurt anyway
     for (auto &entry : inventory) {
-        inventoryItemCopyTo(OBJ_NOTHING, entry);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, entry);
     }
 
     for (auto item_id : class_base_provisions[py.misc.class_id]) {

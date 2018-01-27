@@ -36,7 +36,7 @@ void inventoryDestroyItem(int item_id) {
             inventory[i] = inventory[i + 1];
         }
 
-        inventoryItemCopyTo(OBJ_NOTHING, inventory[py.unique_inventory_items - 1]);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[py.unique_inventory_items - 1]);
         py.unique_inventory_items--;
     }
 
@@ -78,7 +78,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
                 item_id++;
             }
 
-            inventoryItemCopyTo(OBJ_NOTHING, inventory[py.unique_inventory_items]);
+            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[py.unique_inventory_items]);
         } else {
             treasure_list[treasureID].items_count = 1;
             py.inventory_weight -= item.weight;

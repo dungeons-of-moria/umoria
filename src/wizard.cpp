@@ -330,7 +330,7 @@ void wizardCreateObjects() {
     Inventory_t forge{};
     Inventory_t &item = forge;
 
-    item.id = OBJ_WIZARD;
+    item.id = config::dungeon::objects::OBJ_WIZARD;
     item.special_name_id = 0;
     itemReplaceInscription(item, "wizard item");
     item.identification = config::identification::ID_KNOWN2 | config::identification::ID_STORE_BOUGHT;

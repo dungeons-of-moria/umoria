@@ -656,7 +656,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
         playerAdjustBonusesForItem(item, -1);
     }
 
-    inventoryItemCopyTo(OBJ_NOTHING, item);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, item);
 }
 
 // Attacker's level and plusses,  defender's AC -RAK-
@@ -1228,7 +1228,7 @@ static void playerAttackMonster(int y, int x) {
             if (item.items_count == 0) {
                 py.equipment_count--;
                 playerAdjustBonusesForItem(item, -1);
-                inventoryItemCopyTo(OBJ_NOTHING, item);
+                inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, item);
                 playerRecalculateBonuses();
             }
         }
@@ -1270,7 +1270,7 @@ static void openClosedDoor(int y, int x) {
     }
 
     if (item.misc_use == 0) {
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
         tile.feature_id = TILE_CORR_FLOOR;
         dungeonLiteSpot(Coord_t{y, x});
         game.command_count = 0;
@@ -1385,7 +1385,7 @@ void playerCloseDoor() {
         if (item.category_id == TV_OPEN_DOOR) {
             if (tile.creature_id == 0) {
                 if (item.misc_use == 0) {
-                    inventoryItemCopyTo(OBJ_CLOSED_DOOR, item);
+                    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, item);
                     tile.feature_id = TILE_BLOCKED_FLOOR;
                     dungeonLiteSpot(Coord_t{y, x});
                 } else {

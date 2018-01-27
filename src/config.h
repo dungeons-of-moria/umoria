@@ -52,6 +52,25 @@ namespace config {
         extern const uint8_t DUN_QUARTZ_STREAMER;
         extern const uint8_t DUN_QUARTZ_TREASURE;
         extern const uint16_t DUN_UNUSUAL_ROOMS;
+
+        namespace objects {
+            extern const uint16_t OBJ_OPEN_DOOR;
+            extern const uint16_t OBJ_CLOSED_DOOR;
+            extern const uint16_t OBJ_SECRET_DOOR;
+            extern const uint16_t OBJ_UP_STAIR;
+            extern const uint16_t OBJ_DOWN_STAIR;
+            extern const uint16_t OBJ_STORE_DOOR;
+            extern const uint16_t OBJ_TRAP_LIST;
+            extern const uint16_t OBJ_RUBBLE;
+            extern const uint16_t OBJ_MUSH;
+            extern const uint16_t OBJ_SCARE_MON;
+            extern const uint16_t OBJ_GOLD_LIST;
+            extern const uint16_t OBJ_NOTHING;
+            extern const uint16_t OBJ_RUINED_CHEST;
+            extern const uint16_t OBJ_WIZARD;
+
+            extern const uint8_t MAX_GOLD_TYPES;
+        }
     }
 
     namespace treasure {

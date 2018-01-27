@@ -57,11 +57,30 @@ namespace config {
         const uint8_t DUN_QUARTZ_STREAMER = 2;  // Number of quartz streamers
         const uint8_t DUN_QUARTZ_TREASURE = 40; // 1/x chance of treasure per quartz
         const uint16_t DUN_UNUSUAL_ROOMS = 300; // Level/x chance of unusual room
+
+        namespace objects {
+            const uint16_t OBJ_OPEN_DOOR = 367;
+            const uint16_t OBJ_CLOSED_DOOR = 368;
+            const uint16_t OBJ_SECRET_DOOR = 369;
+            const uint16_t OBJ_UP_STAIR = 370;
+            const uint16_t OBJ_DOWN_STAIR = 371;
+            const uint16_t OBJ_STORE_DOOR = 372;
+            const uint16_t OBJ_TRAP_LIST = 378;
+            const uint16_t OBJ_RUBBLE = 396;
+            const uint16_t OBJ_MUSH = 397;
+            const uint16_t OBJ_SCARE_MON = 398;
+            const uint16_t OBJ_GOLD_LIST = 399;
+            const uint16_t OBJ_NOTHING = 417;
+            const uint16_t OBJ_RUINED_CHEST = 418;
+            const uint16_t OBJ_WIZARD = 419;
+
+            const uint8_t MAX_GOLD_TYPES = 18; // Number of different types of gold
+        }
     }
 
-    // Magic Treasure Generation constants
     // Note: Number of special objects, and degree of enchantments can be adjusted here.
     namespace treasure {
+        // Magic Treasure Generation constants
         const uint8_t LEVEL_STD_OBJECT_ADJUST = 125; // Adjust STD per level * 100
         const uint8_t LEVEL_MIN_OBJECT_STD = 7;      // Minimum STD
         const uint8_t LEVEL_TOWN_OBJECTS = 7;        // Town object generation level

@@ -337,7 +337,7 @@ void storeDestroyItem(int store_id, int item_id, bool only_one_of) {
         for (int i = item_id; i < store.unique_items_counter - 1; i++) {
             store.inventory[i] = store.inventory[i + 1];
         }
-        inventoryItemCopyTo(OBJ_NOTHING, store.inventory[store.unique_items_counter - 1].item);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, store.inventory[store.unique_items_counter - 1].item);
         store.inventory[store.unique_items_counter - 1].cost = 0;
         store.unique_items_counter--;
     }

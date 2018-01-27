@@ -184,7 +184,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_
     if (randomNumber(chance * (20 + abs_misc_use)) < 10 * (chance - abs_misc_use)) {
         printMessage("The door crashes open!");
 
-        inventoryItemCopyTo(OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
 
         // 50% chance of breaking door
         item.misc_use = (int16_t) (1 - randomNumber(2));
@@ -216,7 +216,7 @@ static void playerBashClosedChest(Inventory_t &item) {
         printMessage("You have destroyed the chest.");
         printMessage("and its contents!");
 
-        item.id = OBJ_RUINED_CHEST;
+        item.id = config::dungeon::objects::OBJ_RUINED_CHEST;
         item.flags = 0;
 
         return;

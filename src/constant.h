@@ -46,23 +46,7 @@ constexpr uint8_t TREASURE_CHANCE_OF_GREAT_ITEM = 12; // 1/n Chance of item bein
 // Also, player_base_provisions[] and store_choices[] may also have to be changed.
 constexpr uint16_t MAX_OBJECTS_IN_GAME = 420; // Number of objects for universe
 constexpr uint16_t MAX_DUNGEON_OBJECTS = 344; // Number of dungeon objects
-constexpr uint16_t OBJ_OPEN_DOOR = 367;
-constexpr uint16_t OBJ_CLOSED_DOOR = 368;
-constexpr uint16_t OBJ_SECRET_DOOR = 369;
-constexpr uint16_t OBJ_UP_STAIR = 370;
-constexpr uint16_t OBJ_DOWN_STAIR = 371;
-constexpr uint16_t OBJ_STORE_DOOR = 372;
-constexpr uint16_t OBJ_TRAP_LIST = 378;
-constexpr uint16_t OBJ_RUBBLE = 396;
-constexpr uint16_t OBJ_MUSH = 397;
-constexpr uint16_t OBJ_SCARE_MON = 398;
-constexpr uint16_t OBJ_GOLD_LIST = 399;
-constexpr uint16_t OBJ_NOTHING = 417;
-constexpr uint16_t OBJ_RUINED_CHEST = 418;
-constexpr uint16_t OBJ_WIZARD = 419;
 constexpr uint16_t OBJECT_IDENT_SIZE = 448; // 7*64, see object_offset() in desc.cpp, could be MAX_OBJECTS o_o() rewritten
-
-constexpr uint8_t MAX_GOLD_TYPES = 18; // Number of different types of gold
 
 // With LEVEL_MAX_OBJECTS set to 150, it's possible to get compacting
 // objects during level generation, although it is extremely rare.

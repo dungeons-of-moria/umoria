@@ -31,7 +31,7 @@ void storeInitializeOwners() {
         store.bad_purchases = 0;
 
         for (auto &item : store.inventory) {
-            inventoryItemCopyTo(OBJ_NOTHING, item.item);
+            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, item.item);
             item.cost = 0;
         }
     }

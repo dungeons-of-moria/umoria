@@ -221,7 +221,7 @@ bool caveTileVisible(Coord_t const &coord) {
 void dungeonSetTrap(Coord_t const &coord, int sub_type_id) {
     int free_treasure_id = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
 }
 
 // Change a trap from invisible to visible -RAK-
@@ -239,9 +239,9 @@ void trapChangeVisibility(Coord_t const &coord) {
 
     // change secret door to closed door
     if (item.category_id == TV_SECRET_DOOR) {
-        item.id = OBJ_CLOSED_DOOR;
-        item.category_id = game_objects[OBJ_CLOSED_DOOR].category_id;
-        item.sprite = game_objects[OBJ_CLOSED_DOOR].sprite;
+        item.id = config::dungeon::objects::OBJ_CLOSED_DOOR;
+        item.category_id = game_objects[config::dungeon::objects::OBJ_CLOSED_DOOR].category_id;
+        item.sprite = game_objects[config::dungeon::objects::OBJ_CLOSED_DOOR].sprite;
         dungeonLiteSpot(coord);
     }
 }
@@ -251,7 +251,7 @@ void dungeonPlaceRubble(Coord_t const &coord) {
     int free_treasure_id = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    inventoryItemCopyTo(OBJ_RUBBLE, treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_RUBBLE, treasure_list[free_treasure_id]);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
@@ -264,12 +264,12 @@ void dungeonPlaceGold(Coord_t const &coord) {
         gold_type_id += randomNumber(dg.current_level + 1);
     }
 
-    if (gold_type_id >= MAX_GOLD_TYPES) {
-        gold_type_id = MAX_GOLD_TYPES - 1;
+    if (gold_type_id >= config::dungeon::objects::MAX_GOLD_TYPES) {
+        gold_type_id = config::dungeon::objects::MAX_GOLD_TYPES - 1;
     }
 
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
     treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
 
     if (dg.floor[coord.y][coord.x].creature_id == 1) {
