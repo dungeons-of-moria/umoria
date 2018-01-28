@@ -32,6 +32,23 @@ typedef struct {
     vtype_t character_died_from = {'\0'}; // What the character died from: starvation, Bat, etc.
 } Game_t;
 
+constexpr uint8_t TREASURE_MAX_LEVELS = 50; // Maximum level of magic in dungeon
+
+// Note that the following constants are all related, if you change one, you
+// must also change all succeeding ones.
+// Also, player_base_provisions[] and store_choices[] may also have to be changed.
+constexpr uint16_t MAX_OBJECTS_IN_GAME = 420; // Number of objects for universe
+constexpr uint16_t MAX_DUNGEON_OBJECTS = 344; // Number of dungeon objects
+constexpr uint16_t OBJECT_IDENT_SIZE = 448;   // 7*64, see object_offset() in desc.cpp, could be MAX_OBJECTS o_o() rewritten
+
+// With LEVEL_MAX_OBJECTS set to 150, it's possible to get compacting
+// objects during level generation, although it is extremely rare.
+constexpr uint8_t LEVEL_MAX_OBJECTS = 175;        // Max objects per level
+
+// definitions for the pseudo-normal distribution generation
+constexpr uint16_t NORMAL_TABLE_SIZE = 256;
+constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
+
 extern Game_t game;
 extern int eof_flag;
 extern bool panic_save;
@@ -43,7 +60,7 @@ extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 void seedsInitialize(uint32_t seed);
 void seedSet(uint32_t seed);
 void seedResetToOldSeed();
-int randomNumber(int const max);
+int randomNumber(int max);
 int randomNumberNormalDistribution(int mean, int standard);
 void setGameOptions();
 bool validGameVersion(uint8_t major, uint8_t minor, uint8_t patch);

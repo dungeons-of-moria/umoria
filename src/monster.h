@@ -52,6 +52,16 @@ typedef struct {
     Dice_t dice;
 } MonsterAttack_t;
 
+// Creature constants
+constexpr uint16_t MON_MAX_CREATURES = 279; // Number of creatures defined for univ
+constexpr uint8_t MON_ATTACK_TYPES = 215;   // Number of monster attack types.
+
+// With MON_TOTAL_ALLOCATIONS set to 101, it is possible to get compacting
+// monsters messages while breeding/cloning monsters.
+constexpr uint8_t MON_TOTAL_ALLOCATIONS = 125; // Max that can be allocated
+constexpr uint8_t MON_MAX_LEVELS = 40;         // Maximum level of creatures
+constexpr uint8_t MON_MAX_ATTACKS = 4;         // Max num attacks (used in mons memory) -CJS-
+
 extern int hack_monptr;
 extern Creature_t creatures_list[MON_MAX_CREATURES];
 extern Monster_t monsters[MON_TOTAL_ALLOCATIONS];

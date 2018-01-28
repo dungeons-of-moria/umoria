@@ -10,6 +10,12 @@
 
 #include <cstdint>
 
+constexpr uint8_t MAX_OWNERS = 18;                // Number of owners to choose from
+constexpr uint8_t MAX_STORES = 6;                 // Number of different stores
+constexpr uint8_t STORE_MAX_DISCRETE_ITEMS = 24;  // Max number of discrete objects in inventory
+constexpr uint8_t STORE_MAX_ITEM_TYPES = 26;      // Number of items to choose stock from
+constexpr uint8_t COST_ADJUSTMENT = 100;          // Adjust prices for buying and selling
+
 // InventoryRecord_t data for a store inventory item
 typedef struct {
     int32_t cost;

@@ -34,6 +34,9 @@ typedef struct {
 // message line location
 constexpr uint8_t MSG_LINE = 0;
 
+// How many messages to save in the buffer -CJS-
+constexpr uint8_t MESSAGE_HISTORY_SIZE = 22;
+
 // Column for stats
 constexpr uint8_t STAT_COLUMN = 0;
 
