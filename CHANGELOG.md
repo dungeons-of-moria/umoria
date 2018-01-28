@@ -3,6 +3,14 @@
 ## HEAD
 
 
+### Code
+
+- Delete `constant.h`, moving many constants into `config.h` and the rest into
+  their related headers. Things are looking pretty ugly at the moment but
+  perhaps it's a better starting point for further refactoring.
+- Change `config.h` to namespace'd constants - probably not a good approach but let's see!
+
+
 ## 5.7.9 (2018-01-20)
 
 - Add AUTHORS file containing all known author information.
