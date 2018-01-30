@@ -75,7 +75,6 @@ set(
         source_files
         ${source_dir}/character.h
         ${source_dir}/config.h
-        ${source_dir}/constant.h
         ${source_dir}/curses.h
         ${source_dir}/dice.h
         ${source_dir}/dungeon.h

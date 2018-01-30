@@ -51,7 +51,6 @@
 
 // General Umoria headers
 #include "config.h"
-#include "constant.h"
 #include "types.h"
 
 #include "character.h"
