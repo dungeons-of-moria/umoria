@@ -29,6 +29,7 @@ static void wr_string(char *str);
 static void wr_shorts(uint16_t *value, int count);
 static void wr_item(Inventory_t &item);
 static void wr_monster(Monster_t const &monster);
+static uint8_t get_byte();
 static bool rd_bool();
 static uint8_t rd_byte();
 static uint16_t rd_short();
@@ -513,8 +514,8 @@ bool loadGame(bool &generate) {
         version_min = rd_byte();
         xor_byte = 0;
         patch_level = rd_byte();
-        xor_byte = 0;
-        xor_byte = rd_byte();
+
+        xor_byte = get_byte();
 
         if (!validGameVersion(version_maj, version_min, patch_level)) {
             putStringClearToEOL("Sorry. This save file is from a different version of umoria.", Coord_t{2, 0});
@@ -1045,12 +1046,17 @@ static void wr_monster(Monster_t const &monster) {
     wr_byte(monster.confused_amount);
 }
 
+// get_byte reads a single byte from a file, without any xor_byte encryption
+static uint8_t get_byte() {
+    return (uint8_t) (getc(fileptr) & 0xFF);
+}
+
 static bool rd_bool() {
     return (bool) rd_byte();
 }
 
 static uint8_t rd_byte() {
-    auto c = (uint8_t) (getc(fileptr) & 0xFF);
+    auto c = get_byte();
     uint8_t decoded_byte = c ^xor_byte;
     xor_byte = c;
 
@@ -1060,10 +1066,10 @@ static uint8_t rd_byte() {
 }
 
 static uint16_t rd_short() {
-    auto c = (uint8_t) (getc(fileptr) & 0xFF);
+    auto c = get_byte();
     uint16_t decoded_int = c ^xor_byte;
 
-    xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
+    xor_byte = get_byte();
     decoded_int |= (uint16_t) (c ^ xor_byte) << 8;
 
     DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, decoded_int));
@@ -1072,17 +1078,17 @@ static uint16_t rd_short() {
 }
 
 static uint32_t rd_long() {
-    auto c = (uint8_t) (getc(fileptr) & 0xFF);
+    auto c = get_byte();
     uint32_t decoded_long = c ^xor_byte;
 
-    xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
+    xor_byte = get_byte();
     decoded_long |= (uint32_t) (c ^ xor_byte) << 8;
     DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte));
 
-    c = (uint8_t) (getc(fileptr) & 0xFF);
+    c = get_byte();
     decoded_long |= (uint32_t) (c ^ xor_byte) << 16;
 
-    xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
+    xor_byte = get_byte();
     decoded_long |= (uint32_t) (c ^ xor_byte) << 24;
     DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, decoded_long));
 
@@ -1093,7 +1099,7 @@ static void rd_bytes(uint8_t *value, int count) {
     DEBUG(fprintf(logfile, "%d BYTES:", count));
     uint8_t *ptr = value;
     for (int i = 0; i < count; i++) {
-        auto c = (uint8_t) (getc(fileptr) & 0xFF);
+        auto c = get_byte();
         *ptr++ = c ^ xor_byte;
         xor_byte = c;
         DEBUG(fprintf(logfile, "  %02X = %d", (int) c, (int) ptr[-1]));
@@ -1105,7 +1111,7 @@ static void rd_string(char *str) {
     DEBUG(char *s = str);
     DEBUG(fprintf(logfile, "STRING: "));
     do {
-        auto c = (uint8_t) (getc(fileptr) & 0xFF);
+        auto c = get_byte();
         *str = c ^ xor_byte;
         xor_byte = c;
         DEBUG(fprintf(logfile, "%02X ", (int) c));
@@ -1118,9 +1124,9 @@ static void rd_shorts(uint16_t *value, int count) {
     uint16_t *sptr = value;
 
     for (int i = 0; i < count; i++) {
-        auto c = (uint8_t) (getc(fileptr) & 0xFF);
+        auto c = get_byte();
         uint16_t s = c ^xor_byte;
-        xor_byte = (uint8_t) (getc(fileptr) & 0xFF);
+        xor_byte = get_byte();
         s |= (uint16_t) (c ^ xor_byte) << 8;
         *sptr++ = s;
         DEBUG(fprintf(logfile, "  %02X %02X = %d", (int) c, (int) xor_byte, (int) s));
@@ -1200,7 +1206,7 @@ void readHighScore(HighScore_t &score) {
     DEBUG(fprintf(logfile, "Reading score:\n"));
 
     // Read the encryption byte.
-    xor_byte = rd_byte();
+    xor_byte = get_byte();
 
     score.points = rd_long();
     score.birth_date = rd_long();
