@@ -3,12 +3,21 @@
 ## HEAD
 
 
+## 5.7.10 (2018-02-18)
+
+### Bug Fixes
+
+- `xor_byte` decryption was not being performed correctly on `score.dat` files.
+  Introduced with commit: 676cdfed6c274279fa889c079e84788adc954cac (`readHighScore()` function).
+  Note: `game.sav` files were **not affected** by this bug.
+
+
 ### Code
 
 - Delete `constant.h`, moving many constants into `config.h` and the rest into
   their related headers. Things are looking pretty ugly at the moment but
   perhaps it's a better starting point for further refactoring.
-- Change `config.h` to namespace'd constants - probably not a good approach but let's see!
+- Change `config.h` to namespace'd constants - perhaps not a good approach but let's see!
 
 
 ## 5.7.9 (2018-01-20)
