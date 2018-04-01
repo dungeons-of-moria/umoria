@@ -34,12 +34,12 @@ David J. Grabiner [-DJG-] (GPL v2)
   as maintainer
 
 Jimmey Wayne Todd Jr. [-JWT-]
-  character generation
-  save/load code
+  character generation (race, class, stats, etc.)
+  character adjustments (AC, HP, INT, WIS, damage, to hit)
+  calculate total player points
+  print player character/history
+  game save/load code
   add player to scores
-  player points
-  print player history
-  player adjustments (AC, damage, HP, to hit)
   various other features and functions
 
 D. G. Kneller (Public Domain)
@@ -103,7 +103,7 @@ Carlton Hommel (Public Domain)
 Wayne Schlitt (GPL v2)
   the 'calculate hits' utility
 
-Brian Johnson (GPL v2)
+Brian W. Johnson (GPL v2)
   Linux support
 
 Ronald Cook (Public Domain)
