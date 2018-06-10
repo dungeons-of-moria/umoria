@@ -42,9 +42,9 @@ classic roguelike game.
 
 ## Notes on Compiling Umoria
 
-At present Umoria has only been tested against `GCC 6.2`+, `GCC 7` and `ncurses 6.0`,
-although earlier versions should also work fine. You will require these along
-with `CMake` and the C++ build tools for your system.
+At present Umoria has been tested against GCC `6.x`, `7.x`, and `8.1`, with
+`ncurses 6.x`, although earlier versions should also work fine. You will
+require these along with `CMake` and the C++ build tools for your system.
 
 
 ### macOS and Linux
