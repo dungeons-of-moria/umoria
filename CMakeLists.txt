@@ -266,6 +266,7 @@ elseif ((MSYS OR MINGW) AND NOT "$ENV{MINGW}" STREQUAL "")
     set(CURSES_LIBRARIES "/$ENV{MINGW}/lib/libncurses.a")
 else ()
     message(STATUS "NOTE: Configuring build for macOS/Linux release...")
+    set(CURSES_NEED_NCURSES TRUE)
     find_package(Curses REQUIRED)
 endif ()
 
