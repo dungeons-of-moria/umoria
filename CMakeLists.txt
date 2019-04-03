@@ -33,7 +33,7 @@ set(cxx_warnings "-Wall")
 set(cxx_warnings "${cxx_warnings} -Wextra")
 set(cxx_warnings "${cxx_warnings} -Wpedantic")
 set(cxx_warnings "${cxx_warnings} -Wshadow")
-set(cxx_warnings "${cxx_warnings} -Werror")
+#set(cxx_warnings "${cxx_warnings} -Werror")
 set(cxx_warnings "${cxx_warnings} -pedantic-errors")
 set(cxx_warnings "${cxx_warnings} -Weffc++ ")
 
