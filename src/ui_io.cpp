@@ -91,13 +91,15 @@ void terminalRestoreScreen() {
     touchwin(stdscr);
 }
 
-void terminalBellSound() {
+ssize_t terminalBellSound() {
     putQIO();
 
     // The player can turn off beeps if they find them annoying.
     if (config::options::error_beep_sound) {
-        (void) write(1, "\007", 1);
+        return write(1, "\007", 1);
     }
+
+    return 0;
 }
 
 // Dump the IO buffer to terminal -RAK-
