@@ -231,8 +231,8 @@ endif ()
 
 set(
         data_files_to_update
-        ${build_dir}/data/splash.txt
-        ${build_dir}/data/versions.txt
+        ${source_dir}/../data/splash.txt
+        ${source_dir}/../data/versions.txt
 )
 foreach (data_file ${data_files_to_update})
     file(READ ${data_file} content)
