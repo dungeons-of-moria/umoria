@@ -1,5 +1,6 @@
 # Umoria
 
+[![Run on Repl.it](https://repl.it/badge/github/dungeons-of-moria/umoria)](https://repl.it/github/dungeons-of-moria/umoria)
 _The Dungeons of Moria_ is a single player dungeon simulation originally
 written by Robert Alan Koeneke, with v1.0 released in 1983. The game was
 originally written in VMS Pascal before being ported to the C language and
