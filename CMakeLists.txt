@@ -178,8 +178,6 @@ set(
         ${PROJECT_SOURCE_DIR}/data/help_wizard.txt
         ${PROJECT_SOURCE_DIR}/data/rl_help.txt
         ${PROJECT_SOURCE_DIR}/data/rl_help_wizard.txt
-        ${PROJECT_SOURCE_DIR}/data/splash.txt
-        ${PROJECT_SOURCE_DIR}/data/versions.txt
         ${PROJECT_SOURCE_DIR}/data/welcome.txt
         ${PROJECT_SOURCE_DIR}/data/death_tomb.txt
         ${PROJECT_SOURCE_DIR}/data/death_royal.txt
@@ -231,14 +229,11 @@ endif ()
 
 set(
         data_files_to_update
-        ${build_dir}/data/splash.txt
-        ${build_dir}/data/versions.txt
+        data/splash.txt
+        data/versions.txt
 )
 foreach (data_file ${data_files_to_update})
-    file(READ ${data_file} content)
-    string(REGEX REPLACE "{{ CURRENT_VERSION }}" "${umoria_version}" content "${content}")
-    string(REGEX REPLACE "{{ RELEASE_DATE }}" "${current_date}" content "${content}")
-    file(WRITE ${data_file} ${content})
+    configure_file(${data_file}.in ${build_dir}/${data_file})
 endforeach ()
 
 

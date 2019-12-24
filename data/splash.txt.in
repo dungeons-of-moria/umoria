@@ -10,7 +10,7 @@
              ##     ##   ##     ##   ##    ##     ##    ##     ##
              ##     ##    #######    ##     ##   ####   ##     ##
 
-                                Umoria {{ CURRENT_VERSION }}
+                                Umoria ${umoria_version}
 
 
 
