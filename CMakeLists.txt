@@ -164,12 +164,8 @@ set(
 set(build_dir "umoria")
 set(data_dir "${build_dir}/data")
 
-file(MAKE_DIRECTORY ${build_dir})
-file(MAKE_DIRECTORY ${data_dir})
 
-set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${build_dir})
-set(RUNTIME_OUTPUT_DIRECTORY ${build_dir})
 
 # Core game data files
 set(
@@ -269,4 +265,4 @@ include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(umoria ${CURSES_LIBRARIES})
 
 # Build and install the umoria binary
-install(TARGETS umoria DESTINATION ${build_dir})
+install(TARGETS umoria DESTINATION bin)
