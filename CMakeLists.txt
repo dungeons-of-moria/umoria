@@ -263,6 +263,3 @@ endif ()
 
 include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(umoria ${CURSES_LIBRARIES})
-
-# Build and install the umoria binary
-install(TARGETS umoria DESTINATION bin)
