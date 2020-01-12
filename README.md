@@ -49,16 +49,25 @@ require these along with `CMake` and the C++ build tools for your system.
 
 ### macOS and Linux
 
-At the command prompt type the following:
+You can do an in-source build by going to the umoria folder in a command prompt
+and then type:
 
 ```
   $ cmake .
   $ make
-  $ make install
 ```
 
-A `umoria` directory will be created containing the game binary and data files,
-which you can then move to your `home` directory, or other location.
+If you would rather do an out-of-source build you can type:
+
+```
+  $ mkdir build && cd build
+  $ cmake ..
+  $ make
+```
+
+A `umoria` directory will be created in the current directory containing the
+game binary and data files, which you can then move to your `home` directory,
+or another location.
 
 
 ### Windows
@@ -77,7 +86,15 @@ to `MINGW=`:
 ```
   $ MINGW=mingw64 cmake .
   $ make
-  $ make install
+```
+
+Or, if you want to do an out of source build, type
+
+```
+  $ mkdir build
+  $ cd build
+  $ MINGW=mingw64 cmake ..
+  $ make
 ```
 
 As with the macOS/Linux builds, the files will be installed into a `umoria`

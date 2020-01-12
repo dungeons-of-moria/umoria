@@ -164,12 +164,8 @@ set(
 set(build_dir "umoria")
 set(data_dir "${build_dir}/data")
 
-file(MAKE_DIRECTORY ${build_dir})
-file(MAKE_DIRECTORY ${data_dir})
 
-set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${build_dir})
-set(RUNTIME_OUTPUT_DIRECTORY ${build_dir})
 
 # Core game data files
 set(
@@ -178,8 +174,6 @@ set(
         ${PROJECT_SOURCE_DIR}/data/help_wizard.txt
         ${PROJECT_SOURCE_DIR}/data/rl_help.txt
         ${PROJECT_SOURCE_DIR}/data/rl_help_wizard.txt
-        ${PROJECT_SOURCE_DIR}/data/splash.txt
-        ${PROJECT_SOURCE_DIR}/data/versions.txt
         ${PROJECT_SOURCE_DIR}/data/welcome.txt
         ${PROJECT_SOURCE_DIR}/data/death_tomb.txt
         ${PROJECT_SOURCE_DIR}/data/death_royal.txt
@@ -231,14 +225,11 @@ endif ()
 
 set(
         data_files_to_update
-        ${build_dir}/data/splash.txt
-        ${build_dir}/data/versions.txt
+        data/splash.txt
+        data/versions.txt
 )
 foreach (data_file ${data_files_to_update})
-    file(READ ${data_file} content)
-    string(REGEX REPLACE "{{ CURRENT_VERSION }}" "${umoria_version}" content "${content}")
-    string(REGEX REPLACE "{{ RELEASE_DATE }}" "${current_date}" content "${content}")
-    file(WRITE ${data_file} ${content})
+    configure_file(${data_file}.in ${build_dir}/${data_file})
 endforeach ()
 
 
@@ -272,6 +263,3 @@ endif ()
 
 include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(umoria ${CURSES_LIBRARIES})
-
-# Build and install the umoria binary
-install(TARGETS umoria DESTINATION ${build_dir})

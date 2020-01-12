@@ -1,4 +1,4 @@
-                          Umoria {{ CURRENT_VERSION }}  ({{ RELEASE_DATE }})
+                          Umoria ${umoria_version}  (${current_date})
 
 Previous major releases:
 
