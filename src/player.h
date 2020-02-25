@@ -269,10 +269,10 @@ bool playerStatRandomIncrease(int stat);
 bool playerStatRandomDecrease(int stat);
 bool playerStatRestore(int stat);
 void playerStatBoost(int stat, int amount);
-int playerToHitAdjustment();
-int playerArmorClassAdjustment();
+int16_t playerToHitAdjustment();
+int16_t playerArmorClassAdjustment();
 int16_t playerDisarmAdjustment();
-int playerDamageAdjustment();
+int16_t playerDamageAdjustment();
 
 // player_throw.cpp
 void playerThrowItem();

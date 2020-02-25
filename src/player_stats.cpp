@@ -373,8 +373,8 @@ void playerStatBoost(int stat, int amount) {
 }
 
 // Returns a character's adjustment to hit. -JWT-
-int playerToHitAdjustment() {
-    int total;
+int16_t playerToHitAdjustment() {
+    int16_t total;
 
     int dexterity = py.stats.used[py_attrs::A_DEX];
     if (dexterity < 4) {
@@ -420,10 +420,10 @@ int playerToHitAdjustment() {
 }
 
 // Returns a character's adjustment to armor class -JWT-
-int playerArmorClassAdjustment() {
+int16_t playerArmorClassAdjustment() {
     int stat = py.stats.used[py_attrs::A_DEX];
 
-    int adjustment;
+    int16_t adjustment;
 
     if (stat < 4) {
         adjustment = -4;
@@ -486,10 +486,10 @@ int16_t playerDisarmAdjustment() {
 }
 
 // Returns a character's adjustment to damage -JWT-
-int playerDamageAdjustment() {
+int16_t playerDamageAdjustment() {
     int stat = py.stats.used[py_attrs::A_STR];
 
-    int adjustment;
+    int16_t adjustment;
 
     if (stat < 4) {
         adjustment = -2;

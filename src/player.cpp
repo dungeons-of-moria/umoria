@@ -536,9 +536,9 @@ void playerRecalculateBonuses() {
     playerResetFlags();
 
     // Real values
-    py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
-    py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
-    py.misc.magical_ac = (int16_t) playerArmorClassAdjustment();
+    py.misc.plusses_to_hit = playerToHitAdjustment();
+    py.misc.plusses_to_damage = playerDamageAdjustment();
+    py.misc.magical_ac = playerArmorClassAdjustment();
     py.misc.ac = 0;
 
     // Display values

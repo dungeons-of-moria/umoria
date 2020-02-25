@@ -101,10 +101,10 @@ static void characterGenerateStatsAndRace() {
     py.misc.stealth_factor = race.stealth;
     py.misc.saving_throw = race.saving_throw_base;
     py.misc.hit_die = race.hit_points_base;
-    py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
-    py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
+    py.misc.plusses_to_damage = playerDamageAdjustment();
+    py.misc.plusses_to_hit = playerToHitAdjustment();
     py.misc.magical_ac = 0;
-    py.misc.ac = (int16_t) playerArmorClassAdjustment();
+    py.misc.ac = playerArmorClassAdjustment();
     py.misc.experience_factor = race.exp_factor_base;
     py.flags.see_infra = race.infra_vision;
 }
@@ -380,9 +380,9 @@ static void generateCharacterClass(uint8_t const class_id) {
     }
 
     // Real values
-    py.misc.plusses_to_damage = (int16_t) playerDamageAdjustment();
-    py.misc.plusses_to_hit = (int16_t) playerToHitAdjustment();
-    py.misc.magical_ac = (int16_t) playerArmorClassAdjustment();
+    py.misc.plusses_to_damage = playerDamageAdjustment();
+    py.misc.plusses_to_hit = playerToHitAdjustment();
+    py.misc.magical_ac = playerArmorClassAdjustment();
     py.misc.ac = 0;
 
     // Displayed values
