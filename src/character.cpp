@@ -327,7 +327,7 @@ static void characterSetAgeHeightWeight() {
 
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
 // shown during the character creation screens.
-static int displayRaceClasses(int const race_id, uint8_t *class_list) {
+static int displayRaceClasses(uint8_t const race_id, uint8_t *class_list) {
     auto y = 21;
     auto x = 2;
 
