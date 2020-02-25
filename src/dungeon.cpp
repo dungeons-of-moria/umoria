@@ -333,7 +333,7 @@ void dungeonPlaceRandomObjectNear(Coord_t coord, int tries) {
         for (int i = 0; i <= 10; i++) {
             Coord_t at = Coord_t{
                     coord.y - 3 + randomNumber(5),
-                    coord.x - 4 + randomNumber(7)
+                    coord.x - 4 + randomNumber(7),
             };
 
             if (coordInBounds(at) && dg.floor[at.y][at.x].feature_id <= MAX_CAVE_FLOOR && dg.floor[at.y][at.x].treasure_id == 0) {

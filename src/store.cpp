@@ -955,8 +955,10 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     char mask[player_equipment::EQUIPMENT_WIELD];
 
     for (int counter = 0; counter < py.unique_inventory_items; counter++) {
+        // TODO(cook): `flag` is an `int`, but the function returns a `bool`
         int flag = (*store_buy[store_id])(inventory[counter].category_id);
 
+        // TODO(cook): then `flag` is cast to a `char`
         mask[counter] = (char) flag;
         if (flag) {
             if (counter < first_item) {

@@ -521,7 +521,7 @@ DungeonObject_t game_objects[MAX_OBJECTS_IN_GAME] = {
 
     // these next two are needed only for the names
     {"& ruined chest",                0x00000000L, TV_CHEST,    '&', 0, 0, 0, 1, 250, 0, 0, 0, 0, {0, 0}, 0}, // 418
-    {"",                              0x00000000L, TV_NOTHING,  ' ', 0, 0, 0, 0,   0, 0, 0, 0, 0, {0, 0}, 0} // 419
+    {"",                              0x00000000L, TV_NOTHING,  ' ', 0, 0, 0, 0,   0, 0, 0, 0, 0, {0, 0}, 0}, // 419
 };
 
 const char *special_item_names[special_name_ids::SN_ARRAY_SIZE] = {
@@ -543,5 +543,5 @@ const char *special_item_names[special_name_ids::SN_ARRAY_SIZE] = {
     "of Dragon Slaying", "(Empty)",          "(Locked)",
     "(Poison Needle)",   "(Gas Trap)",       "(Explosion Device)",
     "(Summoning Runes)", "(Multiple Traps)", "(Disarmed)",
-    "(Unlocked)",        "of Slay Animal"
+    "(Unlocked)",        "of Slay Animal",
 };

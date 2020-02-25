@@ -421,10 +421,10 @@ static bool inventoryDropItem(char *command, bool selecting) {
 }
 
 static bool inventoryWearWieldItem(bool selecting) {
-    // Note: simple loop to get wear_low value
+    // Note: simple loop to get the global wear_low value
     for (wear_low = 0; wear_low < py.unique_inventory_items && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++);
 
-    // Note: simple loop to get wear_high value
+    // Note: simple loop to get the global wear_high value
     for (wear_high = wear_low; wear_high < py.unique_inventory_items && inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++);
 
     wear_high--;

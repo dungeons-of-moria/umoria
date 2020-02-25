@@ -50,7 +50,7 @@ const char *rocks[MAX_ROCKS] = {
     "Calcite", "Carnelian", "Corundum", "Diamond", "Emerald", "Fluorite", "Garnet",
     "Granite", "Jade", "Jasper", "Lapis Lazuli", "Malachite", "Marble", "Moonstone",
     "Onyx", "Opal", "Pearl", "Quartz", "Quartzite", "Rhodonite", "Ruby", "Sapphire",
-    "Tiger Eye", "Topaz", "Turquoise", "Zircon"
+    "Tiger Eye", "Topaz", "Turquoise", "Zircon",
 };
 
 const char *amulets[MAX_AMULETS] = {

@@ -129,7 +129,6 @@ static void trapRockfall(int y, int x, int dam) {
 }
 
 static void trapCorrodeGas() {
-    // Makes more sense to print the message first, then damage an object.
     printMessage("A strange red gas surrounds you.");
 
     damageCorrodingGas("corrosion gas");
@@ -149,21 +148,18 @@ static void trapSummonMonster(int y, int x) {
 }
 
 static void trapFire(int dam) {
-    // Makes more sense to print the message first, then damage an object.
     printMessage("You are enveloped in flames!");
 
     damageFire(dam, "a fire trap");
 }
 
 static void trapAcid(int dam) {
-    // Makes more sense to print the message first, then damage an object.
     printMessage("You are splashed with acid!");
 
     damageAcid(dam, "an acid trap");
 }
 
 static void trapPoisonGas(int dam) {
-    // Makes more sense to print the message first, then damage an object.
     printMessage("A pungent green gas surrounds you!");
 
     damagePoisonedGas(dam, "a poison gas trap");
