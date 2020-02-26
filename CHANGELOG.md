@@ -1,10 +1,23 @@
-# Umoria CHANGELOG - this file tracks changes since v5.6.0
+# Umoria CHANGELOG
+
+Tracking all changes since the 5.6.0 release.
+
 
 ## HEAD
 
-- Rename several `ui_inventory.cpp` functions to avoid name clashes.
-- Player ToHit/Armor/Damage Adjustment functions now return int16 types. 
+
+## 5.7.11 (2020-02-26)
+
+- Rename several `ui_inventory.cpp` functions to avoid name clashes (bugfix).
+- Player ToHit/Armor/Damage Adjustment functions now return `int16` types.
 - Minor style changes.
+- Various `CMakeLists.txt` updates:
+    * Allow out-of-source builds.
+    * Use `configure_file` to set variables in `splash.txt` and `versions.txt`.
+    * Remove unneeded `make install`.
+    * Fix for finding ncurses on Linux/macOS.
+    * GCC 8 support.
+- Update `AUTHORS`: add more known features from `-JWT-`.
 
 
 ## 5.7.10 (2018-02-18)
