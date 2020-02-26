@@ -2,6 +2,10 @@
 
 ## HEAD
 
+- Rename several `ui_inventory.cpp` functions to avoid name clashes.
+- Player ToHit/Armor/Damage Adjustment functions now return int16 types. 
+- Minor style changes.
+
 
 ## 5.7.10 (2018-02-18)
 

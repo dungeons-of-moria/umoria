@@ -278,7 +278,7 @@ constexpr int WRONG_SCR = 5;
 int screen_state, screen_left, screen_base;
 int wear_low, wear_high;
 
-static void displayInventoryScreen(int new_screen) {
+static void uiCommandDisplayInventoryScreen(int new_screen) {
     if (new_screen == screen_state) {
         return;
     }
@@ -366,7 +366,7 @@ static void setInventoryCommandScreenState(char command) {
 
         int savedState = screen_state;
         screen_state = WRONG_SCR;
-        displayInventoryScreen(savedState);
+        uiCommandDisplayInventoryScreen(savedState);
 
         return;
     }
@@ -378,7 +378,7 @@ static void setInventoryCommandScreenState(char command) {
     screen_state = BLANK_SCR;
 }
 
-static bool inventoryTakeOffItem(bool selecting) {
+static bool uiCommandInventoryTakeOffItem(bool selecting) {
     if (py.equipment_count == 0) {
         printMessage("You are not using any equipment.");
         // don't print message restarting inven command after taking off something, it is confusing
@@ -391,13 +391,13 @@ static bool inventoryTakeOffItem(bool selecting) {
     }
 
     if (screen_state != BLANK_SCR) {
-        displayInventoryScreen(EQUIP_SCR);
+        uiCommandDisplayInventoryScreen(EQUIP_SCR);
     }
 
     return true;
 }
 
-static bool inventoryDropItem(char *command, bool selecting) {
+static bool uiCommandInventoryDropItem(char *command, bool selecting) {
     if (py.unique_inventory_items == 0 && py.equipment_count == 0) {
         printMessage("But you're not carrying anything.");
         return selecting;
@@ -410,17 +410,17 @@ static bool inventoryDropItem(char *command, bool selecting) {
 
     if ((screen_state == EQUIP_SCR && py.equipment_count > 0) || py.unique_inventory_items == 0) {
         if (screen_state != BLANK_SCR) {
-            displayInventoryScreen(EQUIP_SCR);
+            uiCommandDisplayInventoryScreen(EQUIP_SCR);
         }
         *command = 'r'; // Remove - or take off and drop.
     } else if (screen_state != BLANK_SCR) {
-        displayInventoryScreen(INVEN_SCR);
+        uiCommandDisplayInventoryScreen(INVEN_SCR);
     }
 
     return true;
 }
 
-static bool inventoryWearWieldItem(bool selecting) {
+static bool uiCommandInventoryWearWieldItem(bool selecting) {
     // Note: simple loop to get the global wear_low value
     for (wear_low = 0; wear_low < py.unique_inventory_items && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++);
 
@@ -435,13 +435,13 @@ static bool inventoryWearWieldItem(bool selecting) {
     }
 
     if (screen_state != BLANK_SCR && screen_state != INVEN_SCR) {
-        displayInventoryScreen(WEAR_SCR);
+        uiCommandDisplayInventoryScreen(WEAR_SCR);
     }
 
     return true;
 }
 
-static void inventoryUnwieldItem() {
+static void uiCommandInventoryUnwieldItem() {
     if (inventory[player_equipment::EQUIPMENT_WIELD].category_id == TV_NOTHING && inventory[player_equipment::EQUIPMENT_AUX].category_id == TV_NOTHING) {
         printMessage("But you are wielding no weapons.");
         return;
@@ -532,19 +532,19 @@ static void buildCommandHeading(char *prt1, int from, int to, const char *swap, 
 
 static void drawInventoryScreenForCommand(char command) {
     if (command == 't' || command == 'r') {
-        displayInventoryScreen(EQUIP_SCR);
+        uiCommandDisplayInventoryScreen(EQUIP_SCR);
     } else if (command == 'w' && screen_state != INVEN_SCR) {
-        displayInventoryScreen(WEAR_SCR);
+        uiCommandDisplayInventoryScreen(WEAR_SCR);
     } else {
-        displayInventoryScreen(INVEN_SCR);
+        uiCommandDisplayInventoryScreen(INVEN_SCR);
     }
 }
 
 static void swapInventoryScreenForDrop() {
     if (screen_state == EQUIP_SCR) {
-        displayInventoryScreen(INVEN_SCR);
+        uiCommandDisplayInventoryScreen(INVEN_SCR);
     } else if (screen_state == INVEN_SCR) {
-        displayInventoryScreen(EQUIP_SCR);
+        uiCommandDisplayInventoryScreen(EQUIP_SCR);
     }
 }
 
@@ -989,19 +989,19 @@ static void inventoryDisplayAppropriateHeader() {
     eraseLine(Coord_t{screen_base, screen_left});
 }
 
-static void displayInventory() {
+static void uiCommandDisplayInventory() {
     if (py.unique_inventory_items == 0) {
         printMessage("You are not carrying anything.");
     } else {
-        displayInventoryScreen(INVEN_SCR);
+        uiCommandDisplayInventoryScreen(INVEN_SCR);
     }
 }
 
-static void displayEquipment() {
+static void uiCommandDisplayEquipment() {
     if (py.equipment_count == 0) {
         printMessage("You are not using any equipment.");
     } else {
-        displayInventoryScreen(EQUIP_SCR);
+        uiCommandDisplayInventoryScreen(EQUIP_SCR);
     }
 }
 
@@ -1021,28 +1021,28 @@ void inventoryExecuteCommand(char command) {
         bool selecting = false;
         switch (command) {
             case 'i':
-                displayInventory();
+                uiCommandDisplayInventory();
                 break;
             case 'e':
-                displayEquipment();
+                uiCommandDisplayEquipment();
                 break;
             case 't':
-                selecting = inventoryTakeOffItem(selecting);
+                selecting = uiCommandInventoryTakeOffItem(selecting);
                 break;
             case 'd':
-                selecting = inventoryDropItem(&command, selecting);
+                selecting = uiCommandInventoryDropItem(&command, selecting);
                 break;
             case 'w':
-                selecting = inventoryWearWieldItem(selecting);
+                selecting = uiCommandInventoryWearWieldItem(selecting);
                 break;
             case 'x':
-                inventoryUnwieldItem();
+                uiCommandInventoryUnwieldItem();
                 break;
             case ' ':
                 // Dummy command to return again to main prompt.
                 break;
             case '?':
-                displayInventoryScreen(HELP_SCR);
+                uiCommandDisplayInventoryScreen(HELP_SCR);
                 break;
             default:
                 // Nonsense command
