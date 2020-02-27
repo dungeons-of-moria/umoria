@@ -228,7 +228,8 @@ bool inventoryCanCarryItemCount(Inventory_t const &item) {
         bool same_category = inventory[i].sub_category_id == item.sub_category_id;
 
         // make sure the number field doesn't overflow
-        bool same_number = inventory[i].items_count + item.items_count < 256;
+        // NOTE: convert to bigger types before addition -MRC-
+        bool same_number = uint16_t(inventory[i].items_count) + uint16_t(item.items_count) < 256;
 
         // they always stack (sub_category_id < 192), or else they have same `misc_use`
         bool same_group = item.sub_category_id < ITEM_GROUP_MIN || inventory[i].misc_use == item.misc_use;
