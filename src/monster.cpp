@@ -1224,7 +1224,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     }
 }
 
-static void memoryUpdateRecall(Monster_t const &monster, bool wake, bool ignore, int rcmove) {
+static void memoryUpdateRecall(Monster_t const &monster, bool wake, bool ignore, uint32_t rcmove) {
     if (!monster.lit) {
         return;
     }
