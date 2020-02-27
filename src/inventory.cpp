@@ -364,7 +364,7 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
 // that stores can detect the damage.
 static bool damageMinusAC(uint32_t typ_dam) {
     int itemsCount = 0;
-    int items[6];
+    uint8_t items[6];
 
     if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
         items[itemsCount] = player_equipment::EQUIPMENT_BODY;
@@ -403,7 +403,7 @@ static bool damageMinusAC(uint32_t typ_dam) {
         return minus;
     }
 
-    int itemID = items[randomNumber(itemsCount) - 1];
+    uint8_t itemID = items[randomNumber(itemsCount) - 1];
 
     obj_desc_t description = {'\0'};
     obj_desc_t msg = {'\0'};
