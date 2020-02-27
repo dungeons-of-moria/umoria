@@ -550,7 +550,7 @@ bool setFireDestroyableItems(Inventory_t *item) {
 
 // Corrode the unsuspecting person's armor -RAK-
 void damageCorrodingGas(const char *creature_name) {
-    if (!damageMinusAC((uint32_t) config::treasure::flags::TR_RES_ACID)) {
+    if (!damageMinusAC(config::treasure::flags::TR_RES_ACID)) {
         playerTakesHit(randomNumber(8), creature_name);
     }
 
@@ -617,7 +617,7 @@ void damageLightningBolt(int damage, const char *creature_name) {
 void damageAcid(int damage, const char *creature_name) {
     int flag = 0;
 
-    if (damageMinusAC((uint32_t) config::treasure::flags::TR_RES_ACID)) {
+    if (damageMinusAC(config::treasure::flags::TR_RES_ACID)) {
         flag = 1;
     }
 
