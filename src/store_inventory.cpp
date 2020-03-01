@@ -270,22 +270,22 @@ void storeCarryItem(int store_id, int &index_id, Inventory_t &item) {
     int item_id = 0;
     int item_num = item.items_count;
     int item_category = item.category_id;
-    int item_sub_catory = item.sub_category_id;
+    int item_sub_catagory = item.sub_category_id;
 
     bool flag = false;
     do {
         Inventory_t &store_item = store.inventory[item_id].item;
 
         if (item_category == store_item.category_id) {
-            if (item_sub_catory == store_item.sub_category_id && // Adds to other item
-                item_sub_catory >= ITEM_SINGLE_STACK_MIN && (item_sub_catory < ITEM_GROUP_MIN || store_item.misc_use == item.misc_use)) {
+            if (item_sub_catagory == store_item.sub_category_id && // Adds to other item
+                item_sub_catagory >= ITEM_SINGLE_STACK_MIN && (item_sub_catagory < ITEM_GROUP_MIN || store_item.misc_use == item.misc_use)) {
                 index_id = item_id;
                 store_item.items_count += item_num;
 
                 // must set new cost for group items, do this only for items
                 // strictly greater than group_min, not for torches, this
                 // must be recalculated for entire group
-                if (item_sub_catory > ITEM_GROUP_MIN) {
+                if (item_sub_catagory > ITEM_GROUP_MIN) {
                     (void) storeItemSellPrice(store, dummy, item_cost, store_item);
                     store.inventory[item_id].cost = -item_cost;
                 } else if (store_item.items_count > 24) {
