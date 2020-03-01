@@ -582,7 +582,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
         max_gold = owner.max_cost;
     }
 
-    int32_t current_askin_price;
+    int32_t current_asking_price;
     int32_t final_asking_price = 0;
     const char *comment = nullptr;
 
@@ -597,12 +597,12 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
 
             // Disable the automatic haggle increment on RET.
             store_last_increment = 0;
-            current_askin_price = max_gold;
+            current_asking_price = max_gold;
             final_asking_price = max_gold;
             printMessage("I am sorry, but I have not the money to afford such a fine item.");
             did_not_haggle = true;
         } else {
-            current_askin_price = max_buy;
+            current_asking_price = max_buy;
             final_asking_price = min_buy;
 
             if (final_asking_price > max_gold) {
@@ -614,7 +614,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
             // go right to final price if player has bargained well
             if (storeNoNeedToBargain(stores[store_id], final_asking_price)) {
                 printMessage("After a long bargaining session, you agree upon the price.");
-                current_askin_price = final_asking_price;
+                current_asking_price = final_asking_price;
                 comment = "Final offer";
                 did_not_haggle = true;
 
@@ -629,8 +629,8 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
         int32_t last_offer = min_offer;
         int32_t new_offer = 0;
 
-        if (current_askin_price < 1) {
-            current_askin_price = 1;
+        if (current_asking_price < 1) {
+            current_asking_price = 1;
         }
 
         do {
@@ -639,7 +639,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                 loop_flag = true;
 
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "%s :  %d", comment, current_askin_price);
+                (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
                 putString(msg, Coord_t{1, 0});
 
                 sell = storeReceiveOffer(store_id, "What price do you ask? ", new_offer, last_offer, num_offer, -1);
@@ -647,7 +647,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                 if (sell != 0) {
                     flag = true;
                 } else {
-                    if (new_offer < current_askin_price) {
+                    if (new_offer < current_asking_price) {
                         printSpeechSorry();
 
                         // rejected, reset new_offer for incremental haggling
@@ -656,10 +656,10 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                         // If the automatic increment is large enough to
                         // overflow, then the player must have made a mistake.
                         // Clear it because it is useless.
-                        if (last_offer + store_last_increment < current_askin_price) {
+                        if (last_offer + store_last_increment < current_asking_price) {
                             store_last_increment = 0;
                         }
-                    } else if (new_offer == current_askin_price) {
+                    } else if (new_offer == current_asking_price) {
                         flag = true;
                         price = new_offer;
                     } else {
@@ -669,7 +669,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
             } while (!flag && loop_flag);
 
             if (!flag) {
-                int32_t x1 = (last_offer - new_offer) * 100 / (last_offer - current_askin_price);
+                int32_t x1 = (last_offer - new_offer) * 100 / (last_offer - current_asking_price);
 
                 if (x1 < min_per) {
                     flag = storeHaggleInsults(store_id);
@@ -684,17 +684,17 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                 }
 
                 int32_t x2 = x1 + randomNumber(5) - 3;
-                int32_t x3 = ((new_offer - current_askin_price) * x2 / 100) + 1;
+                int32_t x3 = ((new_offer - current_asking_price) * x2 / 100) + 1;
 
                 // don't let the price go down
                 if (x3 < 0) {
                     x3 = 0;
                 }
 
-                current_askin_price += x3;
+                current_asking_price += x3;
 
-                if (current_askin_price > final_asking_price) {
-                    current_askin_price = final_asking_price;
+                if (current_asking_price > final_asking_price) {
+                    current_asking_price = final_asking_price;
                     comment = "Final Offer";
 
                     // Set the automatic haggle increment so that RET will give
@@ -710,7 +710,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                         }
                         flag = true;
                     }
-                } else if (new_offer <= current_askin_price) {
+                } else if (new_offer <= current_asking_price) {
                     flag = true;
                     price = new_offer;
                 }
@@ -724,12 +724,12 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                     (void) sprintf(msg, "Your last bid %d", last_offer);
                     putString(msg, Coord_t{1, 39});
 
-                    printSpeechBuyingHaggle(current_askin_price, last_offer, final_flag);
+                    printSpeechBuyingHaggle(current_asking_price, last_offer, final_flag);
 
                     // If the current decrement would take you under the store's
                     // price, then increase it to an exact match.
-                    if (current_askin_price - last_offer > store_last_increment) {
-                        store_last_increment = (int16_t) (current_askin_price - last_offer);
+                    if (current_asking_price - last_offer > store_last_increment) {
+                        store_last_increment = (int16_t) (current_asking_price - last_offer);
                     }
                 }
             }
