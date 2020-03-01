@@ -850,7 +850,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
 }
 
 // Functions to emulate the original Pascal sets
-static bool setGeneralStoreItems(int item_id) {
+static bool setGeneralStoreItems(uint8_t item_id) {
     switch (item_id) {
         case TV_DIGGING:
         case TV_BOOTS:
@@ -865,7 +865,7 @@ static bool setGeneralStoreItems(int item_id) {
     }
 }
 
-static bool setArmoryItems(int item_id) {
+static bool setArmoryItems(uint8_t item_id) {
     switch (item_id) {
         case TV_BOOTS:
         case TV_GLOVES:
@@ -879,7 +879,7 @@ static bool setArmoryItems(int item_id) {
     }
 }
 
-static bool setWeaponsmithItems(int item_id) {
+static bool setWeaponsmithItems(uint8_t item_id) {
     switch (item_id) {
         case TV_SLING_AMMO:
         case TV_BOLT:
@@ -894,7 +894,7 @@ static bool setWeaponsmithItems(int item_id) {
     }
 }
 
-static bool setTempleItems(int item_id) {
+static bool setTempleItems(uint8_t item_id) {
     switch (item_id) {
         case TV_HAFTED:
         case TV_SCROLL1:
@@ -908,7 +908,7 @@ static bool setTempleItems(int item_id) {
     }
 }
 
-static bool setAlchemistItems(int item_id) {
+static bool setAlchemistItems(uint8_t item_id) {
     switch (item_id) {
         case TV_SCROLL1:
         case TV_SCROLL2:
@@ -920,7 +920,7 @@ static bool setAlchemistItems(int item_id) {
     }
 }
 
-static bool setMagicShopItems(int item_id) {
+static bool setMagicShopItems(uint8_t item_id) {
     switch (item_id) {
         case TV_AMULET:
         case TV_RING:
@@ -938,7 +938,7 @@ static bool setMagicShopItems(int item_id) {
 }
 
 // Each store will buy only certain items, based on TVAL
-bool (*store_buy[MAX_STORES])(int) = {
+bool (*store_buy[MAX_STORES])(uint8_t) = {
     setGeneralStoreItems,
     setArmoryItems,
     setWeaponsmithItems,
@@ -955,18 +955,19 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     char mask[player_equipment::EQUIPMENT_WIELD];
 
     for (int counter = 0; counter < py.unique_inventory_items; counter++) {
-        // TODO(cook): `flag` is an `int`, but the function returns a `bool`
-        int flag = (*store_buy[store_id])(inventory[counter].category_id);
+        bool flag = (*store_buy[store_id])(inventory[counter].category_id);
 
-        // TODO(cook): then `flag` is cast to a `char`
-        mask[counter] = (char) flag;
         if (flag) {
+            mask[counter] = 1;
+
             if (counter < first_item) {
                 first_item = counter;
             }
             if (counter > last_item) {
                 last_item = counter;
             }
+        } else {
+            mask[counter] = 0;
         }
     }
 

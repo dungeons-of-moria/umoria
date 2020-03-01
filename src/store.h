@@ -49,7 +49,7 @@ extern uint8_t race_gold_adjustments[PLAYER_MAX_RACES][PLAYER_MAX_RACES];
 extern Owner_t store_owners[MAX_OWNERS];
 extern Store_t stores[MAX_STORES];
 extern uint16_t store_choices[MAX_STORES][STORE_MAX_ITEM_TYPES];
-extern bool (*store_buy[MAX_STORES])(int);
+extern bool (*store_buy[MAX_STORES])(uint8_t);
 extern const char *speech_sale_accepted[14];
 extern const char *speech_selling_haggle_final[3];
 extern const char *speech_selling_haggle[16];
