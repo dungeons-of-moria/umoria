@@ -71,6 +71,7 @@ bool getDirectionWithMemory(char *prompt, int &direction);
 bool getAllDirections(const char *prompt, int &direction);
 
 void exitProgram();
+void abortProgram(const char *msg);
 
 // game object management
 int popt();

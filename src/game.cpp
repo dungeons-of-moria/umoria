@@ -331,3 +331,14 @@ void exitProgram() {
     terminalRestore();
     exit(0);
 }
+
+// Abort the program with a message displayed on the terminal.
+void abortProgram(const char *msg) {
+    flushInputBuffer();
+    terminalRestore();
+
+    printf("Program was manually aborted with the message:\n");
+    printf("%s\n", msg);
+
+    exit(0);
+}
