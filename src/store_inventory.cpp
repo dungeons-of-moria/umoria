@@ -316,7 +316,7 @@ void storeDestroyItem(int store_id, int item_id, bool only_one_of) {
     Store_t &store = stores[store_id];
     Inventory_t &store_item = store.inventory[item_id].item;
 
-    int number;
+    uint8_t number;
 
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
@@ -325,7 +325,7 @@ void storeDestroyItem(int store_id, int item_id, bool only_one_of) {
         if (only_one_of) {
             number = 1;
         } else {
-            number = randomNumber((int) store_item.items_count);
+            number = (uint8_t) randomNumber((int) store_item.items_count);
         }
     } else {
         number = store_item.items_count;
