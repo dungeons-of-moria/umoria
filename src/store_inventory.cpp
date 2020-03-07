@@ -34,8 +34,10 @@ void storeMaintenance() {
             if (store.unique_items_counter >= config::stores::STORE_MAX_AUTO_BUY_ITEMS) {
                 turnaround += 1 + store.unique_items_counter - config::stores::STORE_MAX_AUTO_BUY_ITEMS;
             }
-            while (--turnaround >= 0) {
+            turnaround--;
+            while (turnaround >= 0) {
                 storeDestroyItem(store_id, randomNumber(store.unique_items_counter) - 1, false);
+                turnaround--;
             }
         }
 
@@ -47,8 +49,10 @@ void storeMaintenance() {
 
             int16_t max_cost = store_owners[store.owner_id].max_cost;
 
-            while (--turnaround >= 0) {
+            turnaround--;
+            while (turnaround >= 0) {
                 storeItemCreate(store_id, max_cost);
+                turnaround--;
             }
         }
     }

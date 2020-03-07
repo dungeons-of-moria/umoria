@@ -1022,7 +1022,8 @@ static void monsterMoveOutOfWall(Monster_t const &monster, int monster_id, uint3
     for (int y = monster.y + 1; y >= (monster.y - 1); y--) {
         for (int x = monster.x - 1; x <= monster.x + 1; x++) {
             if (dir != 5 && dg.floor[y][x].feature_id <= MAX_OPEN_SPACE && dg.floor[y][x].creature_id != 1) {
-                directions[id++] = dir;
+                directions[id] = dir;
+                id++;
             }
             dir++;
         }

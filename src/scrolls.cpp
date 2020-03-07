@@ -44,23 +44,29 @@ static int inventoryItemIdOfCursedEquipment() {
     int items[6];
 
     if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        items[item_count++] = player_equipment::EQUIPMENT_BODY;
+        items[item_count] = player_equipment::EQUIPMENT_BODY;
+        item_count++;
     }
     if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        items[item_count++] = player_equipment::EQUIPMENT_ARM;
+        items[item_count] = player_equipment::EQUIPMENT_ARM;
+        item_count++;
     }
     if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        items[item_count++] = player_equipment::EQUIPMENT_OUTER;
+        items[item_count] = player_equipment::EQUIPMENT_OUTER;
+        item_count++;
     }
     if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        items[item_count++] = player_equipment::EQUIPMENT_HANDS;
+        items[item_count] = player_equipment::EQUIPMENT_HANDS;
+        item_count++;
     }
     if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        items[item_count++] = player_equipment::EQUIPMENT_HEAD;
+        items[item_count] = player_equipment::EQUIPMENT_HEAD;
+        item_count++;
     }
     // also enchant boots
     if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        items[item_count++] = player_equipment::EQUIPMENT_FEET;
+        items[item_count] = player_equipment::EQUIPMENT_FEET;
+        item_count++;
     }
 
     int item_id = 0;

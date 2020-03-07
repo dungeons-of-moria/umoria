@@ -124,7 +124,8 @@ void recordNewHighScore() {
         }
 
         // only allow one thousand scores in the score file
-        if (++i >= MAX_HIGH_SCORE_ENTRIES) {
+        i++;
+        if (i >= MAX_HIGH_SCORE_ENTRIES) {
             (void) fclose(highscore_fp);
             return;
         }

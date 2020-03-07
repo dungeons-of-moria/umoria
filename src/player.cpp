@@ -939,7 +939,8 @@ void playerGainSpells() {
                 new_spells--;
 
                 py.flags.spells_learnt |= 1L << spell_bank[c];
-                py.flags.spells_learned_order[last_known++] = (uint8_t) spell_bank[c];
+                py.flags.spells_learned_order[last_known] = (uint8_t) spell_bank[c];
+                last_known++;
 
                 for (; c <= spell_id - 1; c++) {
                     spell_bank[c] = spell_bank[c + 1];
@@ -960,7 +961,8 @@ void playerGainSpells() {
         while (new_spells != 0) {
             int id = randomNumber(spell_id) - 1;
             py.flags.spells_learnt |= 1L << spell_bank[id];
-            py.flags.spells_learned_order[last_known++] = (uint8_t) spell_bank[id];
+            py.flags.spells_learned_order[last_known] = (uint8_t) spell_bank[id];
+            last_known++;
 
             vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spell_bank[id] + offset]);

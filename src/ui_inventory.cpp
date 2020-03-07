@@ -329,8 +329,10 @@ static void uiCommandDisplayInventoryScreen(int new_screen) {
         return;
     }
 
-    while (++line <= screen_base) {
+    line++;
+    while (line <= screen_base) {
         eraseLine(Coord_t{line, screen_left});
+        line++;
     }
 }
 
@@ -1246,7 +1248,10 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
                             do {
                                 // Note: a simple loop to find first inventory item
-                                while (inventory[++item_id_start].category_id == TV_NOTHING);
+                                item_id_start++;
+                                while (inventory[item_id_start].category_id == TV_NOTHING) {
+                                    item_id_start++;
+                                }
 
                                 item_id_end--;
                             } while (item_id_end >= 0);

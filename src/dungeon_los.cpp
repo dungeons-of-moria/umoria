@@ -337,7 +337,9 @@ void look() {
                 abort = lookRay(1, 2 * GRADF - 1, GRADF);
             }
         }
-    } while (!abort && config::options::highlight_seams && (++los_rocks_and_objects < 2));
+
+        los_rocks_and_objects++;
+    } while (!abort && config::options::highlight_seams && (los_rocks_and_objects < 2));
 
     if (abort) {
         printMessage("--Aborting look--");

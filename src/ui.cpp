@@ -86,7 +86,8 @@ void drawDungeonPanel() {
 
     // Top to bottom
     for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
-        eraseLine(Coord_t{line++, 13});
+        eraseLine(Coord_t{line, 13});
+        line++;
 
         // Left to right
         for (int x = dg.panel.left; x <= dg.panel.right; x++) {

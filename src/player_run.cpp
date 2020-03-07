@@ -224,8 +224,12 @@ void playerFindInitialize(int direction) {
 }
 
 void playerRunAndFind() {
+    uint8_t tracker = py.running_tracker;
+
+    py.running_tracker++;
+
     // prevent infinite loops in find mode, will stop after moving 100 times
-    if (py.running_tracker++ > 100) {
+    if (tracker > 100) {
         printMessage("You stop running to catch your breath.");
         playerEndRunning();
         return;
