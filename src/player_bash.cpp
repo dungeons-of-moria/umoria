@@ -11,9 +11,9 @@
 #include "headers.h"
 #include "dice.h"
 
-static void playerBashAttack(int y, int x);
-static void playerBashPosition(int y, int x);
-static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_t &item);
+static void playerBashAttack(Coord_t coord);
+static void playerBashPosition(Coord_t coord);
+static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory_t &item);
 static void playerBashClosedChest(Inventory_t &item);
 
 // Bash open a door or chest -RAK-
@@ -53,7 +53,7 @@ void playerBash() {
     Tile_t &tile = dg.floor[y][x];
 
     if (tile.creature_id > 1) {
-        playerBashPosition(y, x);
+        playerBashPosition(Coord_t{y, x});
         return;
     }
 
@@ -61,7 +61,7 @@ void playerBash() {
         Inventory_t &item = treasure_list[tile.treasure_id];
 
         if (item.category_id == TV_CLOSED_DOOR) {
-            playerBashClosedDoor(y, x, dir, tile, item);
+            playerBashClosedDoor(Coord_t{y, x}, dir, tile, item);
         } else if (item.category_id == TV_CHEST) {
             playerBashClosedChest(item);
         } else {
@@ -83,8 +83,8 @@ void playerBash() {
 
 // Make a bash attack on someone. -CJS-
 // Used to be part of bash above.
-static void playerBashAttack(int y, int x) {
-    int monster_id = dg.floor[y][x].creature_id;
+static void playerBashAttack(Coord_t coord) {
+    int monster_id = dg.floor[coord.y][coord.x].creature_id;
 
     Monster_t &monster = monsters[monster_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
@@ -164,17 +164,17 @@ static void playerBashAttack(int y, int x) {
     }
 }
 
-static void playerBashPosition(int y, int x) {
+static void playerBashPosition(Coord_t coord) {
     // Is a Coward?
     if (py.flags.afraid > 0) {
         printMessage("You are afraid!");
         return;
     }
 
-    playerBashAttack(y, x);
+    playerBashAttack(coord);
 }
 
-static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_t &item) {
+static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory_t &item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
     int chance = py.stats.used[py_attrs::A_STR] + py.misc.weight / 2;
@@ -194,7 +194,7 @@ static void playerBashClosedDoor(int y, int x, int dir, Tile_t &tile, Inventory_
         if (py.flags.confused == 0) {
             playerMove(dir, false);
         } else {
-            dungeonLiteSpot(Coord_t{y, x});
+            dungeonLiteSpot(coord);
         }
 
         return;
