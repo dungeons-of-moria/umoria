@@ -5,6 +5,13 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
+- Use `Coord_t` in many function signatures; mostly the simple `(int y, int x)` variations.
+- Various type change:
+    * `rcmove` variable in `memoryUpdateRecall()` signature is now an `uint32_t` like everywhere else.
+    * Change `store_buy` function signature type to use `uint8_t`, and return a `bool`.
+    * PLus various of types changes
+- Typo fixes: `item_sub_catory`, `current_askin_price`.
+
 
 ## 5.7.11 (2020-02-26)
 
