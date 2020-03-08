@@ -148,7 +148,7 @@ void playerTunnel(int direction) {
 
     if (tile.creature_id > 1) {
         objectBlockedByMonster(tile.creature_id);
-        playerAttackPosition(y, x);
+        playerAttackPosition(Coord_t{y, x});
         return;
     }
 

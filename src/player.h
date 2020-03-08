@@ -226,7 +226,7 @@ void playerGainKillExperience(Creature_t const &creature);
 void playerOpenClosedObject();
 void playerCloseDoor();
 bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);
-void playerAttackPosition(int y, int x);
+void playerAttackPosition(Coord_t coord);
 void playerCalculateAllowedSpellsCount(int stat);
 
 char *playerRankTitle();

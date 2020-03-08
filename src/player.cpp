@@ -1138,8 +1138,8 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 }
 
 // Player attacks a (poor, defenseless) creature -RAK-
-static void playerAttackMonster(int y, int x) {
-    int creature_id = dg.floor[y][x].creature_id;
+static void playerAttackMonster(Coord_t coord) {
+    int creature_id = dg.floor[coord.y][coord.x].creature_id;
 
     Monster_t &monster = monsters[creature_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
@@ -1456,14 +1456,14 @@ bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 }
 
 // let the player attack the creature
-void playerAttackPosition(int y, int x) {
+void playerAttackPosition(Coord_t coord) {
     // Is a Coward?
     if (py.flags.afraid > 0) {
         printMessage("You are too afraid!");
         return;
     }
 
-    playerAttackMonster(y, x);
+    playerAttackMonster(coord);
 }
 
 

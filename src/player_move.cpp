@@ -545,7 +545,7 @@ void playerMove(int direction, bool do_pickup) {
             // did not do anything this turn
             game.player_free_turn = true;
         } else {
-            playerAttackPosition(y, x);
+            playerAttackPosition(Coord_t{y, x});
         }
     }
 }
