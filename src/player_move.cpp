@@ -36,7 +36,7 @@ static void trapArrow(Inventory_t const &item, int dam) {
     printMessage("An arrow barely misses you.");
 }
 
-static void trapCoveredPit(Inventory_t const &item, int dam, int y, int x) {
+static void trapCoveredPit(Inventory_t const &item, int dam, Coord_t coord) {
     printMessage("You fell into a covered pit.");
 
     if (py.flags.free_fall) {
@@ -47,7 +47,7 @@ static void trapCoveredPit(Inventory_t const &item, int dam, int y, int x) {
         playerTakesHit(dam, description);
     }
 
-    dungeonSetTrap(Coord_t{y, x}, 0);
+    dungeonSetTrap(coord, 0);
 }
 
 static void trapDoor(Inventory_t const &item, int dam) {
@@ -84,10 +84,10 @@ static void trapSleepingGas() {
     printMessage("You fall asleep.");
 }
 
-static void trapHiddenObject(int y, int x) {
-    (void) dungeonDeleteObject(Coord_t{y, x});
+static void trapHiddenObject(Coord_t coord) {
+    (void) dungeonDeleteObject(coord);
 
-    dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
+    dungeonPlaceRandomObjectAt(coord, false);
 
     printMessage("Hmmm, there was something under this rock.");
 }
@@ -110,20 +110,20 @@ static void trapStrengthDart(Inventory_t const &item, int dam) {
     }
 }
 
-static void trapTeleport(int y, int x) {
+static void trapTeleport(Coord_t coord) {
     teleport_player = true;
 
     printMessage("You hit a teleport trap!");
 
     // Light up the teleport trap, before we teleport away.
-    dungeonMoveCharacterLight(Coord_t{y, x}, Coord_t{y, x});
+    dungeonMoveCharacterLight(coord, coord);
 }
 
-static void trapRockfall(int y, int x, int dam) {
+static void trapRockfall(Coord_t coord, int dam) {
     playerTakesHit(dam, "a falling rock");
 
-    (void) dungeonDeleteObject(Coord_t{y, x});
-    dungeonPlaceRubble(Coord_t{y, x});
+    (void) dungeonDeleteObject(coord);
+    dungeonPlaceRubble(coord);
 
     printMessage("You are hit by falling rock.");
 }
@@ -134,15 +134,15 @@ static void trapCorrodeGas() {
     damageCorrodingGas("corrosion gas");
 }
 
-static void trapSummonMonster(int y, int x) {
+static void trapSummonMonster(Coord_t coord) {
     // Rune disappears.
-    (void) dungeonDeleteObject(Coord_t{y, x});
+    (void) dungeonDeleteObject(coord);
 
     int num = 2 + randomNumber(3);
 
     for (int i = 0; i < num; i++) {
-        int ty = y;
-        int tx = x;
+        int ty = coord.y;
+        int tx = coord.x;
         (void) monsterSummon(ty, tx, false);
     }
 }
@@ -243,11 +243,11 @@ enum class TrapTypes {
 };
 
 // Player hit a trap.  (Chuckle) -RAK-
-static void playerStepsOnTrap(int y, int x) {
+static void playerStepsOnTrap(Coord_t coord) {
     playerEndRunning();
-    trapChangeVisibility(Coord_t{y, x});
+    trapChangeVisibility(coord);
 
-    Inventory_t const &item = treasure_list[dg.floor[y][x].treasure_id];
+    Inventory_t const &item = treasure_list[dg.floor[coord.y][coord.x].treasure_id];
 
     int damage = diceRoll(item.damage);
 
@@ -259,7 +259,7 @@ static void playerStepsOnTrap(int y, int x) {
             trapArrow(item, damage);
             break;
         case TrapTypes::covered_pit:
-            trapCoveredPit(item, damage, y, x);
+            trapCoveredPit(item, damage, coord);
             break;
         case TrapTypes::trap_door:
             trapDoor(item, damage);
@@ -268,22 +268,22 @@ static void playerStepsOnTrap(int y, int x) {
             trapSleepingGas();
             break;
         case TrapTypes::hidden_object:
-            trapHiddenObject(y, x);
+            trapHiddenObject(coord);
             break;
         case TrapTypes::dart_of_str:
             trapStrengthDart(item, damage);
             break;
         case TrapTypes::teleport:
-            trapTeleport(y, x);
+            trapTeleport(coord);
             break;
         case TrapTypes::rockfall:
-            trapRockfall(y, x, damage);
+            trapRockfall(coord, damage);
             break;
         case TrapTypes::corroding_gas:
             trapCorrodeGas();
             break;
         case TrapTypes::summon_monster:
-            trapSummonMonster(y, x);
+            trapSummonMonster(coord);
             break;
         case TrapTypes::fire_trap:
             trapFire(damage);
@@ -354,15 +354,15 @@ static bool playerRandomMovement(int dir) {
 // Player is on an object. Many things can happen based -RAK-
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
-static void carry(int y, int x, bool pickup) {
-    Inventory_t &item = treasure_list[dg.floor[y][x].treasure_id];
+static void carry(Coord_t coord, bool pickup) {
+    Inventory_t &item = treasure_list[dg.floor[coord.y][coord.x].treasure_id];
 
-    int tileFlags = treasure_list[dg.floor[y][x].treasure_id].category_id;
+    int tileFlags = treasure_list[dg.floor[coord.y][coord.x].treasure_id].category_id;
 
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
             // OOPS!
-            playerStepsOnTrap(y, x);
+            playerStepsOnTrap(coord);
         }
         return;
     }
@@ -380,7 +380,7 @@ static void carry(int y, int x, bool pickup) {
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item.cost, description);
 
         printCharacterGoldValue();
-        (void) dungeonDeleteObject(Coord_t{y, x});
+        (void) dungeonDeleteObject(coord);
 
         printMessage(msg);
 
@@ -414,7 +414,7 @@ static void carry(int y, int x, bool pickup) {
             itemDescription(description, inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
-            (void) dungeonDeleteObject(Coord_t{y, x});
+            (void) dungeonDeleteObject(coord);
         }
     } else {
         itemDescription(description, item, true);
@@ -498,7 +498,7 @@ void playerMove(int direction, bool do_pickup) {
 
             // An object is beneath them.
             if (tile.treasure_id != 0) {
-                carry(py.row, py.col, do_pickup);
+                carry(Coord_t{py.row, py.col}, do_pickup);
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
@@ -514,7 +514,7 @@ void playerMove(int direction, bool do_pickup) {
                     if (id != 0) {
                         int val = treasure_list[id].category_id;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
-                            playerStepsOnTrap(py.row, py.col);
+                            playerStepsOnTrap(Coord_t{py.row, py.col});
                         }
                     }
                 }
