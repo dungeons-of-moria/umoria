@@ -491,7 +491,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 13:
-                identified = monsterSleep(py.row, py.col);
+                identified = monsterSleep(Coord_t{py.row, py.col});
                 break;
             case 14:
                 spellWardingGlyph();

@@ -94,8 +94,8 @@ static int monsterMovementRate(int16_t speed) {
 }
 
 // Makes sure a new creature gets lit up. -CJS-
-static bool monsterMakeVisible(int y, int x) {
-    int monster_id = dg.floor[y][x].creature_id;
+static bool monsterMakeVisible(Coord_t coord) {
+    int monster_id = dg.floor[coord.y][coord.x].creature_id;
     if (monster_id <= 1) {
         return false;
     }
@@ -954,7 +954,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
                         }
 
                         monster_multiply_total++;
-                        return monsterMakeVisible(pos_y, pos_x);
+                        return monsterMakeVisible(Coord_t{pos_y, pos_x});
                     }
                 } else {
                     // All clear,  place a monster
@@ -969,7 +969,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
                     }
 
                     monster_multiply_total++;
-                    return monsterMakeVisible(pos_y, pos_x);
+                    return monsterMakeVisible(Coord_t{pos_y, pos_x});
                 }
             }
         }
@@ -1496,11 +1496,11 @@ std::string monsterNameDescription(const std::string &real_name, bool is_lit) {
 }
 
 // Sleep creatures adjacent to player -RAK-
-bool monsterSleep(int y, int x) {
+bool monsterSleep(Coord_t coord) {
     bool asleep = false;
 
-    for (int row = y - 1; row <= y + 1 && row < MAX_HEIGHT; row++) {
-        for (int col = x - 1; col <= x + 1 && col < MAX_WIDTH; col++) {
+    for (int row = coord.y - 1; row <= coord.y + 1 && row < MAX_HEIGHT; row++) {
+        for (int col = coord.x - 1; col <= coord.x + 1 && col < MAX_WIDTH; col++) {
             uint8_t monster_id = dg.floor[row][col].creature_id;
 
             if (monster_id <= 1) {

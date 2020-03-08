@@ -145,7 +145,7 @@ static void castSpell(int spell_id) {
             (void) spellRechargeItem(20);
             break;
         case MageSpellTypes::sleep_ii:
-            (void) monsterSleep(py.row, py.col);
+            (void) monsterSleep(Coord_t{py.row, py.col});
             break;
         case MageSpellTypes::polymorph_other:
             if (getDirectionWithMemory(CNIL, dir)) {

@@ -123,7 +123,7 @@ static void playerRecitePrayer(int prayer_type) {
             playerBless(randomNumber(24) + 24);
             break;
         case PriestSpellTypes::sanctuary:
-            (void) monsterSleep(py.row, py.col);
+            (void) monsterSleep(Coord_t{py.row, py.col});
             break;
         case PriestSpellTypes::create_food:
             spellCreateFood();
