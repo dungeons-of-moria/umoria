@@ -85,7 +85,7 @@ static void castSpell(int spell_id) {
             playerTeleport(10);
             break;
         case MageSpellTypes::light_area:
-            (void) spellLightArea(py.row, py.col);
+            (void) spellLightArea(Coord_t{py.row, py.col});
             break;
         case MageSpellTypes::cure_light_wounds:
             (void) spellChangePlayerHitPoints(diceRoll(Dice_t{4, 4}));
@@ -190,7 +190,7 @@ static void castSpell(int spell_id) {
             }
             break;
         case MageSpellTypes::word_of_destruction:
-            spellDestroyArea(py.row, py.col);
+            spellDestroyArea(Coord_t{py.row, py.col});
             break;
         case MageSpellTypes::genocide:
             (void) spellGenocide();

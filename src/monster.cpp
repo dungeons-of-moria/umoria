@@ -696,7 +696,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             spellTeleportAwayMonster(monster_id, config::monsters::MON_MAX_SIGHT);
             break;
         case 7: // Teleport To
-            spellTeleportPlayerTo((int) monster.y, (int) monster.x);
+            spellTeleportPlayerTo(Coord_t{monster.y, monster.x});
             break;
         case 8: // Light Wound
             if (playerSavingThrow()) {

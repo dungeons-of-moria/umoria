@@ -276,7 +276,7 @@ bool spellDetectInvisibleCreaturesWithinVicinity() {
 // Light an area: -RAK-
 //     1.  If corridor  light immediate area
 //     2.  If room      light entire room plus immediate area.
-bool spellLightArea(int y, int x) {
+bool spellLightArea(Coord_t coord) {
     if (py.flags.blind < 1) {
         printMessage("You are surrounded by a white light.");
     }
@@ -284,16 +284,16 @@ bool spellLightArea(int y, int x) {
     // NOTE: this is not changed anywhere. A bug or correct? -MRC-
     bool lit = true;
 
-    if (dg.floor[y][x].perma_lit_room && dg.current_level > 0) {
-        dungeonLightRoom(Coord_t{y, x});
+    if (dg.floor[coord.y][coord.x].perma_lit_room && dg.current_level > 0) {
+        dungeonLightRoom(coord);
     }
 
     // Must always light immediate area, because one might be standing on
     // the edge of a room, or next to a destroyed area, etc.
-    for (int i = y - 1; i <= y + 1; i++) {
-        for (int j = x - 1; j <= x + 1; j++) {
-            dg.floor[i][j].permanent_light = true;
-            dungeonLiteSpot(Coord_t{i, j});
+    for (int y = coord.y - 1; y <= coord.y + 1; y++) {
+        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
+            dg.floor[y][x].permanent_light = true;
+            dungeonLiteSpot(Coord_t{y, x});
         }
     }
 
@@ -301,14 +301,14 @@ bool spellLightArea(int y, int x) {
 }
 
 // Darken an area, opposite of light area -RAK-
-bool spellDarkenArea(int y, int x) {
+bool spellDarkenArea(Coord_t coord) {
     bool darkened = false;
 
-    if (dg.floor[y][x].perma_lit_room && dg.current_level > 0) {
+    if (dg.floor[coord.y][coord.x].perma_lit_room && dg.current_level > 0) {
         int half_height = (SCREEN_HEIGHT / 2);
         int half_width = (SCREEN_WIDTH / 2);
-        int start_row = (y / half_height) * half_height + 1;
-        int start_col = (x / half_width) * half_width + 1;
+        int start_row = (coord.y / half_height) * half_height + 1;
+        int start_col = (coord.x / half_width) * half_width + 1;
         int end_row = start_row + half_height - 1;
         int end_col = start_col + half_width - 1;
 
@@ -329,8 +329,8 @@ bool spellDarkenArea(int y, int x) {
             }
         }
     } else {
-        for (int row = y - 1; row <= y + 1; row++) {
-            for (int col = x - 1; col <= x + 1; col++) {
+        for (int row = coord.y - 1; row <= coord.y + 1; row++) {
+            for (int col = coord.x - 1; col <= coord.x + 1; col++) {
                 Tile_t &tile = dg.floor[row][col];
 
                 if (tile.feature_id == TILE_CORR_FLOOR && tile.permanent_light) {
@@ -349,10 +349,10 @@ bool spellDarkenArea(int y, int x) {
     return darkened;
 }
 
-static void dungeonLightAreaAroundFloorTile(int y, int x) {
-    for (int yy = y - 1; yy <= y + 1; yy++) {
-        for (int xx = x - 1; xx <= x + 1; xx++) {
-            Tile_t &tile = dg.floor[yy][xx];
+static void dungeonLightAreaAroundFloorTile(Coord_t coord) {
+    for (int y = coord.y - 1; y <= coord.y + 1; y++) {
+        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
+            Tile_t &tile = dg.floor[y][x];
 
             if (tile.feature_id >= MIN_CAVE_WALL) {
                 tile.permanent_light = true;
@@ -373,7 +373,7 @@ void spellMapCurrentArea() {
     for (int y = row_min; y <= row_max; y++) {
         for (int x = col_min; x <= col_max; x++) {
             if (coordInBounds(Coord_t{y, x}) && dg.floor[y][x].feature_id <= MAX_CAVE_FLOOR) {
-                dungeonLightAreaAroundFloorTile(y, x);
+                dungeonLightAreaAroundFloorTile(Coord_t{y, x});
             }
         }
     }
@@ -582,7 +582,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
 }
 
 // Leave a line of light in given dir, blue light can sometimes hurt creatures. -RAK-
-void spellLightLine(int x, int y, int direction) {
+void spellLightLine(int x, int y, int direction) { // TODO: change coords to be standard y,x
     int distance = 0;
     bool finished = false;
 
@@ -622,14 +622,14 @@ void spellLightLine(int x, int y, int direction) {
 }
 
 // Light line in all directions -RAK-
-void spellStarlite(int y, int x) {
+void spellStarlite(Coord_t coord) {
     if (py.flags.blind < 1) {
         printMessage("The end of the staff bursts into a blue shimmering light.");
     }
 
     for (int dir = 1; dir <= 9; dir++) {
         if (dir != 5) {
-            spellLightLine(x, y, dir);
+            spellLightLine(coord.x, coord.y, dir);
         }
     }
 }
@@ -1613,22 +1613,22 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
 }
 
 // Teleport player to spell casting creature -RAK-
-void spellTeleportPlayerTo(int y, int x) {
-    int to_y, to_x;
+void spellTeleportPlayerTo(Coord_t coord) {
+    int y, x;
     int distance = 1;
     int counter = 0;
 
     do {
-        to_y = y + (randomNumber(2 * distance + 1) - (distance + 1));
-        to_x = x + (randomNumber(2 * distance + 1) - (distance + 1));
+        y = coord.y + (randomNumber(2 * distance + 1) - (distance + 1));
+        x = coord.x + (randomNumber(2 * distance + 1) - (distance + 1));
         counter++;
         if (counter > 9) {
             counter = 0;
             distance++;
         }
-    } while (!coordInBounds(Coord_t{to_y, to_x}) || (dg.floor[to_y][to_x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[to_y][to_x].creature_id >= 2));
+    } while (!coordInBounds(Coord_t{y, x}) || (dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id >= 2));
 
-    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{to_y, to_x});
+    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{y, x});
 
     for (int row = py.row - 1; row <= py.row + 1; row++) {
         for (int col = py.col - 1; col <= py.col + 1; col++) {
@@ -1639,8 +1639,8 @@ void spellTeleportPlayerTo(int y, int x) {
 
     dungeonLiteSpot(Coord_t{py.row, py.col});
 
-    py.row = (int16_t) to_y;
-    py.col = (int16_t) to_x;
+    py.row = (int16_t) y;
+    py.col = (int16_t) x;
 
     dungeonResetView();
 
@@ -2202,20 +2202,20 @@ static void replaceSpot(int y, int x, int typ) {
 // NOTE:
 //   Winning creatures that are deleted will be considered as teleporting to another level.
 //   This will NOT win the game.
-void spellDestroyArea(int y, int x) {
+void spellDestroyArea(Coord_t coord) {
     if (dg.current_level > 0) {
-        for (int pos_y = y - 15; pos_y <= y + 15; pos_y++) {
-            for (int pos_x = x - 15; pos_x <= x + 15; pos_x++) {
-                if (coordInBounds(Coord_t{pos_y, pos_x}) && dg.floor[pos_y][pos_x].feature_id != TILE_BOUNDARY_WALL) {
-                    int distance = coordDistanceBetween(Coord_t{pos_y, pos_x}, Coord_t{y, x});
+        for (int y = coord.y - 15; y <= coord.y + 15; y++) {
+            for (int x = coord.x - 15; x <= coord.x + 15; x++) {
+                if (coordInBounds(Coord_t{y, x}) && dg.floor[y][x].feature_id != TILE_BOUNDARY_WALL) {
+                    int distance = coordDistanceBetween(Coord_t{y, x}, coord);
 
                     // clear player's spot, but don't put wall there
                     if (distance == 0) {
-                        replaceSpot(pos_y, pos_x, 1);
+                        replaceSpot(y, x, 1);
                     } else if (distance < 13) {
-                        replaceSpot(pos_y, pos_x, randomNumber(6));
+                        replaceSpot(y, x, randomNumber(6));
                     } else if (distance < 16) {
-                        replaceSpot(pos_y, pos_x, randomNumber(9));
+                        replaceSpot(y, x, randomNumber(9));
                     }
                 }
             }

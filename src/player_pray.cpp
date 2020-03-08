@@ -97,7 +97,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) playerRemoveFear();
             break;
         case PriestSpellTypes::call_light:
-            (void) spellLightArea(py.row, py.col);
+            (void) spellLightArea(Coord_t{py.row, py.col});
             break;
         case PriestSpellTypes::find_traps:
             (void) spellDetectTrapsWithinVicinity();

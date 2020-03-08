@@ -466,7 +466,7 @@ void scrollRead() {
                 identified = scrollRemoveCurse();
                 break;
             case 6:
-                identified = spellLightArea(py.row, py.col);
+                identified = spellLightArea(Coord_t{py.row, py.col});
                 break;
             case 7:
                 identified = scrollSummonMonster();
@@ -542,7 +542,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 27:
-                identified = spellDarkenArea(py.row, py.col);
+                identified = spellDarkenArea(Coord_t{py.row, py.col});
                 break;
             case 28:
                 identified = playerProtectEvil();
@@ -586,7 +586,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 42:
-                spellDestroyArea(py.row, py.col);
+                spellDestroyArea(Coord_t{py.row, py.col});
                 identified = true;
                 break;
             default:
