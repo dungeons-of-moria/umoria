@@ -85,7 +85,7 @@ static void trapSleepingGas() {
 }
 
 static void trapHiddenObject(int y, int x) {
-    (void) dungeonDeleteObject(Coord_t{y, x});;
+    (void) dungeonDeleteObject(Coord_t{y, x});
 
     dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
 
@@ -122,7 +122,7 @@ static void trapTeleport(int y, int x) {
 static void trapRockfall(int y, int x, int dam) {
     playerTakesHit(dam, "a falling rock");
 
-    (void) dungeonDeleteObject(Coord_t{y, x});;
+    (void) dungeonDeleteObject(Coord_t{y, x});
     dungeonPlaceRubble(Coord_t{y, x});
 
     printMessage("You are hit by falling rock.");
@@ -136,7 +136,7 @@ static void trapCorrodeGas() {
 
 static void trapSummonMonster(int y, int x) {
     // Rune disappears.
-    (void) dungeonDeleteObject(Coord_t{y, x});;
+    (void) dungeonDeleteObject(Coord_t{y, x});
 
     int num = 2 + randomNumber(3);
 
@@ -380,7 +380,7 @@ static void carry(int y, int x, bool pickup) {
         (void) sprintf(msg, "You have found %d gold pieces worth of %s", item.cost, description);
 
         printCharacterGoldValue();
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(Coord_t{y, x});
 
         printMessage(msg);
 
@@ -414,7 +414,7 @@ static void carry(int y, int x, bool pickup) {
             itemDescription(description, inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
-            (void) dungeonDeleteObject(Coord_t{y, x});;
+            (void) dungeonDeleteObject(Coord_t{y, x});
         }
     } else {
         itemDescription(description, item, true);

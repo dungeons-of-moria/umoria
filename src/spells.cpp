@@ -445,7 +445,7 @@ bool spellSurroundPlayerWithTraps() {
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
-                    (void) dungeonDeleteObject(Coord_t{y, x});;
+                    (void) dungeonDeleteObject(Coord_t{y, x});
                 }
 
                 dungeonSetTrap(Coord_t{y, x}, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
@@ -478,7 +478,7 @@ bool spellSurroundPlayerWithDoors() {
 
             if (tile.feature_id <= MAX_CAVE_FLOOR) {
                 if (tile.treasure_id != 0) {
-                    (void) dungeonDeleteObject(Coord_t{y, x});;
+                    (void) dungeonDeleteObject(Coord_t{y, x});
                 }
 
                 int free_id = popt();
@@ -1370,7 +1370,7 @@ bool spellWallToMud(int y, int x, int direction) {
             }
 
             if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                (void) dungeonDeleteObject(Coord_t{y, x});;
+                (void) dungeonDeleteObject(Coord_t{y, x});
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
                     if (caveTileVisible(Coord_t{y, x})) {
@@ -1379,7 +1379,7 @@ bool spellWallToMud(int y, int x, int direction) {
                 }
                 dungeonLiteSpot(Coord_t{y, x});
             } else {
-                (void) dungeonDeleteObject(Coord_t{y, x});;
+                (void) dungeonDeleteObject(Coord_t{y, x});
             }
         }
 
@@ -1508,7 +1508,7 @@ bool spellBuildWall(int y, int x, int direction) {
         }
 
         if (tile.treasure_id != 0) {
-            (void) dungeonDeleteObject(Coord_t{y, x});;
+            (void) dungeonDeleteObject(Coord_t{y, x});
         }
 
         if (tile.creature_id > 1) {
@@ -1923,7 +1923,7 @@ void spellEarthquake() {
                 Tile_t &tile = dg.floor[y][x];
 
                 if (tile.treasure_id != 0) {
-                    (void) dungeonDeleteObject(Coord_t{y, x});;
+                    (void) dungeonDeleteObject(Coord_t{y, x});
                 }
 
                 if (tile.creature_id > 1) {
@@ -2190,7 +2190,7 @@ static void replaceSpot(int y, int x, int typ) {
     tile.perma_lit_room = false; // this is no longer part of a room
 
     if (tile.treasure_id != 0) {
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(Coord_t{y, x});
     }
 
     if (tile.creature_id > 1) {

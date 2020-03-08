@@ -545,7 +545,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
         if (y == py.row && x == py.col) {
             printMessage("The rune of protection is broken!");
         }
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(Coord_t{y, x});
         return;
     }
 
@@ -600,7 +600,7 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
             rcmove |= config::monsters::move::CM_PICKS_UP;
-            (void) dungeonDeleteObject(Coord_t{y, x});;
+            (void) dungeonDeleteObject(Coord_t{y, x});
         }
     }
 

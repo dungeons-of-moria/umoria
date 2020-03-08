@@ -465,7 +465,7 @@ void wizardCreateObjects() {
         Tile_t &tile = dg.floor[py.row][py.col];
 
         if (tile.treasure_id != 0) {
-            (void) dungeonDeleteObject(Coord_t{py.row, py.col});;
+            (void) dungeonDeleteObject(Coord_t{py.row, py.col});
         }
 
         number = popt();

@@ -87,7 +87,7 @@ static void dungeonDigQuartzWall(int y, int x, int digging_ability) {
 
 static void dungeonDigRubble(int y, int x, int digging_ability) {
     if (digging_ability > randomNumber(180)) {
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(Coord_t{y, x});
         printMessage("You have removed the rubble.");
 
         if (randomNumber(10) == 1) {

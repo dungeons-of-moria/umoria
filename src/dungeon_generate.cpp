@@ -231,7 +231,7 @@ static void dungeonPlaceDoor(int y, int x) {
 // Place an up staircase at given y, x -RAK-
 static void dungeonPlaceUpStairs(int y, int x) {
     if (dg.floor[y][x].treasure_id != 0) {
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(Coord_t{y, x});
     }
 
     int cur_pos = popt();
@@ -242,7 +242,7 @@ static void dungeonPlaceUpStairs(int y, int x) {
 // Place a down staircase at given y, x -RAK-
 static void dungeonPlaceDownStairs(int y, int x) {
     if (dg.floor[y][x].treasure_id != 0) {
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(Coord_t{y, x});
     }
 
     int cur_pos = popt();
