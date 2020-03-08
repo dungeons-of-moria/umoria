@@ -5,6 +5,7 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
+- Change `spellLightLine` signature from non-standard `x, y` to `y, x`.
 - Use `Coord_t` in many function signatures; mostly the simple `(int y, int x)` variations.
 - Various type change:
     * `rcmove` variable in `memoryUpdateRecall()` signature is now an `uint32_t` like everywhere else.

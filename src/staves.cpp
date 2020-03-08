@@ -282,7 +282,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
         switch ((WandSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case WandSpellTypes::light:
                 printMessage("A line of blue shimmering light appears.");
-                spellLightLine(py.col, py.row, direction);
+                spellLightLine(py.row, py.col, direction);
                 identified = true;
                 break;
             case WandSpellTypes::lightning_bolt:

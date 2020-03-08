@@ -582,7 +582,7 @@ static void spellLightLineTouchesMonster(int monster_id) {
 }
 
 // Leave a line of light in given dir, blue light can sometimes hurt creatures. -RAK-
-void spellLightLine(int x, int y, int direction) { // TODO: change coords to be standard y,x
+void spellLightLine(int y, int x, int direction) { // TODO: change coords to be standard y,x
     int distance = 0;
     bool finished = false;
 
@@ -629,7 +629,7 @@ void spellStarlite(Coord_t coord) {
 
     for (int dir = 1; dir <= 9; dir++) {
         if (dir != 5) {
-            spellLightLine(coord.x, coord.y, dir);
+            spellLightLine(coord.y, coord.x, dir);
         }
     }
 }

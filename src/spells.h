@@ -37,7 +37,7 @@ bool spellSurroundPlayerWithTraps();
 bool spellSurroundPlayerWithDoors();
 bool spellDestroyAdjacentDoorsTraps();
 bool spellDetectMonsters();
-void spellLightLine(int x, int y, int direction);
+void spellLightLine(int y, int x, int direction);
 void spellStarlite(Coord_t coord);
 bool spellDisarmAllInDirection(int y, int x, int direction);
 void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name);
