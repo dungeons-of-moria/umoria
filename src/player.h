@@ -279,7 +279,7 @@ void playerThrowItem();
 
 // player_traps.cpp
 void playerDisarmTrap();
-void chestTrap(int y, int x);
+void chestTrap(Coord_t coord);
 
 // player_tunnel.cpp
 void playerTunnel(int direction);

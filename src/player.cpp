@@ -1315,7 +1315,7 @@ static void openClosedChest(int y, int x) {
     }
 
     // Oh, yes it was...   (Snicker)
-    chestTrap(y, x);
+    chestTrap(Coord_t{y, x});
 
     if (tile.treasure_id != 0) {
         // Chest treasure is allocated as if a creature had been killed.

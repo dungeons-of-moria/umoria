@@ -32,13 +32,13 @@ static int playerTrapDisarmAbility() {
     return ability;
 }
 
-static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, int16_t misc_use) {
+static void playerDisarmFloorTrap(Coord_t coord, int total, int level, int dir, int16_t misc_use) {
     int confused = py.flags.confused;
 
     if (total + 100 - level > randomNumber(100)) {
         printMessage("You have disarmed the trap.");
         py.misc.exp += misc_use;
-        (void) dungeonDeleteObject(Coord_t{y, x});;
+        (void) dungeonDeleteObject(coord);
 
         // make sure we move onto the trap even if confused
         py.flags.confused = 0;
@@ -63,7 +63,7 @@ static void playerDisarmFloorTrap(int y, int x, int total, int level, int dir, i
     py.flags.confused += confused;
 }
 
-static void playerDisarmChestTrap(int y, int x, int total, Inventory_t &item) {
+static void playerDisarmChestTrap(Coord_t coord, int total, Inventory_t &item) {
     if (!spellItemIdentified(item)) {
         game.player_free_turn = true;
         printMessage("I don't see a trap.");
@@ -94,7 +94,7 @@ static void playerDisarmChestTrap(int y, int x, int total, Inventory_t &item) {
         } else {
             printMessage("You set a trap off!");
             spellItemIdentifyAndRemoveRandomInscription(item);
-            chestTrap(y, x);
+            chestTrap(coord);
         }
         return;
     }
@@ -126,9 +126,9 @@ void playerDisarmTrap() {
         Inventory_t &item = treasure_list[tile.treasure_id];
 
         if (item.category_id == TV_VIS_TRAP) {
-            playerDisarmFloorTrap(y, x, disarm_ability, item.depth_first_found, dir, item.misc_use);
+            playerDisarmFloorTrap(Coord_t{y, x}, disarm_ability, item.depth_first_found, dir, item.misc_use);
         } else if (item.category_id == TV_CHEST) {
-            playerDisarmChestTrap(y, x, disarm_ability, item);
+            playerDisarmChestTrap(Coord_t{y, x}, disarm_ability, item);
         } else {
             no_disarm = true;
         }
@@ -177,26 +177,26 @@ static void chestParalysed() {
     py.flags.paralysis = (int16_t) (10 + randomNumber(20));
 }
 
-static void chestSummonMonster(int y, int x) {
+static void chestSummonMonster(Coord_t coord) {
     for (int i = 0; i < 3; i++) {
-        int cy = y;
-        int cx = x;
+        int cy = coord.y;
+        int cx = coord.x;
         (void) monsterSummon(cy, cx, false);
     }
 }
 
-static void chestExplode(int y, int x) {
+static void chestExplode(Coord_t coord) {
     printMessage("There is a sudden explosion!");
 
-    (void) dungeonDeleteObject(Coord_t{y, x});;
+    (void) dungeonDeleteObject(coord);
 
     playerTakesHit(diceRoll(Dice_t{5, 8}), "an exploding chest");
 }
 
 // Chests have traps too. -RAK-
 // Note: Chest traps are based on the FLAGS value
-void chestTrap(int y, int x) {
-    uint32_t flags = treasure_list[dg.floor[y][x].treasure_id].flags;
+void chestTrap(Coord_t coord) {
+    uint32_t flags = treasure_list[dg.floor[coord.y][coord.x].treasure_id].flags;
 
     if ((flags & config::treasure::chests::CH_LOSE_STR) != 0u) {
         chestLooseStrength();
@@ -211,10 +211,10 @@ void chestTrap(int y, int x) {
     }
 
     if ((flags & config::treasure::chests::CH_SUMMON) != 0u) {
-        chestSummonMonster(y, x);
+        chestSummonMonster(coord);
     }
 
     if ((flags & config::treasure::chests::CH_EXPLODE) != 0u) {
-        chestExplode(y, x);
+        chestExplode(coord);
     }
 }
