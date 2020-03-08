@@ -1248,8 +1248,8 @@ static int16_t playerLockPickingSkill() {
     return skill;
 }
 
-static void openClosedDoor(int y, int x) {
-    Tile_t &tile = dg.floor[y][x];
+static void openClosedDoor(Coord_t coord) {
+    Tile_t &tile = dg.floor[coord.y][coord.x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     if (item.misc_use > 0) {
@@ -1274,13 +1274,13 @@ static void openClosedDoor(int y, int x) {
     if (item.misc_use == 0) {
         inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
         tile.feature_id = TILE_CORR_FLOOR;
-        dungeonLiteSpot(Coord_t{y, x});
+        dungeonLiteSpot(coord);
         game.command_count = 0;
     }
 }
 
-static void openClosedChest(int y, int x) {
-    Tile_t const &tile = dg.floor[y][x];
+static void openClosedChest(Coord_t coord) {
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool success = false;
@@ -1315,7 +1315,7 @@ static void openClosedChest(int y, int x) {
     }
 
     // Oh, yes it was...   (Snicker)
-    chestTrap(Coord_t{y, x});
+    chestTrap(coord);
 
     if (tile.treasure_id != 0) {
         // Chest treasure is allocated as if a creature had been killed.
@@ -1323,7 +1323,7 @@ static void openClosedChest(int y, int x) {
         // can not win by opening a cursed chest
         treasure_list[tile.treasure_id].flags &= ~config::treasure::flags::TR_CURSED;
 
-        (void) monsterDeath(y, x, treasure_list[tile.treasure_id].flags);
+        (void) monsterDeath(coord.y, coord.x, treasure_list[tile.treasure_id].flags);
 
         treasure_list[tile.treasure_id].flags = 0;
     }
@@ -1350,9 +1350,9 @@ void playerOpenClosedObject() {
         objectBlockedByMonster(tile.creature_id);
     } else if (tile.treasure_id != 0) {
         if (item.category_id == TV_CLOSED_DOOR) {
-            openClosedDoor(y, x);
+            openClosedDoor(Coord_t{y, x});
         } else if (item.category_id == TV_CHEST) {
-            openClosedChest(y, x);
+            openClosedChest(Coord_t{y, x});
         } else {
             no_object = true;
         }
