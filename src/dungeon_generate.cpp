@@ -296,16 +296,16 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 }
 
 // Place a trap with a given displacement of point -RAK-
-static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
+static void dungeonPlaceVaultTrap(Coord_t coord, Coord_t displacement, int number) {
     for (int i = 0; i < number; i++) {
         bool placed = false;
 
         for (int count = 0; !placed && count <= 5; count++) {
-            int y1 = y - yd - 1 + randomNumber(2 * yd + 1);
-            int x1 = x - xd - 1 + randomNumber(2 * xd + 1);
+            int y = coord.y - displacement.y - 1 + randomNumber(2 * displacement.y + 1);
+            int x = coord.x - displacement.x - 1 + randomNumber(2 * displacement.x + 1);
 
-            if (dg.floor[y1][x1].feature_id != TILE_NULL_WALL && dg.floor[y1][x1].feature_id <= MAX_CAVE_FLOOR && dg.floor[y1][x1].treasure_id == 0) {
-                dungeonSetTrap(Coord_t{y1, x1}, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
+            if (dg.floor[y][x].feature_id != TILE_NULL_WALL && dg.floor[y][x].feature_id <= MAX_CAVE_FLOOR && dg.floor[y][x].treasure_id == 0) {
+                dungeonSetTrap(Coord_t{y, x}, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
                 placed = true;
             }
         }
@@ -313,12 +313,12 @@ static void dungeonPlaceVaultTrap(int y, int x, int yd, int xd, int number) {
 }
 
 // Place a trap with a given displacement of point -RAK-
-static void dungeonPlaceVaultMonster(int y, int x, int number) {
+static void dungeonPlaceVaultMonster(Coord_t coord, int number) {
     int pos_y, pos_x;
 
     for (int i = 0; i < number; i++) {
-        pos_y = y;
-        pos_x = x;
+        pos_y = coord.y;
+        pos_x = coord.x;
         (void) monsterSummon(pos_y, pos_x, true);
     }
 }
@@ -584,16 +584,16 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
     switch ((InnerRoomTypes) randomNumber(5)) {
         case InnerRoomTypes::plain:
             dungeonPlaceRandomSecretDoor(coord, depth, height, left, right);
-            dungeonPlaceVaultMonster(coord.y, coord.x, 1);
+            dungeonPlaceVaultMonster(coord, 1);
             break;
         case InnerRoomTypes::treasure_vault:
             dungeonPlaceTreasureVault(coord, depth, height, left, right);
 
             // Guard the treasure well
-            dungeonPlaceVaultMonster(coord.y, coord.x, 2 + randomNumber(3));
+            dungeonPlaceVaultMonster(coord, 2 + randomNumber(3));
 
             // If the monsters don't get 'em.
-            dungeonPlaceVaultTrap(coord.y, coord.x, 4, 10, 2 + randomNumber(3));
+            dungeonPlaceVaultTrap(coord, Coord_t{4, 10}, 2 + randomNumber(3));
             break;
         case InnerRoomTypes::pillars:
             dungeonPlaceRandomSecretDoor(coord, depth, height, left, right);
@@ -623,8 +623,8 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
                 dungeonPlaceRandomObjectAt(Coord_t{coord.y, coord.x + 2}, false);
             }
 
-            dungeonPlaceVaultMonster(coord.y, coord.x - 2, randomNumber(2));
-            dungeonPlaceVaultMonster(coord.y, coord.x + 2, randomNumber(2));
+            dungeonPlaceVaultMonster(Coord_t{coord.y, coord.x - 2}, randomNumber(2));
+            dungeonPlaceVaultMonster(Coord_t{coord.y, coord.x + 2}, randomNumber(2));
             break;
         case InnerRoomTypes::maze:
             dungeonPlaceRandomSecretDoor(coord, depth, height, left, right);
@@ -632,12 +632,12 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
             dungeonPlaceMazeInsideRoom(depth, height, left, right);
 
             // Monsters just love mazes.
-            dungeonPlaceVaultMonster(coord.y, coord.x - 5, randomNumber(3));
-            dungeonPlaceVaultMonster(coord.y, coord.x + 5, randomNumber(3));
+            dungeonPlaceVaultMonster(Coord_t{coord.y, coord.x - 5}, randomNumber(3));
+            dungeonPlaceVaultMonster(Coord_t{coord.y, coord.x + 5}, randomNumber(3));
 
             // Traps make them entertaining.
-            dungeonPlaceVaultTrap(coord.y, coord.x - 3, 2, 8, randomNumber(3));
-            dungeonPlaceVaultTrap(coord.y, coord.x + 3, 2, 8, randomNumber(3));
+            dungeonPlaceVaultTrap(Coord_t{coord.y, coord.x - 3}, Coord_t{2, 8}, randomNumber(3));
+            dungeonPlaceVaultTrap(Coord_t{coord.y, coord.x + 3}, Coord_t{2, 8}, randomNumber(3));
 
             // Mazes should have some treasure too..
             for (int i = 0; i < 3; i++) {
@@ -651,10 +651,10 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
             dungeonPlaceRandomObjectNear(coord, 2 + randomNumber(2));
 
             // Gotta have some monsters.
-            dungeonPlaceVaultMonster(coord.y + 2, coord.x - 4, randomNumber(2));
-            dungeonPlaceVaultMonster(coord.y + 2, coord.x + 4, randomNumber(2));
-            dungeonPlaceVaultMonster(coord.y - 2, coord.x - 4, randomNumber(2));
-            dungeonPlaceVaultMonster(coord.y - 2, coord.x + 4, randomNumber(2));
+            dungeonPlaceVaultMonster(Coord_t{coord.y + 2, coord.x - 4}, randomNumber(2));
+            dungeonPlaceVaultMonster(Coord_t{coord.y + 2, coord.x + 4}, randomNumber(2));
+            dungeonPlaceVaultMonster(Coord_t{coord.y - 2, coord.x - 4}, randomNumber(2));
+            dungeonPlaceVaultMonster(Coord_t{coord.y - 2, coord.x + 4}, randomNumber(2));
             break;
         default:
             break;
@@ -762,10 +762,10 @@ static void dungeonBuildRoomCrossShaped(Coord_t coord) {
             dungeonPlaceRandomObjectAt(coord, false);
 
             // Let's guard the treasure well.
-            dungeonPlaceVaultMonster(coord.y, coord.x, 2 + randomNumber(2));
+            dungeonPlaceVaultMonster(coord, 2 + randomNumber(2));
 
             // Traps naturally
-            dungeonPlaceVaultTrap(coord.y, coord.x, 4, 4, 1 + randomNumber(3));
+            dungeonPlaceVaultTrap(coord, Coord_t{4, 4}, 1 + randomNumber(3));
             break;
         case 3:
             if (randomNumber(3) == 1) {
