@@ -126,7 +126,7 @@ void printCharacterWinner();
 void printCharacterStatsBlock();
 void printCharacterInformation();
 void printCharacterStats();
-const char *statRating(int y, int x);
+const char *statRating(Coord_t coord);
 void printCharacterVitalStatistics();
 void printCharacterLevelExperience();
 void printCharacterAbilities();

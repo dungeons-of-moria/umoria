@@ -263,14 +263,14 @@ static void writeCharacterSheetToFile(FILE *file1) {
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
     (void) fprintf(file1, "(Miscellaneous Abilities)\n\n");
-    (void) fprintf(file1, " Fighting    : %-10s", statRating(12, xbth));
-    (void) fprintf(file1, "   Stealth     : %-10s", statRating(1, xstl));
-    (void) fprintf(file1, "   Perception  : %s\n", statRating(3, xfos));
-    (void) fprintf(file1, " Bows/Throw  : %-10s", statRating(12, xbthb));
-    (void) fprintf(file1, "   Disarming   : %-10s", statRating(8, xdis));
-    (void) fprintf(file1, "   Searching   : %s\n", statRating(6, xsrh));
-    (void) fprintf(file1, " Saving Throw: %-10s", statRating(6, xsave));
-    (void) fprintf(file1, "   Magic Device: %-10s", statRating(6, xdev));
+    (void) fprintf(file1, " Fighting    : %-10s", statRating(Coord_t{12, xbth}));
+    (void) fprintf(file1, "   Stealth     : %-10s", statRating(Coord_t{1, xstl}));
+    (void) fprintf(file1, "   Perception  : %s\n", statRating(Coord_t{3, xfos}));
+    (void) fprintf(file1, " Bows/Throw  : %-10s", statRating(Coord_t{12, xbthb}));
+    (void) fprintf(file1, "   Disarming   : %-10s", statRating(Coord_t{8, xdis}));
+    (void) fprintf(file1, "   Searching   : %s\n", statRating(Coord_t{6, xsrh}));
+    (void) fprintf(file1, " Saving Throw: %-10s", statRating(Coord_t{6, xsave}));
+    (void) fprintf(file1, "   Magic Device: %-10s", statRating(Coord_t{6, xdev}));
     (void) fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
 
     // Write out the character's history

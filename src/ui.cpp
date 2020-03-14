@@ -505,8 +505,8 @@ void printCharacterStats() {
 }
 
 // Returns a rating of x depending on y -JWT-
-const char *statRating(int y, int x) {
-    switch (x / y) {
+const char *statRating(Coord_t coord) {
+    switch (coord.x / coord.y) {
         case -3:
         case -2:
         case -1:
@@ -584,23 +584,23 @@ void printCharacterAbilities() {
 
     putString("(Miscellaneous Abilities)", Coord_t{15, 25});
     putString("Fighting    :", Coord_t{16, 1});
-    putString(statRating(12, xbth), Coord_t{16, 15});
+    putString(statRating(Coord_t{12, xbth}), Coord_t{16, 15});
     putString("Bows/Throw  :", Coord_t{17, 1});
-    putString(statRating(12, xbthb), Coord_t{17, 15});
+    putString(statRating(Coord_t{12, xbthb}), Coord_t{17, 15});
     putString("Saving Throw:", Coord_t{18, 1});
-    putString(statRating(6, xsave), Coord_t{18, 15});
+    putString(statRating(Coord_t{6, xsave}), Coord_t{18, 15});
 
     putString("Stealth     :", Coord_t{16, 28});
-    putString(statRating(1, xstl), Coord_t{16, 42});
+    putString(statRating(Coord_t{1, xstl}), Coord_t{16, 42});
     putString("Disarming   :", Coord_t{17, 28});
-    putString(statRating(8, xdis), Coord_t{17, 42});
+    putString(statRating(Coord_t{8, xdis}), Coord_t{17, 42});
     putString("Magic Device:", Coord_t{18, 28});
-    putString(statRating(6, xdev), Coord_t{18, 42});
+    putString(statRating(Coord_t{6, xdev}), Coord_t{18, 42});
 
     putString("Perception  :", Coord_t{16, 55});
-    putString(statRating(3, xfos), Coord_t{16, 69});
+    putString(statRating(Coord_t{3, xfos}), Coord_t{16, 69});
     putString("Searching   :", Coord_t{17, 55});
-    putString(statRating(6, xsrh), Coord_t{17, 69});
+    putString(statRating(Coord_t{6, xsrh}), Coord_t{17, 69});
     putString("Infra-Vision:", Coord_t{18, 55});
     putString(xinfra, Coord_t{18, 69});
 }
