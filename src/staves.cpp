@@ -122,9 +122,8 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = false;
 
                 for (int i = 0; i < randomNumber(4); i++) {
-                    int y = py.row;
-                    int x = py.col;
-                    identified |= monsterSummon(y, x, false);
+                    Coord_t coord = Coord_t{py.row,py.col};
+                    identified |= monsterSummon(coord, false);
                 }
                 break;
             case StaffSpellTypes::destruction:

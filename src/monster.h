@@ -85,5 +85,5 @@ bool compactMonsters();
 bool monsterPlaceNew(Coord_t coord, int creature_id, bool sleeping);
 void monsterPlaceWinning();
 void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
-bool monsterSummon(int &y, int &x, bool sleeping);
-bool monsterSummonUndead(int &y, int &x);
+bool monsterSummon(Coord_t &coord, bool sleeping);
+bool monsterSummonUndead(Coord_t &coord);

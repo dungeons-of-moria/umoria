@@ -9,7 +9,6 @@
 // Version history and info, and wizard mode debugging aids.
 
 #include "headers.h"
-#include "dice.h"
 
 #include <sstream>
 

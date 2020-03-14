@@ -1553,7 +1553,8 @@ static void commandToggleSearch() {
 }
 
 static void doWizardCommands(char com_val) {
-    int i, y, x;
+    int i;
+    Coord_t coord = Coord_t{0,0};
 
     switch (com_val) {
         case CTRL_KEY('A'):
@@ -1675,9 +1676,9 @@ static void doWizardCommands(char com_val) {
             break;
         case '&':
             // Summon a random monster
-            y = py.row;
-            x = py.col;
-            (void) monsterSummon(y, x, true);
+            coord.y = py.row;
+            coord.x = py.col;
+            (void) monsterSummon(coord, true);
 
             updateMonsters(false);
             break;

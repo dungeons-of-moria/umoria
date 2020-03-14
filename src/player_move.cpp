@@ -145,7 +145,7 @@ static void trapSummonMonster(Coord_t coord) {
     for (int i = 0; i < num; i++) {
         location.y = coord.y;
         location.x = coord.x;
-        (void) monsterSummon(location.y, location.x, false);
+        (void) monsterSummon(location, false);
     }
 }
 

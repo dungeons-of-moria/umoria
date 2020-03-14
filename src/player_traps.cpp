@@ -177,10 +177,12 @@ static void chestParalysed() {
 }
 
 static void chestSummonMonster(Coord_t coord) {
+    Coord_t position = Coord_t{0,0};
+
     for (int i = 0; i < 3; i++) {
-        int cy = coord.y;
-        int cx = coord.x;
-        (void) monsterSummon(cy, cx, false);
+        position.y = coord.y;
+        position.x = coord.x;
+        (void) monsterSummon(position, false);
     }
 }
 

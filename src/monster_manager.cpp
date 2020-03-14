@@ -182,15 +182,14 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
     }
 }
 
-// TODO: use Coord_t
-static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
+static bool placeMonsterAdjacentTo(int monsterID, Coord_t &coord, bool slp) {
     bool placed = false;
 
     Coord_t position = Coord_t{0,0};
 
     for (int i = 0; i <= 9; i++) {
-        position.y = y - 2 + randomNumber(3);
-        position.x = x - 2 + randomNumber(3);
+        position.y = coord.y - 2 + randomNumber(3);
+        position.x = coord.x - 2 + randomNumber(3);
 
         if (coordInBounds(position)) {
             if (dg.floor[position.y][position.x].feature_id <= MAX_OPEN_SPACE && dg.floor[position.y][position.x].creature_id == 0) {
@@ -199,8 +198,8 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
                     return false;
                 }
 
-                y = position.y;
-                x = position.x;
+                coord.y = position.y;
+                coord.x = position.x;
 
                 placed = true;
                 i = 9;
@@ -211,15 +210,14 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
     return placed;
 }
 
-// TODO: use Coord_t
 // Places creature adjacent to given location -RAK-
-bool monsterSummon(int &y, int &x, bool sleeping) {
+bool monsterSummon(Coord_t &coord, bool sleeping) {
     int monster_id = monsterGetOneSuitableForLevel(dg.current_level + config::monsters::MON_SUMMONED_LEVEL_ADJUST);
-    return placeMonsterAdjacentTo(monster_id, y, x, sleeping);
+    return placeMonsterAdjacentTo(monster_id, coord, sleeping);
 }
 
 // Places undead adjacent to given location -RAK-
-bool monsterSummonUndead(int &y, int &x) {
+bool monsterSummonUndead(Coord_t &coord) {
     int monster_id;
     int max_levels = monster_levels[MON_MAX_LEVELS];
 
@@ -240,7 +238,7 @@ bool monsterSummonUndead(int &y, int &x) {
         }
     } while (max_levels != 0);
 
-    return placeMonsterAdjacentTo(monster_id, y, x, false);
+    return placeMonsterAdjacentTo(monster_id, coord, false);
 }
 
 // Compact monsters -RAK-

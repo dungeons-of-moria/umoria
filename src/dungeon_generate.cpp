@@ -22,42 +22,42 @@ static uint8_t dungeonFloorTileForLevel() {
 }
 
 // Always picks a correct direction
-static void pickCorrectDirection(int &row_dir, int &col_dir, Coord_t start, Coord_t end) {
+static void pickCorrectDirection(int &vertical, int &horizontal, Coord_t start, Coord_t end) {
     if (start.y < end.y) {
-        row_dir = 1;
+        vertical = 1;
     } else if (start.y == end.y) {
-        row_dir = 0;
+        vertical = 0;
     } else {
-        row_dir = -1;
+        vertical = -1;
     }
 
     if (start.x < end.x) {
-        col_dir = 1;
+        horizontal = 1;
     } else if (start.x == end.x) {
-        col_dir = 0;
+        horizontal = 0;
     } else {
-        col_dir = -1;
+        horizontal = -1;
     }
 
-    if (row_dir != 0 && col_dir != 0) {
+    if (vertical != 0 && horizontal != 0) {
         if (randomNumber(2) == 1) {
-            row_dir = 0;
+            vertical = 0;
         } else {
-            col_dir = 0;
+            horizontal = 0;
         }
     }
 }
 
 // Chance of wandering direction
-static void chanceOfRandomDirection(int &y, int &x) {
+static void chanceOfRandomDirection(int &vertical, int &horizontal) {
     int direction = randomNumber(4);
 
     if (direction < 3) {
-        x = 0;
-        y = -3 + (direction << 1); // direction=1 -> y=-1; direction=2 -> y=1
+        horizontal = 0;
+        vertical = -3 + (direction << 1); // direction=1 -> y=-1; direction=2 -> y=1
     } else {
-        y = 0;
-        x = -7 + (direction << 1); // direction=3 -> x=-1; direction=4 -> x=1
+        vertical = 0;
+        horizontal = -7 + (direction << 1); // direction=3 -> x=-1; direction=4 -> x=1
     }
 }
 
@@ -326,7 +326,7 @@ static void dungeonPlaceVaultMonster(Coord_t coord, int number) {
     for (int i = 0; i < number; i++) {
         spot.y = coord.y;
         spot.x = coord.x;
-        (void) monsterSummon(spot.y, spot.x, true);
+        (void) monsterSummon(spot, true);
     }
 }
 
@@ -808,9 +808,8 @@ static void dungeonBuildRoomCrossShaped(Coord_t coord) {
     }
 }
 
-// TODO: use Coord_t
 // Constructs a tunnel between two points
-static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
+static void dungeonBuildTunnel(Coord_t start, Coord_t end) {
     Coord_t tunnels_tk[1000], walls_tk[1000];
 
     // Main procedure for Tunnel
@@ -818,13 +817,13 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     bool door_flag = false;
     bool stop_flag = false;
     int main_loop_count = 0;
-    int start_row = y_start;
-    int start_col = x_start;
+    int start_row = start.y;
+    int start_col = start.x;
     int tunnel_index = 0;
     int wall_index = 0;
 
-    int row_dir, col_dir;
-    pickCorrectDirection(row_dir, col_dir, Coord_t{y_start, x_start}, Coord_t{y_end, x_end});
+    int y_direction, x_direction;
+    pickCorrectDirection(y_direction, x_direction, start, end);
 
     do {
         // prevent infinite loops, just in case
@@ -835,32 +834,32 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
 
         if (randomNumber(100) > config::dungeon::DUN_DIR_CHANGE) {
             if (randomNumber(config::dungeon::DUN_RANDOM_DIR) == 1) {
-                chanceOfRandomDirection(row_dir, col_dir);
+                chanceOfRandomDirection(y_direction, x_direction);
             } else {
-                pickCorrectDirection(row_dir, col_dir, Coord_t{y_start, x_start}, Coord_t{y_end, x_end});
+                pickCorrectDirection(y_direction, x_direction, start, end);
             }
         }
 
-        int tmp_row = y_start + row_dir;
-        int tmp_col = x_start + col_dir;
+        int tmp_row = start.y + y_direction;
+        int tmp_col = start.x + x_direction;
 
         while (!coordInBounds(Coord_t{tmp_row, tmp_col})) {
             if (randomNumber(config::dungeon::DUN_RANDOM_DIR) == 1) {
-                chanceOfRandomDirection(row_dir, col_dir);
+                chanceOfRandomDirection(y_direction, x_direction);
             } else {
-                pickCorrectDirection(row_dir, col_dir, Coord_t{y_start, x_start}, Coord_t{y_end, x_end});
+                pickCorrectDirection(y_direction, x_direction, start, end);
             }
-            tmp_row = y_start + row_dir;
-            tmp_col = x_start + col_dir;
+            tmp_row = start.y + y_direction;
+            tmp_col = start.x + x_direction;
         }
 
         switch (dg.floor[tmp_row][tmp_col].feature_id) {
             case TILE_NULL_WALL:
-                y_start = tmp_row;
-                x_start = tmp_col;
+                start.y = tmp_row;
+                start.x = tmp_col;
                 if (tunnel_index < 1000) {
-                    tunnels_tk[tunnel_index].y = y_start;
-                    tunnels_tk[tunnel_index].x = x_start;
+                    tunnels_tk[tunnel_index].y = start.y;
+                    tunnels_tk[tunnel_index].x = start.x;
                     tunnel_index++;
                 }
                 door_flag = false;
@@ -869,17 +868,17 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                 // do nothing
                 break;
             case TILE_GRANITE_WALL:
-                y_start = tmp_row;
-                x_start = tmp_col;
+                start.y = tmp_row;
+                start.x = tmp_col;
 
                 if (wall_index < 1000) {
-                    walls_tk[wall_index].y = y_start;
-                    walls_tk[wall_index].x = x_start;
+                    walls_tk[wall_index].y = start.y;
+                    walls_tk[wall_index].x = start.x;
                     wall_index++;
                 }
 
-                for (int y = y_start - 1; y <= y_start + 1; y++) {
-                    for (int x = x_start - 1; x <= x_start + 1; x++) {
+                for (int y = start.y - 1; y <= start.y + 1; y++) {
+                    for (int x = start.x - 1; x <= start.x + 1; x++) {
                         if (coordInBounds(Coord_t{y, x})) {
                             // values 11 and 12 are impossible here, dungeonPlaceStreamerRock
                             // is never run before dungeonBuildTunnel
@@ -892,13 +891,13 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                 break;
             case TILE_CORR_FLOOR:
             case TILE_BLOCKED_FLOOR:
-                y_start = tmp_row;
-                x_start = tmp_col;
+                start.y = tmp_row;
+                start.x = tmp_col;
 
                 if (!door_flag) {
                     if (door_index < 100) {
-                        doors_tk[door_index].y = y_start;
-                        doors_tk[door_index].x = x_start;
+                        doors_tk[door_index].y = start.y;
+                        doors_tk[door_index].x = start.x;
                         door_index++;
                     }
                     door_flag = true;
@@ -907,12 +906,12 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                 if (randomNumber(100) > config::dungeon::DUN_TUNNELING) {
                     // make sure that tunnel has gone a reasonable distance
                     // before stopping it, this helps prevent isolated rooms
-                    tmp_row = y_start - start_row;
+                    tmp_row = start.y - start_row;
                     if (tmp_row < 0) {
                         tmp_row = -tmp_row;
                     }
 
-                    tmp_col = x_start - start_col;
+                    tmp_col = start.x - start_col;
                     if (tmp_col < 0) {
                         tmp_col = -tmp_col;
                     }
@@ -924,10 +923,10 @@ static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
                 break;
             default:
                 // none of: NULL, TMP2, GRANITE, CORR
-                y_start = tmp_row;
-                x_start = tmp_col;
+                start.y = tmp_row;
+                start.x = tmp_col;
         }
-    } while ((y_start != y_end || x_start != x_end) && !stop_flag);
+    } while ((start.y != end.y || start.x != end.x) && !stop_flag);
 
     for (int i = 0; i < tunnel_index; i++) {
         dg.floor[tunnels_tk[i].y][tunnels_tk[i].x].feature_id = TILE_CORR_FLOOR;
@@ -966,18 +965,18 @@ static void dungeonPlaceDoorIfNextToTwoWalls(Coord_t coord) {
 }
 
 // Returns random co-ordinates -RAK-
-static void dungeonNewSpot(int16_t &y, int16_t &x) {
-    int pos_y, pos_x;
+static void dungeonNewSpot(Coord_t &coord) {
     Tile_t *tile = nullptr;
+    Coord_t position = Coord_t{0,0};
 
     do {
-        pos_y = randomNumber(dg.height - 2);
-        pos_x = randomNumber(dg.width - 2);
-        tile = &dg.floor[pos_y][pos_x];
+        position.y = (int32_t) randomNumber(dg.height - 2);
+        position.x = (int32_t) randomNumber(dg.width - 2);
+        tile = &dg.floor[position.y][position.x];
     } while (tile->feature_id >= MIN_CLOSED_SPACE || tile->creature_id != 0 || tile->treasure_id != 0);
 
-    y = (int16_t) pos_y;
-    x = (int16_t) pos_x;
+    coord.y = position.y;
+    coord.x = position.x;
 }
 
 // Functions to emulate the original Pascal sets
@@ -1013,25 +1012,25 @@ static void dungeonGenerate() {
 
     // Build rooms
     int location_id = 0;
-    int16_t y_locations[400], x_locations[400];
+    Coord_t locations[400];
 
     for (int row = 0; row < row_rooms; row++) {
         for (int col = 0; col < col_rooms; col++) {
             if (room_map[row][col]) {
-                y_locations[location_id] = (int16_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
-                x_locations[location_id] = (int16_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
+                locations[location_id].y = (int32_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
+                locations[location_id].x = (int32_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
                 if (dg.current_level > randomNumber(config::dungeon::DUN_UNUSUAL_ROOMS)) {
                     int room_type = randomNumber(3);
 
                     if (room_type == 1) {
-                        dungeonBuildRoomOverlappingRectangles(Coord_t{y_locations[location_id], x_locations[location_id]});
+                        dungeonBuildRoomOverlappingRectangles(locations[location_id]);
                     } else if (room_type == 2) {
-                        dungeonBuildRoomWithInnerRooms(Coord_t{y_locations[location_id], x_locations[location_id]});
+                        dungeonBuildRoomWithInnerRooms(locations[location_id]);
                     } else {
-                        dungeonBuildRoomCrossShaped(Coord_t{y_locations[location_id], x_locations[location_id]});
+                        dungeonBuildRoomCrossShaped(locations[location_id]);
                     }
                 } else {
-                    dungeonBuildRoom(Coord_t{y_locations[location_id], x_locations[location_id]});
+                    dungeonBuildRoom(locations[location_id]);
                 }
                 location_id++;
             }
@@ -1041,26 +1040,23 @@ static void dungeonGenerate() {
     for (int i = 0; i < location_id; i++) {
         int pick1 = randomNumber(location_id) - 1;
         int pick2 = randomNumber(location_id) - 1;
-        int y1 = y_locations[pick1];
-        int x1 = x_locations[pick1];
-        y_locations[pick1] = y_locations[pick2];
-        x_locations[pick1] = x_locations[pick2];
-        y_locations[pick2] = (int16_t) y1;
-        x_locations[pick2] = (int16_t) x1;
+
+        int32_t y = locations[pick1].y;
+        int32_t x = locations[pick1].x;
+        locations[pick1].y = locations[pick2].y;
+        locations[pick1].x = locations[pick2].x;
+        locations[pick2].y = y;
+        locations[pick2].x = x;
     }
 
     door_index = 0;
 
     // move zero entry to location_id, so that can call dungeonBuildTunnel all location_id times
-    y_locations[location_id] = y_locations[0];
-    x_locations[location_id] = x_locations[0];
+    locations[location_id].y = locations[0].y;
+    locations[location_id].x = locations[0].x;
 
     for (int i = 0; i < location_id; i++) {
-        int y1 = y_locations[i];
-        int x1 = x_locations[i];
-        int y2 = y_locations[i + 1];
-        int x2 = x_locations[i + 1];
-        dungeonBuildTunnel(y2, x2, y1, x1);
+        dungeonBuildTunnel(locations[i + 1], locations[i]);
     }
 
     // Generate walls and streamers
@@ -1092,7 +1088,10 @@ static void dungeonGenerate() {
     dungeonPlaceStairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
-    dungeonNewSpot(py.row, py.col);
+    Coord_t coord = Coord_t{0,0};
+    dungeonNewSpot(coord);
+    py.row = coord.y;
+    py.col = coord.x;
 
     monsterPlaceNewWithinDistance((randomNumber(8) + config::monsters::MON_MIN_PER_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
@@ -1233,7 +1232,10 @@ static void townGeneration() {
     seedResetToOldSeed();
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance below
-    dungeonNewSpot(py.row, py.col);
+    Coord_t coord = Coord_t{0,0};
+    dungeonNewSpot(coord);
+    py.row = coord.y;
+    py.col = coord.x;
 
     lightTown();
 

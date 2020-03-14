@@ -204,11 +204,12 @@ static bool scrollRemoveCurse() {
 
 static bool scrollSummonMonster() {
     bool identified = false;
+    Coord_t coord = Coord_t{0,0};
 
     for (int i = 0; i < randomNumber(3); i++) {
-        auto y = (int) py.row;
-        auto x = (int) py.col;
-        identified |= monsterSummon(y, x, false);
+        coord.y = py.row;
+        coord.x = py.col;
+        identified |= monsterSummon(coord, false);
     }
 
     return identified;
@@ -401,11 +402,12 @@ static bool scrollCurseArmor() {
 
 static bool scrollSummonUndead() {
     bool identified = false;
+    Coord_t coord = Coord_t{0,0};
 
     for (int i = 0; i < randomNumber(3); i++) {
-        int y = py.row;
-        int x = py.col;
-        identified |= monsterSummonUndead(y, x);
+        coord.y = py.row;
+        coord.x = py.col;
+        identified |= monsterSummonUndead(coord);
     }
 
     return identified;

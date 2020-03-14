@@ -687,7 +687,7 @@ static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
 }
 
 void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
-    int y, x;
+    Coord_t coord = Coord_t{py.row, py.col}; //  only used for cases 14 and 15.
 
     // Cast the spell.
     switch (spell_id) {
@@ -755,26 +755,26 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 14: // Summon Monster
             (void) strcat(monster_name, "magically summons a monster!");
             printMessage(monster_name);
-            y = py.row;
-            x = py.col;
+            coord.y = py.row;
+            coord.x = py.col;
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
-            (void) monsterSummon(y, x, false);
+            (void) monsterSummon(coord, false);
             hack_monptr = -1;
-            monsterUpdateVisibility((int) dg.floor[y][x].creature_id);
+            monsterUpdateVisibility((int) dg.floor[coord.y][coord.x].creature_id);
             break;
         case 15: // Summon Undead
             (void) strcat(monster_name, "magically summons an undead!");
             printMessage(monster_name);
-            y = py.row;
-            x = py.col;
+            coord.y = py.row;
+            coord.x = py.col;
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
-            (void) monsterSummonUndead(y, x);
+            (void) monsterSummonUndead(coord);
             hack_monptr = -1;
-            monsterUpdateVisibility((int) dg.floor[y][x].creature_id);
+            monsterUpdateVisibility((int) dg.floor[coord.y][coord.x].creature_id);
             break;
         case 16: // Slow Person
             if (py.flags.free_action) {

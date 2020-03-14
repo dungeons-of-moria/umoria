@@ -115,19 +115,18 @@ static void displayCharacterRaces() {
     clearToBottom(20);
     putString("Choose a race (? for Help):", Coord_t{20, 2});
 
-    auto y = 21;
-    auto x = 2;
+    Coord_t coord = Coord_t{21, 2};
 
     for (auto i = 0; i < PLAYER_MAX_RACES; i++) {
         char description[80];
 
         (void) sprintf(description, "%c) %s", i + 'a', character_races[i].name);
-        putString(description, Coord_t{y, x});
+        putString(description, coord);
 
-        x += 15;
-        if (x > 70) {
-            x = 2;
-            y++;
+        coord.x += 15;
+        if (coord.x > 70) {
+            coord.x = 2;
+            coord.y++;
         }
     }
 }
@@ -164,7 +163,7 @@ static void characterChooseRace() {
 static void displayCharacterHistory() {
     putString("Character Background", Coord_t{14, 27});
 
-    for (auto i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         putStringClearToEOL(py.misc.history[i], Coord_t{i + 15, 10});
     }
 }
