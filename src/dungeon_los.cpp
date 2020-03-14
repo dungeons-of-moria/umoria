@@ -246,7 +246,7 @@ static int los_map_diagonals2[] = {2, 1, 0, 4, 3};
 #define GRADF 10000 // Any sufficiently big number will do
 
 static bool lookRay(int y, int from, int to);
-static bool lookSee(int y, int x, bool &transparent);
+static bool lookSee(Coord_t coord, bool &transparent);
 
 // Look at what we can see. This is a free move.
 //
@@ -281,7 +281,7 @@ void look() {
     los_hack_no_query = false;
 
     bool dummy;
-    if (lookSee(0, 0, dummy)) {
+    if (lookSee(Coord_t{0, 0}, dummy)) {
         return;
     }
 
@@ -409,7 +409,7 @@ static bool lookRay(int y, int from, int to) {
 
     bool transparent;
 
-    if (lookSee(y, x, transparent)) {
+    if (lookSee(Coord_t{y, x}, transparent)) {
         return true;
     }
 
@@ -442,7 +442,7 @@ static bool lookRay(int y, int from, int to) {
 
             x++;
 
-            if (lookSee(y, x, transparent)) {
+            if (lookSee(Coord_t{y, x}, transparent)) {
                 return true;
             }
         } while (!transparent);
@@ -458,37 +458,37 @@ static bool lookRay(int y, int from, int to) {
 
             x++;
 
-            if (lookSee(y, x, transparent)) {
+            if (lookSee(Coord_t{y, x}, transparent)) {
                 return true;
             }
         } while (transparent);
     }
 }
 
-static bool lookSee(int y, int x, bool &transparent) {
-    if (x < 0 || y < 0 || y > x) {
+static bool lookSee(Coord_t coord, bool &transparent) {
+    if (coord.x < 0 || coord.y < 0 || coord.y > coord.x) {
         obj_desc_t errorMessage = {'\0'};
-        (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", x, y);
+        (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", coord.y, coord.x);
         printMessage(errorMessage);
     }
 
     const char *description = nullptr;
-    if (x == 0 && y == 0) {
+    if (coord.x == 0 && coord.y == 0) {
         description = "You are on";
     } else {
         description = "You see";
     }
 
-    int j = py.col + los_fxx * x + los_fxy * y;
-    y = py.row + los_fyx * x + los_fyy * y;
-    x = j;
+    int j = py.col + los_fxx * coord.x + los_fxy * coord.y;
+    coord.y = py.row + los_fyx * coord.x + los_fyy * coord.y;
+    coord.x = j;
 
-    if (!coordInsidePanel(Coord_t{y, x})) {
+    if (!coordInsidePanel(coord)) {
         transparent = false;
         return false;
     }
 
-    Tile_t const &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
     transparent = tile.feature_id <= MAX_OPEN_SPACE;
 
     if (los_hack_no_query) {
@@ -507,7 +507,7 @@ static bool lookSee(int y, int x, bool &transparent) {
         description = "It is on";
         putStringClearToEOL(msg, Coord_t{0, 0});
 
-        panelMoveCursor(Coord_t{y, x});
+        panelMoveCursor(coord);
         query = getKeyInput();
 
         if (query == 'r' || query == 'R') {
@@ -533,7 +533,7 @@ static bool lookSee(int y, int x, bool &transparent) {
                 description = "It is in";
                 putStringClearToEOL(msg, Coord_t{0, 0});
 
-                panelMoveCursor(Coord_t{y, x});
+                panelMoveCursor(coord);
                 query = getKeyInput();
             }
         }
@@ -564,7 +564,7 @@ static bool lookSee(int y, int x, bool &transparent) {
             if (wall_description != nullptr) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
                 putStringClearToEOL(msg, Coord_t{0, 0});
-                panelMoveCursor(Coord_t{y, x});
+                panelMoveCursor(coord);
                 query = getKeyInput();
             }
         }
