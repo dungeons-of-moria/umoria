@@ -246,7 +246,7 @@ static int los_map_diagonals2[] = {2, 1, 0, 4, 3};
 #define GRADF 10000 // Any sufficiently big number will do
 
 static bool lookRay(int y, int from, int to);
-static bool lookSee(int x, int y, bool &transparent);
+static bool lookSee(int y, int x, bool &transparent);
 
 // Look at what we can see. This is a free move.
 //
@@ -409,7 +409,7 @@ static bool lookRay(int y, int from, int to) {
 
     bool transparent;
 
-    if (lookSee(x, y, transparent)) {
+    if (lookSee(y, x, transparent)) {
         return true;
     }
 
@@ -442,7 +442,7 @@ static bool lookRay(int y, int from, int to) {
 
             x++;
 
-            if (lookSee(x, y, transparent)) {
+            if (lookSee(y, x, transparent)) {
                 return true;
             }
         } while (!transparent);
@@ -458,14 +458,14 @@ static bool lookRay(int y, int from, int to) {
 
             x++;
 
-            if (lookSee(x, y, transparent)) {
+            if (lookSee(y, x, transparent)) {
                 return true;
             }
         } while (transparent);
     }
 }
 
-static bool lookSee(int x, int y, bool &transparent) {
+static bool lookSee(int y, int x, bool &transparent) {
     if (x < 0 || y < 0 || y > x) {
         obj_desc_t errorMessage = {'\0'};
         (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", x, y);
