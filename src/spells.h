@@ -42,7 +42,7 @@ void spellStarlite(Coord_t coord);
 bool spellDisarmAllInDirection(int y, int x, int direction);
 void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name);
 void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name);
-void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, const std::string &spell_name);
+void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, const std::string &spell_name);
 bool spellRechargeItem(int number_of_charges);
 bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp);
 bool spellDrainLifeFromMonster(int y, int x, int direction);
