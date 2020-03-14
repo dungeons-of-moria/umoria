@@ -29,3 +29,8 @@ typedef char vtype_t[MORIA_MESSAGE_SIZE];
 // an object description must always be called with an
 // obj_desc_t type as the first parameter.
 typedef char obj_desc_t[160];
+
+typedef struct {
+    int y;
+    int x;
+} Coord_t;

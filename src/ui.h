@@ -26,11 +26,6 @@ typedef struct {
     int16_t max_cols;
 } Panel_t;
 
-typedef struct {
-    int32_t y;
-    int32_t x;
-} Coord_t;
-
 // message line location
 constexpr uint8_t MSG_LINE = 0;
 
