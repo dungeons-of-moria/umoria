@@ -110,11 +110,10 @@ void playerDisarmTrap() {
         return;
     }
 
-    int y = py.row;
-    int x = py.col;
-    (void) playerMovePosition(dir, y, x);
+    Coord_t coord = Coord_t{py.row, py.col};
+    (void) playerMovePosition(dir, coord);
 
-    Tile_t const &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
 
     bool no_disarm = false;
 
@@ -126,9 +125,9 @@ void playerDisarmTrap() {
         Inventory_t &item = treasure_list[tile.treasure_id];
 
         if (item.category_id == TV_VIS_TRAP) {
-            playerDisarmFloorTrap(Coord_t{y, x}, disarm_ability, item.depth_first_found, dir, item.misc_use);
+            playerDisarmFloorTrap(coord, disarm_ability, item.depth_first_found, dir, item.misc_use);
         } else if (item.category_id == TV_CHEST) {
-            playerDisarmChestTrap(Coord_t{y, x}, disarm_ability, item);
+            playerDisarmChestTrap(coord, disarm_ability, item);
         } else {
             no_disarm = true;
         }

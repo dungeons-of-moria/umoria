@@ -135,11 +135,10 @@ void playerTunnel(int direction) {
         direction = randomNumber(9);
     }
 
-    int y = py.row;
-    int x = py.col;
-    (void) playerMovePosition(direction, y, x);
+    Coord_t coord = Coord_t{py.row, py.col};
+    (void) playerMovePosition(direction, coord);
 
-    Tile_t const &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
     Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (!playerCanTunnel(tile.treasure_id, tile.feature_id)) {
@@ -148,18 +147,18 @@ void playerTunnel(int direction) {
 
     if (tile.creature_id > 1) {
         objectBlockedByMonster(tile.creature_id);
-        playerAttackPosition(Coord_t{y, x});
+        playerAttackPosition(coord);
         return;
     }
 
     if (item.category_id != TV_NOTHING) {
         int diggingAbility = playerDiggingAbility(item);
 
-        if (!dungeonDigAtLocation(Coord_t{y, x}, tile.feature_id, diggingAbility)) {
+        if (!dungeonDigAtLocation(coord, tile.feature_id, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (tile.treasure_id != 0) {
                 if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                    dungeonDigRubble(Coord_t{y, x}, diggingAbility);
+                    dungeonDigRubble(coord, diggingAbility);
                 } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");

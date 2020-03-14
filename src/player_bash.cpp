@@ -46,14 +46,13 @@ void playerBash() {
         dir = getRandomDirection();
     }
 
-    int y = py.row;
-    int x = py.col;
-    (void) playerMovePosition(dir, y, x);
+    Coord_t coord = Coord_t{py.row, py.col};
+    (void) playerMovePosition(dir, coord);
 
-    Tile_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[coord.y][coord.x];
 
     if (tile.creature_id > 1) {
-        playerBashPosition(Coord_t{y, x});
+        playerBashPosition(coord);
         return;
     }
 
@@ -61,7 +60,7 @@ void playerBash() {
         Inventory_t &item = treasure_list[tile.treasure_id];
 
         if (item.category_id == TV_CLOSED_DOOR) {
-            playerBashClosedDoor(Coord_t{y, x}, dir, tile, item);
+            playerBashClosedDoor(coord, dir, tile, item);
         } else if (item.category_id == TV_CHEST) {
             playerBashClosedChest(item);
         } else {

@@ -643,13 +643,14 @@ void spellLightLine(int y, int x, int direction) {
     int distance = 0;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y, x};
+    Coord_t tmp_coord = Coord_t{0, 0};
 
     while (!finished) {
-        Tile_t &tile = dg.floor[y][x];
+        Tile_t &tile = dg.floor[coord.y][coord.x];
 
         if (distance > config::treasure::OBJECT_BOLTS_MAX_RANGE || tile.feature_id >= MIN_CLOSED_SPACE) {
-            (void) playerMovePosition(direction, y, x);
+            (void) playerMovePosition(direction, coord);
             finished = true;
             continue; // we're done here, break out of the loop
         }
@@ -658,15 +659,16 @@ void spellLightLine(int y, int x, int direction) {
             // set permanent_light so that dungeonLiteSpot will work
             tile.permanent_light = true;
 
-            coord.y = y;
-            coord.x = x;
+            // coord y/x need to be maintained, so copy them
+            tmp_coord.y = coord.y;
+            tmp_coord.x = coord.x;
 
             if (tile.feature_id == TILE_LIGHT_FLOOR) {
-                if (coordInsidePanel(coord)) {
-                    dungeonLightRoom(coord);
+                if (coordInsidePanel(tmp_coord)) {
+                    dungeonLightRoom(tmp_coord);
                 }
             } else {
-                dungeonLiteSpot(coord);
+                dungeonLiteSpot(tmp_coord);
             }
         }
 
@@ -677,8 +679,8 @@ void spellLightLine(int y, int x, int direction) {
             spellLightLineTouchesMonster((int) tile.creature_id);
         }
 
-        // move must be at end because want to light up current spot
-        (void) playerMovePosition(direction, y, x);
+        // move must be at end because want to light up current tmp_coord
+        (void) playerMovePosition(direction, coord);
         distance++;
     }
 }
@@ -701,13 +703,10 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
     int distance = 0;
     bool disarmed = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
     Tile_t *tile = nullptr;
 
     do {
-        coord.y = y;
-        coord.x = x;
-
         tile = &dg.floor[coord.y][coord.x];
 
         // note, must continue up to and including the first non open space,
@@ -738,7 +737,7 @@ bool spellDisarmAllInDirection(int y, int x, int direction) {
         }
 
         // move must be at end because want to light up current spot
-        (void) playerMovePosition(direction, y, x);
+        (void) playerMovePosition(direction, coord);
 
         distance++;
     } while (distance <= config::treasure::OBJECT_BOLTS_MAX_RANGE && tile->feature_id <= MAX_OPEN_SPACE);
@@ -847,17 +846,15 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &dummy);
 
     Coord_t old_coord = Coord_t{0,0};
-    Coord_t coord = Coord_t{0, 0};
+    Coord_t coord = Coord_t{y, x};
 
     int distance = 0;
     bool finished = false;
 
     while (!finished) {
-        old_coord.y = y;
-        old_coord.x = x;
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
+        old_coord.y = coord.y;
+        old_coord.x = coord.x;
+        (void) playerMovePosition(direction, coord);
 
         distance++;
 
@@ -893,19 +890,18 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
     uint32_t weapon_type;
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
+    Coord_t coord = Coord_t{y, x};
+
     Coord_t old_coord = Coord_t{0,0};
     Coord_t spot = Coord_t{0,0};
-    Coord_t coord = Coord_t{0, 0};
 
     int distance = 0;
     bool finished = false;
 
     while (!finished) {
-        old_coord.y = y;
-        old_coord.x = x;
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
+        old_coord.y = coord.y;
+        old_coord.x = coord.x;
+        (void) playerMovePosition(direction, coord);
 
         distance++;
 
@@ -1194,13 +1190,10 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
     bool changed = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1238,13 +1231,10 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
     bool drained = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1287,13 +1277,10 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
     bool changed = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1342,13 +1329,10 @@ bool spellConfuseMonster(int y, int x, int direction) {
     bool confused = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1402,13 +1386,10 @@ bool spellSleepMonster(int y, int x, int direction) {
     bool asleep = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1451,13 +1432,10 @@ bool spellWallToMud(int y, int x, int direction) {
     bool turned = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0, 0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1534,14 +1512,11 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
     bool destroyed = false;
     int distance = 0;
 
-    Coord_t coord = Coord_t{0, 0};
+    Coord_t coord = Coord_t{y,x};
     Tile_t *tile = nullptr;
 
     do {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         tile = &dg.floor[coord.y][coord.x];
@@ -1577,13 +1552,10 @@ bool spellPolymorphMonster(int y, int x, int direction) {
     bool morphed = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0, 0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1625,13 +1597,10 @@ bool spellBuildWall(int y, int x, int direction) {
     bool built = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0, 0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t &tile = dg.floor[coord.y][coord.x];
@@ -1694,13 +1663,10 @@ bool spellCloneMonster(int y, int x, int direction) {
     int distance = 0;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0, 0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -1799,13 +1765,10 @@ bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
     bool teleported = false;
     bool finished = false;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
-        (void) playerMovePosition(direction, y, x);
-        coord.y = y;
-        coord.x = x;
-
+        (void) playerMovePosition(direction, coord);
         distance++;
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];

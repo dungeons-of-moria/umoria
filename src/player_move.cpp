@@ -430,15 +430,14 @@ void playerMove(int direction, bool do_pickup) {
         playerEndRunning();
     }
 
-    int y = py.row;
-    int x = py.col;
+    Coord_t coord = Coord_t{py.row, py.col};
 
     // Legal move?
-    if (!playerMovePosition(direction, y, x)) {
+    if (!playerMovePosition(direction, coord)) {
         return;
     }
 
-    Tile_t const &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
     Monster_t const &monster = monsters[tile.creature_id];
 
     // if there is no creature, or an unlit creature in the walls then...
@@ -450,14 +449,13 @@ void playerMove(int direction, bool do_pickup) {
         // Open floor spot
         if (tile.feature_id <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
-            int old_row = py.row;
-            int old_col = py.col;
+            Coord_t old_coord = Coord_t{py.row, py.col};
 
-            py.row = (int16_t) y;
-            py.col = (int16_t) x;
+            py.row = (int16_t) coord.y;
+            py.col = (int16_t) coord.x;
 
             // Move character record (-1)
-            dungeonMoveCreatureRecord(Coord_t{old_row, old_col}, Coord_t{py.row, py.col});
+            dungeonMoveCreatureRecord(old_coord, Coord_t{py.row, py.col});
 
             // Check for new panel
             if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
@@ -494,7 +492,7 @@ void playerMove(int direction, bool do_pickup) {
             }
 
             // Move the light source
-            dungeonMoveCharacterLight(Coord_t{old_row, old_col}, Coord_t{py.row, py.col});
+            dungeonMoveCharacterLight(old_coord, Coord_t{py.row, py.col});
 
             // An object is beneath them.
             if (tile.treasure_id != 0) {
@@ -503,11 +501,11 @@ void playerMove(int direction, bool do_pickup) {
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
                 if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{old_row, old_col});
-                    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{old_row, old_col});
+                    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, old_coord);
+                    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, old_coord);
 
-                    py.row = (int16_t) old_row;
-                    py.col = (int16_t) old_col;
+                    py.row = (int16_t) old_coord.y;
+                    py.col = (int16_t) old_coord.x;
 
                     // check to see if we have stepped back onto another trap, if so, set it off
                     uint8_t id = dg.floor[py.row][py.col].treasure_id;
@@ -545,7 +543,7 @@ void playerMove(int direction, bool do_pickup) {
             // did not do anything this turn
             game.player_free_turn = true;
         } else {
-            playerAttackPosition(Coord_t{y, x});
+            playerAttackPosition(coord);
         }
     }
 }

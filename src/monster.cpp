@@ -626,15 +626,17 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
 
     Monster_t &monster = monsters[monster_id];
     uint32_t move_bits = creatures_list[monster.creature_id].movement;
+    Coord_t coord = Coord_t{0,0};
 
     // Up to 5 attempts at moving, give up.
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
-        int y = monster.y;
-        int x = monster.x;
-        (void) playerMovePosition(directions[i], y, x);
+        coord.y = monster.y;
+        coord.x = monster.x;
 
-        Tile_t &tile = dg.floor[y][x];
+        (void) playerMovePosition(directions[i], coord);
+
+        Tile_t &tile = dg.floor[coord.y][coord.x];
 
         if (tile.feature_id == TILE_BOUNDARY_WALL) {
             continue;
@@ -649,22 +651,22 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
             rcmove |= config::monsters::move::CM_PHASE;
         } else if (tile.treasure_id != 0) {
             // Creature can open doors?
-            monsterOpenDoor(tile, monster.hp, move_bits, do_turn, do_move, rcmove, Coord_t{y, x});
+            monsterOpenDoor(tile, monster.hp, move_bits, do_turn, do_move, rcmove, coord);
         }
 
         // Glyph of warding present?
         if (do_move && tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile.treasure_id].sub_category_id == 99) {
-            glyphOfWardingProtection(monster.creature_id, move_bits, do_move, do_turn, Coord_t{y, x});
+            glyphOfWardingProtection(monster.creature_id, move_bits, do_move, do_turn, coord);
         }
 
         // Creature has attempted to move on player?
         if (do_move) {
-            monsterMovesOnPlayer(monster, tile.creature_id, monster_id, move_bits, do_move, do_turn, rcmove, Coord_t{y, x});
+            monsterMovesOnPlayer(monster, tile.creature_id, monster_id, move_bits, do_move, do_turn, rcmove, coord);
         }
 
         // Creature has been allowed move.
         if (do_move) {
-            monsterAllowedToMove(monster, move_bits, do_turn, rcmove, Coord_t{y, x});
+            monsterAllowedToMove(monster, move_bits, do_turn, rcmove, coord);
         }
     }
 }

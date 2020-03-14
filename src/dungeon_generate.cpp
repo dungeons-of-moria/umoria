@@ -128,8 +128,10 @@ static void dungeonPlaceBoundaryWalls() {
 // Places "streamers" of rock through dungeon -RAK-
 static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) {
     // Choose starting point and direction
-    int y = (dg.height / 2) + 11 - randomNumber(23);
-    int x = (dg.width / 2) + 16 - randomNumber(33);
+    Coord_t coord = Coord_t{
+        (dg.height / 2) + 11 - randomNumber(23),
+        (dg.width / 2) + 16 - randomNumber(33),
+    };
 
     // Get random direction. Numbers 1-4, 6-9
     int dir = randomNumber(8);
@@ -143,22 +145,22 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
 
     do {
         for (int i = 0; i < config::dungeon::DUN_STREAMER_DENSITY; i++) {
-            Coord_t coord = Coord_t{
-                y + randomNumber(t1) - t2,
-                x + randomNumber(t1) - t2
+            Coord_t spot = Coord_t{
+                coord.y + randomNumber(t1) - t2,
+                coord.x + randomNumber(t1) - t2,
             };
 
-            if (coordInBounds(coord)) {
-                if (dg.floor[coord.y][coord.x].feature_id == TILE_GRANITE_WALL) {
-                    dg.floor[coord.y][coord.x].feature_id = rock_type;
+            if (coordInBounds(spot)) {
+                if (dg.floor[spot.y][spot.x].feature_id == TILE_GRANITE_WALL) {
+                    dg.floor[spot.y][spot.x].feature_id = rock_type;
 
                     if (randomNumber(chance_of_treasure) == 1) {
-                        dungeonPlaceGold(coord);
+                        dungeonPlaceGold(spot);
                     }
                 }
             }
         }
-    } while (playerMovePosition(dir, y, x));
+    } while (playerMovePosition(dir, coord));
 }
 
 static void dungeonPlaceOpenDoor(Coord_t coord) {

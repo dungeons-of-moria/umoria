@@ -194,7 +194,7 @@ extern uint8_t blows_table[7][6];
 bool playerIsMale();
 void playerSetGender(bool is_male);
 const char *playerGetGenderLabel();
-bool playerMovePosition(int dir, int &new_y, int &new_x);
+bool playerMovePosition(int dir, Coord_t &coord);
 void playerTeleport(int new_distance);
 bool playerNoLight();
 void playerDisturb(int major_disturbance, int light_disturbance);

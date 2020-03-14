@@ -52,58 +52,56 @@ const char *playerGetGenderLabel() {
 }
 
 // Given direction "dir", returns new row, column location -RAK-
-bool playerMovePosition(int dir, int &new_y, int &new_x) {
-    int new_row;
-    int new_col;
+bool playerMovePosition(int dir, Coord_t &coord) {
+    Coord_t new_coord = Coord_t{0,0};
 
     switch (dir) {
         case 1:
-            new_row = new_y + 1;
-            new_col = new_x - 1;
+            new_coord.y = coord.y + 1;
+            new_coord.x = coord.x - 1;
             break;
         case 2:
-            new_row = new_y + 1;
-            new_col = new_x;
+            new_coord.y = coord.y + 1;
+            new_coord.x = coord.x;
             break;
         case 3:
-            new_row = new_y + 1;
-            new_col = new_x + 1;
+            new_coord.y = coord.y + 1;
+            new_coord.x = coord.x + 1;
             break;
         case 4:
-            new_row = new_y;
-            new_col = new_x - 1;
+            new_coord.y = coord.y;
+            new_coord.x = coord.x - 1;
             break;
         case 5:
-            new_row = new_y;
-            new_col = new_x;
+            new_coord.y = coord.y;
+            new_coord.x = coord.x;
             break;
         case 6:
-            new_row = new_y;
-            new_col = new_x + 1;
+            new_coord.y = coord.y;
+            new_coord.x = coord.x + 1;
             break;
         case 7:
-            new_row = new_y - 1;
-            new_col = new_x - 1;
+            new_coord.y = coord.y - 1;
+            new_coord.x = coord.x - 1;
             break;
         case 8:
-            new_row = new_y - 1;
-            new_col = new_x;
+            new_coord.y = coord.y - 1;
+            new_coord.x = coord.x;
             break;
         case 9:
-            new_row = new_y - 1;
-            new_col = new_x + 1;
+            new_coord.y = coord.y - 1;
+            new_coord.x = coord.x + 1;
             break;
         default:
-            new_row = 0;
-            new_col = 0;
+            new_coord.y = 0;
+            new_coord.x = 0;
             break;
     }
 
     bool can_move = false;
 
-    if (new_row >= 0 && new_row < dg.height && new_col >= 0 && new_col < dg.width) {
-        new_y = new_row;
-        new_x = new_col;
+    if (new_coord.y >= 0 && new_coord.y < dg.height && new_coord.x >= 0 && new_coord.x < dg.width) {
+        coord = new_coord;
         can_move = true;
     }
 
@@ -1332,27 +1330,25 @@ static void openClosedChest(Coord_t coord) {
 // Opens a closed door or closed chest. -RAK-
 void playerOpenClosedObject() {
     int dir;
-
     if (!getDirectionWithMemory(CNIL, dir)) {
         return;
     }
 
-    int y = py.row;
-    int x = py.col;
-    (void) playerMovePosition(dir, y, x);
+    Coord_t coord = Coord_t{py.row, py.col};
+    (void) playerMovePosition(dir, coord);
 
     bool no_object = false;
 
-    Tile_t const &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
     Inventory_t const &item = treasure_list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
         objectBlockedByMonster(tile.creature_id);
     } else if (tile.treasure_id != 0) {
         if (item.category_id == TV_CLOSED_DOOR) {
-            openClosedDoor(Coord_t{y, x});
+            openClosedDoor(coord);
         } else if (item.category_id == TV_CHEST) {
-            openClosedChest(Coord_t{y, x});
+            openClosedChest(coord);
         } else {
             no_object = true;
         }
@@ -1374,11 +1370,10 @@ void playerCloseDoor() {
         return;
     }
 
-    int y = py.row;
-    int x = py.col;
-    (void) playerMovePosition(dir, y, x);
+    Coord_t coord = Coord_t{py.row, py.col};
+    (void) playerMovePosition(dir, coord);
 
-    Tile_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[coord.y][coord.x];
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     bool no_object = false;
@@ -1389,7 +1384,7 @@ void playerCloseDoor() {
                 if (item.misc_use == 0) {
                     inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, item);
                     tile.feature_id = TILE_BLOCKED_FLOOR;
-                    dungeonLiteSpot(Coord_t{y, x});
+                    dungeonLiteSpot(coord);
                 } else {
                     printMessage("The door appears to be broken.");
                 }

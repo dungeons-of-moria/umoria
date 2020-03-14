@@ -189,25 +189,24 @@ void playerThrowItem() {
 
     char tile_char = thrown_item.sprite;
     bool visible;
-    int y = py.row;
-    int x = py.col;
-    int old_y = py.row;
-    int old_x = py.col;
     int current_distance = 0;
+
+    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t old_coord = Coord_t{py.row, py.col};
 
     bool flag = false;
 
     while (!flag) {
-        (void) playerMovePosition(dir, y, x);
+        (void) playerMovePosition(dir, coord);
 
         if (current_distance + 1 > tdis) {
             break;
         }
 
         current_distance++;
-        dungeonLiteSpot(Coord_t{old_y, old_x});
+        dungeonLiteSpot(old_coord);
 
-        Tile_t const &tile = dg.floor[y][x];
+        Tile_t const &tile = dg.floor[coord.y][coord.x];
 
         if (tile.feature_id <= MAX_OPEN_SPACE && !flag) {
             if (tile.creature_id > 1) {
@@ -261,22 +260,22 @@ void playerThrowItem() {
                         displayCharacterExperience();
                     }
                 } else {
-                    inventoryDropOrThrowItem(Coord_t{old_y, old_x}, &thrown_item);
+                    inventoryDropOrThrowItem(old_coord, &thrown_item);
                 }
             } else {
                 // do not test tile.field_mark here
 
-                if (coordInsidePanel(Coord_t{y, x}) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
-                    panelPutTile(tile_char, Coord_t{y, x});
+                if (coordInsidePanel(coord) && py.flags.blind < 1 && (tile.temporary_light || tile.permanent_light)) {
+                    panelPutTile(tile_char, coord);
                     putQIO(); // show object moving
                 }
             }
         } else {
             flag = true;
-            inventoryDropOrThrowItem(Coord_t{old_y, old_x}, &thrown_item);
+            inventoryDropOrThrowItem(old_coord, &thrown_item);
         }
 
-        old_y = y;
-        old_x = x;
+        old_coord.y = coord.y;
+        old_coord.x = coord.x;
     }
 }

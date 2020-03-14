@@ -2255,16 +2255,15 @@ static void dungeonGoDownLevel() {
 static void dungeonJamDoor() {
     game.player_free_turn = true;
 
-    int y = py.row;
-    int x = py.col;
+    Coord_t coord = Coord_t{py.row, py.col};
 
     int direction;
     if (!getDirectionWithMemory(CNIL, direction)) {
         return;
     }
-    (void) playerMovePosition(direction, y, x);
+    (void) playerMovePosition(direction, coord);
 
-    Tile_t const &tile = dg.floor[y][x];
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
 
     if (tile.treasure_id == 0) {
         printMessage("That isn't a door!");
