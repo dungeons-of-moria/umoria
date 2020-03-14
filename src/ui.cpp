@@ -167,81 +167,81 @@ void displayCharacterStats(int stat) {
 
 // Print character info in given row, column -RAK-
 // The longest title is 13 characters, so only pad to 13
-static void printCharacterInfoInField(const char *info, int row, int column) {
+static void printCharacterInfoInField(const char *info, Coord_t coord) {
     // blank out the current field space
-    putString(&blank_string[BLANK_LENGTH - 13], Coord_t{row, column});
+    putString(&blank_string[BLANK_LENGTH - 13], coord);
 
-    putString(info, Coord_t{row, column});
+    putString(info, coord);
 }
 
 // Print long number with header at given row, column
-static void printHeaderLongNumber(const char *header, int32_t num, int row, int column) {
+static void printHeaderLongNumber(const char *header, int32_t num, Coord_t coord) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %6d", header, num);
-    putString(str, Coord_t{row, column});
+    putString(str, coord);
 }
 
 // Print long number (7 digits of space) with header at given row, column
-static void printHeaderLongNumber7Spaces(const char *header, int32_t num, int row, int column) {
+static void printHeaderLongNumber7Spaces(const char *header, int32_t num, Coord_t coord) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %7d", header, num);
-    putString(str, Coord_t{row, column});
+    putString(str, coord);
 }
 
 // Print number with header at given row, column -RAK-
-static void printHeaderNumber(const char *header, int num, int row, int column) {
+static void printHeaderNumber(const char *header, int num, Coord_t coord) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%s: %6d", header, num);
-    putString(str, Coord_t{row, column});
+    putString(str, coord);
 }
 
 // Print long number at given row, column
-static void printLongNumber(int32_t num, int row, int column) {
+static void printLongNumber(int32_t num, Coord_t coord) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
-    putString(str, Coord_t{row, column});
+    putString(str, coord);
 }
 
 // Print number at given row, column -RAK-
-static void printNumber(int num, int row, int column) {
+static void printNumber(int num, Coord_t coord) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
-    putString(str, Coord_t{row, column});
+    putString(str, coord);
 }
 
 // Prints title of character -RAK-
 void printCharacterTitle() {
-    printCharacterInfoInField(playerRankTitle(), 4, STAT_COLUMN);
+    printCharacterInfoInField(playerRankTitle(), Coord_t{4, STAT_COLUMN});
 }
 
 // Prints level -RAK-
 void printCharacterLevel() {
-    printNumber((int) py.misc.level, 13, STAT_COLUMN + 6);
+    printNumber((int) py.misc.level, Coord_t{13, STAT_COLUMN + 6});
 }
 
 // Prints players current mana points. -RAK-
 void printCharacterCurrentMana() {
-    printNumber(py.misc.current_mana, 15, STAT_COLUMN + 6);
+    printNumber(py.misc.current_mana, Coord_t{15, STAT_COLUMN + 6});
 }
 
 // Prints Max hit points -RAK-
 void printCharacterMaxHitPoints() {
-    printNumber(py.misc.max_hp, 16, STAT_COLUMN + 6);
+    printNumber(py.misc.max_hp, Coord_t{16, STAT_COLUMN + 6});
 }
 
 // Prints players current hit points -RAK-
 void printCharacterCurrentHitPoints() {
-    printNumber(py.misc.current_hp, 17, STAT_COLUMN + 6);
+    printNumber(py.misc.current_hp, Coord_t{17, STAT_COLUMN + 6});
 }
 
 // prints current AC -RAK-
 void printCharacterCurrentArmorClass() {
-    printNumber(py.misc.display_ac, 19, STAT_COLUMN + 6);
+    printNumber(py.misc.display_ac, Coord_t{19, STAT_COLUMN + 6});
 }
 
 // Prints current gold -RAK-
 void printCharacterGoldValue() {
-    printLongNumber(py.misc.au, 20, STAT_COLUMN + 6);
+    printLongNumber(py.misc.au, Coord_t{20, STAT_COLUMN + 6});
 }
 
 // Prints depth in stat area -RAK-
@@ -411,21 +411,21 @@ void printCharacterWinner() {
 
 // Prints character-screen info -RAK-
 void printCharacterStatsBlock() {
-    printCharacterInfoInField(character_races[py.misc.race_id].name, 2, STAT_COLUMN);
-    printCharacterInfoInField(classes[py.misc.class_id].title, 3, STAT_COLUMN);
-    printCharacterInfoInField(playerRankTitle(), 4, STAT_COLUMN);
+    printCharacterInfoInField(character_races[py.misc.race_id].name, Coord_t{2, STAT_COLUMN});
+    printCharacterInfoInField(classes[py.misc.class_id].title, Coord_t{3, STAT_COLUMN});
+    printCharacterInfoInField(playerRankTitle(), Coord_t{4, STAT_COLUMN});
 
     for (int i = 0; i < 6; i++) {
         displayCharacterStats(i);
     }
 
-    printHeaderNumber("LEV ", (int) py.misc.level, 13, STAT_COLUMN);
-    printHeaderLongNumber("EXP ", py.misc.exp, 14, STAT_COLUMN);
-    printHeaderNumber("MANA", py.misc.current_mana, 15, STAT_COLUMN);
-    printHeaderNumber("MHP ", py.misc.max_hp, 16, STAT_COLUMN);
-    printHeaderNumber("CHP ", py.misc.current_hp, 17, STAT_COLUMN);
-    printHeaderNumber("AC  ", py.misc.display_ac, 19, STAT_COLUMN);
-    printHeaderLongNumber("GOLD", py.misc.au, 20, STAT_COLUMN);
+    printHeaderNumber("LEV ", (int) py.misc.level, Coord_t{13, STAT_COLUMN});
+    printHeaderLongNumber("EXP ", py.misc.exp, Coord_t{14, STAT_COLUMN});
+    printHeaderNumber("MANA", py.misc.current_mana, Coord_t{15, STAT_COLUMN});
+    printHeaderNumber("MHP ", py.misc.max_hp, Coord_t{16, STAT_COLUMN});
+    printHeaderNumber("CHP ", py.misc.current_hp, Coord_t{17, STAT_COLUMN});
+    printHeaderNumber("AC  ", py.misc.display_ac, Coord_t{19, STAT_COLUMN});
+    printHeaderLongNumber("GOLD", py.misc.au, Coord_t{20, STAT_COLUMN});
     printCharacterWinner();
 
     uint32_t status = py.flags.status;
@@ -498,10 +498,10 @@ void printCharacterStats() {
         }
     }
 
-    printHeaderNumber("+ To Hit    ", py.misc.display_to_hit, 9, 1);
-    printHeaderNumber("+ To Damage ", py.misc.display_to_damage, 10, 1);
-    printHeaderNumber("+ To AC     ", py.misc.display_to_ac, 11, 1);
-    printHeaderNumber("  Total AC  ", py.misc.display_ac, 12, 1);
+    printHeaderNumber("+ To Hit    ", py.misc.display_to_hit, Coord_t{9, 1});
+    printHeaderNumber("+ To Damage ", py.misc.display_to_damage, Coord_t{10, 1});
+    printHeaderNumber("+ To AC     ", py.misc.display_to_ac, Coord_t{11, 1});
+    printHeaderNumber("  Total AC  ", py.misc.display_ac, Coord_t{12, 1});
 }
 
 // Returns a rating of x depending on y -JWT-
@@ -533,29 +533,29 @@ const char *statRating(Coord_t coord) {
 
 // Prints age, height, weight, and SC -JWT-
 void printCharacterVitalStatistics() {
-    printHeaderNumber("Age          ", (int) py.misc.age, 2, 38);
-    printHeaderNumber("Height       ", (int) py.misc.height, 3, 38);
-    printHeaderNumber("Weight       ", (int) py.misc.weight, 4, 38);
-    printHeaderNumber("Social Class ", (int) py.misc.social_class, 5, 38);
+    printHeaderNumber("Age          ", (int) py.misc.age, Coord_t{2, 38});
+    printHeaderNumber("Height       ", (int) py.misc.height, Coord_t{3, 38});
+    printHeaderNumber("Weight       ", (int) py.misc.weight, Coord_t{4, 38});
+    printHeaderNumber("Social Class ", (int) py.misc.social_class, Coord_t{5, 38});
 }
 
 // Prints the following information on the screen. -JWT-
 void printCharacterLevelExperience() {
-    printHeaderLongNumber7Spaces("Level      ", (int32_t) py.misc.level, 9, 28);
-    printHeaderLongNumber7Spaces("Experience ", py.misc.exp, 10, 28);
-    printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, 11, 28);
+    printHeaderLongNumber7Spaces("Level      ", (int32_t) py.misc.level, Coord_t{9, 28});
+    printHeaderLongNumber7Spaces("Experience ", py.misc.exp, Coord_t{10, 28});
+    printHeaderLongNumber7Spaces("Max Exp    ", py.misc.max_exp, Coord_t{11, 28});
 
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", Coord_t{12, 28});
     } else {
-        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), 12, 28);
+        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), Coord_t{12, 28});
     }
 
-    printHeaderLongNumber7Spaces("Gold       ", py.misc.au, 13, 28);
-    printHeaderNumber("Max Hit Points ", py.misc.max_hp, 9, 52);
-    printHeaderNumber("Cur Hit Points ", py.misc.current_hp, 10, 52);
-    printHeaderNumber("Max Mana       ", py.misc.mana, 11, 52);
-    printHeaderNumber("Cur Mana       ", py.misc.current_mana, 12, 52);
+    printHeaderLongNumber7Spaces("Gold       ", py.misc.au, Coord_t{13, 28});
+    printHeaderNumber("Max Hit Points ", py.misc.max_hp, Coord_t{9, 52});
+    printHeaderNumber("Cur Hit Points ", py.misc.current_hp, Coord_t{10, 52});
+    printHeaderNumber("Max Mana       ", py.misc.mana, Coord_t{11, 52});
+    printHeaderNumber("Cur Mana       ", py.misc.current_mana, Coord_t{12, 52});
 }
 
 // Prints ratings on certain abilities -RAK-
@@ -766,5 +766,5 @@ void displayCharacterExperience() {
         py.misc.max_exp = py.misc.exp;
     }
 
-    printLongNumber(py.misc.exp, 14, STAT_COLUMN + 6);
+    printLongNumber(py.misc.exp, Coord_t{14, STAT_COLUMN + 6});
 }
