@@ -1055,7 +1055,7 @@ static void monsterMoveOutOfWall(Monster_t const &monster, int monster_id, uint3
             displayCharacterExperience();
         } else {
             printMessage("A creature digs itself out from the rock!");
-            (void) playerTunnelWall((int) monster.y, (int) monster.x, 1, 0);
+            (void) playerTunnelWall(Coord_t{monster.y, monster.x}, 1, 0);
         }
     }
 }

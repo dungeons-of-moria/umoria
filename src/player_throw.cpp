@@ -116,9 +116,9 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
     }
 }
 
-static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
-    int pos_y = y;
-    int pos_x = x;
+static void inventoryDropOrThrowItem(Coord_t coord, Inventory_t *item) {
+    int pos_y = coord.y;
+    int pos_x = coord.x;
 
     bool flag = false;
 
@@ -131,8 +131,8 @@ static void inventoryDropOrThrowItem(int y, int x, Inventory_t *item) {
             }
 
             if (!flag) {
-                pos_y = y + randomNumber(3) - 2;
-                pos_x = x + randomNumber(3) - 2;
+                pos_y = coord.y + randomNumber(3) - 2;
+                pos_x = coord.x + randomNumber(3) - 2;
                 k++;
             }
         }
@@ -261,7 +261,7 @@ void playerThrowItem() {
                         displayCharacterExperience();
                     }
                 } else {
-                    inventoryDropOrThrowItem(old_y, old_x, &thrown_item);
+                    inventoryDropOrThrowItem(Coord_t{old_y, old_x}, &thrown_item);
                 }
             } else {
                 // do not test tile.field_mark here
@@ -273,7 +273,7 @@ void playerThrowItem() {
             }
         } else {
             flag = true;
-            inventoryDropOrThrowItem(old_y, old_x, &thrown_item);
+            inventoryDropOrThrowItem(Coord_t{old_y, old_x}, &thrown_item);
         }
 
         old_y = y;

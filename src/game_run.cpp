@@ -1931,7 +1931,7 @@ static void doCommand(char command) {
             scrollRead();
             break;
         case 's': // (s)earch for a turn
-            playerSearch(py.row, py.col, py.misc.chance_in_search);
+            playerSearch(Coord_t{py.row, py.col}, py.misc.chance_in_search);
             break;
         case 'T': // (T)ake off something  (t)ake off
             inventoryExecuteCommand('t');

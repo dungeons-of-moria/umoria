@@ -1349,7 +1349,7 @@ bool spellWallToMud(int y, int x, int direction) {
         if (tile.feature_id >= MIN_CAVE_WALL && tile.feature_id != TILE_BOUNDARY_WALL) {
             finished = true;
 
-            (void) playerTunnelWall(y, x, 1, 0);
+            (void) playerTunnelWall(Coord_t{y, x}, 1, 0);
 
             if (caveTileVisible(Coord_t{y, x})) {
                 turned = true;

@@ -119,24 +119,24 @@ static int find_prevdir;
 static int find_direction; // Keep a record of which way we are going.
 
 // Do we see a wall? Used in running. -CJS-
-static bool playerCanSeeDungeonWall(int dir, int y, int x) {
+static bool playerCanSeeDungeonWall(int dir, Coord_t coord) {
     // check to see if movement there possible
-    if (!playerMovePosition(dir, y, x)) {
+    if (!playerMovePosition(dir, coord.y, coord.x)) {
         return true;
     }
 
-    char c = caveGetTileSymbol(Coord_t{y, x});
+    char c = caveGetTileSymbol(coord);
 
     return c == '#' || c == '%';
 }
 
 // Do we see anything? Used in running. -CJS-
-static bool playerSeeNothing(int dir, int y, int x) {
+static bool playerSeeNothing(int dir, Coord_t coord) {
     // check to see if movement there possible
-    return playerMovePosition(dir, y, x) && caveGetTileSymbol(Coord_t{y, x}) == ' ';
+    return playerMovePosition(dir, coord.y, coord.x) && caveGetTileSymbol(coord) == ' ';
 }
 
-static void findRunningBreak(int dir, int row, int col) {
+static void findRunningBreak(int dir, Coord_t coord) {
     bool deepLeft = false;
     bool deepRight = false;
     bool shortLeft = false;
@@ -144,18 +144,18 @@ static void findRunningBreak(int dir, int row, int col) {
 
     int cycleIndex = chome[dir];
 
-    if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], py.row, py.col)) {
+    if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], Coord_t{py.row, py.col})) {
         find_breakleft = true;
         shortLeft = true;
-    } else if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], row, col)) {
+    } else if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], coord)) {
         find_breakleft = true;
         deepLeft = true;
     }
 
-    if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], py.row, py.col)) {
+    if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], Coord_t{py.row, py.col})) {
         find_breakright = true;
         shortRight = true;
-    } else if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], row, col)) {
+    } else if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], coord)) {
         find_breakright = true;
         deepRight = true;
     }
@@ -170,7 +170,7 @@ static void findRunningBreak(int dir, int row, int col) {
             } else if (deepRight && !deepLeft) {
                 find_prevdir = cycle[cycleIndex + 1];
             }
-        } else if (playerCanSeeDungeonWall(cycle[cycleIndex], row, col)) {
+        } else if (playerCanSeeDungeonWall(cycle[cycleIndex], coord)) {
             // else if there is a wall two spaces ahead and seem to be in a
             // corridor, then force a turn into the side corridor, must
             // be moving straight into a corridor here
@@ -202,7 +202,7 @@ void playerFindInitialize(int direction) {
         find_breakleft = false;
 
         if (py.flags.blind < 1) {
-            findRunningBreak(direction, y, x);
+            findRunningBreak(direction, Coord_t{y, x});
         }
     }
 
@@ -249,8 +249,8 @@ void playerEndRunning() {
     dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{py.row, py.col});
 }
 
-static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, int x, int &check_dir, int &option1, int &option2) {
-    Tile_t const &tile = dg.floor[y][x];
+static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t coord, int &check_dir, int &option1, int &option2) {
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
 
     // Default: Square unseen. Treat as open.
     bool invisible = true;
@@ -334,7 +334,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, int y, i
 }
 
 // Determine the next direction for a run, or if we should stop. -CJS-
-void playerAreaAffect(int direction, int y, int x) {
+void playerAreaAffect(int direction, Coord_t coord) {
     if (py.flags.blind >= 1) {
         return;
     }
@@ -351,12 +351,12 @@ void playerAreaAffect(int direction, int y, int x) {
     for (int i = -max; i <= max; i++) {
         int new_dir = cycle[chome[direction] + i];
 
-        int row = y;
-        int col = x;
+        int row = coord.y;
+        int col = coord.x;
 
         // Objects player can see (Including doors?) cause a stop.
         if (playerMovePosition(new_dir, row, col)) {
-            areaAffectStopLookingAtSquares(i, direction, new_dir, row, col, check_dir, option, option2);
+            areaAffectStopLookingAtSquares(i, direction, new_dir, Coord_t{row, col}, check_dir, option, option2);
         }
     }
 
@@ -384,15 +384,15 @@ void playerAreaAffect(int direction, int y, int x) {
     }
 
     // Two options!
-    int row = y;
-    int col = x;
+    int row = coord.y;
+    int col = coord.x;
 
     (void) playerMovePosition(option, row, col);
 
-    if (!playerCanSeeDungeonWall(option, row, col) || !playerCanSeeDungeonWall(check_dir, row, col)) {
+    if (!playerCanSeeDungeonWall(option, Coord_t{row, col}) || !playerCanSeeDungeonWall(check_dir, Coord_t{row, col})) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
-        if (config::options::run_examine_corners && playerSeeNothing(option, row, col) && playerSeeNothing(option2, row, col)) {
+        if (config::options::run_examine_corners && playerSeeNothing(option, Coord_t{row, col}) && playerSeeNothing(option2, Coord_t{row, col})) {
             // Can not see anything ahead and in the direction we are
             // turning, assume that it is a potential corner.
             find_direction = option;

@@ -212,7 +212,7 @@ void playerTakeOff(int item_id, int pack_position_id);
 bool playerTestBeingHit(int base_to_hit, int level, int plus_to_hit, int armor_class, int attack_type_id);
 void playerTakesHit(int damage, const char *creature_name);
 
-void playerSearch(int y, int x, int chance);
+void playerSearch(Coord_t coord, int chance);
 
 int playerCarryingLoadLimit();
 void playerStrength();
@@ -225,7 +225,7 @@ bool playerSavingThrow();
 void playerGainKillExperience(Creature_t const &creature);
 void playerOpenClosedObject();
 void playerCloseDoor();
-bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance);
+bool playerTunnelWall(Coord_t coord, int digging_ability, int digging_chance);
 void playerAttackPosition(Coord_t coord);
 void playerCalculateAllowedSpellsCount(int stat);
 
@@ -255,7 +255,7 @@ void playerMove(int direction, bool do_pickup);
 void playerFindInitialize(int direction);
 void playerRunAndFind();
 void playerEndRunning();
-void playerAreaAffect(int direction, int y, int x);
+void playerAreaAffect(int direction, Coord_t coord);
 
 // player_stats.cpp
 void playerInitializeBaseExperienceLevels();

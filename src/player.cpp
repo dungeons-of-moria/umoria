@@ -697,7 +697,7 @@ void playerTakesHit(int damage, const char *creature_name_label) {
 }
 
 // Searches for hidden things. -RAK-
-void playerSearch(int y, int x, int chance) {
+void playerSearch(Coord_t coord, int chance) {
     if (py.flags.confused > 0) {
         chance = chance / 10;
     }
@@ -710,8 +710,8 @@ void playerSearch(int y, int x, int chance) {
         chance = chance / 10;
     }
 
-    for (int i = y - 1; i <= y + 1; i++) {
-        for (int j = x - 1; j <= x + 1; j++) {
+    for (int i = coord.y - 1; i <= coord.y + 1; i++) {
+        for (int j = coord.x - 1; j <= coord.x + 1; j++) {
             // always coordInBounds() here
             if (randomNumber(100) >= chance) {
                 continue;
@@ -1411,23 +1411,23 @@ void playerCloseDoor() {
 
 // Tunneling through real wall: 10, 11, 12 -RAK-
 // Used by TUNNEL and WALL_TO_MUD
-bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance) {
+bool playerTunnelWall(Coord_t coord, int digging_ability, int digging_chance) {
     if (digging_ability <= digging_chance) {
         return false;
     }
 
-    Tile_t &tile = dg.floor[y][x];
+    Tile_t &tile = dg.floor[coord.y][coord.x];
 
     if (tile.perma_lit_room) {
         // Should become a room space, check to see whether
         // it should be TILE_LIGHT_FLOOR or TILE_DARK_FLOOR.
         bool found = false;
 
-        for (int yy = y - 1; yy <= y + 1 && yy < MAX_HEIGHT; yy++) {
-            for (int xx = x - 1; xx <= x + 1 && xx < MAX_WIDTH; xx++) {
-                if (dg.floor[yy][xx].feature_id <= MAX_CAVE_ROOM) {
-                    tile.feature_id = dg.floor[yy][xx].feature_id;
-                    tile.permanent_light = dg.floor[yy][xx].permanent_light;
+        for (int y = coord.y - 1; y <= coord.y + 1 && y < MAX_HEIGHT; y++) {
+            for (int x = coord.x - 1; x <= coord.x + 1 && x < MAX_WIDTH; x++) {
+                if (dg.floor[y][x].feature_id <= MAX_CAVE_ROOM) {
+                    tile.feature_id = dg.floor[y][x].feature_id;
+                    tile.permanent_light = dg.floor[y][x].permanent_light;
                     found = true;
                     break;
                 }
@@ -1446,11 +1446,11 @@ bool playerTunnelWall(int y, int x, int digging_ability, int digging_chance) {
 
     tile.field_mark = false;
 
-    if (coordInsidePanel(Coord_t{y, x}) && (tile.temporary_light || tile.permanent_light) && tile.treasure_id != 0) {
+    if (coordInsidePanel(coord) && (tile.temporary_light || tile.permanent_light) && tile.treasure_id != 0) {
         printMessage("You have found something!");
     }
 
-    dungeonLiteSpot(Coord_t{y, x});
+    dungeonLiteSpot(coord);
 
     return true;
 }

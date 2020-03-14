@@ -466,13 +466,13 @@ void playerMove(int direction, bool do_pickup) {
 
             // Check to see if they should stop
             if (py.running_tracker != 0) {
-                playerAreaAffect(direction, py.row, py.col);
+                playerAreaAffect(direction, Coord_t{py.row, py.col});
             }
 
             // Check to see if they've noticed something
             // fos may be negative if have good rings of searching
             if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || ((py.flags.status & config::player::status::PY_SEARCH) != 0u)) {
-                playerSearch(py.row, py.col, py.misc.chance_in_search);
+                playerSearch(Coord_t{py.row, py.col}, py.misc.chance_in_search);
             }
 
             if (tile.feature_id == TILE_LIGHT_FLOOR) {

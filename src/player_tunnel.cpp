@@ -55,50 +55,50 @@ static int playerDiggingAbility(Inventory_t const &weapon) {
     return diggingAbility;
 }
 
-static void dungeonDigGraniteWall(int y, int x, int digging_ability) {
+static void dungeonDigGraniteWall(Coord_t coord, int digging_ability) {
     int i = randomNumber(1200) + 80;
 
-    if (playerTunnelWall(y, x, digging_ability, i)) {
+    if (playerTunnelWall(coord, digging_ability, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the granite wall.");
     }
 }
 
-static void dungeonDigMagmaWall(int y, int x, int digging_ability) {
+static void dungeonDigMagmaWall(Coord_t coord, int digging_ability) {
     int i = randomNumber(600) + 10;
 
-    if (playerTunnelWall(y, x, digging_ability, i)) {
+    if (playerTunnelWall(coord, digging_ability, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the magma intrusion.");
     }
 }
 
-static void dungeonDigQuartzWall(int y, int x, int digging_ability) {
+static void dungeonDigQuartzWall(Coord_t coord, int digging_ability) {
     int i = randomNumber(400) + 10;
 
-    if (playerTunnelWall(y, x, digging_ability, i)) {
+    if (playerTunnelWall(coord, digging_ability, i)) {
         printMessage("You have finished the tunnel.");
     } else {
         printMessageNoCommandInterrupt("You tunnel into the quartz vein.");
     }
 }
 
-static void dungeonDigRubble(int y, int x, int digging_ability) {
+static void dungeonDigRubble(Coord_t coord, int digging_ability) {
     if (digging_ability > randomNumber(180)) {
-        (void) dungeonDeleteObject(Coord_t{y, x});
+        (void) dungeonDeleteObject(coord);
         printMessage("You have removed the rubble.");
 
         if (randomNumber(10) == 1) {
-            dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
+            dungeonPlaceRandomObjectAt(coord, false);
 
-            if (caveTileVisible(Coord_t{y, x})) {
+            if (caveTileVisible(coord)) {
                 printMessage("You have found something!");
             }
         }
 
-        dungeonLiteSpot(Coord_t{y, x});
+        dungeonLiteSpot(coord);
     } else {
         printMessageNoCommandInterrupt("You dig in the rubble.");
     }
@@ -107,16 +107,16 @@ static void dungeonDigRubble(int y, int x, int digging_ability) {
 // Dig regular walls; Granite, magma intrusion, quartz vein
 // Don't forget the boundary walls, made of titanium (255)
 // Return `true` if a wall was dug at
-static bool dungeonDigAtLocation(int y, int x, uint8_t wall_type, int digging_ability) {
+static bool dungeonDigAtLocation(Coord_t coord, uint8_t wall_type, int digging_ability) {
     switch (wall_type) {
         case TILE_GRANITE_WALL:
-            dungeonDigGraniteWall(y, x, digging_ability);
+            dungeonDigGraniteWall(coord, digging_ability);
             break;
         case TILE_MAGMA_WALL:
-            dungeonDigMagmaWall(y, x, digging_ability);
+            dungeonDigMagmaWall(coord, digging_ability);
             break;
         case TILE_QUARTZ_WALL:
-            dungeonDigQuartzWall(y, x, digging_ability);
+            dungeonDigQuartzWall(coord, digging_ability);
             break;
         case TILE_BOUNDARY_WALL:
             printMessage("This seems to be permanent rock.");
@@ -155,15 +155,15 @@ void playerTunnel(int direction) {
     if (item.category_id != TV_NOTHING) {
         int diggingAbility = playerDiggingAbility(item);
 
-        if (!dungeonDigAtLocation(y, x, tile.feature_id, diggingAbility)) {
+        if (!dungeonDigAtLocation(Coord_t{y, x}, tile.feature_id, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (tile.treasure_id != 0) {
                 if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                    dungeonDigRubble(y, x, diggingAbility);
+                    dungeonDigRubble(Coord_t{y, x}, diggingAbility);
                 } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
-                    playerSearch(py.row, py.col, py.misc.chance_in_search);
+                    playerSearch(Coord_t{py.row, py.col}, py.misc.chance_in_search);
                 } else {
                     abort();
                 }
