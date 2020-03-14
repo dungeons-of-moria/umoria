@@ -110,7 +110,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::blind_creature:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellConfuseMonster(py.row, py.col, dir);
+                (void) spellConfuseMonster(Coord_t{py.row, py.col}, dir);
             }
             break;
         case PriestSpellTypes::portal:
@@ -145,7 +145,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::orb_of_draining:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.row, py.col, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), magic_spell_flags::GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(Coord_t{py.row, py.col}, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), magic_spell_flags::GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case PriestSpellTypes::cure_serious_wounds:

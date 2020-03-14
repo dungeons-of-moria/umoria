@@ -639,11 +639,10 @@ static void spellLightLineTouchesMonster(int monster_id) {
 }
 
 // Leave a line of light in given dir, blue light can sometimes hurt creatures. -RAK-
-void spellLightLine(int y, int x, int direction) {
+void spellLightLine(Coord_t coord, int direction) {
     int distance = 0;
     bool finished = false;
 
-    Coord_t coord = Coord_t{y, x};
     Coord_t tmp_coord = Coord_t{0, 0};
 
     while (!finished) {
@@ -693,17 +692,16 @@ void spellStarlite(Coord_t coord) {
 
     for (int dir = 1; dir <= 9; dir++) {
         if (dir != 5) {
-            spellLightLine(coord.y, coord.x, dir);
+            spellLightLine(coord, dir);
         }
     }
 }
 
 // Disarms all traps/chests in a given direction -RAK-
-bool spellDisarmAllInDirection(int y, int x, int direction) {
+bool spellDisarmAllInDirection(Coord_t coord, int direction) {
     int distance = 0;
     bool disarmed = false;
 
-    Coord_t coord = Coord_t{y,x};
     Tile_t *tile = nullptr;
 
     do {
@@ -839,14 +837,13 @@ static void spellFireBoltTouchesMonster(Tile_t &tile, int damage, int harm_type,
 }
 
 // Shoot a bolt in a given direction -RAK-
-void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name) {
+void spellFireBolt(Coord_t coord, int direction, int damage_hp, int spell_type, const std::string &spell_name) {
     bool (*dummy)(Inventory_t *);
     int harm_type = 0;
     uint32_t weapon_type;
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &dummy);
 
     Coord_t old_coord = Coord_t{0,0};
-    Coord_t coord = Coord_t{y, x};
 
     int distance = 0;
     bool finished = false;
@@ -880,7 +877,7 @@ void spellFireBolt(int y, int x, int direction, int damage_hp, int spell_type, c
 }
 
 // Shoot a ball in a given direction.  Note that balls have an area affect. -RAK-
-void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, const std::string &spell_name) {
+void spellFireBall(Coord_t coord, int direction, int damage_hp, int spell_type, const std::string &spell_name) {
     int total_hits = 0;
     int total_kills = 0;
     int max_distance = 2;
@@ -889,8 +886,6 @@ void spellFireBall(int y, int x, int direction, int damage_hp, int spell_type, c
     int harm_type;
     uint32_t weapon_type;
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
-
-    Coord_t coord = Coord_t{y, x};
 
     Coord_t old_coord = Coord_t{0,0};
     Coord_t spot = Coord_t{0,0};
@@ -1185,12 +1180,10 @@ bool spellRechargeItem(int number_of_charges) {
 }
 
 // Increase or decrease a creatures hit points -RAK-
-bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
+bool spellChangeMonsterHitPoints(Coord_t coord, int direction, int damage_hp) {
     int distance = 0;
     bool changed = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1226,12 +1219,10 @@ bool spellChangeMonsterHitPoints(int y, int x, int direction, int damage_hp) {
 }
 
 // Drains life; note it must be living. -RAK-
-bool spellDrainLifeFromMonster(int y, int x, int direction) {
+bool spellDrainLifeFromMonster(Coord_t coord, int direction) {
     int distance = 0;
     bool drained = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1272,12 +1263,10 @@ bool spellDrainLifeFromMonster(int y, int x, int direction) {
 
 // Increase or decrease a creatures speed -RAK-
 // NOTE: cannot slow a winning creature (BALROG)
-bool spellSpeedMonster(int y, int x, int direction, int speed) {
+bool spellSpeedMonster(Coord_t coord, int direction, int speed) {
     int distance = 0;
     bool changed = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1324,12 +1313,10 @@ bool spellSpeedMonster(int y, int x, int direction, int speed) {
 }
 
 // Confuse a creature -RAK-
-bool spellConfuseMonster(int y, int x, int direction) {
+bool spellConfuseMonster(Coord_t coord, int direction) {
     int distance = 0;
     bool confused = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1381,12 +1368,10 @@ bool spellConfuseMonster(int y, int x, int direction) {
 }
 
 // Sleep a creature. -RAK-
-bool spellSleepMonster(int y, int x, int direction) {
+bool spellSleepMonster(Coord_t coord, int direction) {
     int distance = 0;
     bool asleep = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1427,12 +1412,10 @@ bool spellSleepMonster(int y, int x, int direction) {
 }
 
 // Turn stone to mud, delete wall. -RAK-
-bool spellWallToMud(int y, int x, int direction) {
+bool spellWallToMud(Coord_t coord, int direction) {
     int distance = 0;
     bool turned = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1508,11 +1491,10 @@ bool spellWallToMud(int y, int x, int direction) {
 }
 
 // Destroy all traps and doors in a given direction -RAK-
-bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
+bool spellDestroyDoorsTrapsInDirection(Coord_t coord, int direction) {
     bool destroyed = false;
     int distance = 0;
 
-    Coord_t coord = Coord_t{y,x};
     Tile_t *tile = nullptr;
 
     do {
@@ -1547,12 +1529,10 @@ bool spellDestroyDoorsTrapsInDirection(int y, int x, int direction) {
 
 // Polymorph a monster -RAK-
 // NOTE: cannot polymorph a winning creature (BALROG)
-bool spellPolymorphMonster(int y, int x, int direction) {
+bool spellPolymorphMonster(Coord_t coord, int direction) {
     int distance = 0;
     bool morphed = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1592,12 +1572,10 @@ bool spellPolymorphMonster(int y, int x, int direction) {
 }
 
 // Create a wall. -RAK-
-bool spellBuildWall(int y, int x, int direction) {
+bool spellBuildWall(Coord_t coord, int direction) {
     int distance = 0;
     bool built = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1659,11 +1637,9 @@ bool spellBuildWall(int y, int x, int direction) {
 }
 
 // Replicate a creature -RAK-
-bool spellCloneMonster(int y, int x, int direction) {
+bool spellCloneMonster(Coord_t coord, int direction) {
     int distance = 0;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);
@@ -1760,12 +1736,10 @@ void spellTeleportPlayerTo(Coord_t coord) {
 }
 
 // Teleport all creatures in a given direction away -RAK-
-bool spellTeleportAwayMonsterInDirection(int y, int x, int direction) {
+bool spellTeleportAwayMonsterInDirection(Coord_t coord, int direction) {
     int distance = 0;
     bool teleported = false;
     bool finished = false;
-
-    Coord_t coord = Coord_t{y,x};
 
     while (!finished) {
         (void) playerMovePosition(direction, coord);

@@ -75,7 +75,7 @@ static void castSpell(int spell_id) {
     switch ((MageSpellTypes) spell_id) {
         case MageSpellTypes::magic_missile :
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceRoll(Dice_t{2, 6}), magic_spell_flags::GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(Coord_t{py.row, py.col}, dir, diceRoll(Dice_t{2, 6}), magic_spell_flags::GF_MAGIC_MISSILE, spell_names[0]);
             }
             break;
         case MageSpellTypes::detect_monsters:
@@ -96,17 +96,17 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::stinking_cloud:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.row, py.col, dir, 12, magic_spell_flags::GF_POISON_GAS, spell_names[6]);
+                spellFireBall(Coord_t{py.row, py.col}, dir, 12, magic_spell_flags::GF_POISON_GAS, spell_names[6]);
             }
             break;
         case MageSpellTypes::confusion:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellConfuseMonster(py.row, py.col, dir);
+                (void) spellConfuseMonster(Coord_t{py.row, py.col}, dir);
             }
             break;
         case MageSpellTypes::lightning_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceRoll(Dice_t{4, 8}), magic_spell_flags::GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(Coord_t{py.row, py.col}, dir, diceRoll(Dice_t{4, 8}), magic_spell_flags::GF_LIGHTNING, spell_names[8]);
             }
             break;
         case MageSpellTypes::trap_door_destruction:
@@ -114,7 +114,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::sleep_i:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellSleepMonster(py.row, py.col, dir);
+                (void) spellSleepMonster(Coord_t{py.row, py.col}, dir);
             }
             break;
         case MageSpellTypes::cure_poison:
@@ -130,12 +130,12 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::frost_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceRoll(Dice_t{6, 8}), magic_spell_flags::GF_FROST, spell_names[14]);
+                spellFireBolt(Coord_t{py.row, py.col}, dir, diceRoll(Dice_t{6, 8}), magic_spell_flags::GF_FROST, spell_names[14]);
             }
             break;
         case MageSpellTypes::wall_to_mud:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellWallToMud(py.row, py.col, dir);
+                (void) spellWallToMud(Coord_t{py.row, py.col}, dir);
             }
             break;
         case MageSpellTypes::create_food:
@@ -149,7 +149,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::polymorph_other:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellPolymorphMonster(py.row, py.col, dir);
+                (void) spellPolymorphMonster(Coord_t{py.row, py.col}, dir);
             }
             break;
         case MageSpellTypes::identify_item:
@@ -160,17 +160,17 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::fire_bolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.row, py.col, dir, diceRoll(Dice_t{9, 8}), magic_spell_flags::GF_FIRE, spell_names[22]);
+                spellFireBolt(Coord_t{py.row, py.col}, dir, diceRoll(Dice_t{9, 8}), magic_spell_flags::GF_FIRE, spell_names[22]);
             }
             break;
         case MageSpellTypes::speed_monster:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellSpeedMonster(py.row, py.col, dir, -1);
+                (void) spellSpeedMonster(Coord_t{py.row, py.col}, dir, -1);
             }
             break;
         case MageSpellTypes::frost_ball:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.row, py.col, dir, 48, magic_spell_flags::GF_FROST, spell_names[24]);
+                spellFireBall(Coord_t{py.row, py.col}, dir, 48, magic_spell_flags::GF_FROST, spell_names[24]);
             }
             break;
         case MageSpellTypes::recharge_item_ii:
@@ -178,7 +178,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::teleport_other:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellTeleportAwayMonsterInDirection(py.row, py.col, dir);
+                (void) spellTeleportAwayMonsterInDirection(Coord_t{py.row, py.col}, dir);
             }
             break;
         case MageSpellTypes::haste_self:
@@ -186,7 +186,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::fire_ball:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.row, py.col, dir, 72, magic_spell_flags::GF_FIRE, spell_names[28]);
+                spellFireBall(Coord_t{py.row, py.col}, dir, 72, magic_spell_flags::GF_FIRE, spell_names[28]);
             }
             break;
         case MageSpellTypes::word_of_destruction:
