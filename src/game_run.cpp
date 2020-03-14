@@ -1486,32 +1486,29 @@ static void commandLocateOnMap() {
         return;
     }
 
-    int y = py.row;
-    int x = py.col;
-    if (coordOutsidePanel(Coord_t{y, x}, true)) {
+    Coord_t player_coord = Coord_t{py.row, py.col};
+    if (coordOutsidePanel(player_coord, true)) {
         drawDungeonPanel();
     }
-
-    int cy, cx, p_y, p_x;
-
-    cy = dg.panel.row;
-    cx = dg.panel.col;
 
     int dir_val;
     vtype_t out_val = {'\0'};
     vtype_t tmp_str = {'\0'};
 
-    while (true) {
-        p_y = dg.panel.row;
-        p_x = dg.panel.col;
+    Coord_t old_panel = Coord_t{dg.panel.row, dg.panel.col};
+    Coord_t panel = Coord_t{0, 0};
 
-        if (p_y == cy && p_x == cx) {
+    while (true) {
+        panel.y = dg.panel.row;
+        panel.x = dg.panel.col;
+
+        if (panel.y == old_panel.y && panel.x == old_panel.x) {
             tmp_str[0] = '\0';
         } else {
-            (void) sprintf(tmp_str, "%s%s of", p_y < cy ? " North" : p_y > cy ? " South" : "", p_x < cx ? " West" : p_x > cx ? " East" : "");
+            (void) sprintf(tmp_str, "%s%s of", panel.y < old_panel.y ? " North" : panel.y > old_panel.y ? " South" : "", panel.x < old_panel.x ? " West" : panel.x > old_panel.x ? " East" : "");
         }
 
-        (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", p_y, p_x, tmp_str);
+        (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", panel.y, panel.x, tmp_str);
 
         if (!getDirectionWithMemory(out_val, dir_val)) {
             break;
@@ -1522,19 +1519,19 @@ static void commandLocateOnMap() {
         // is nicer, as it moves exactly to the same place in another
         // section. The direction calculation is not intuitive. Sorry.
         while (true) {
-            x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
-            y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
+            player_coord.x += ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
+            player_coord.y -= ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
 
-            if (x < 0 || y < 0 || x >= dg.width || y >= dg.width) {
+            if (player_coord.x < 0 || player_coord.y < 0 || player_coord.x >= dg.width || player_coord.y >= dg.width) {
                 printMessage("You've gone past the end of your map.");
 
-                x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
-                y += ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
+                player_coord.x -= ((dir_val - 1) % 3 - 1) * SCREEN_WIDTH / 2;
+                player_coord.y += ((dir_val - 1) / 3 - 1) * SCREEN_HEIGHT / 2;
 
                 break;
             }
 
-            if (coordOutsidePanel(Coord_t{y, x}, true)) {
+            if (coordOutsidePanel(player_coord, true)) {
                 drawDungeonPanel();
                 break;
             }

@@ -133,72 +133,72 @@ void clearToBottom(int row) {
 }
 
 // move cursor to a given y, x position
-void moveCursor(Coord_t coords) {
-    (void) move(coords.y, coords.x);
+void moveCursor(Coord_t coord) {
+    (void) move(coord.y, coord.x);
 }
 
-void addChar(char ch, Coord_t coords) {
-    if (mvaddch(coords.y, coords.x, ch) == ERR) {
+void addChar(char ch, Coord_t coord) {
+    if (mvaddch(coord.y, coord.x, ch) == ERR) {
         abort();
     }
 }
 
 // Dump IO to buffer -RAK-
-void putString(const char *out_str, Coord_t coords) {
+void putString(const char *out_str, Coord_t coord) {
     // truncate the string, to make sure that it won't go past right edge of screen.
-    if (coords.x > 79) {
-        coords.x = 79;
+    if (coord.x > 79) {
+        coord.x = 79;
     }
 
     vtype_t str = {'\0'};
-    (void) strncpy(str, out_str, (size_t) (79 - coords.x));
-    str[79 - coords.x] = '\0';
+    (void) strncpy(str, out_str, (size_t) (79 - coord.x));
+    str[79 - coord.x] = '\0';
 
-    if (mvaddstr(coords.y, coords.x, str) == ERR) {
+    if (mvaddstr(coord.y, coord.x, str) == ERR) {
         abort();
     }
 }
 
 // Outputs a line to a given y, x position -RAK-
-void putStringClearToEOL(const std::string &str, Coord_t coords) {
-    if (coords.y == MSG_LINE && message_ready_to_print) {
+void putStringClearToEOL(const std::string &str, Coord_t coord) {
+    if (coord.y == MSG_LINE && message_ready_to_print) {
         printMessage(CNIL);
     }
 
-    (void) move(coords.y, coords.x);
+    (void) move(coord.y, coord.x);
     clrtoeol();
-    putString(str.c_str(), coords);
+    putString(str.c_str(), coord);
 }
 
 // Clears given line of text -RAK-
-void eraseLine(Coord_t coords) {
-    if (coords.y == MSG_LINE && message_ready_to_print) {
+void eraseLine(Coord_t coord) {
+    if (coord.y == MSG_LINE && message_ready_to_print) {
         printMessage(CNIL);
     }
 
-    (void) move(coords.y, coords.x);
+    (void) move(coord.y, coord.x);
     clrtoeol();
 }
 
 // Moves the cursor to a given interpolated y, x position -RAK-
-void panelMoveCursor(Coord_t coords) {
+void panelMoveCursor(Coord_t coord) {
     // Real coords convert to screen positions
-    coords.y -= dg.panel.row_prt;
-    coords.x -= dg.panel.col_prt;
+    coord.y -= dg.panel.row_prt;
+    coord.x -= dg.panel.col_prt;
 
-    if (move(coords.y, coords.x) == ERR) {
+    if (move(coord.y, coord.x) == ERR) {
         abort();
     }
 }
 
 // Outputs a char to a given interpolated y, x position -RAK-
 // sign bit of a character used to indicate standout mode. -CJS
-void panelPutTile(char ch, Coord_t coords) {
+void panelPutTile(char ch, Coord_t coord) {
     // Real coords convert to screen positions
-    coords.y -= dg.panel.row_prt;
-    coords.x -= dg.panel.col_prt;
+    coord.y -= dg.panel.row_prt;
+    coord.x -= dg.panel.col_prt;
 
-    if (mvaddch(coords.y, coords.x, ch) == ERR) {
+    if (mvaddch(coord.y, coord.x, ch) == ERR) {
         abort();
     }
 }
@@ -213,7 +213,7 @@ static Coord_t currentCursorPosition() {
 // first clearing the line of any text!
 void messageLinePrintMessage(std::string message) {
     // save current cursor position
-    Coord_t coords = currentCursorPosition();
+    Coord_t coord = currentCursorPosition();
 
     // move to beginning of message line, and clear it
     move(0, 0);
@@ -225,21 +225,21 @@ void messageLinePrintMessage(std::string message) {
     addstr(message.c_str());
 
     // restore cursor to old position
-    move(coords.y, coords.x);
+    move(coord.y, coord.x);
 }
 
 // deleteMessageLine will delete all text from the message line (0,0).
 // The current cursor position will be maintained.
 void messageLineClear() {
     // save current cursor position
-    Coord_t coords = currentCursorPosition();
+    Coord_t coord = currentCursorPosition();
 
     // move to beginning of message line, and clear it
     move(0, 0);
     clrtoeol();
 
     // restore cursor to old position
-    move(coords.y, coords.x);
+    move(coord.y, coord.x);
 }
 
 // Outputs message to top line of screen
@@ -390,17 +390,17 @@ bool getCommand(const std::string &prompt, char &command) {
 
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
-bool getStringInput(char *in_str, Coord_t coords, int slen) {
-    (void) move(coords.y, coords.x);
+bool getStringInput(char *in_str, Coord_t coord, int slen) {
+    (void) move(coord.y, coord.x);
 
     for (int i = slen; i > 0; i--) {
         (void) addch(' ');
     }
 
-    (void) move(coords.y, coords.x);
+    (void) move(coord.y, coord.x);
 
-    int start_col = coords.x;
-    int end_col = coords.x + slen - 1;
+    int start_col = coord.x;
+    int end_col = coord.x + slen - 1;
 
     if (end_col > 79) {
         end_col = 79;
@@ -423,20 +423,20 @@ bool getStringInput(char *in_str, Coord_t coords, int slen) {
                 break;
             case DELETE:
             case CTRL_KEY('H'):
-                if (coords.x > start_col) {
-                    coords.x--;
-                    putString(" ", coords);
-                    moveCursor(coords);
+                if (coord.x > start_col) {
+                    coord.x--;
+                    putString(" ", coord);
+                    moveCursor(coord);
                     *--p = '\0';
                 }
                 break;
             default:
-                if ((isprint(key) == 0) || coords.x > end_col) {
+                if ((isprint(key) == 0) || coord.x > end_col) {
                     terminalBellSound();
                 } else {
-                    mvaddch(coords.y, coords.x, (char) key);
+                    mvaddch(coord.y, coord.x, (char) key);
                     *p++ = (char) key;
-                    coords.x++;
+                    coord.x++;
                 }
                 break;
         }

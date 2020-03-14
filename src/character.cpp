@@ -328,8 +328,7 @@ static void characterSetAgeHeightWeight() {
 // Prints the classes for a given race: Rogue, Mage, Priest, etc.,
 // shown during the character creation screens.
 static int displayRaceClasses(uint8_t const race_id, uint8_t *class_list) {
-    auto y = 21;
-    auto x = 2;
+    Coord_t coord = Coord_t{21, 2};
 
     auto class_id = 0;
 
@@ -342,13 +341,13 @@ static int displayRaceClasses(uint8_t const race_id, uint8_t *class_list) {
     for (uint8_t i = 0; i < PLAYER_MAX_CLASSES; i++) {
         if ((character_races[race_id].classes_bit_field & mask) != 0u) {
             (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
-            putString(description, Coord_t{y, x});
+            putString(description, coord);
             class_list[class_id] = i;
 
-            x += 15;
-            if (x > 70) {
-                x = 2;
-                y++;
+            coord.x += 15;
+            if (coord.x > 70) {
+                coord.x = 2;
+                coord.y++;
             }
             class_id++;
         }

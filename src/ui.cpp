@@ -33,31 +33,30 @@ static void panelBounds() {
 // when a move off the screen has occurred and figures new borders.
 // `force` forces the panel bounds to be recalculated, useful for 'W'here.
 bool coordOutsidePanel(Coord_t coord, bool force) {
-    int row = dg.panel.row;
-    int col = dg.panel.col;
+    Coord_t panel = Coord_t{dg.panel.row, dg.panel.col};
 
     if (force || coord.y < dg.panel.top + 2 || coord.y > dg.panel.bottom - 2) {
-        row = (coord.y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2);
+        panel.y = (coord.y - SCREEN_HEIGHT / 4) / (SCREEN_HEIGHT / 2);
 
-        if (row > dg.panel.max_rows) {
-            row = dg.panel.max_rows;
-        } else if (row < 0) {
-            row = 0;
+        if (panel.y > dg.panel.max_rows) {
+            panel.y = dg.panel.max_rows;
+        } else if (panel.y < 0) {
+            panel.y = 0;
         }
     }
 
     if (force || coord.x < dg.panel.left + 3 || coord.x > dg.panel.right - 3) {
-        col = ((coord.x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
-        if (col > dg.panel.max_cols) {
-            col = dg.panel.max_cols;
-        } else if (col < 0) {
-            col = 0;
+        panel.x = ((coord.x - SCREEN_WIDTH / 4) / (SCREEN_WIDTH / 2));
+        if (panel.x > dg.panel.max_cols) {
+            panel.x = dg.panel.max_cols;
+        } else if (panel.x < 0) {
+            panel.x = 0;
         }
     }
 
-    if (row != dg.panel.row || col != dg.panel.col) {
-        dg.panel.row = row;
-        dg.panel.col = col;
+    if (panel.y != dg.panel.row || panel.x != dg.panel.col) {
+        dg.panel.row = panel.y;
+        dg.panel.col = panel.x;
         panelBounds();
 
         // stop movement if any
@@ -84,16 +83,18 @@ bool coordInsidePanel(Coord_t coord) {
 void drawDungeonPanel() {
     int line = 1;
 
+    Coord_t coord = Coord_t{0, 0};
+
     // Top to bottom
-    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
+    for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
         eraseLine(Coord_t{line, 13});
         line++;
 
         // Left to right
-        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
-            char ch = caveGetTileSymbol(Coord_t{y, x});
+        for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
+            char ch = caveGetTileSymbol(coord);
             if (ch != ' ') {
-                panelPutTile(ch, Coord_t{y, x});
+                panelPutTile(ch, coord);
             }
         }
     }

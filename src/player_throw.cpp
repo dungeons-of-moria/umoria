@@ -117,22 +117,21 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
 }
 
 static void inventoryDropOrThrowItem(Coord_t coord, Inventory_t *item) {
-    int pos_y = coord.y;
-    int pos_x = coord.x;
+    Coord_t position = Coord_t{coord.y, coord.x};
 
     bool flag = false;
 
     if (randomNumber(10) > 1) {
         for (int k = 0; !flag && k <= 9;) {
-            if (coordInBounds(Coord_t{pos_y, pos_x})) {
-                if (dg.floor[pos_y][pos_x].feature_id <= MAX_OPEN_SPACE && dg.floor[pos_y][pos_x].treasure_id == 0) {
+            if (coordInBounds(position)) {
+                if (dg.floor[position.y][position.x].feature_id <= MAX_OPEN_SPACE && dg.floor[position.y][position.x].treasure_id == 0) {
                     flag = true;
                 }
             }
 
             if (!flag) {
-                pos_y = coord.y + randomNumber(3) - 2;
-                pos_x = coord.x + randomNumber(3) - 2;
+                position.y = coord.y + randomNumber(3) - 2;
+                position.x = coord.x + randomNumber(3) - 2;
                 k++;
             }
         }
@@ -140,9 +139,9 @@ static void inventoryDropOrThrowItem(Coord_t coord, Inventory_t *item) {
 
     if (flag) {
         int cur_pos = popt();
-        dg.floor[pos_y][pos_x].treasure_id = (uint8_t) cur_pos;
+        dg.floor[position.y][position.x].treasure_id = (uint8_t) cur_pos;
         treasure_list[cur_pos] = *item;
-        dungeonLiteSpot(Coord_t{pos_y, pos_x});
+        dungeonLiteSpot(position);
     } else {
         obj_desc_t description = {'\0'};
         obj_desc_t msg = {'\0'};

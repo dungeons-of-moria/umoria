@@ -626,9 +626,9 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
 
     Monster_t &monster = monsters[monster_id];
     uint32_t move_bits = creatures_list[monster.creature_id].movement;
-    Coord_t coord = Coord_t{0,0};
 
     // Up to 5 attempts at moving, give up.
+    Coord_t coord = Coord_t{0,0};
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
         coord.y = monster.y;
@@ -917,14 +917,16 @@ static bool monsterCastSpell(int monster_id) {
 // Places creature adjacent to given location -RAK-
 // Rats and Flys are fun!
 bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
+    Coord_t position = Coord_t{0,0};
+
     for (int i = 0; i <= 18; i++) {
-        int pos_y = coord.y - 2 + randomNumber(3);
-        int pos_x = coord.x - 2 + randomNumber(3);
+        position.y = coord.y - 2 + randomNumber(3);
+        position.x = coord.x - 2 + randomNumber(3);
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
-        if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != coord.y || pos_x != coord.x)) {
-            Tile_t const &tile = dg.floor[pos_y][pos_x];
+        if (coordInBounds(position) && (position.y != coord.y || position.x != coord.x)) {
+            Tile_t const &tile = dg.floor[position.y][position.x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
                 // Creature there already?
@@ -949,14 +951,14 @@ bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
                         // in case compact_monster() is called, it needs monster_id.
                         hack_monptr = monster_id;
                         // Place_monster() may fail if monster list full.
-                        bool result = monsterPlaceNew(Coord_t{pos_y, pos_x}, creature_id, false);
+                        bool result = monsterPlaceNew(position, creature_id, false);
                         hack_monptr = -1;
                         if (!result) {
                             return false;
                         }
 
                         monster_multiply_total++;
-                        return monsterMakeVisible(Coord_t{pos_y, pos_x});
+                        return monsterMakeVisible(position);
                     }
                 } else {
                     // All clear,  place a monster
@@ -964,14 +966,14 @@ bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
                     // in case compact_monster() is called,it needs monster_id
                     hack_monptr = monster_id;
                     // Place_monster() may fail if monster list full.
-                    bool result = monsterPlaceNew(Coord_t{pos_y, pos_x}, creature_id, false);
+                    bool result = monsterPlaceNew(position, creature_id, false);
                     hack_monptr = -1;
                     if (!result) {
                         return false;
                     }
 
                     monster_multiply_total++;
-                    return monsterMakeVisible(Coord_t{pos_y, pos_x});
+                    return monsterMakeVisible(position);
                 }
             }
         }
@@ -983,9 +985,11 @@ bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
 static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uint32_t &rcmove) {
     int counter = 0;
 
-    for (int y = monster.y - 1; y <= monster.y + 1; y++) {
-        for (int x = monster.x - 1; x <= monster.x + 1; x++) {
-            if (coordInBounds(Coord_t{y, x}) && (dg.floor[y][x].creature_id > 1)) {
+    Coord_t coord = Coord_t{0,0};
+
+    for (coord.y = monster.y - 1; coord.y <= monster.y + 1; coord.y++) {
+        for (coord.x = monster.x - 1; coord.x <= monster.x + 1; coord.x++) {
+            if (coordInBounds(coord) && (dg.floor[coord.y][coord.x].creature_id > 1)) {
                 counter++;
             }
         }
@@ -1501,9 +1505,9 @@ std::string monsterNameDescription(const std::string &real_name, bool is_lit) {
 bool monsterSleep(Coord_t coord) {
     bool asleep = false;
 
-    for (int row = coord.y - 1; row <= coord.y + 1 && row < MAX_HEIGHT; row++) {
-        for (int col = coord.x - 1; col <= coord.x + 1 && col < MAX_WIDTH; col++) {
-            uint8_t monster_id = dg.floor[row][col].creature_id;
+    for (int y = coord.y - 1; y <= coord.y + 1 && y < MAX_HEIGHT; y++) {
+        for (int x = coord.x - 1; x <= coord.x + 1 && x < MAX_WIDTH; x++) {
+            uint8_t monster_id = dg.floor[y][x].creature_id;
 
             if (monster_id <= 1) {
                 continue;

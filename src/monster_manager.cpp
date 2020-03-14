@@ -78,11 +78,12 @@ void monsterPlaceWinning() {
         return;
     }
 
-    int y, x;
+    Coord_t coord = Coord_t{0,0};
+
     do {
-        y = randomNumber(dg.height - 2);
-        x = randomNumber(dg.width - 2);
-    } while ((dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[y][x].creature_id != 0) || (dg.floor[y][x].treasure_id != 0) || (coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) <= config::monsters::MON_MAX_SIGHT));
+        coord.y = randomNumber(dg.height - 2);
+        coord.x = randomNumber(dg.width - 2);
+    } while ((dg.floor[coord.y][coord.x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[coord.y][coord.x].creature_id != 0) || (dg.floor[coord.y][coord.x].treasure_id != 0) || (coordDistanceBetween(coord, Coord_t{py.row, py.col}) <= config::monsters::MON_MAX_SIGHT));
 
     int creature_id = randomNumber(config::monsters::MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -101,8 +102,8 @@ void monsterPlaceWinning() {
 
     Monster_t &monster = monsters[monster_id];
 
-    monster.y = (uint8_t) y;
-    monster.x = (uint8_t) x;
+    monster.y = (uint8_t) coord.y;
+    monster.x = (uint8_t) coord.x;
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & config::monsters::defense::CD_MAX_HP) != 0) {
@@ -114,9 +115,9 @@ void monsterPlaceWinning() {
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
     monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, coord);
 
-    dg.floor[y][x].creature_id = (uint8_t) monster_id;
+    dg.floor[coord.y][coord.x].creature_id = (uint8_t) monster_id;
 
     monster.sleep_count = 0;
 }
@@ -159,13 +160,13 @@ static int monsterGetOneSuitableForLevel(int level) {
 
 // Allocates a random monster -RAK-
 void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping) {
-    int y, x;
+    Coord_t position = Coord_t{0, 0};
 
     for (int i = 0; i < number; i++) {
         do {
-            y = randomNumber(dg.height - 2);
-            x = randomNumber(dg.width - 2);
-        } while (dg.floor[y][x].feature_id >= MIN_CLOSED_SPACE || dg.floor[y][x].creature_id != 0 || coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) <= distance_from_source);
+            position.y = randomNumber(dg.height - 2);
+            position.x = randomNumber(dg.width - 2);
+        } while (dg.floor[position.y][position.x].feature_id >= MIN_CLOSED_SPACE || dg.floor[position.y][position.x].creature_id != 0 || coordDistanceBetween(position, Coord_t{py.row, py.col}) <= distance_from_source);
 
         int l = monsterGetOneSuitableForLevel(dg.current_level);
 
@@ -177,26 +178,29 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
 
         // Place_monster() should always return true here.
         // It does not matter if it fails though.
-        (void) monsterPlaceNew(Coord_t{y, x}, l, sleeping);
+        (void) monsterPlaceNew(position, l, sleeping);
     }
 }
 
+// TODO: use Coord_t
 static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
     bool placed = false;
 
-    for (int i = 0; i <= 9; i++) {
-        int yy = y - 2 + randomNumber(3);
-        int xx = x - 2 + randomNumber(3);
+    Coord_t position = Coord_t{0,0};
 
-        if (coordInBounds(Coord_t{yy, xx})) {
-            if (dg.floor[yy][xx].feature_id <= MAX_OPEN_SPACE && dg.floor[yy][xx].creature_id == 0) {
+    for (int i = 0; i <= 9; i++) {
+        position.y = y - 2 + randomNumber(3);
+        position.x = x - 2 + randomNumber(3);
+
+        if (coordInBounds(position)) {
+            if (dg.floor[position.y][position.x].feature_id <= MAX_OPEN_SPACE && dg.floor[position.y][position.x].creature_id == 0) {
                 // Place_monster() should always return true here.
-                if (!monsterPlaceNew(Coord_t{yy, xx}, monsterID, slp)) {
+                if (!monsterPlaceNew(position, monsterID, slp)) {
                     return false;
                 }
 
-                y = yy;
-                x = xx;
+                y = position.y;
+                x = position.x;
 
                 placed = true;
                 i = 9;
@@ -207,6 +211,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
     return placed;
 }
 
+// TODO: use Coord_t
 // Places creature adjacent to given location -RAK-
 bool monsterSummon(int &y, int &x, bool sleeping) {
     int monster_id = monsterGetOneSuitableForLevel(dg.current_level + config::monsters::MON_SUMMONED_LEVEL_ADJUST);

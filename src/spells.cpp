@@ -156,11 +156,8 @@ bool spellDetectTreasureWithinVicinity() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
-        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
+        for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             Tile_t &tile = dg.floor[coord.y][coord.x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(coord)) {
@@ -180,11 +177,8 @@ bool spellDetectObjectsWithinVicinity() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
-        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
+        for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             Tile_t &tile = dg.floor[coord.y][coord.x];
 
             if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(coord)) {
@@ -204,11 +198,8 @@ bool spellDetectTrapsWithinVicinity() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
-        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
+        for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             Tile_t &tile = dg.floor[coord.y][coord.x];
 
             if (tile.treasure_id == 0) {
@@ -235,11 +226,8 @@ bool spellDetectSecretDoorssWithinVicinity() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = dg.panel.top; y <= dg.panel.bottom; y++) {
-        for (int x = dg.panel.left; x <= dg.panel.right; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
+        for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             Tile_t &tile = dg.floor[coord.y][coord.x];
 
             if (tile.treasure_id == 0) {
@@ -311,11 +299,8 @@ bool spellLightArea(Coord_t coord) {
     // Must always light immediate area, because one might be standing on
     // the edge of a room, or next to a destroyed area, etc.
     Coord_t spot = Coord_t{0,0};
-    for (int y = coord.y - 1; y <= coord.y + 1; y++) {
-        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
-            spot.y = y;
-            spot.x = x;
-
+    for (spot.y = coord.y - 1; spot.y <= coord.y + 1; spot.y++) {
+        for (spot.x = coord.x - 1; spot.x <= coord.x + 1; spot.x++) {
             dg.floor[spot.y][spot.x].permanent_light = true;
             dungeonLiteSpot(spot);
         }
@@ -338,11 +323,8 @@ bool spellDarkenArea(Coord_t coord) {
         int end_row = start_row + half_height - 1;
         int end_col = start_col + half_width - 1;
 
-        for (int y = start_row; y <= end_row; y++) {
-            for (int x = start_col; x <= end_col; x++) {
-                spot.y = y;
-                spot.x = x;
-
+        for (spot.y = start_row; spot.y <= end_row; spot.y++) {
+            for (spot.x = start_col; spot.x <= end_col; spot.x++) {
                 Tile_t &tile = dg.floor[spot.y][spot.x];
 
                 if (tile.perma_lit_room && tile.feature_id <= MAX_CAVE_FLOOR) {
@@ -358,11 +340,8 @@ bool spellDarkenArea(Coord_t coord) {
             }
         }
     } else {
-        for (int y = coord.y - 1; y <= coord.y + 1; y++) {
-            for (int x = coord.x - 1; x <= coord.x + 1; x++) {
-                spot.y = y;
-                spot.x = x;
-
+        for (spot.y = coord.y - 1; spot.y <= coord.y + 1; spot.y++) {
+            for (spot.x = coord.x - 1; spot.x <= coord.x + 1; spot.x++) {
                 Tile_t &tile = dg.floor[spot.y][spot.x];
 
                 if (tile.feature_id == TILE_CORR_FLOOR && tile.permanent_light) {
@@ -384,11 +363,8 @@ bool spellDarkenArea(Coord_t coord) {
 static void dungeonLightAreaAroundFloorTile(Coord_t coord) {
     Coord_t spot = Coord_t{0,0};
 
-    for (int y = coord.y - 1; y <= coord.y + 1; y++) {
-        for (int x = coord.x - 1; x <= coord.x + 1; x++) {
-            spot.y = y;
-            spot.x = x;
-
+    for (spot.y = coord.y - 1; spot.y <= coord.y + 1; spot.y++) {
+        for (spot.x = coord.x - 1; spot.x <= coord.x + 1; spot.x++) {
             Tile_t &tile = dg.floor[spot.y][spot.x];
 
             if (tile.feature_id >= MIN_CAVE_WALL) {
@@ -409,11 +385,8 @@ void spellMapCurrentArea() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = row_min; y <= row_max; y++) {
-        for (int x = col_min; x <= col_max; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = row_min; coord.y <= row_max; coord.y++) {
+        for (coord.x = col_min; coord.x <= col_max; coord.x++) {
             if (coordInBounds(coord) && dg.floor[coord.y][coord.x].feature_id <= MAX_CAVE_FLOOR) {
                 dungeonLightAreaAroundFloorTile(coord);
             }
@@ -475,11 +448,8 @@ bool spellAggravateMonsters(int affect_distance) {
 bool spellSurroundPlayerWithTraps() {
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = py.row - 1; y <= py.row + 1; y++) {
-        for (int x = py.col - 1; x <= py.col + 1; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = py.row - 1; coord.y <= py.row + 1; coord.y++) {
+        for (coord.x = py.col - 1; coord.x <= py.col + 1; coord.x++) {
             // Don't put a trap under the player, since this can lead to
             // strange situations, e.g. falling through a trap door while
             // trying to rest, setting off a falling rock trap and ending
@@ -516,11 +486,8 @@ bool spellSurroundPlayerWithDoors() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = py.row - 1; y <= py.row + 1; y++) {
-        for (int x = py.col - 1; x <= py.col + 1; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = py.row - 1; coord.y <= py.row + 1; coord.y++) {
+        for (coord.x = py.col - 1; coord.x <= py.col + 1; coord.x++) {
             // Don't put a door under the player!
             if (coord.y == py.row && coord.x == py.col) {
                 continue;
@@ -554,11 +521,8 @@ bool spellDestroyAdjacentDoorsTraps() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = py.row - 1; y <= py.row + 1; y++) {
-        for (int x = py.col - 1; x <= py.col + 1; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = py.row - 1; coord.y <= py.row + 1; coord.y++) {
+        for (coord.x = py.col - 1; coord.x <= py.col + 1; coord.x++) {
             Tile_t const &tile = dg.floor[coord.y][coord.x];
 
             if (tile.treasure_id == 0) {
@@ -1023,11 +987,8 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
 
     Coord_t location = Coord_t{0,0};
 
-    for (int row = coord.y - 2; row <= coord.y + 2; row++) {
-        for (int col = coord.x - 2; col <= coord.x + 2; col++) {
-            location.y = row;
-            location.x = col;
-
+    for (location.y = coord.y - 2; location.y <= coord.y + 2; location.y++) {
+        for (location.x = coord.x - 2; location.x <= coord.x + 2; location.x++) {
             if (coordInBounds(location) && coordDistanceBetween(coord, location) <= max_distance && los(coord.y, coord.x, location.y, location.x)) {
                 Tile_t const &tile = dg.floor[location.y][location.x];
 
@@ -1121,10 +1082,8 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
     putQIO();
 
     Coord_t spot = Coord_t{0,0};
-    for (int row = (coord.y - 2); row <= (coord.y + 2); row++) {
-        for (int col = (coord.x - 2); col <= (coord.x + 2); col++) {
-            spot.y = row;
-            spot.x = col;
+    for (spot.y = (coord.y - 2); spot.y <= (coord.y + 2); spot.y++) {
+        for (spot.x = (coord.x - 2); spot.x <= (coord.x + 2); spot.x++) {
             if (coordInBounds(spot) && coordInsidePanel(spot) && coordDistanceBetween(coord, spot) <= max_distance) {
                 dungeonLiteSpot(spot);
             }
@@ -1714,11 +1673,8 @@ void spellTeleportPlayerTo(Coord_t coord) {
     dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, rnd_coord);
 
     Coord_t spot = Coord_t{0,0};
-    for (int y = py.row - 1; y <= py.row + 1; y++) {
-        for (int x = py.col - 1; x <= py.col + 1; x++) {
-            spot.y = y;
-            spot.x = x;
-
+    for (spot.y = py.row - 1; spot.y <= py.row + 1; spot.y++) {
+        for (spot.x = py.col - 1; spot.x <= py.col + 1; spot.x++) {
             dg.floor[spot.y][spot.x].temporary_light = false;
             dungeonLiteSpot(spot);
         }
@@ -1891,6 +1847,7 @@ bool spellSleepAllMonsters() {
 // NOTE: cannot polymorph a winning creature (BALROG)
 bool spellMassPolymorph() {
     bool morphed = false;
+    Coord_t coord = Coord_t{0,0};
 
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
@@ -1899,12 +1856,12 @@ bool spellMassPolymorph() {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & config::monsters::move::CM_WIN) == 0) {
-                int y = monster.y;
-                int x = monster.x;
+                coord.y = monster.y;
+                coord.x = monster.x;
                 dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.
-                morphed = monsterPlaceNew(Coord_t{y, x}, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(coord, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
             }
         }
     }
@@ -2006,11 +1963,8 @@ static void earthquakeHitsMonster(int monsterID) {
 void spellEarthquake() {
     Coord_t coord = Coord_t{0, 0};
 
-    for (int y = py.row - 8; y <= py.row + 8; y++) {
-        for (int x = py.col - 8; x <= py.col + 8; x++) {
-            coord.y = y;
-            coord.x = x;
-
+    for (coord.y = py.row - 8; coord.y <= py.row + 8; coord.y++) {
+        for (coord.x = py.col - 8; coord.x <= py.col + 8; coord.x++) {
             if ((coord.y != py.row || coord.x != py.col) && coordInBounds(coord) && randomNumber(8) == 1) {
                 Tile_t &tile = dg.floor[coord.y][coord.x];
 
@@ -2295,14 +2249,11 @@ static void replaceSpot(Coord_t coord, int typ) {
 //   Winning creatures that are deleted will be considered as teleporting to another level.
 //   This will NOT win the game.
 void spellDestroyArea(Coord_t coord) {
-    Coord_t spot = Coord_t{0,0};
-
     if (dg.current_level > 0) {
-        for (int y = coord.y - 15; y <= coord.y + 15; y++) {
-            for (int x = coord.x - 15; x <= coord.x + 15; x++) {
-                spot.y = y;
-                spot.x = x;
+        Coord_t spot = Coord_t{0,0};
 
+        for (spot.y = coord.y - 15; spot.y <= coord.y + 15; spot.y++) {
+            for (spot.x = coord.x - 15; spot.x <= coord.x + 15; spot.x++) {
                 if (coordInBounds(spot) && dg.floor[spot.y][spot.x].feature_id != TILE_BOUNDARY_WALL) {
                     int distance = coordDistanceBetween(spot, coord);
 

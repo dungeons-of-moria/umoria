@@ -296,19 +296,21 @@ void wizardGenerateObject() {
     int id;
     if (!wizardRequestObjectId(id, "Dungeon/Store object", 0, 366)) return;
 
-    for (int i = 0; i < 10; i++) {
-        int j = py.row - 3 + randomNumber(5);
-        int k = py.col - 4 + randomNumber(7);
+    Coord_t coord = Coord_t{0,0};
 
-        if (coordInBounds(Coord_t{j, k}) && dg.floor[j][k].feature_id <= MAX_CAVE_FLOOR && dg.floor[j][k].treasure_id == 0) {
+    for (int i = 0; i < 10; i++) {
+        coord.y = py.row - 3 + randomNumber(5);
+        coord.x = py.col - 4 + randomNumber(7);
+
+        if (coordInBounds(coord) && dg.floor[coord.y][coord.x].feature_id <= MAX_CAVE_FLOOR && dg.floor[coord.y][coord.x].treasure_id == 0) {
             // delete any object at location, before call popt()
-            if (dg.floor[j][k].treasure_id != 0) {
-                (void) dungeonDeleteObject(Coord_t{j, k});
+            if (dg.floor[coord.y][coord.x].treasure_id != 0) {
+                (void) dungeonDeleteObject(coord);
             }
 
             // place the object
             int free_treasure_id = popt();
-            dg.floor[j][k].treasure_id = (uint8_t) free_treasure_id;
+            dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
             inventoryItemCopyTo(id, treasure_list[free_treasure_id]);
             magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 

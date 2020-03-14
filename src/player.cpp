@@ -110,31 +110,32 @@ bool playerMovePosition(int dir, Coord_t &coord) {
 
 // Teleport the player to a new location -RAK-
 void playerTeleport(int new_distance) {
-    int new_y, new_x;
+    Coord_t location = Coord_t{0, 0};
 
     do {
-        new_y = randomNumber(dg.height) - 1;
-        new_x = randomNumber(dg.width) - 1;
+        location.y = randomNumber(dg.height) - 1;
+        location.x = randomNumber(dg.width) - 1;
 
-        while (coordDistanceBetween(Coord_t{new_y, new_x}, Coord_t{py.row, py.col}) > new_distance) {
-            new_y += (py.row - new_y) / 2;
-            new_x += (py.col - new_x) / 2;
+        while (coordDistanceBetween(location, Coord_t{py.row, py.col}) > new_distance) {
+            location.y += (py.row - location.y) / 2;
+            location.x += (py.col - location.x) / 2;
         }
-    } while (dg.floor[new_y][new_x].feature_id >= MIN_CLOSED_SPACE || dg.floor[new_y][new_x].creature_id >= 2);
+    } while (dg.floor[location.y][location.x].feature_id >= MIN_CLOSED_SPACE || dg.floor[location.y][location.x].creature_id >= 2);
 
-    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, Coord_t{new_y, new_x});
+    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, location);
 
-    for (int y = py.row - 1; y <= py.row + 1; y++) {
-        for (int x = py.col - 1; x <= py.col + 1; x++) {
-            dg.floor[y][x].temporary_light = false;
-            dungeonLiteSpot(Coord_t{y, x});
+    Coord_t spot = Coord_t{0, 0};
+    for (spot.y = py.row - 1; spot.y <= py.row + 1; spot.y++) {
+        for (spot.x = py.col - 1; spot.x <= py.col + 1; spot.x++) {
+            dg.floor[spot.y][spot.x].temporary_light = false;
+            dungeonLiteSpot(spot);
         }
     }
 
     dungeonLiteSpot(Coord_t{py.row, py.col});
 
-    py.row = (int16_t) new_y;
-    py.col = (int16_t) new_x;
+    py.row = (int16_t) location.y;
+    py.col = (int16_t) location.x;
 
     dungeonResetView();
     updateMonsters(false);
@@ -708,20 +709,21 @@ void playerSearch(Coord_t coord, int chance) {
         chance = chance / 10;
     }
 
-    for (int i = coord.y - 1; i <= coord.y + 1; i++) {
-        for (int j = coord.x - 1; j <= coord.x + 1; j++) {
+    Coord_t spot = Coord_t{0, 0};
+    for (spot.y = coord.y - 1; spot.y <= coord.y + 1; spot.y++) {
+        for (spot.x = coord.x - 1; spot.x <= coord.x + 1; spot.x++) {
             // always coordInBounds() here
             if (randomNumber(100) >= chance) {
                 continue;
             }
 
-            if (dg.floor[i][j].treasure_id == 0) {
+            if (dg.floor[spot.y][spot.x].treasure_id == 0) {
                 continue;
             }
 
             // Search for hidden objects
 
-            Inventory_t &item = treasure_list[dg.floor[i][j].treasure_id];
+            Inventory_t &item = treasure_list[dg.floor[spot.y][spot.x].treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
@@ -733,14 +735,14 @@ void playerSearch(Coord_t coord, int chance) {
                 (void) sprintf(msg, "You have found %s", description);
                 printMessage(msg);
 
-                trapChangeVisibility(Coord_t{i, j});
+                trapChangeVisibility(spot);
                 playerEndRunning();
             } else if (item.category_id == TV_SECRET_DOOR) {
                 // Secret door?
 
                 printMessage("You have found a secret door.");
 
-                trapChangeVisibility(Coord_t{i, j});
+                trapChangeVisibility(spot);
                 playerEndRunning();
             } else if (item.category_id == TV_CHEST) {
                 // Chest is trapped?

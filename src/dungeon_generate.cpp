@@ -256,6 +256,9 @@ static void dungeonPlaceDownStairs(Coord_t coord) {
 
 // Places a staircase 1=up, 2=down -RAK-
 static void dungeonPlaceStairs(int stair_type, int number, int walls) {
+    Coord_t coord1 = Coord_t{0,0};
+    Coord_t coord2 = Coord_t{0,0};
+
     for (int i = 0; i < number; i++) {
         bool placed = false;
 
@@ -267,27 +270,27 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
                 // don't let y1/x1 be zero,
                 // don't let y2/x2 be equal to dg.height-1/dg.width-1,
                 // these values are always BOUNDARY_ROCK.
-                int y1 = randomNumber(dg.height - 14);
-                int x1 = randomNumber(dg.width - 14);
-                int y2 = y1 + 12;
-                int x2 = x1 + 12;
+                coord1.y = randomNumber(dg.height - 14);
+                coord1.x = randomNumber(dg.width - 14);
+                coord2.y = coord1.y + 12;
+                coord2.x = coord1.x + 12;
 
                 do {
                     do {
-                        if (dg.floor[y1][x1].feature_id <= MAX_OPEN_SPACE && dg.floor[y1][x1].treasure_id == 0 && coordWallsNextTo(Coord_t{y1, x1}) >= walls) {
+                        if (dg.floor[coord1.y][coord1.x].feature_id <= MAX_OPEN_SPACE && dg.floor[coord1.y][coord1.x].treasure_id == 0 && coordWallsNextTo(coord1) >= walls) {
                             placed = true;
                             if (stair_type == 1) {
-                                dungeonPlaceUpStairs(Coord_t{y1, x1});
+                                dungeonPlaceUpStairs(coord1);
                             } else {
-                                dungeonPlaceDownStairs(Coord_t{y1, x1});
+                                dungeonPlaceDownStairs(coord1);
                             }
                         }
-                        x1++;
-                    } while ((x1 != x2) && (!placed));
+                        coord1.x++;
+                    } while ((coord1.x != coord2.x) && (!placed));
 
-                    x1 = x2 - 12;
-                    y1++;
-                } while ((y1 != y2) && (!placed));
+                    coord1.x = coord2.x - 12;
+                    coord1.y++;
+                } while ((coord1.y != coord2.y) && (!placed));
 
                 j++;
             } while ((!placed) && (j <= 30));
@@ -299,15 +302,17 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 
 // Place a trap with a given displacement of point -RAK-
 static void dungeonPlaceVaultTrap(Coord_t coord, Coord_t displacement, int number) {
+    Coord_t spot = Coord_t{0,0};
+
     for (int i = 0; i < number; i++) {
         bool placed = false;
 
         for (int count = 0; !placed && count <= 5; count++) {
-            int y = coord.y - displacement.y - 1 + randomNumber(2 * displacement.y + 1);
-            int x = coord.x - displacement.x - 1 + randomNumber(2 * displacement.x + 1);
+            spot.y = coord.y - displacement.y - 1 + randomNumber(2 * displacement.y + 1);
+            spot.x = coord.x - displacement.x - 1 + randomNumber(2 * displacement.x + 1);
 
-            if (dg.floor[y][x].feature_id != TILE_NULL_WALL && dg.floor[y][x].feature_id <= MAX_CAVE_FLOOR && dg.floor[y][x].treasure_id == 0) {
-                dungeonSetTrap(Coord_t{y, x}, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
+            if (dg.floor[spot.y][spot.x].feature_id != TILE_NULL_WALL && dg.floor[spot.y][spot.x].feature_id <= MAX_CAVE_FLOOR && dg.floor[spot.y][spot.x].treasure_id == 0) {
+                dungeonSetTrap(spot, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
                 placed = true;
             }
         }
@@ -316,12 +321,12 @@ static void dungeonPlaceVaultTrap(Coord_t coord, Coord_t displacement, int numbe
 
 // Place a trap with a given displacement of point -RAK-
 static void dungeonPlaceVaultMonster(Coord_t coord, int number) {
-    int pos_y, pos_x;
+    Coord_t spot = Coord_t{0,0};
 
     for (int i = 0; i < number; i++) {
-        pos_y = coord.y;
-        pos_x = coord.x;
-        (void) monsterSummon(pos_y, pos_x, true);
+        spot.y = coord.y;
+        spot.x = coord.x;
+        (void) monsterSummon(spot.y, spot.x, true);
     }
 }
 
@@ -803,6 +808,7 @@ static void dungeonBuildRoomCrossShaped(Coord_t coord) {
     }
 }
 
+// TODO: use Coord_t
 // Constructs a tunnel between two points
 static void dungeonBuildTunnel(int y_start, int x_start, int y_end, int x_end) {
     Coord_t tunnels_tk[1000], walls_tk[1000];

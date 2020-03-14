@@ -295,31 +295,31 @@ void dungeonPlaceRandomObjectAt(Coord_t const &coord, bool must_be_small) {
 
 // Allocates an object for tunnels and rooms -RAK-
 void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number) {
-    int y, x;
+    Coord_t coord = Coord_t{0,0};
 
     for (int i = 0; i < number; i++) {
         // don't put an object beneath the player, this could cause
         // problems if player is standing under rubble, or on a trap.
         do {
-            y = randomNumber(dg.height) - 1;
-            x = randomNumber(dg.width) - 1;
-        } while (!(*set_function)(dg.floor[y][x].feature_id) || dg.floor[y][x].treasure_id != 0 || (y == py.row && x == py.col));
+            coord.y = randomNumber(dg.height) - 1;
+            coord.x = randomNumber(dg.width) - 1;
+        } while (!(*set_function)(dg.floor[coord.y][coord.x].feature_id) || dg.floor[coord.y][coord.x].treasure_id != 0 || (coord.y == py.row && coord.x == py.col));
 
         switch (object_type) {
             case 1:
-                dungeonSetTrap(Coord_t{y, x}, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
+                dungeonSetTrap(coord, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
                 break;
             case 2:
                 // NOTE: object_type == 2 is no longer used - it used to be visible traps.
                 // FIXME: there was no `break` here so `case 3` catches it? -MRC-
             case 3:
-                dungeonPlaceRubble(Coord_t{y, x});
+                dungeonPlaceRubble(coord);
                 break;
             case 4:
-                dungeonPlaceGold(Coord_t{y, x});
+                dungeonPlaceGold(coord);
                 break;
             case 5:
-                dungeonPlaceRandomObjectAt(Coord_t{y, x}, false);
+                dungeonPlaceRandomObjectAt(coord, false);
                 break;
             default:
                 break;
@@ -332,8 +332,8 @@ void dungeonPlaceRandomObjectNear(Coord_t coord, int tries) {
     do {
         for (int i = 0; i <= 10; i++) {
             Coord_t at = Coord_t{
-                    coord.y - 3 + randomNumber(5),
-                    coord.x - 4 + randomNumber(7),
+                coord.y - 3 + randomNumber(5),
+                coord.x - 4 + randomNumber(7),
             };
 
             if (coordInBounds(at) && dg.floor[at.y][at.x].feature_id <= MAX_CAVE_FLOOR && dg.floor[at.y][at.x].treasure_id == 0) {
@@ -368,9 +368,11 @@ void dungeonLightRoom(Coord_t const &coord) {
     int bottom = top + height_middle - 1;
     int right = left + width_middle - 1;
 
-    for (int y = top; y <= bottom; y++) {
-        for (int x = left; x <= right; x++) {
-            Tile_t &tile = dg.floor[y][x];
+    Coord_t location = Coord_t{0,0};
+
+    for (location.y = top; location.y <= bottom; location.y++) {
+        for (location.x = left; location.x <= right; location.x++) {
+            Tile_t &tile = dg.floor[location.y][location.x];
 
             if (tile.perma_lit_room && !tile.permanent_light) {
                 tile.permanent_light = true;
@@ -384,7 +386,7 @@ void dungeonLightRoom(Coord_t const &coord) {
                         tile.field_mark = true;
                     }
                 }
-                panelPutTile(caveGetTileSymbol(Coord_t{y, x}), Coord_t{y, x});
+                panelPutTile(caveGetTileSymbol(location), location);
             }
         }
     }
@@ -456,10 +458,11 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
         right = from.x + 1;
     }
 
-    for (int y = top; y <= bottom; y++) {
+    Coord_t coord = Coord_t{0,0};
+    for (coord.y = top; coord.y <= bottom; coord.y++) {
         // Leftmost to rightmost do
-        for (int x = left; x <= right; x++) {
-            panelPutTile(caveGetTileSymbol(Coord_t{y, x}), Coord_t{y, x});
+        for (coord.x = left; coord.x <= right; coord.x++) {
+            panelPutTile(caveGetTileSymbol(coord), coord);
         }
     }
 }
@@ -468,10 +471,12 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
 // With no light,  movement becomes involved.
 static void sub3_move_light(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
-        for (int y = from.y - 1; y <= from.y + 1; y++) {
-            for (int x = from.x - 1; x <= from.x + 1; x++) {
-                dg.floor[y][x].temporary_light = false;
-                panelPutTile(caveGetTileSymbol(Coord_t{y, x}), Coord_t{y, x});
+        Coord_t coord = Coord_t{0,0};
+
+        for (coord.y = from.y - 1; coord.y <= from.y + 1; coord.y++) {
+            for (coord.x = from.x - 1; coord.x <= from.x + 1; coord.x++) {
+                dg.floor[coord.y][coord.x].temporary_light = false;
+                panelPutTile(caveGetTileSymbol(coord), coord);
             }
         }
 
@@ -581,8 +586,8 @@ int dungeonSummonObject(Coord_t coord, int amount, int object_type) {
     do {
         for (int tries = 0; tries <= 20; tries++) {
             Coord_t at = Coord_t{
-                    coord.y - 3 + randomNumber(5),
-                    coord.x - 3 + randomNumber(5),
+                coord.y - 3 + randomNumber(5),
+                coord.x - 3 + randomNumber(5),
             };
 
             if (coordInBounds(at) && los(coord.y, coord.x, at.y, at.x)) {

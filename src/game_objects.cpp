@@ -20,13 +20,15 @@ static void compactObjects() {
     int counter = 0;
     int current_distance = 66;
 
+    Coord_t coord = Coord_t{0,0};
+
     while (counter <= 0) {
-        for (int y = 0; y < dg.height; y++) {
-            for (int x = 0; x < dg.width; x++) {
-                if (dg.floor[y][x].treasure_id != 0 && coordDistanceBetween(Coord_t{y, x}, Coord_t{py.row, py.col}) > current_distance) {
+        for (coord.y = 0; coord.y < dg.height; coord.y++) {
+            for (coord.x = 0; coord.x < dg.width; coord.x++) {
+                if (dg.floor[coord.y][coord.x].treasure_id != 0 && coordDistanceBetween(coord, Coord_t{py.row, py.col}) > current_distance) {
                     int chance;
 
-                    switch (treasure_list[dg.floor[y][x].treasure_id].category_id) {
+                    switch (treasure_list[dg.floor[coord.y][coord.x].treasure_id].category_id) {
                         case TV_VIS_TRAP:
                             chance = 15;
                             break;
@@ -50,7 +52,7 @@ static void compactObjects() {
                             chance = 10;
                     }
                     if (randomNumber(100) <= chance) {
-                        (void) dungeonDeleteObject(Coord_t{y, x});
+                        (void) dungeonDeleteObject(coord);
                         counter++;
                     }
                 }
