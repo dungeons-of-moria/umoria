@@ -165,8 +165,8 @@ void humanDateString(char *day) {
     struct tm *datetime = localtime(&now);
 
 #ifdef _WIN32
-    strftime(day, 10, "%a %b %d", datetime);
+    strftime(day, 11, "%a %b %d", datetime);
 #else
-    strftime(day, 10, "%a %b %e", datetime);
+    strftime(day, 11, "%a %b %e", datetime);
 #endif
 }
