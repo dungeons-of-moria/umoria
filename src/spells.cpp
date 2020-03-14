@@ -984,7 +984,7 @@ void spellBreath(int y, int x, int monster_id, int damage_hp, int spell_type, co
                         monster.sleep_count = 0;
 
                         if (monster.hp < 0) {
-                            uint32_t treasure_id = monsterDeath((int) monster.y, (int) monster.x, creature.movement);
+                            uint32_t treasure_id = monsterDeath(Coord_t{monster.y, monster.x}, creature.movement);
 
                             if (monster.lit) {
                                 auto tmp = (uint32_t) ((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
@@ -1474,7 +1474,7 @@ bool spellPolymorphMonster(int y, int x, int direction) {
                 dungeonDeleteMonster((int) tile.creature_id);
 
                 // Place_monster() should always return true here.
-                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(Coord_t{y, x}, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
 
                 // don't test tile.field_mark here, only permanent_light/temporary_light
                 if (morphed && coordInsidePanel(Coord_t{y, x}) && (tile.temporary_light || tile.permanent_light)) {
@@ -1572,7 +1572,7 @@ bool spellCloneMonster(int y, int x, int direction) {
             monsters[tile.creature_id].sleep_count = 0;
 
             // monptr of 0 is safe here, since can't reach here from creatures
-            return monsterMultiply(y, x, (int) monsters[tile.creature_id].creature_id, 0);
+            return monsterMultiply(Coord_t{y, x}, (int) monsters[tile.creature_id].creature_id, 0);
         }
     }
 
@@ -1817,7 +1817,7 @@ bool spellMassPolymorph() {
                 dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.
-                morphed = monsterPlaceNew(y, x, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
+                morphed = monsterPlaceNew(Coord_t{y, x}, randomNumber(monster_levels[MON_MAX_LEVELS] - monster_levels[0]) - 1 + monster_levels[0], false);
             }
         }
     }

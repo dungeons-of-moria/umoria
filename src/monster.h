@@ -72,9 +72,9 @@ extern int16_t next_free_monster_id;
 extern int16_t monster_multiply_total;
 
 void monsterUpdateVisibility(int monster_id);
-bool monsterMultiply(int y, int x, int creatureID, int monsterID);
+bool monsterMultiply(Coord_t coord, int creatureID, int monsterID);
 void updateMonsters(bool attack);
-uint32_t monsterDeath(int y, int x, uint32_t flags);
+uint32_t monsterDeath(Coord_t coord, uint32_t flags);
 int monsterTakeHit(int monster_id, int damage);
 void printMonsterActionText(const std::string &name, const std::string &action);
 std::string monsterNameDescription(const std::string &real_name, bool is_lit);
@@ -82,7 +82,7 @@ bool monsterSleep(Coord_t coord);
 
 // monster management
 bool compactMonsters();
-bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping);
+bool monsterPlaceNew(Coord_t coord, int creature_id, bool sleeping);
 void monsterPlaceWinning();
 void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sleeping);
 bool monsterSummon(int &y, int &x, bool sleeping);

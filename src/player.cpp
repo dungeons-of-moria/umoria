@@ -1323,7 +1323,7 @@ static void openClosedChest(Coord_t coord) {
         // can not win by opening a cursed chest
         treasure_list[tile.treasure_id].flags &= ~config::treasure::flags::TR_CURSED;
 
-        (void) monsterDeath(coord.y, coord.x, treasure_list[tile.treasure_id].flags);
+        (void) monsterDeath(coord, treasure_list[tile.treasure_id].flags);
 
         treasure_list[tile.treasure_id].flags = 0;
     }

@@ -475,7 +475,7 @@ static void monsterAttackPlayer(int monster_id) {
     }
 }
 
-static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits, bool &do_turn, bool &do_move, uint32_t &rcmove, int y, int x) {
+static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits, bool &do_turn, bool &do_move, uint32_t &rcmove, Coord_t coord) {
     Inventory_t &item = treasure_list[tile.treasure_id];
 
     // Creature can open doors.
@@ -518,7 +518,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
                 item.misc_use = (int16_t) (1 - randomNumber(2));
             }
             tile.feature_id = TILE_CORR_FLOOR;
-            dungeonLiteSpot(Coord_t{y, x});
+            dungeonLiteSpot(coord);
             rcmove |= config::monsters::move::CM_OPEN_DOOR;
             do_move = false;
         }
@@ -533,19 +533,19 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
             // 50% chance of breaking door
             item.misc_use = (int16_t) (1 - randomNumber(2));
             tile.feature_id = TILE_CORR_FLOOR;
-            dungeonLiteSpot(Coord_t{y, x});
+            dungeonLiteSpot(coord);
             printMessage("You hear a door burst open!");
             playerDisturb(1, 0);
         }
     }
 }
 
-static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool &do_move, bool &do_turn, int y, int x) {
+static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool &do_move, bool &do_turn, Coord_t coord) {
     if (randomNumber(config::treasure::OBJECTS_RUNE_PROTECTION) < creatures_list[creature_id].level) {
-        if (y == py.row && x == py.col) {
+        if (coord.y == py.row && coord.x == py.col) {
             printMessage("The rune of protection is broken!");
         }
-        (void) dungeonDeleteObject(Coord_t{y, x});
+        (void) dungeonDeleteObject(coord);
         return;
     }
 
@@ -558,7 +558,7 @@ static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, b
     }
 }
 
-static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, int y, int x) {
+static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, int monster_id, uint32_t move_bits, bool &do_move, bool &do_turn, uint32_t &rcmove, Coord_t coord) {
     if (creature_id == 1) {
         // if the monster is not lit, must call monsterUpdateVisibility, it
         // may be faster than character, and hence could have
@@ -569,7 +569,7 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
         monsterAttackPlayer(monster_id);
         do_move = false;
         do_turn = true;
-    } else if (creature_id > 1 && (y != monster.y || x != monster.x)) {
+    } else if (creature_id > 1 && (coord.y != monster.y || coord.x != monster.x)) {
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
@@ -593,28 +593,28 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
     }
 }
 
-static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &do_turn, uint32_t &rcmove, int y, int x) {
+static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &do_turn, uint32_t &rcmove, Coord_t coord) {
     // Pick up or eat an object
     if ((move_bits & config::monsters::move::CM_PICKS_UP) != 0u) {
-        uint8_t treasure_id = dg.floor[y][x].treasure_id;
+        uint8_t treasure_id = dg.floor[coord.y][coord.x].treasure_id;
 
         if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
             rcmove |= config::monsters::move::CM_PICKS_UP;
-            (void) dungeonDeleteObject(Coord_t{y, x});
+            (void) dungeonDeleteObject(coord);
         }
     }
 
     // Move creature record
-    dungeonMoveCreatureRecord(Coord_t{monster.y, monster.x}, Coord_t{y, x});
+    dungeonMoveCreatureRecord(Coord_t{monster.y, monster.x}, coord);
 
     if (monster.lit) {
         monster.lit = false;
         dungeonLiteSpot(Coord_t{monster.y, monster.x});
     }
 
-    monster.y = (uint8_t) y;
-    monster.x = (uint8_t) x;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
+    monster.y = (uint8_t) coord.y;
+    monster.x = (uint8_t) coord.x;
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, coord);
 
     do_turn = true;
 }
@@ -649,22 +649,22 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
             rcmove |= config::monsters::move::CM_PHASE;
         } else if (tile.treasure_id != 0) {
             // Creature can open doors?
-            monsterOpenDoor(tile, monster.hp, move_bits, do_turn, do_move, rcmove, y, x);
+            monsterOpenDoor(tile, monster.hp, move_bits, do_turn, do_move, rcmove, Coord_t{y, x});
         }
 
         // Glyph of warding present?
         if (do_move && tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile.treasure_id].sub_category_id == 99) {
-            glyphOfWardingProtection(monster.creature_id, move_bits, do_move, do_turn, y, x);
+            glyphOfWardingProtection(monster.creature_id, move_bits, do_move, do_turn, Coord_t{y, x});
         }
 
         // Creature has attempted to move on player?
         if (do_move) {
-            monsterMovesOnPlayer(monster, tile.creature_id, monster_id, move_bits, do_move, do_turn, rcmove, y, x);
+            monsterMovesOnPlayer(monster, tile.creature_id, monster_id, move_bits, do_move, do_turn, rcmove, Coord_t{y, x});
         }
 
         // Creature has been allowed move.
         if (do_move) {
-            monsterAllowedToMove(monster, move_bits, do_turn, rcmove, y, x);
+            monsterAllowedToMove(monster, move_bits, do_turn, rcmove, Coord_t{y, x});
         }
     }
 }
@@ -914,14 +914,14 @@ static bool monsterCastSpell(int monster_id) {
 
 // Places creature adjacent to given location -RAK-
 // Rats and Flys are fun!
-bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
+bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
     for (int i = 0; i <= 18; i++) {
-        int pos_y = y - 2 + randomNumber(3);
-        int pos_x = x - 2 + randomNumber(3);
+        int pos_y = coord.y - 2 + randomNumber(3);
+        int pos_x = coord.x - 2 + randomNumber(3);
 
         // don't create a new creature on top of the old one, that
         // causes invincible/invisible creatures to appear.
-        if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != y || pos_x != x)) {
+        if (coordInBounds(Coord_t{pos_y, pos_x}) && (pos_y != coord.y || pos_x != coord.x)) {
             Tile_t const &tile = dg.floor[pos_y][pos_x];
 
             if (tile.feature_id <= MAX_OPEN_SPACE && tile.treasure_id == 0 && tile.creature_id != 1) {
@@ -947,7 +947,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
                         // in case compact_monster() is called, it needs monster_id.
                         hack_monptr = monster_id;
                         // Place_monster() may fail if monster list full.
-                        bool result = monsterPlaceNew(pos_y, pos_x, creature_id, false);
+                        bool result = monsterPlaceNew(Coord_t{pos_y, pos_x}, creature_id, false);
                         hack_monptr = -1;
                         if (!result) {
                             return false;
@@ -962,7 +962,7 @@ bool monsterMultiply(int y, int x, int creature_id, int monster_id) {
                     // in case compact_monster() is called,it needs monster_id
                     hack_monptr = monster_id;
                     // Place_monster() may fail if monster list full.
-                    bool result = monsterPlaceNew(pos_y, pos_x, creature_id, false);
+                    bool result = monsterPlaceNew(Coord_t{pos_y, pos_x}, creature_id, false);
                     hack_monptr = -1;
                     if (!result) {
                         return false;
@@ -996,7 +996,7 @@ static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uin
     }
 
     if (counter < 4 && randomNumber(counter * config::monsters::MON_MULTIPLY_ADJUST) == 1) {
-        if (monsterMultiply(monster.y, monster.x, monster.creature_id, monster_id)) {
+        if (monsterMultiply(Coord_t{monster.y, monster.x}, monster.creature_id, monster_id)) {
             rcmove |= config::monsters::move::CM_MULTIPLY;
         }
     }
@@ -1353,7 +1353,7 @@ int monsterTakeHit(int monster_id, int damage) {
         return -1;
     }
 
-    uint32_t treasure_flags = monsterDeath((int) monster.y, (int) monster.x, creature.movement);
+    uint32_t treasure_flags = monsterDeath(Coord_t{monster.y, monster.x}, creature.movement);
 
     Recall_t &memory = creature_recall[monster.creature_id];
 
@@ -1440,14 +1440,14 @@ static int monsterDeathItemDropCount(uint32_t flags) {
 //
 // Returns a mask of bits from the given flags which indicates what the
 // monster is seen to have dropped.  This may be added to monster memory.
-uint32_t monsterDeath(int y, int x, uint32_t flags) {
+uint32_t monsterDeath(Coord_t coord, uint32_t flags) {
     int item_type = monsterDeathItemDropType(flags);
     int item_count = monsterDeathItemDropCount(flags);
 
     uint32_t dropped_item_id = 0;
 
     if (item_count > 0) {
-        dropped_item_id = (uint32_t) dungeonSummonObject(Coord_t{y, x}, item_count, item_type);
+        dropped_item_id = (uint32_t) dungeonSummonObject(coord, item_count, item_type);
     }
 
     // maybe the player died in mid-turn

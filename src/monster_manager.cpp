@@ -31,7 +31,7 @@ static int popm() {
 }
 
 // Places a monster at given location -RAK-
-bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
+bool monsterPlaceNew(Coord_t coord, int creature_id, bool sleeping) {
     int monster_id = popm();
 
     // Check for case where could not allocate space for the monster
@@ -41,8 +41,8 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
 
     Monster_t &monster = monsters[monster_id];
 
-    monster.y = (uint8_t) y;
-    monster.x = (uint8_t) x;
+    monster.y = (uint8_t) coord.y;
+    monster.x = (uint8_t) coord.x;
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & config::monsters::defense::CD_MAX_HP) != 0) {
@@ -54,10 +54,10 @@ bool monsterPlaceNew(int y, int x, int creature_id, bool sleeping) {
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
     monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{y, x});
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, coord);
     monster.lit = false;
 
-    dg.floor[y][x].creature_id = (uint8_t) monster_id;
+    dg.floor[coord.y][coord.x].creature_id = (uint8_t) monster_id;
 
     if (sleeping) {
         if (creatures_list[creature_id].sleep_counter == 0) {
@@ -177,7 +177,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
 
         // Place_monster() should always return true here.
         // It does not matter if it fails though.
-        (void) monsterPlaceNew(y, x, l, sleeping);
+        (void) monsterPlaceNew(Coord_t{y, x}, l, sleeping);
     }
 }
 
@@ -191,7 +191,7 @@ static bool placeMonsterAdjacentTo(int monsterID, int &y, int &x, bool slp) {
         if (coordInBounds(Coord_t{yy, xx})) {
             if (dg.floor[yy][xx].feature_id <= MAX_OPEN_SPACE && dg.floor[yy][xx].creature_id == 0) {
                 // Place_monster() should always return true here.
-                if (!monsterPlaceNew(yy, xx, monsterID, slp)) {
+                if (!monsterPlaceNew(Coord_t{yy, xx}, monsterID, slp)) {
                     return false;
                 }
 
