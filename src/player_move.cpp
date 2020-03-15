@@ -432,7 +432,7 @@ void playerMove(int direction, bool do_pickup) {
         playerEndRunning();
     }
 
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
 
     // Legal move?
     if (!playerMovePosition(direction, coord)) {
@@ -451,41 +451,41 @@ void playerMove(int direction, bool do_pickup) {
         // Open floor spot
         if (tile.feature_id <= MAX_OPEN_SPACE) {
             // Make final assignments of char coords
-            Coord_t old_coord = Coord_t{py.row, py.col};
+            Coord_t old_coord = py.pos;
 
-            py.row = (int16_t) coord.y;
-            py.col = (int16_t) coord.x;
+            py.pos.y = coord.y;
+            py.pos.x = coord.x;
 
             // Move character record (-1)
-            dungeonMoveCreatureRecord(old_coord, Coord_t{py.row, py.col});
+            dungeonMoveCreatureRecord(old_coord, py.pos);
 
             // Check for new panel
-            if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
+            if (coordOutsidePanel(py.pos, false)) {
                 drawDungeonPanel();
             }
 
             // Check to see if they should stop
             if (py.running_tracker != 0) {
-                playerAreaAffect(direction, Coord_t{py.row, py.col});
+                playerAreaAffect(direction, py.pos);
             }
 
             // Check to see if they've noticed something
             // fos may be negative if have good rings of searching
             if (py.misc.fos <= 1 || randomNumber(py.misc.fos) == 1 || ((py.flags.status & config::player::status::PY_SEARCH) != 0u)) {
-                playerSearch(Coord_t{py.row, py.col}, py.misc.chance_in_search);
+                playerSearch(py.pos, py.misc.chance_in_search);
             }
 
             if (tile.feature_id == TILE_LIGHT_FLOOR) {
                 // A room of light should be lit.
 
                 if (!tile.permanent_light && (py.flags.blind == 0)) {
-                    dungeonLightRoom(Coord_t{py.row, py.col});
+                    dungeonLightRoom(py.pos);
                 }
             } else if (tile.perma_lit_room && py.flags.blind < 1) {
                 // In doorway of light-room?
 
-                for (int row = (py.row - 1); row <= (py.row + 1); row++) {
-                    for (int col = (py.col - 1); col <= (py.col + 1); col++) {
+                for (int row = (py.pos.y - 1); row <= (py.pos.y + 1); row++) {
+                    for (int col = (py.pos.x - 1); col <= (py.pos.x + 1); col++) {
                         if (dg.floor[row][col].feature_id == TILE_LIGHT_FLOOR && !dg.floor[row][col].permanent_light) {
                             dungeonLightRoom(Coord_t{row, col});
                         }
@@ -494,27 +494,27 @@ void playerMove(int direction, bool do_pickup) {
             }
 
             // Move the light source
-            dungeonMoveCharacterLight(old_coord, Coord_t{py.row, py.col});
+            dungeonMoveCharacterLight(old_coord, py.pos);
 
             // An object is beneath them.
             if (tile.treasure_id != 0) {
-                carry(Coord_t{py.row, py.col}, do_pickup);
+                carry(py.pos, do_pickup);
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
                 if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
-                    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, old_coord);
-                    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, old_coord);
+                    dungeonMoveCreatureRecord(py.pos, old_coord);
+                    dungeonMoveCharacterLight(py.pos, old_coord);
 
-                    py.row = (int16_t) old_coord.y;
-                    py.col = (int16_t) old_coord.x;
+                    py.pos.y = old_coord.y;
+                    py.pos.x = old_coord.x;
 
                     // check to see if we have stepped back onto another trap, if so, set it off
-                    uint8_t id = dg.floor[py.row][py.col].treasure_id;
+                    uint8_t id = dg.floor[py.pos.y][py.pos.x].treasure_id;
                     if (id != 0) {
                         int val = treasure_list[id].category_id;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
-                            playerStepsOnTrap(Coord_t{py.row, py.col});
+                            playerStepsOnTrap(py.pos);
                         }
                     }
                 }

@@ -97,7 +97,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) playerRemoveFear();
             break;
         case PriestSpellTypes::call_light:
-            (void) spellLightArea(Coord_t{py.row, py.col});
+            (void) spellLightArea(py.pos);
             break;
         case PriestSpellTypes::find_traps:
             (void) spellDetectTrapsWithinVicinity();
@@ -110,7 +110,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::blind_creature:
             if (getDirectionWithMemory(CNIL, dir)) {
-                (void) spellConfuseMonster(Coord_t{py.row, py.col}, dir);
+                (void) spellConfuseMonster(py.pos, dir);
             }
             break;
         case PriestSpellTypes::portal:
@@ -123,7 +123,7 @@ static void playerRecitePrayer(int prayer_type) {
             playerBless(randomNumber(24) + 24);
             break;
         case PriestSpellTypes::sanctuary:
-            (void) monsterSleep(Coord_t{py.row, py.col});
+            (void) monsterSleep(py.pos);
             break;
         case PriestSpellTypes::create_food:
             spellCreateFood();
@@ -145,7 +145,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::orb_of_draining:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(Coord_t{py.row, py.col}, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), magic_spell_flags::GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(py.pos, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), magic_spell_flags::GF_HOLY_ORB, "Black Sphere");
             }
             break;
         case PriestSpellTypes::cure_serious_wounds:

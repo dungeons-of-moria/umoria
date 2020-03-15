@@ -55,8 +55,8 @@ void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
 
 // Drops an item from inventory to given location -RAK-
 void inventoryDropItem(int item_id, bool drop_all) {
-    if (dg.floor[py.row][py.col].treasure_id != 0) {
-        (void) dungeonDeleteObject(Coord_t{py.row, py.col});
+    if (dg.floor[py.pos.y][py.pos.x].treasure_id != 0) {
+        (void) dungeonDeleteObject(py.pos);
     }
 
     int treasureID = popt();
@@ -64,7 +64,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
     Inventory_t &item = inventory[item_id];
     treasure_list[treasureID] = item;
 
-    dg.floor[py.row][py.col].treasure_id = (uint8_t) treasureID;
+    dg.floor[py.pos.y][py.pos.x].treasure_id = (uint8_t) treasureID;
 
     if (item_id >= player_equipment::EQUIPMENT_WIELD) {
         playerTakeOff(item_id, -1);

@@ -224,8 +224,8 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
   The others map coords in the ray frame to dungeon coords.
 
-  dungeon y = py.row   + los_fyx * (ray x)  + los_fyy * (ray y)
-  dungeon x = py.col   + los_fxx * (ray x)  + los_fxy * (ray y)
+  dungeon y = py.pos.y + los_fyx * (ray x) + los_fyy * (ray y)
+  dungeon x = py.pos.x + los_fxx * (ray x) + los_fxy * (ray y)
 */
 static int los_fxx, los_fxy, los_fyx, los_fyy;
 static int los_num_places_seen;
@@ -479,8 +479,8 @@ static bool lookSee(Coord_t coord, bool &transparent) {
         description = "You see";
     }
 
-    int j = py.col + los_fxx * coord.x + los_fxy * coord.y;
-    coord.y = py.row + los_fyx * coord.x + los_fyy * coord.y;
+    int j = py.pos.x + los_fxx * coord.x + los_fxy * coord.y;
+    coord.y = py.pos.y + los_fyx * coord.x + los_fyy * coord.y;
     coord.x = j;
 
     if (!coordInsidePanel(coord)) {

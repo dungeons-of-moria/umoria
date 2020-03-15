@@ -96,7 +96,7 @@ static bool staffDischarge(Inventory_t &item) {
     while (flags != 0) {
         switch ((StaffSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case StaffSpellTypes::light:
-                identified = spellLightArea(Coord_t{py.row, py.col});
+                identified = spellLightArea(py.pos);
                 break;
             case StaffSpellTypes::detect_doors_stairs:
                 identified = spellDetectSecretDoorssWithinVicinity();
@@ -122,17 +122,17 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = false;
 
                 for (int i = 0; i < randomNumber(4); i++) {
-                    Coord_t coord = Coord_t{py.row,py.col};
+                    Coord_t coord = py.pos;
                     identified |= monsterSummon(coord, false);
                 }
                 break;
             case StaffSpellTypes::destruction:
                 identified = true;
-                spellDestroyArea(Coord_t{py.row, py.col});
+                spellDestroyArea(py.pos);
                 break;
             case StaffSpellTypes::starlight:
                 identified = true;
-                spellStarlite(Coord_t{py.row, py.col});
+                spellStarlite(py.pos);
                 break;
             case StaffSpellTypes::haste_monsters:
                 identified = spellSpeedAllMonsters(1);
@@ -184,7 +184,7 @@ static bool staffDischarge(Inventory_t &item) {
                 identified = spellDispelCreature(config::monsters::defense::CD_EVIL, 60);
                 break;
             case StaffSpellTypes::darkness:
-                identified = spellDarkenArea(Coord_t{py.row, py.col});
+                identified = spellDarkenArea(py.pos);
                 break;
             case StaffSpellTypes::store_bought_flag:
                 // store bought flag
@@ -276,14 +276,14 @@ static bool wandDischarge(Inventory_t &item, int direction) {
     Coord_t coord = Coord_t{0,0};
 
     while (flags != 0) {
-        coord.y = py.row;
-        coord.x = py.col;
+        coord.y = py.pos.y;
+        coord.x = py.pos.x;
 
         // Wand types
         switch ((WandSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case WandSpellTypes::light:
                 printMessage("A line of blue shimmering light appears.");
-                spellLightLine(Coord_t{py.row, py.col}, direction);
+                spellLightLine(py.pos, direction);
                 identified = true;
                 break;
             case WandSpellTypes::lightning_bolt:

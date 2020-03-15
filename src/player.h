@@ -152,8 +152,7 @@ typedef struct {
     } flags;
 
     // location in dungeon
-    int16_t row;
-    int16_t col;
+    Coord_t pos;
 
     // calculated base hp values at each level, store them so that
     // drain life + restore life does not affect hit points.

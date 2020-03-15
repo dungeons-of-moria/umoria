@@ -448,13 +448,13 @@ bool spellAggravateMonsters(int affect_distance) {
 bool spellSurroundPlayerWithTraps() {
     Coord_t coord = Coord_t{0, 0};
 
-    for (coord.y = py.row - 1; coord.y <= py.row + 1; coord.y++) {
-        for (coord.x = py.col - 1; coord.x <= py.col + 1; coord.x++) {
+    for (coord.y = py.pos.y - 1; coord.y <= py.pos.y + 1; coord.y++) {
+        for (coord.x = py.pos.x - 1; coord.x <= py.pos.x + 1; coord.x++) {
             // Don't put a trap under the player, since this can lead to
             // strange situations, e.g. falling through a trap door while
             // trying to rest, setting off a falling rock trap and ending
             // up under the rock.
-            if (coord.y == py.row && coord.x == py.col) {
+            if (coord.y == py.pos.y && coord.x == py.pos.x) {
                 continue;
             }
 
@@ -486,10 +486,10 @@ bool spellSurroundPlayerWithDoors() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (coord.y = py.row - 1; coord.y <= py.row + 1; coord.y++) {
-        for (coord.x = py.col - 1; coord.x <= py.col + 1; coord.x++) {
+    for (coord.y = py.pos.y - 1; coord.y <= py.pos.y + 1; coord.y++) {
+        for (coord.x = py.pos.x - 1; coord.x <= py.pos.x + 1; coord.x++) {
             // Don't put a door under the player!
-            if (coord.y == py.row && coord.x == py.col) {
+            if (coord.y == py.pos.y && coord.x == py.pos.x) {
                 continue;
             }
 
@@ -521,8 +521,8 @@ bool spellDestroyAdjacentDoorsTraps() {
 
     Coord_t coord = Coord_t{0, 0};
 
-    for (coord.y = py.row - 1; coord.y <= py.row + 1; coord.y++) {
-        for (coord.x = py.col - 1; coord.x <= py.col + 1; coord.x++) {
+    for (coord.y = py.pos.y - 1; coord.y <= py.pos.y + 1; coord.y++) {
+        for (coord.x = py.pos.x - 1; coord.x <= py.pos.x + 1; coord.x++) {
             Tile_t const &tile = dg.floor[coord.y][coord.x];
 
             if (tile.treasure_id == 0) {
@@ -1648,7 +1648,7 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
     // this is necessary, because the creature is
     // not currently visible in its new position.
     monster.lit = false;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, coord);
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(py.pos, coord);
 
     monsterUpdateVisibility(monster_id);
 }
@@ -1670,20 +1670,20 @@ void spellTeleportPlayerTo(Coord_t coord) {
         }
     } while (!coordInBounds(rnd_coord) || (dg.floor[rnd_coord.y][rnd_coord.x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[rnd_coord.y][rnd_coord.x].creature_id >= 2));
 
-    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, rnd_coord);
+    dungeonMoveCreatureRecord(py.pos, rnd_coord);
 
     Coord_t spot = Coord_t{0,0};
-    for (spot.y = py.row - 1; spot.y <= py.row + 1; spot.y++) {
-        for (spot.x = py.col - 1; spot.x <= py.col + 1; spot.x++) {
+    for (spot.y = py.pos.y - 1; spot.y <= py.pos.y + 1; spot.y++) {
+        for (spot.x = py.pos.x - 1; spot.x <= py.pos.x + 1; spot.x++) {
             dg.floor[spot.y][spot.x].temporary_light = false;
             dungeonLiteSpot(spot);
         }
     }
 
-    dungeonLiteSpot(Coord_t{py.row, py.col});
+    dungeonLiteSpot(py.pos);
 
-    py.row = (int16_t) rnd_coord.y;
-    py.col = (int16_t) rnd_coord.x;
+    py.pos.y = rnd_coord.y;
+    py.pos.x = rnd_coord.x;
 
     dungeonResetView();
 
@@ -1781,7 +1781,7 @@ bool spellSpeedAllMonsters(int speed) {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
             continue; // do nothing
         }
 
@@ -1820,7 +1820,7 @@ bool spellSleepAllMonsters() {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
             continue; // do nothing
         }
 
@@ -1963,9 +1963,9 @@ static void earthquakeHitsMonster(int monsterID) {
 void spellEarthquake() {
     Coord_t coord = Coord_t{0, 0};
 
-    for (coord.y = py.row - 8; coord.y <= py.row + 8; coord.y++) {
-        for (coord.x = py.col - 8; coord.x <= py.col + 8; coord.x++) {
-            if ((coord.y != py.row || coord.x != py.col) && coordInBounds(coord) && randomNumber(8) == 1) {
+    for (coord.y = py.pos.y - 8; coord.y <= py.pos.y + 8; coord.y++) {
+        for (coord.x = py.pos.x - 8; coord.x <= py.pos.x + 8; coord.x++) {
+            if ((coord.y != py.pos.y || coord.x != py.pos.x) && coordInBounds(coord) && randomNumber(8) == 1) {
                 Tile_t &tile = dg.floor[coord.y][coord.x];
 
                 if (tile.treasure_id != 0) {
@@ -2003,7 +2003,7 @@ void spellEarthquake() {
 void spellCreateFood() {
     // Note: must take reference to this location as dungeonPlaceRandomObjectAt()
     // below, changes the tile values.
-    Tile_t const &tile = dg.floor[py.row][py.col];
+    Tile_t const &tile = dg.floor[py.pos.y][py.pos.x];
 
     // take no action here, don't want to destroy object under player
     if (tile.treasure_id != 0) {
@@ -2015,7 +2015,7 @@ void spellCreateFood() {
         return;
     }
 
-    dungeonPlaceRandomObjectAt(Coord_t{py.row, py.col}, false);
+    dungeonPlaceRandomObjectAt(py.pos, false);
     inventoryItemCopyTo(config::dungeon::objects::OBJ_MUSH, treasure_list[tile.treasure_id]);
 }
 
@@ -2027,7 +2027,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -2062,7 +2062,7 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.row, py.col, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
@@ -2086,9 +2086,9 @@ bool spellTurnUndead() {
 
 // Leave a glyph of warding. Creatures will not pass over! -RAK-
 void spellWardingGlyph() {
-    if (dg.floor[py.row][py.col].treasure_id == 0) {
+    if (dg.floor[py.pos.y][py.pos.x].treasure_id == 0) {
         int free_id = popt();
-        dg.floor[py.row][py.col].treasure_id = (uint8_t) free_id;
+        dg.floor[py.pos.y][py.pos.x].treasure_id = (uint8_t) free_id;
         inventoryItemCopyTo(config::dungeon::objects::OBJ_SCARE_MON, treasure_list[free_id]);
     }
 }

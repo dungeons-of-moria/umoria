@@ -46,7 +46,7 @@ void playerBash() {
         dir = getRandomDirection();
     }
 
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
     (void) playerMovePosition(dir, coord);
 
     Tile_t &tile = dg.floor[coord.y][coord.x];

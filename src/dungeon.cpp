@@ -303,7 +303,7 @@ void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, i
         do {
             coord.y = randomNumber(dg.height) - 1;
             coord.x = randomNumber(dg.width) - 1;
-        } while (!(*set_function)(dg.floor[coord.y][coord.x].feature_id) || dg.floor[coord.y][coord.x].treasure_id != 0 || (coord.y == py.row && coord.x == py.col));
+        } while (!(*set_function)(dg.floor[coord.y][coord.x].feature_id) || dg.floor[coord.y][coord.x].treasure_id != 0 || (coord.y == py.pos.y && coord.x == py.pos.x));
 
         switch (object_type) {
             case 1:

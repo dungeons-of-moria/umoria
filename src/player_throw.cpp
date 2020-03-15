@@ -190,8 +190,8 @@ void playerThrowItem() {
     bool visible;
     int current_distance = 0;
 
-    Coord_t coord = Coord_t{py.row, py.col};
-    Coord_t old_coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
+    Coord_t old_coord = py.pos;
 
     bool flag = false;
 

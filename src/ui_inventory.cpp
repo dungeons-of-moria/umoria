@@ -405,7 +405,7 @@ static bool uiCommandInventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if (dg.floor[py.row][py.col].treasure_id != 0) {
+    if (dg.floor[py.pos.y][py.pos.x].treasure_id != 0) {
         printMessage("There's no room to drop anything here.");
         return selecting;
     }
@@ -751,7 +751,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 item_id = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(inventory[item_id])) {
-                if (dg.floor[py.row][py.col].treasure_id != 0) {
+                if (dg.floor[py.pos.y][py.pos.x].treasure_id != 0) {
                     item_id = -1;
                     printMessage("You can't carry it.");
                 } else if (getInputConfirmation("You can't carry it.  Drop it?")) {

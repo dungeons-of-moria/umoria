@@ -207,8 +207,8 @@ static bool scrollSummonMonster() {
     Coord_t coord = Coord_t{0,0};
 
     for (int i = 0; i < randomNumber(3); i++) {
-        coord.y = py.row;
-        coord.x = py.col;
+        coord.y = py.pos.y;
+        coord.x = py.pos.x;
         identified |= monsterSummon(coord, false);
     }
 
@@ -405,8 +405,8 @@ static bool scrollSummonUndead() {
     Coord_t coord = Coord_t{0,0};
 
     for (int i = 0; i < randomNumber(3); i++) {
-        coord.y = py.row;
-        coord.x = py.col;
+        coord.y = py.pos.y;
+        coord.x = py.pos.x;
         identified |= monsterSummonUndead(coord);
     }
 
@@ -468,7 +468,7 @@ void scrollRead() {
                 identified = scrollRemoveCurse();
                 break;
             case 6:
-                identified = spellLightArea(Coord_t{py.row, py.col});
+                identified = spellLightArea(py.pos);
                 break;
             case 7:
                 identified = scrollSummonMonster();
@@ -493,7 +493,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 13:
-                identified = monsterSleep(Coord_t{py.row, py.col});
+                identified = monsterSleep(py.pos);
                 break;
             case 14:
                 spellWardingGlyph();
@@ -544,7 +544,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 27:
-                identified = spellDarkenArea(Coord_t{py.row, py.col});
+                identified = spellDarkenArea(py.pos);
                 break;
             case 28:
                 identified = playerProtectEvil();
@@ -588,7 +588,7 @@ void scrollRead() {
                 identified = true;
                 break;
             case 42:
-                spellDestroyArea(Coord_t{py.row, py.col});
+                spellDestroyArea(py.pos);
                 identified = true;
                 break;
             default:

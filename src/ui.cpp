@@ -110,28 +110,28 @@ void drawCavePanel() {
 
 // We need to reset the view of things. -CJS-
 void dungeonResetView() {
-    Tile_t const &tile = dg.floor[py.row][py.col];
+    Tile_t const &tile = dg.floor[py.pos.y][py.pos.x];
 
     // Check for new panel
-    if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
+    if (coordOutsidePanel(py.pos, false)) {
         drawDungeonPanel();
     }
 
     // Move the light source
-    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{py.row, py.col});
+    dungeonMoveCharacterLight(py.pos, py.pos);
 
     // A room of light should be lit.
     if (tile.feature_id == TILE_LIGHT_FLOOR) {
         if (py.flags.blind < 1 && !tile.permanent_light) {
-            dungeonLightRoom(Coord_t{py.row, py.col});
+            dungeonLightRoom(py.pos);
         }
         return;
     }
 
     // In doorway of light-room?
     if (tile.perma_lit_room && py.flags.blind < 1) {
-        for (int i = py.row - 1; i <= py.row + 1; i++) {
-            for (int j = py.col - 1; j <= py.col + 1; j++) {
+        for (int i = py.pos.y - 1; i <= py.pos.y + 1; i++) {
+            for (int j = py.pos.x - 1; j <= py.pos.x + 1; j++) {
                 if (dg.floor[i][j].feature_id == TILE_LIGHT_FLOOR && !dg.floor[i][j].permanent_light) {
                     dungeonLightRoom(Coord_t{i, j});
                 }

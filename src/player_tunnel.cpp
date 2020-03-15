@@ -135,7 +135,7 @@ void playerTunnel(int direction) {
         direction = randomNumber(9);
     }
 
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
     (void) playerMovePosition(direction, coord);
 
     Tile_t const &tile = dg.floor[coord.y][coord.x];
@@ -162,7 +162,7 @@ void playerTunnel(int direction) {
                 } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
-                    playerSearch(Coord_t{py.row, py.col}, py.misc.chance_in_search);
+                    playerSearch(py.pos, py.misc.chance_in_search);
                 } else {
                     abort();
                 }

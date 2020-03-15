@@ -116,26 +116,26 @@ void playerTeleport(int new_distance) {
         location.y = randomNumber(dg.height) - 1;
         location.x = randomNumber(dg.width) - 1;
 
-        while (coordDistanceBetween(location, Coord_t{py.row, py.col}) > new_distance) {
-            location.y += (py.row - location.y) / 2;
-            location.x += (py.col - location.x) / 2;
+        while (coordDistanceBetween(location, py.pos) > new_distance) {
+            location.y += (py.pos.y - location.y) / 2;
+            location.x += (py.pos.x - location.x) / 2;
         }
     } while (dg.floor[location.y][location.x].feature_id >= MIN_CLOSED_SPACE || dg.floor[location.y][location.x].creature_id >= 2);
 
-    dungeonMoveCreatureRecord(Coord_t{py.row, py.col}, location);
+    dungeonMoveCreatureRecord(py.pos, location);
 
     Coord_t spot = Coord_t{0, 0};
-    for (spot.y = py.row - 1; spot.y <= py.row + 1; spot.y++) {
-        for (spot.x = py.col - 1; spot.x <= py.col + 1; spot.x++) {
+    for (spot.y = py.pos.y - 1; spot.y <= py.pos.y + 1; spot.y++) {
+        for (spot.x = py.pos.x - 1; spot.x <= py.pos.x + 1; spot.x++) {
             dg.floor[spot.y][spot.x].temporary_light = false;
             dungeonLiteSpot(spot);
         }
     }
 
-    dungeonLiteSpot(Coord_t{py.row, py.col});
+    dungeonLiteSpot(py.pos);
 
-    py.row = (int16_t) location.y;
-    py.col = (int16_t) location.x;
+    py.pos.y = location.y;
+    py.pos.x = location.x;
 
     dungeonResetView();
     updateMonsters(false);
@@ -145,7 +145,7 @@ void playerTeleport(int new_distance) {
 
 // Returns true if player has no light -RAK-
 bool playerNoLight() {
-    return !dg.floor[py.row][py.col].temporary_light && !dg.floor[py.row][py.col].permanent_light;
+    return !dg.floor[py.pos.y][py.pos.x].temporary_light && !dg.floor[py.pos.y][py.pos.x].permanent_light;
 }
 
 // Something happens to disturb the player. -CJS-
@@ -1336,7 +1336,7 @@ void playerOpenClosedObject() {
         return;
     }
 
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
     (void) playerMovePosition(dir, coord);
 
     bool no_object = false;
@@ -1372,7 +1372,7 @@ void playerCloseDoor() {
         return;
     }
 
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
     (void) playerMovePosition(dir, coord);
 
     Tile_t &tile = dg.floor[coord.y][coord.x];

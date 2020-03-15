@@ -48,7 +48,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(py.row, py.col, monster.pos.y, monster.pos.x)) {
+        } else if (los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
             visible = monsterIsVisible(monster);
         }
     }
@@ -108,8 +108,8 @@ static bool monsterMakeVisible(Coord_t coord) {
 static void monsterGetMoveDirection(int monster_id, int *directions) {
     int ay, ax, movement;
 
-    int y = monsters[monster_id].pos.y - py.row;
-    int x = monsters[monster_id].pos.x - py.col;
+    int y = monsters[monster_id].pos.y - py.pos.y;
+    int x = monsters[monster_id].pos.x - py.pos.x;
 
     if (y < 0) {
         movement = 8;
@@ -542,7 +542,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
 
 static void glyphOfWardingProtection(uint16_t creature_id, uint32_t move_bits, bool &do_move, bool &do_turn, Coord_t coord) {
     if (randomNumber(config::treasure::OBJECTS_RUNE_PROTECTION) < creatures_list[creature_id].level) {
-        if (coord.y == py.row && coord.x == py.col) {
+        if (coord.y == py.pos.y && coord.x == py.pos.x) {
             printMessage("The rune of protection is broken!");
         }
         (void) dungeonDeleteObject(coord);
@@ -614,7 +614,7 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
 
     monster.pos.y = coord.y;
     monster.pos.x = coord.x;
-    monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, coord);
+    monster.distance_from_player = (uint8_t) coordDistanceBetween(py.pos, coord);
 
     do_turn = true;
 }
@@ -681,13 +681,13 @@ static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     bool within_range = monster.distance_from_player <= config::monsters::MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    bool unobstructed = los(py.row, py.col, monster.pos.y, monster.pos.x);
+    bool unobstructed = los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x);
 
     return within_range && unobstructed;
 }
 
 void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_id, uint8_t level, vtype_t monster_name, vtype_t death_description) {
-    Coord_t coord = Coord_t{py.row, py.col}; //  only used for cases 14 and 15.
+    Coord_t coord = py.pos; //  only used for cases 14 and 15.
 
     // Cast the spell.
     switch (spell_id) {
@@ -755,8 +755,8 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 14: // Summon Monster
             (void) strcat(monster_name, "magically summons a monster!");
             printMessage(monster_name);
-            coord.y = py.row;
-            coord.x = py.col;
+            coord.y = py.pos.y;
+            coord.x = py.pos.x;
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
@@ -767,8 +767,8 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 15: // Summon Undead
             (void) strcat(monster_name, "magically summons an undead!");
             printMessage(monster_name);
-            coord.y = py.row;
-            coord.x = py.col;
+            coord.y = py.pos.y;
+            coord.x = py.pos.x;
 
             // in case compact_monster() is called,it needs monster_id
             hack_monptr = monster_id;
@@ -815,27 +815,27 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 20: // Breath Light
             (void) strcat(monster_name, "breathes lightning.");
             printMessage(monster_name);
-            spellBreath(Coord_t{py.row, py.col}, monster_id, (monster.hp / 4), magic_spell_flags::GF_LIGHTNING, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 4), magic_spell_flags::GF_LIGHTNING, death_description);
             break;
         case 21: // Breath Gas
             (void) strcat(monster_name, "breathes gas.");
             printMessage(monster_name);
-            spellBreath(Coord_t{py.row, py.col}, monster_id, (monster.hp / 3), magic_spell_flags::GF_POISON_GAS, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_POISON_GAS, death_description);
             break;
         case 22: // Breath Acid
             (void) strcat(monster_name, "breathes acid.");
             printMessage(monster_name);
-            spellBreath(Coord_t{py.row, py.col}, monster_id, (monster.hp / 3), magic_spell_flags::GF_ACID, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_ACID, death_description);
             break;
         case 23: // Breath Frost
             (void) strcat(monster_name, "breathes frost.");
             printMessage(monster_name);
-            spellBreath(Coord_t{py.row, py.col}, monster_id, (monster.hp / 3), magic_spell_flags::GF_FROST, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_FROST, death_description);
             break;
         case 24: // Breath Fire
             (void) strcat(monster_name, "breathes fire.");
             printMessage(monster_name);
-            spellBreath(Coord_t{py.row, py.col}, monster_id, (monster.hp / 3), magic_spell_flags::GF_FIRE, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_FIRE, death_description);
             break;
         default:
             (void) strcat(monster_name, "cast unknown spell.");
@@ -1321,7 +1321,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{monster.pos.y, monster.pos.x});
+        monster.distance_from_player = (uint8_t) coordDistanceBetween(py.pos, Coord_t{monster.pos.y, monster.pos.x});
 
         // Attack is argument passed to CREATURE
         if (attack) {

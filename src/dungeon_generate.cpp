@@ -1090,8 +1090,8 @@ static void dungeonGenerate() {
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
     Coord_t coord = Coord_t{0,0};
     dungeonNewSpot(coord);
-    py.row = coord.y;
-    py.col = coord.x;
+    py.pos.y = coord.y;
+    py.pos.x = coord.x;
 
     monsterPlaceNewWithinDistance((randomNumber(8) + config::monsters::MON_MIN_PER_LEVEL + alloc_level), 0, true);
     dungeonAllocateAndPlaceObject(setCorridors, 3, randomNumber(alloc_level));
@@ -1234,8 +1234,8 @@ static void townGeneration() {
     // Set up the character coords, used by monsterPlaceNewWithinDistance below
     Coord_t coord = Coord_t{0,0};
     dungeonNewSpot(coord);
-    py.row = coord.y;
-    py.col = coord.x;
+    py.pos.y = coord.y;
+    py.pos.x = coord.x;
 
     lightTown();
 
@@ -1249,8 +1249,8 @@ void generateCave() {
     dg.panel.left = 0;
     dg.panel.right = 0;
 
-    py.row = -1;
-    py.col = -1;
+    py.pos.y = -1;
+    py.pos.x = -1;
 
     treasureLinker();
     monsterLinker();

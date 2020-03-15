@@ -34,7 +34,7 @@ bool enterWizardMode() {
 void wizardLightUpDungeon() {
     bool flag;
 
-    flag = !dg.floor[py.row][py.col].permanent_light;
+    flag = !dg.floor[py.pos.y][py.pos.x].permanent_light;
 
     for (int y = 0; y < dg.height; y++) {
         for (int x = 0; x < dg.width; x++) {
@@ -298,8 +298,8 @@ void wizardGenerateObject() {
     Coord_t coord = Coord_t{0,0};
 
     for (int i = 0; i < 10; i++) {
-        coord.y = py.row - 3 + randomNumber(5);
-        coord.x = py.col - 4 + randomNumber(7);
+        coord.y = py.pos.y - 3 + randomNumber(5);
+        coord.x = py.pos.x - 4 + randomNumber(7);
 
         if (coordInBounds(coord) && dg.floor[coord.y][coord.x].feature_id <= MAX_CAVE_FLOOR && dg.floor[coord.y][coord.x].treasure_id == 0) {
             // delete any object at location, before call popt()
@@ -463,10 +463,10 @@ void wizardCreateObjects() {
 
     if (getInputConfirmation("Allocate?")) {
         // delete object first if any, before call popt()
-        Tile_t &tile = dg.floor[py.row][py.col];
+        Tile_t &tile = dg.floor[py.pos.y][py.pos.x];
 
         if (tile.treasure_id != 0) {
-            (void) dungeonDeleteObject(Coord_t{py.row, py.col});
+            (void) dungeonDeleteObject(py.pos);
         }
 
         number = popt();

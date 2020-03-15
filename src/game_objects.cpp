@@ -25,7 +25,7 @@ static void compactObjects() {
     while (counter <= 0) {
         for (coord.y = 0; coord.y < dg.height; coord.y++) {
             for (coord.x = 0; coord.x < dg.width; coord.x++) {
-                if (dg.floor[coord.y][coord.x].treasure_id != 0 && coordDistanceBetween(coord, Coord_t{py.row, py.col}) > current_distance) {
+                if (dg.floor[coord.y][coord.x].treasure_id != 0 && coordDistanceBetween(coord, py.pos) > current_distance) {
                     int chance;
 
                     switch (treasure_list[dg.floor[coord.y][coord.x].treasure_id].category_id) {

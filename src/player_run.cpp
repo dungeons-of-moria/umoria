@@ -144,7 +144,7 @@ static void findRunningBreak(int dir, Coord_t coord) {
 
     int cycleIndex = chome[dir];
 
-    if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], Coord_t{py.row, py.col})) {
+    if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], py.pos)) {
         find_breakleft = true;
         shortLeft = true;
     } else if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], coord)) {
@@ -152,7 +152,7 @@ static void findRunningBreak(int dir, Coord_t coord) {
         deepLeft = true;
     }
 
-    if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], Coord_t{py.row, py.col})) {
+    if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], py.pos)) {
         find_breakright = true;
         shortRight = true;
     } else if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], coord)) {
@@ -187,7 +187,7 @@ static void findRunningBreak(int dir, Coord_t coord) {
 }
 
 void playerFindInitialize(int direction) {
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
 
     if (!playerMovePosition(direction, coord)) {
         py.running_tracker = 0;
@@ -212,7 +212,7 @@ void playerFindInitialize(int direction) {
     // of find mode, when the initial position of the character must be erased.
     // Hence we must do the erasure here.
     if (!py.temporary_light_only && !config::options::run_print_self) {
-        panelPutTile(caveGetTileSymbol(Coord_t{py.row, py.col}), Coord_t{py.row, py.col});
+        panelPutTile(caveGetTileSymbol(py.pos), py.pos);
     }
 
     playerMove(direction, true);
@@ -245,7 +245,7 @@ void playerEndRunning() {
 
     py.running_tracker = 0;
 
-    dungeonMoveCharacterLight(Coord_t{py.row, py.col}, Coord_t{py.row, py.col});
+    dungeonMoveCharacterLight(py.pos, py.pos);
 }
 
 static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t coord, int &check_dir, int &option1, int &option2) {

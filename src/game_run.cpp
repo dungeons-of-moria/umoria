@@ -258,7 +258,7 @@ static void resetDungeonFlags() {
     py.running_tracker = 0;
     teleport_player = false;
     monster_multiply_total = 0;
-    dg.floor[py.row][py.col].creature_id = 1;
+    dg.floor[py.pos.y][py.pos.x].creature_id = 1;
 }
 
 // Check light status for dungeon setup
@@ -1049,7 +1049,7 @@ static void executeInputCommands(char &command, int &find_count) {
         }
 
         // move the cursor to the players character
-        panelMoveCursor(Coord_t{py.row, py.col});
+        panelMoveCursor(py.pos);
 
         message_ready_to_print = false;
 
@@ -1070,7 +1070,7 @@ static void executeInputCommands(char &command, int &find_count) {
             }
 
             // move cursor to player char again, in case it moved
-            panelMoveCursor(Coord_t{py.row, py.col});
+            panelMoveCursor(py.pos);
 
             // Commands are always converted to rogue form. -CJS-
             if (!config::options::use_roguelike_keys) {
@@ -1091,7 +1091,7 @@ static void executeInputCommands(char &command, int &find_count) {
 
         // Flash the message line.
         messageLineClear();
-        panelMoveCursor(Coord_t{py.row, py.col});
+        panelMoveCursor(py.pos);
         putQIO();
 
         doCommand(lastInputCommand);
@@ -1486,7 +1486,7 @@ static void commandLocateOnMap() {
         return;
     }
 
-    Coord_t player_coord = Coord_t{py.row, py.col};
+    Coord_t player_coord = py.pos;
     if (coordOutsidePanel(player_coord, true)) {
         drawDungeonPanel();
     }
@@ -1539,7 +1539,7 @@ static void commandLocateOnMap() {
     }
 
     // Move to a new panel - but only if really necessary.
-    if (coordOutsidePanel(Coord_t{py.row, py.col}, false)) {
+    if (coordOutsidePanel(py.pos, false)) {
         drawDungeonPanel();
     }
 }
@@ -1595,7 +1595,7 @@ static void doWizardCommands(char com_val) {
             } else {
                 i = 1;
             }
-            dungeonPlaceRandomObjectNear(Coord_t{py.row, py.col}, i);
+            dungeonPlaceRandomObjectNear(py.pos, i);
 
             drawDungeonPanel();
             break;
@@ -1676,8 +1676,8 @@ static void doWizardCommands(char com_val) {
             break;
         case '&':
             // Summon a random monster
-            coord.y = py.row;
-            coord.x = py.col;
+            coord.y = py.pos.y;
+            coord.x = py.pos.x;
             (void) monsterSummon(coord, true);
 
             updateMonsters(false);
@@ -1929,7 +1929,7 @@ static void doCommand(char command) {
             scrollRead();
             break;
         case 's': // (s)earch for a turn
-            playerSearch(Coord_t{py.row, py.col}, py.misc.chance_in_search);
+            playerSearch(py.pos, py.misc.chance_in_search);
             break;
         case 'T': // (T)ake off something  (t)ake off
             inventoryExecuteCommand('t');
@@ -2217,7 +2217,7 @@ static void examineBook() {
 
 // Go up one level -RAK-
 static void dungeonGoUpLevel() {
-    uint8_t tile_id = dg.floor[py.row][py.col].treasure_id;
+    uint8_t tile_id = dg.floor[py.pos.y][py.pos.x].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
         dg.current_level--;
@@ -2234,7 +2234,7 @@ static void dungeonGoUpLevel() {
 
 // Go down one level -RAK-
 static void dungeonGoDownLevel() {
-    uint8_t tile_id = dg.floor[py.row][py.col].treasure_id;
+    uint8_t tile_id = dg.floor[py.pos.y][py.pos.x].treasure_id;
 
     if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
         dg.current_level++;
@@ -2253,7 +2253,7 @@ static void dungeonGoDownLevel() {
 static void dungeonJamDoor() {
     game.player_free_turn = true;
 
-    Coord_t coord = Coord_t{py.row, py.col};
+    Coord_t coord = py.pos;
 
     int direction;
     if (!getDirectionWithMemory(CNIL, direction)) {
@@ -2478,7 +2478,7 @@ static void playDungeon() {
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
-            panelMoveCursor(Coord_t{py.row, py.col});
+            panelMoveCursor(py.pos);
             putQIO();
         }
 
