@@ -94,5 +94,5 @@ bool dungeonDeleteObject(Coord_t const &coord);
 void generateCave();
 
 // Line of Sight
-bool los(int from_y, int from_x, int to_y, int to_x);
+bool los(Coord_t from, Coord_t to);
 void look();

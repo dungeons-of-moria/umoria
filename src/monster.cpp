@@ -48,7 +48,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
+        } else if (los(py.pos, monster.pos)) {
             visible = monsterIsVisible(monster);
         }
     }
@@ -681,7 +681,7 @@ static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     bool within_range = monster.distance_from_player <= config::monsters::MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    bool unobstructed = los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x);
+    bool unobstructed = los(py.pos, monster.pos);
 
     return within_range && unobstructed;
 }

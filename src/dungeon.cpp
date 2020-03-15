@@ -590,7 +590,7 @@ int dungeonSummonObject(Coord_t coord, int amount, int object_type) {
                 coord.x - 3 + randomNumber(5),
             };
 
-            if (coordInBounds(at) && los(coord.y, coord.x, at.y, at.x)) {
+            if (coordInBounds(at) && los(coord, at)) {
                 if (dg.floor[at.y][at.x].feature_id <= MAX_OPEN_SPACE && dg.floor[at.y][at.x].treasure_id == 0) {
                     // object_type == 3 -> 50% objects, 50% gold
                     if (object_type == 3 || object_type == 7) {

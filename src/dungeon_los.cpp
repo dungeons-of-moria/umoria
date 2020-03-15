@@ -25,9 +25,9 @@
 
 // Because this function uses (short) ints for all calculations, overflow may
 // occur if deltaX and deltaY exceed 90.
-bool los(int from_y, int from_x, int to_y, int to_x) {
-    int delta_x = to_x - from_x;
-    int delta_y = to_y - from_y;
+bool los(Coord_t from, Coord_t to) {
+    int delta_x = to.x - from.x;
+    int delta_y = to.y - from.y;
 
     // Adjacent?
     if (delta_x < 2 && delta_x > -2 && delta_y < 2 && delta_y > -2) {
@@ -37,13 +37,13 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
     // Handle the cases where delta_x or delta_y == 0.
     if (delta_x == 0) {
         if (delta_y < 0) {
-            int tmp = from_y;
-            from_y = to_y;
-            to_y = tmp;
+            int tmp = from.y;
+            from.y = to.y;
+            to.y = tmp;
         }
 
-        for (int yy = from_y + 1; yy < to_y; yy++) {
-            if (dg.floor[yy][from_x].feature_id >= MIN_CLOSED_SPACE) {
+        for (int yy = from.y + 1; yy < to.y; yy++) {
+            if (dg.floor[yy][from.x].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -53,13 +53,13 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
     if (delta_y == 0) {
         if (delta_x < 0) {
-            int tmp = from_x;
-            from_x = to_x;
-            to_x = tmp;
+            int tmp = from.x;
+            from.x = to.x;
+            to.x = tmp;
         }
 
-        for (int xx = from_x + 1; xx < to_x; xx++) {
-            if (dg.floor[from_y][xx].feature_id >= MIN_CLOSED_SPACE) {
+        for (int xx = from.x + 1; xx < to.x; xx++) {
+            if (dg.floor[from.y][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }
         }
@@ -101,17 +101,17 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
 
             dy = delta_y * delta_y;
             slope = dy << 1;
-            xx = from_x + x_sign;
+            xx = from.x + x_sign;
 
             // Consider the special case where slope == 1.
             if (dy == scale_half) {
-                yy = from_y + y_sign;
+                yy = from.y + y_sign;
                 dy -= scale;
             } else {
-                yy = from_y;
+                yy = from.y;
             }
 
-            while ((to_x - xx) != 0) {
+            while ((to.x - xx) != 0) {
                 if (dg.floor[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                     return false;
                 }
@@ -143,16 +143,16 @@ bool los(int from_y, int from_x, int to_y, int to_x) {
         dx = delta_x * delta_x;
         slope = dx << 1;
 
-        yy = from_y + y_sign;
+        yy = from.y + y_sign;
 
         if (dx == scale_half) {
-            xx = from_x + x_sign;
+            xx = from.x + x_sign;
             dx -= scale;
         } else {
-            xx = from_x;
+            xx = from.x;
         }
 
-        while ((to_y - yy) != 0) {
+        while ((to.y - yy) != 0) {
             if (dg.floor[yy][xx].feature_id >= MIN_CLOSED_SPACE) {
                 return false;
             }

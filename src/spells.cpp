@@ -889,7 +889,7 @@ void spellFireBall(Coord_t coord, int direction, int damage_hp, int spell_type, 
                     spot.y = row;
                     spot.x = col;
 
-                    if (coordInBounds(spot) && coordDistanceBetween(coord, spot) <= max_distance && los(coord.y, coord.x, spot.y, spot.x)) {
+                    if (coordInBounds(spot) && coordDistanceBetween(coord, spot) <= max_distance && los(coord, spot)) {
                         tile = &dg.floor[spot.y][spot.x];
 
                         if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
@@ -989,7 +989,7 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
 
     for (location.y = coord.y - 2; location.y <= coord.y + 2; location.y++) {
         for (location.x = coord.x - 2; location.x <= coord.x + 2; location.x++) {
-            if (coordInBounds(location) && coordDistanceBetween(coord, location) <= max_distance && los(coord.y, coord.x, location.y, location.x)) {
+            if (coordInBounds(location) && coordDistanceBetween(coord, location) <= max_distance && los(coord, location)) {
                 Tile_t const &tile = dg.floor[location.y][location.x];
 
                 if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
@@ -1781,7 +1781,7 @@ bool spellSpeedAllMonsters(int speed) {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.pos, monster.pos)) {
             continue; // do nothing
         }
 
@@ -1820,7 +1820,7 @@ bool spellSleepAllMonsters() {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.pos, monster.pos)) {
             continue; // do nothing
         }
 
@@ -2027,7 +2027,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.pos, monster.pos)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -2062,7 +2062,7 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.pos.y, py.pos.x, monster.pos.y, monster.pos.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.pos, monster.pos)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {
