@@ -260,11 +260,11 @@ bool spellDetectInvisibleCreaturesWithinVicinity() {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].movement & config::monsters::move::CM_INVISIBLE) != 0u)) {
+        if (coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x}) && ((creatures_list[monster.creature_id].movement & config::monsters::move::CM_INVISIBLE) != 0u)) {
             monster.lit = true;
 
             // works correctly even if hallucinating
-            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.pos.y, monster.pos.x});
 
             detected = true;
         }
@@ -558,12 +558,12 @@ bool spellDetectMonsters() {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && (creatures_list[monster.creature_id].movement & config::monsters::move::CM_INVISIBLE) == 0) {
+        if (coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x}) && (creatures_list[monster.creature_id].movement & config::monsters::move::CM_INVISIBLE) == 0) {
             monster.lit = true;
             detected = true;
 
             // works correctly even if hallucinating
-            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.pos.y, monster.pos.x});
         }
     }
 
@@ -1024,7 +1024,7 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
                         monster.sleep_count = 0;
 
                         if (monster.hp < 0) {
-                            uint32_t treasure_id = monsterDeath(Coord_t{monster.y, monster.x}, creature.movement);
+                            uint32_t treasure_id = monsterDeath(Coord_t{monster.pos.y, monster.pos.x}, creature.movement);
 
                             if (monster.lit) {
                                 auto tmp = (uint32_t) ((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
@@ -1628,8 +1628,8 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
 
     do {
         do {
-            coord.y = monster.y + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
-            coord.x = monster.x + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+            coord.y = monster.pos.y + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
+            coord.x = monster.pos.x + (randomNumber(2 * distance_from_player + 1) - (distance_from_player + 1));
         } while (!coordInBounds(coord));
 
         counter++;
@@ -1639,11 +1639,11 @@ void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
         }
     } while ((dg.floor[coord.y][coord.x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[coord.y][coord.x].creature_id != 0));
 
-    dungeonMoveCreatureRecord(Coord_t{monster.y, monster.x}, coord);
-    dungeonLiteSpot(Coord_t{monster.y, monster.x});
+    dungeonMoveCreatureRecord(Coord_t{monster.pos.y, monster.pos.x}, coord);
+    dungeonLiteSpot(Coord_t{monster.pos.y, monster.pos.x});
 
-    monster.y = (uint8_t) coord.y;
-    monster.x = (uint8_t) coord.x;
+    monster.pos.y = coord.y;
+    monster.pos.x = coord.x;
 
     // this is necessary, because the creature is
     // not currently visible in its new position.
@@ -1781,7 +1781,7 @@ bool spellSpeedAllMonsters(int speed) {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.pos.y, monster.pos.x)) {
             continue; // do nothing
         }
 
@@ -1820,7 +1820,7 @@ bool spellSleepAllMonsters() {
 
         auto name = monsterNameDescription(creature.name, monster.lit);
 
-        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player > config::monsters::MON_MAX_SIGHT || !los(py.row, py.col, monster.pos.y, monster.pos.x)) {
             continue; // do nothing
         }
 
@@ -1856,8 +1856,8 @@ bool spellMassPolymorph() {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             if ((creature.movement & config::monsters::move::CM_WIN) == 0) {
-                coord.y = monster.y;
-                coord.x = monster.x;
+                coord.y = monster.pos.y;
+                coord.x = monster.pos.x;
                 dungeonDeleteMonster(id);
 
                 // Place_monster() should always return true here.
@@ -1876,13 +1876,13 @@ bool spellDetectEvil() {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t &monster = monsters[id];
 
-        if (coordInsidePanel(Coord_t{monster.y, monster.x}) && ((creatures_list[monster.creature_id].defenses & config::monsters::defense::CD_EVIL) != 0)) {
+        if (coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x}) && ((creatures_list[monster.creature_id].defenses & config::monsters::defense::CD_EVIL) != 0)) {
             monster.lit = true;
 
             detected = true;
 
             // works correctly even if hallucinating
-            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.y, monster.x});
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.pos.y, monster.pos.x});
         }
     }
 
@@ -2027,7 +2027,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.row, py.col, monster.pos.y, monster.pos.x)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -2062,7 +2062,7 @@ bool spellTurnUndead() {
         Monster_t &monster = monsters[id];
         Creature_t const &creature = creatures_list[monster.creature_id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.row, py.col, monster.y, monster.x)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature.defenses & config::monsters::defense::CD_UNDEAD) != 0) && los(py.row, py.col, monster.pos.y, monster.pos.x)) {
             auto name = monsterNameDescription(creature.name, monster.lit);
 
             if (py.misc.level + 1 > creature.level || randomNumber(5) == 1) {

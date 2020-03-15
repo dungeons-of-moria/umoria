@@ -19,7 +19,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
 static bool monsterIsVisible(Monster_t const &monster) {
     bool visible = false;
 
-    Tile_t const &tile = dg.floor[monster.y][monster.x];
+    Tile_t const &tile = dg.floor[monster.pos.y][monster.pos.x];
     Creature_t const &creature = creatures_list[monster.creature_id];
 
     if (tile.permanent_light || tile.temporary_light || ((py.running_tracker != 0) && monster.distance_from_player < 2 && py.carrying_light)) {
@@ -44,11 +44,11 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t &monster = monsters[monster_id];
 
-    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((py.flags.status & config::player::status::PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.y, monster.x})) {
+    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((py.flags.status & config::player::status::PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x})) {
         if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
-        } else if (los(py.row, py.col, monster.y, monster.x)) {
+        } else if (los(py.row, py.col, monster.pos.y, monster.pos.x)) {
             visible = monsterIsVisible(monster);
         }
     }
@@ -58,7 +58,7 @@ void monsterUpdateVisibility(int monster_id) {
         if (!monster.lit) {
             playerDisturb(1, 0);
             monster.lit = true;
-            dungeonLiteSpot(Coord_t{monster.y, monster.x});
+            dungeonLiteSpot(Coord_t{monster.pos.y, monster.pos.x});
 
             // notify inventoryExecuteCommand()
             screen_has_changed = true;
@@ -66,7 +66,7 @@ void monsterUpdateVisibility(int monster_id) {
     } else if (monster.lit) {
         // Turn it off.
         monster.lit = false;
-        dungeonLiteSpot(Coord_t{monster.y, monster.x});
+        dungeonLiteSpot(Coord_t{monster.pos.y, monster.pos.x});
 
         // notify inventoryExecuteCommand()
         screen_has_changed = true;
@@ -108,8 +108,8 @@ static bool monsterMakeVisible(Coord_t coord) {
 static void monsterGetMoveDirection(int monster_id, int *directions) {
     int ay, ax, movement;
 
-    int y = monsters[monster_id].y - py.row;
-    int x = monsters[monster_id].x - py.col;
+    int y = monsters[monster_id].pos.y - py.row;
+    int x = monsters[monster_id].pos.x - py.col;
 
     if (y < 0) {
         movement = 8;
@@ -569,7 +569,7 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
         monsterAttackPlayer(monster_id);
         do_move = false;
         do_turn = true;
-    } else if (creature_id > 1 && (coord.y != monster.y || coord.x != monster.x)) {
+    } else if (creature_id > 1 && (coord.y != monster.pos.y || coord.x != monster.pos.x)) {
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
@@ -605,15 +605,15 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
     }
 
     // Move creature record
-    dungeonMoveCreatureRecord(Coord_t{monster.y, monster.x}, coord);
+    dungeonMoveCreatureRecord(Coord_t{monster.pos.y, monster.pos.x}, coord);
 
     if (monster.lit) {
         monster.lit = false;
-        dungeonLiteSpot(Coord_t{monster.y, monster.x});
+        dungeonLiteSpot(Coord_t{monster.pos.y, monster.pos.x});
     }
 
-    monster.y = (uint8_t) coord.y;
-    monster.x = (uint8_t) coord.x;
+    monster.pos.y = coord.y;
+    monster.pos.x = coord.x;
     monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, coord);
 
     do_turn = true;
@@ -631,8 +631,8 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
     Coord_t coord = Coord_t{0,0};
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
-        coord.y = monster.y;
-        coord.x = monster.x;
+        coord.y = monster.pos.y;
+        coord.x = monster.pos.x;
 
         (void) playerMovePosition(directions[i], coord);
 
@@ -681,7 +681,7 @@ static bool monsterCanCastSpells(Monster_t const &monster, uint32_t spells) {
     bool within_range = monster.distance_from_player <= config::monsters::MON_MAX_SPELL_CAST_DISTANCE;
 
     // Must have unobstructed Line-Of-Sight
-    bool unobstructed = los(py.row, py.col, monster.y, monster.x);
+    bool unobstructed = los(py.row, py.col, monster.pos.y, monster.pos.x);
 
     return within_range && unobstructed;
 }
@@ -698,7 +698,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             spellTeleportAwayMonster(monster_id, config::monsters::MON_MAX_SIGHT);
             break;
         case 7: // Teleport To
-            spellTeleportPlayerTo(Coord_t{monster.y, monster.x});
+            spellTeleportPlayerTo(Coord_t{monster.pos.y, monster.pos.x});
             break;
         case 8: // Light Wound
             if (playerSavingThrow()) {
@@ -987,8 +987,8 @@ static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uin
 
     Coord_t coord = Coord_t{0,0};
 
-    for (coord.y = monster.y - 1; coord.y <= monster.y + 1; coord.y++) {
-        for (coord.x = monster.x - 1; coord.x <= monster.x + 1; coord.x++) {
+    for (coord.y = monster.pos.y - 1; coord.y <= monster.pos.y + 1; coord.y++) {
+        for (coord.x = monster.pos.x - 1; coord.x <= monster.pos.x + 1; coord.x++) {
             if (coordInBounds(coord) && (dg.floor[coord.y][coord.x].creature_id > 1)) {
                 counter++;
             }
@@ -1002,7 +1002,7 @@ static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uin
     }
 
     if (counter < 4 && randomNumber(counter * config::monsters::MON_MULTIPLY_ADJUST) == 1) {
-        if (monsterMultiply(Coord_t{monster.y, monster.x}, monster.creature_id, monster_id)) {
+        if (monsterMultiply(Coord_t{monster.pos.y, monster.pos.x}, monster.creature_id, monster_id)) {
             rcmove |= config::monsters::move::CM_MULTIPLY;
         }
     }
@@ -1025,8 +1025,8 @@ static void monsterMoveOutOfWall(Monster_t const &monster, int monster_id, uint3
     // Do not allow attack against the player.
     // Must cast y-1 to signed int, so that a negative value
     // of i will fail the comparison.
-    for (int y = monster.y + 1; y >= (monster.y - 1); y--) {
-        for (int x = monster.x - 1; x <= monster.x + 1; x++) {
+    for (int y = monster.pos.y + 1; y >= (monster.pos.y - 1); y--) {
+        for (int x = monster.pos.x - 1; x <= monster.pos.x + 1; x++) {
             if (dir != 5 && dg.floor[y][x].feature_id <= MAX_OPEN_SPACE && dg.floor[y][x].creature_id != 1) {
                 directions[id] = dir;
                 id++;
@@ -1049,7 +1049,7 @@ static void monsterMoveOutOfWall(Monster_t const &monster, int monster_id, uint3
     }
 
     // if still in a wall, let it dig itself out, but also apply some more damage
-    if (dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
+    if (dg.floor[monster.pos.y][monster.pos.x].feature_id >= MIN_CAVE_WALL) {
         // in case the monster dies, may need to callfix1_delete_monster()
         // instead of delete_monsters()
         hack_monptr = monster_id;
@@ -1061,7 +1061,7 @@ static void monsterMoveOutOfWall(Monster_t const &monster, int monster_id, uint3
             displayCharacterExperience();
         } else {
             printMessage("A creature digs itself out from the rock!");
-            (void) playerTunnelWall(Coord_t{monster.y, monster.x}, 1, 0);
+            (void) playerTunnelWall(Coord_t{monster.pos.y, monster.pos.x}, 1, 0);
         }
     }
 }
@@ -1177,7 +1177,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
 
     // if in wall, must immediately escape to a clear area
     // then monster movement finished
-    if (((creature.movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL) {
+    if (((creature.movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.pos.y][monster.pos.x].feature_id >= MIN_CAVE_WALL) {
         monsterMoveOutOfWall(monster, monster_id, rcmove);
         return;
     }
@@ -1260,7 +1260,7 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.y][monster.x].feature_id >= MIN_CAVE_WALL)) {
+        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.pos.y][monster.pos.x].feature_id >= MIN_CAVE_WALL)) {
             if (monster.sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster.sleep_count = 0;
@@ -1321,7 +1321,7 @@ void updateMonsters(bool attack) {
             continue;
         }
 
-        monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{monster.y, monster.x});
+        monster.distance_from_player = (uint8_t) coordDistanceBetween(Coord_t{py.row, py.col}, Coord_t{monster.pos.y, monster.pos.x});
 
         // Attack is argument passed to CREATURE
         if (attack) {
@@ -1359,7 +1359,7 @@ int monsterTakeHit(int monster_id, int damage) {
         return -1;
     }
 
-    uint32_t treasure_flags = monsterDeath(Coord_t{monster.y, monster.x}, creature.movement);
+    uint32_t treasure_flags = monsterDeath(Coord_t{monster.pos.y, monster.pos.x}, creature.movement);
 
     Recall_t &memory = creature_recall[monster.creature_id];
 

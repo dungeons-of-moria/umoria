@@ -504,17 +504,17 @@ void dungeonMoveCharacterLight(Coord_t const &from, Coord_t const &to) {
 void dungeonDeleteMonster(int id) {
     Monster_t *monster = &monsters[id];
 
-    dg.floor[monster->y][monster->x].creature_id = 0;
+    dg.floor[monster->pos.y][monster->pos.x].creature_id = 0;
 
     if (monster->lit) {
-        dungeonLiteSpot(Coord_t{monster->y, monster->x});
+        dungeonLiteSpot(Coord_t{monster->pos.y, monster->pos.x});
     }
 
     int last_id = next_free_monster_id - 1;
 
     if (id != last_id) {
         monster = &monsters[last_id];
-        dg.floor[monster->y][monster->x].creature_id = (uint8_t) id;
+        dg.floor[monster->pos.y][monster->pos.x].creature_id = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 
@@ -543,10 +543,10 @@ void dungeonDeleteMonsterFix1(int id) {
     // hit points
     monster.hp = -1;
 
-    dg.floor[monster.y][monster.x].creature_id = 0;
+    dg.floor[monster.pos.y][monster.pos.x].creature_id = 0;
 
     if (monster.lit) {
-        dungeonLiteSpot(Coord_t{monster.y, monster.x});
+        dungeonLiteSpot(Coord_t{monster.pos.y, monster.pos.x});
     }
 
     if (monster_multiply_total > 0) {
@@ -560,8 +560,8 @@ void dungeonDeleteMonsterFix2(int id) {
     int last_id = next_free_monster_id - 1;
 
     if (id != last_id) {
-        int y = monsters[last_id].y;
-        int x = monsters[last_id].x;
+        int y = monsters[last_id].pos.y;
+        int x = monsters[last_id].pos.x;
         dg.floor[y][x].creature_id = (uint8_t) id;
 
         monsters[id] = monsters[last_id];

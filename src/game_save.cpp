@@ -1038,8 +1038,8 @@ static void wr_monster(Monster_t const &monster) {
     wr_short((uint16_t) monster.sleep_count);
     wr_short((uint16_t) monster.speed);
     wr_short(monster.creature_id);
-    wr_byte(monster.y);
-    wr_byte(monster.x);
+    wr_byte(monster.pos.y);
+    wr_byte(monster.pos.x);
     wr_byte(monster.distance_from_player);
     wr_bool(monster.lit);
     wr_byte(monster.stunned_amount);
@@ -1163,8 +1163,8 @@ static void rd_monster(Monster_t &monster) {
     monster.sleep_count = rd_short();
     monster.speed = rd_short();
     monster.creature_id = rd_short();
-    monster.y = rd_byte();
-    monster.x = rd_byte();
+    monster.pos.y = rd_byte();
+    monster.pos.x = rd_byte();
     monster.distance_from_player = rd_byte();
     monster.lit = rd_bool();
     monster.stunned_amount = rd_byte();

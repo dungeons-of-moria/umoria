@@ -14,7 +14,7 @@ Monster_t monsters[MON_TOTAL_ALLOCATIONS];
 int16_t monster_levels[MON_MAX_LEVELS + 1];
 
 // Values for a blank monster
-Monster_t blank_monster = {0, 0, 0, 0, 0, 0, 0, false, 0, 0};
+Monster_t blank_monster = {0, 0, 0, 0, Coord_t {0,0}, 0, false, 0, 0};
 
 int16_t next_free_monster_id;    // ID for the next available monster ptr
 int16_t monster_multiply_total;  // Total number of reproduction's of creatures
@@ -41,8 +41,8 @@ bool monsterPlaceNew(Coord_t coord, int creature_id, bool sleeping) {
 
     Monster_t &monster = monsters[monster_id];
 
-    monster.y = (uint8_t) coord.y;
-    monster.x = (uint8_t) coord.x;
+    monster.pos.y = coord.y;
+    monster.pos.x = coord.x;
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & config::monsters::defense::CD_MAX_HP) != 0) {
@@ -102,8 +102,8 @@ void monsterPlaceWinning() {
 
     Monster_t &monster = monsters[monster_id];
 
-    monster.y = (uint8_t) coord.y;
-    monster.x = (uint8_t) coord.x;
+    monster.pos.y = coord.y;
+    monster.pos.x = coord.x;
     monster.creature_id = (uint16_t) creature_id;
 
     if ((creatures_list[creature_id].defenses & config::monsters::defense::CD_MAX_HP) != 0) {
