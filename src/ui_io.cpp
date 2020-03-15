@@ -521,7 +521,7 @@ bool checkForNonBlockingKeyPress(int microseconds) {
     tbuf.tv_usec = microseconds;
 
     smask = 1; // i.e. (1 << 0)
-    if (select(1, (fd_set *) &smask, (fd_set *) 0, (fd_set *) 0, &tbuf) == 1) {
+    if (select(1, (fd_set *) &smask, (fd_set *) nullptr, (fd_set *) nullptr, &tbuf) == 1) {
         ch = getch();
         // check for EOF errors here, select sometimes works even when EOF
         if (ch == -1) {

@@ -8,7 +8,7 @@
 
 // This used to be NULL, but that was technically incorrect.
 // CNIL is used instead of null to help avoid lint errors.
-constexpr char *CNIL = 0;
+constexpr char *CNIL = nullptr;
 
 // Many of the character fields used to be fixed length, which
 // greatly increased the size of the executable. Many fixed
