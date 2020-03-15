@@ -104,7 +104,7 @@ directory, which you can then move to your games directory.
 ## Historical Documents
 
 Most of the original documents included in the Umoria 5.6 sources have been
-moved to the [historical](historical/) directory. You will even find the old
+moved to the [historical](historical) directory. You will even find the old
 CHANGELOG which tracks all the code changes made between versions 4.81 and
 5.5.2 (1987-2008).
 
