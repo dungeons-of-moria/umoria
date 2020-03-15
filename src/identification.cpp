@@ -55,8 +55,8 @@ static const char *objectDescription(char command) {
             return ". - Floor.";
         case '/':
             return "/ - A pole weapon.";
-//        case '0':
-//            return "0 - Not used.";
+            //        case '0':
+            //            return "0 - Not used.";
         case '1':
             return "1 - Entrance to General Store.";
         case '2':
@@ -69,12 +69,12 @@ static const char *objectDescription(char command) {
             return "5 - Entrance to Alchemy shop.";
         case '6':
             return "6 - Entrance to Magic-Users store.";
-//        case '7':
-//            return "7 - Not used.";
-//        case '8':
-//            return "8 - Not used.";
-//        case '9':
-//            return "9 - Not used.";
+            // case '7':
+            //     return "7 - Not used.";
+            // case '8':
+            //     return "8 - Not used.";
+            // case '9':
+            //     return "9 - Not used.";
         case ':':
             return ": - Rubble.";
         case ';':
@@ -105,8 +105,8 @@ static const char *objectDescription(char command) {
             return "G - Ghost.";
         case 'H':
             return "H - Hobgoblin.";
-//        case 'I':
-//            return "I - Invisible Stalker.";
+            // case 'I':
+            //     return "I - Invisible Stalker.";
         case 'J':
             return "J - Jelly.";
         case 'K':
@@ -115,8 +115,8 @@ static const char *objectDescription(char command) {
             return "L - Lich.";
         case 'M':
             return "M - Mummy.";
-//        case 'N':
-//            return "N - Not used.";
+            // case 'N':
+            //     return "N - Not used.";
         case 'O':
             return "O - Ooze.";
         case 'P':
@@ -139,8 +139,8 @@ static const char *objectDescription(char command) {
             return "X - Xorn.";
         case 'Y':
             return "Y - Yeti.";
-//        case 'Z':
-//            return "Z - Not used.";
+            // case 'Z':
+            //     return "Z - Not used.";
         case '[':
             return "[ - Hard armor.";
         case '\\':
@@ -151,8 +151,8 @@ static const char *objectDescription(char command) {
             return "^ - A trap.";
         case '_':
             return "_ - A staff.";
-//        case '`':
-//            return "` - Not used.";
+            // case '`':
+            //     return "` - Not used.";
         case 'a':
             return "a - Giant Ant.";
         case 'b':
@@ -193,14 +193,14 @@ static const char *objectDescription(char command) {
             return "s - Skeleton.";
         case 't':
             return "t - Giant Tick.";
-//        case 'u':
-//            return "u - Not used.";
-//        case 'v':
-//            return "v - Not used.";
+            // case 'u':
+            //     return "u - Not used.";
+            // case 'v':
+            //     return "v - Not used.";
         case 'w':
             return "w - Worm or Worm Mass.";
-//        case 'x':
-//            return "x - Not used.";
+            // case 'x':
+            //     return "x - Not used.";
         case 'y':
             return "y - Yeek.";
         case 'z':
@@ -353,7 +353,7 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
     }
 
     id <<= 6;
-    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t)(sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     objects_identified[id] |= config::identification::OD_KNOWN1;
 
@@ -373,7 +373,7 @@ static void unsample(Inventory_t &item) {
     }
 
     id <<= 6;
-    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t)(item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -419,7 +419,7 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
     }
 
     id <<= 6;
-    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t)(sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     return isObjectKnown(id);
 }
@@ -433,7 +433,7 @@ void itemSetAsTried(Inventory_t const &item) {
     }
 
     id <<= 6;
-    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t)(item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     setObjectTriedFlag(id);
 }
@@ -507,7 +507,12 @@ int bowDamageValue(int16_t misc_use) {
 
 // determines how the `item.misc_use` field is printed
 enum class ItemMiscUse {
-    ignored, charges, plusses, light, flags, z_plusses,
+    ignored,
+    charges,
+    plusses,
+    light,
+    flags,
+    z_plusses,
 };
 
 // Set the `description` for an inventory item.

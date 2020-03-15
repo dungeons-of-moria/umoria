@@ -55,7 +55,7 @@ static void printTomb() {
     text = std::string(day);
     putString(text.c_str(), Coord_t{17, (int) (26 - text.length() / 2)});
 
-    retry:
+retry:
     flushInputBuffer();
 
     putString("(ESC to abort, return to print on screen, or file name)", Coord_t{23, 0});

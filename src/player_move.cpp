@@ -140,7 +140,7 @@ static void trapSummonMonster(Coord_t coord) {
 
     int num = 2 + randomNumber(3);
 
-    Coord_t location = Coord_t{0,0};
+    Coord_t location = Coord_t{0, 0};
 
     for (int i = 0; i < num; i++) {
         location.y = coord.y;

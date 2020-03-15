@@ -121,18 +121,19 @@ int randomNumberNormalDistribution(int mean, int standard) {
 static struct {
     const char *o_prompt;
     bool *o_var;
-} game_options[] = {{"Running: cut known corners",            &config::options::run_cut_corners},
-                    {"Running: examine potential corners",    &config::options::run_examine_corners},
-                    {"Running: print self during run",        &config::options::run_print_self},
-                    {"Running: stop when map sector changes", &config::options::find_bound},
-                    {"Running: run through open doors",       &config::options::run_ignore_doors},
-                    {"Prompt to pick up objects",             &config::options::prompt_to_pickup},
-                    {"Rogue like commands",                   &config::options::use_roguelike_keys},
-                    {"Show weights in inventory",             &config::options::show_inventory_weights},
-                    {"Highlight and notice mineral seams",    &config::options::highlight_seams},
-                    {"Beep for invalid character",            &config::options::error_beep_sound},
-                    {"Display rest/repeat counts",            &config::options::display_counts},
-                    {nullptr,                                 nullptr},
+} game_options[] = {
+    {"Running: cut known corners", &config::options::run_cut_corners},
+    {"Running: examine potential corners", &config::options::run_examine_corners},
+    {"Running: print self during run", &config::options::run_print_self},
+    {"Running: stop when map sector changes", &config::options::find_bound},
+    {"Running: run through open doors", &config::options::run_ignore_doors},
+    {"Prompt to pick up objects", &config::options::prompt_to_pickup},
+    {"Rogue like commands", &config::options::use_roguelike_keys},
+    {"Show weights in inventory", &config::options::show_inventory_weights},
+    {"Highlight and notice mineral seams", &config::options::highlight_seams},
+    {"Beep for invalid character", &config::options::error_beep_sound},
+    {"Display rest/repeat counts", &config::options::display_counts},
+    {nullptr, nullptr},
 };
 
 // Set or unset various boolean config::options::display_counts -CJS-

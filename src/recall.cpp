@@ -78,23 +78,24 @@ static void memoryWizardModeInit(Recall_t &memory, Creature_t const &creature) {
     memory.kills = (uint16_t) SHRT_MAX;
     memory.wake = memory.ignore = UCHAR_MAX;
 
-    uint32_t move = (uint32_t) ((creature.movement & config::monsters::move::CM_4D2_OBJ) != 0) * 8;
-    move += (uint32_t) ((creature.movement & config::monsters::move::CM_2D2_OBJ) != 0) * 4;
-    move += (uint32_t) ((creature.movement & config::monsters::move::CM_1D2_OBJ) != 0) * 2;
-    move += (uint32_t) ((creature.movement & config::monsters::move::CM_90_RANDOM) != 0);
-    move += (uint32_t) ((creature.movement & config::monsters::move::CM_60_RANDOM) != 0);
+    uint32_t move = (uint32_t)((creature.movement & config::monsters::move::CM_4D2_OBJ) != 0) * 8;
+    move += (uint32_t)((creature.movement & config::monsters::move::CM_2D2_OBJ) != 0) * 4;
+    move += (uint32_t)((creature.movement & config::monsters::move::CM_1D2_OBJ) != 0) * 2;
+    move += (uint32_t)((creature.movement & config::monsters::move::CM_90_RANDOM) != 0);
+    move += (uint32_t)((creature.movement & config::monsters::move::CM_60_RANDOM) != 0);
 
-    memory.movement = (uint32_t) ((creature.movement & ~config::monsters::move::CM_TREASURE) | (move << config::monsters::move::CM_TR_SHIFT));
+    memory.movement = (uint32_t)((creature.movement & ~config::monsters::move::CM_TREASURE) | (move << config::monsters::move::CM_TR_SHIFT));
     memory.defenses = creature.defenses;
 
     if ((creature.spells & config::monsters::spells::CS_FREQ) != 0u) {
-        memory.spells = (uint32_t) (creature.spells | config::monsters::spells::CS_FREQ);
+        memory.spells = (uint32_t)(creature.spells | config::monsters::spells::CS_FREQ);
     } else {
         memory.spells = creature.spells;
     }
 
     for (int i = 0; i < MON_MAX_ATTACKS; i++) {
-        if (creature.damage[i] == 0) break;
+        if (creature.damage[i] == 0)
+            break;
         memory.attacks[i] = UCHAR_MAX;
     }
 
@@ -240,7 +241,7 @@ static void memoryKillPoints(uint16_t creature_defense, uint16_t monster_exp, ui
 
     // calculate the fractional exp part scaled by 100,
     // must use long arithmetic to avoid overflow
-    int remainder = (uint32_t) ((((int32_t) monster_exp * level % py.misc.level) * (int32_t) 1000 / py.misc.level + 5) / 10);
+    int remainder = (uint32_t)((((int32_t) monster_exp * level % py.misc.level) * (int32_t) 1000 / py.misc.level + 5) / 10);
 
     char plural;
     if (quotient == 1 && remainder == 0) {
@@ -354,7 +355,13 @@ static void memoryKillDifficulty(Creature_t const &creature, uint32_t monster_ki
     (void) sprintf(description, " It has an armor rating of %d", creature.ac);
     memoryPrint(description);
 
-    (void) sprintf(description, " and a%s life rating of %dd%d.", ((creature.defenses & config::monsters::defense::CD_MAX_HP) != 0 ? " maximized" : ""), creature.hit_die.dice, creature.hit_die.sides);
+    (void) sprintf(
+            description,
+            " and a%s life rating of %dd%d.",
+            ((creature.defenses & config::monsters::defense::CD_MAX_HP) != 0 ? " maximized" : ""),
+            creature.hit_die.dice,
+            creature.hit_die.sides
+           );
     memoryPrint(description);
 }
 
@@ -450,7 +457,7 @@ static void memoryLootCarried(uint32_t creature_move, uint32_t memory_move) {
 
     memoryPrint(" It may");
 
-    auto carrying_chance = (uint32_t) ((memory_move & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
+    auto carrying_chance = (uint32_t)((memory_move & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
 
     if (carrying_chance == 1) {
         if ((creature_move & config::monsters::move::CM_TREASURE) == config::monsters::move::CM_60_RANDOM) {
@@ -517,7 +524,9 @@ static void memoryAttackNumberAndDamage(Recall_t const &memory, Creature_t const
     int attack_count = 0;
     for (int i = 0; i < MON_MAX_ATTACKS; i++) {
         int attack_id = creature.damage[i];
-        if (attack_id == 0) break;
+        if (attack_id == 0) {
+            break;
+        }
 
         // don't print out unknown attacks
         if (memory.attacks[i] == 0u) {
@@ -594,10 +603,10 @@ int memoryRecall(int monster_id) {
     roff_print_line = 0;
     roff_buffer_pointer = roff_buffer;
 
-    auto spells = (uint32_t) (memory.spells & creature.spells & ~config::monsters::spells::CS_FREQ);
+    auto spells = (uint32_t)(memory.spells & creature.spells & ~config::monsters::spells::CS_FREQ);
 
     // the config::monsters::move::CM_WIN property is always known, set it if a win monster
-    auto move = (uint32_t) (memory.movement | (creature.movement & config::monsters::move::CM_WIN));
+    auto move = (uint32_t)(memory.movement | (creature.movement & config::monsters::move::CM_WIN));
 
     uint16_t defense = memory.defenses & creature.defenses;
 

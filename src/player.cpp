@@ -53,7 +53,7 @@ const char *playerGetGenderLabel() {
 
 // Given direction "dir", returns new row, column location -RAK-
 bool playerMovePosition(int dir, Coord_t &coord) {
-    Coord_t new_coord = Coord_t{0,0};
+    Coord_t new_coord = Coord_t{0, 0};
 
     switch (dir) {
         case 1:
@@ -977,7 +977,7 @@ void playerGainSpells() {
         }
     }
 
-    py.flags.new_spells_to_learn = (uint8_t) (new_spells + diff_spells);
+    py.flags.new_spells_to_learn = (uint8_t)(new_spells + diff_spells);
 
     if (py.flags.new_spells_to_learn == 0) {
         py.flags.status |= config::player::status::PY_STUDY;
@@ -1027,8 +1027,8 @@ void playerGainMana(int stat) {
                 // change current mana proportionately to change of max mana,
                 // divide first to avoid overflow, little loss of accuracy
                 int32_t value = (((int32_t) py.misc.current_mana << 16) + py.misc.current_mana_fraction) / py.misc.mana * new_mana;
-                py.misc.current_mana = (int16_t) (value >> 16);
-                py.misc.current_mana_fraction = (uint16_t) (value & 0xFFFF);
+                py.misc.current_mana = (int16_t)(value >> 16);
+                py.misc.current_mana_fraction = (uint16_t)(value & 0xFFFF);
             } else {
                 py.misc.current_mana = (int16_t) new_mana;
                 py.misc.current_mana_fraction = 0;
@@ -1096,7 +1096,7 @@ void playerGainKillExperience(Creature_t const &creature) {
 
     if (remainder >= 0x10000L) {
         quotient++;
-        py.misc.exp_fraction = (uint16_t) (remainder - 0x10000L);
+        py.misc.exp_fraction = (uint16_t)(remainder - 0x10000L);
     } else {
         py.misc.exp_fraction = (uint16_t) remainder;
     }
@@ -1202,7 +1202,7 @@ static void playerAttackMonster(Coord_t coord) {
                 if (monster.confused_amount != 0u) {
                     monster.confused_amount += 3;
                 } else {
-                    monster.confused_amount = (uint8_t) (2 + randomNumber(16));
+                    monster.confused_amount = (uint8_t)(2 + randomNumber(16));
                 }
             }
             printMessage(msg);
@@ -1463,7 +1463,6 @@ void playerAttackPosition(Coord_t coord) {
     playerAttackMonster(coord);
 }
 
-
 // check to see if know any spells greater than level, eliminate them
 static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p, int offset) {
     uint32_t mask = 0x80000000L;
@@ -1539,7 +1538,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
         if (orderID == 99) {
             mask = 0x0;
         } else {
-            mask = (uint32_t) (1L << orderID);
+            mask = (uint32_t)(1L << orderID);
         }
 
         if ((mask & py.flags.spells_forgotten) != 0u) {
@@ -1563,7 +1562,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newS
 // determine which spells player can learn must check all spells here,
 // in gain_spell() we actually check if the books are present
 static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
-    auto spell_flag = (uint32_t) (0x7FFFFFFFL & ~py.flags.spells_learnt);
+    auto spell_flag = (uint32_t)(0x7FFFFFFFL & ~py.flags.spells_learnt);
 
     int id = 0;
     uint32_t mask = 0x1;
@@ -1599,7 +1598,7 @@ static void forgetSpells(int newSpells, const char *p, int offset) {
         if (orderID == 99) {
             mask = 0x0;
         } else {
-            mask = (uint32_t) (1L << orderID);
+            mask = (uint32_t)(1L << orderID);
         }
 
         if ((mask & py.flags.spells_learnt) != 0u) {

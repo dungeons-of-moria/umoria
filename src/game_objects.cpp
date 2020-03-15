@@ -20,7 +20,7 @@ static void compactObjects() {
     int counter = 0;
     int current_distance = 66;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     while (counter <= 0) {
         for (coord.y = 0; coord.y < dg.height; coord.y++) {

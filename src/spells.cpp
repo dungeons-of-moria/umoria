@@ -298,7 +298,7 @@ bool spellLightArea(Coord_t coord) {
 
     // Must always light immediate area, because one might be standing on
     // the edge of a room, or next to a destroyed area, etc.
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
     for (spot.y = coord.y - 1; spot.y <= coord.y + 1; spot.y++) {
         for (spot.x = coord.x - 1; spot.x <= coord.x + 1; spot.x++) {
             dg.floor[spot.y][spot.x].permanent_light = true;
@@ -313,7 +313,7 @@ bool spellLightArea(Coord_t coord) {
 bool spellDarkenArea(Coord_t coord) {
     bool darkened = false;
 
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
 
     if (dg.floor[coord.y][coord.x].perma_lit_room && dg.current_level > 0) {
         int half_height = (SCREEN_HEIGHT / 2);
@@ -361,7 +361,7 @@ bool spellDarkenArea(Coord_t coord) {
 }
 
 static void dungeonLightAreaAroundFloorTile(Coord_t coord) {
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
 
     for (spot.y = coord.y - 1; spot.y <= coord.y + 1; spot.y++) {
         for (spot.x = coord.x - 1; spot.x <= coord.x + 1; spot.x++) {
@@ -807,7 +807,7 @@ void spellFireBolt(Coord_t coord, int direction, int damage_hp, int spell_type, 
     uint32_t weapon_type;
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &dummy);
 
-    Coord_t old_coord = Coord_t{0,0};
+    Coord_t old_coord = Coord_t{0, 0};
 
     int distance = 0;
     bool finished = false;
@@ -851,8 +851,8 @@ void spellFireBall(Coord_t coord, int direction, int damage_hp, int spell_type, 
     uint32_t weapon_type;
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
-    Coord_t old_coord = Coord_t{0,0};
-    Coord_t spot = Coord_t{0,0};
+    Coord_t old_coord = Coord_t{0, 0};
+    Coord_t spot = Coord_t{0, 0};
 
     int distance = 0;
     bool finished = false;
@@ -985,7 +985,7 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
     uint32_t weapon_type;
     spellGetAreaAffectFlags(spell_type, weapon_type, harm_type, &destroy);
 
-    Coord_t location = Coord_t{0,0};
+    Coord_t location = Coord_t{0, 0};
 
     for (location.y = coord.y - 2; location.y <= coord.y + 2; location.y++) {
         for (location.x = coord.x - 2; location.x <= coord.x + 2; location.x++) {
@@ -1020,18 +1020,19 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
 
                         // can not call monsterTakeHit here, since player does not
                         // get experience for kill
-                        monster.hp = (int16_t) (monster.hp - damage);
+                        monster.hp = (int16_t)(monster.hp - damage);
                         monster.sleep_count = 0;
 
                         if (monster.hp < 0) {
                             uint32_t treasure_id = monsterDeath(Coord_t{monster.pos.y, monster.pos.x}, creature.movement);
 
                             if (monster.lit) {
-                                auto tmp = (uint32_t) ((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
+                                auto tmp = (uint32_t)((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
                                 if (tmp > ((treasure_id & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT)) {
-                                    treasure_id = (uint32_t) ((treasure_id & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
+                                    treasure_id = (uint32_t)((treasure_id & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
                                 }
-                                creature_recall[monster.creature_id].movement = (uint32_t) (treasure_id | (creature_recall[monster.creature_id].movement & ~config::monsters::move::CM_TREASURE));
+                                creature_recall[monster.creature_id].movement =
+                                    (uint32_t)(treasure_id | (creature_recall[monster.creature_id].movement & ~config::monsters::move::CM_TREASURE));
                             }
 
                             // It ate an already processed monster. Handle normally.
@@ -1081,7 +1082,7 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
     // show the ball of gas
     putQIO();
 
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
     for (spot.y = (coord.y - 2); spot.y <= (coord.y + 2); spot.y++) {
         for (spot.x = (coord.x - 2); spot.x <= (coord.x + 2); spot.x++) {
             if (coordInBounds(spot) && coordInsidePanel(spot) && coordDistanceBetween(coord, spot) <= max_distance) {
@@ -1312,7 +1313,7 @@ bool spellConfuseMonster(Coord_t coord, int direction) {
                 if (monster.confused_amount != 0u) {
                     monster.confused_amount += 3;
                 } else {
-                    monster.confused_amount = (uint8_t) (2 + randomNumber(16));
+                    monster.confused_amount = (uint8_t)(2 + randomNumber(16));
                 }
                 monster.sleep_count = 0;
 
@@ -1623,7 +1624,7 @@ bool spellCloneMonster(Coord_t coord, int direction) {
 void spellTeleportAwayMonster(int monster_id, int distance_from_player) {
     int counter = 0;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
     Monster_t &monster = monsters[monster_id];
 
     do {
@@ -1672,7 +1673,7 @@ void spellTeleportPlayerTo(Coord_t coord) {
 
     dungeonMoveCreatureRecord(py.pos, rnd_coord);
 
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
     for (spot.y = py.pos.y - 1; spot.y <= py.pos.y + 1; spot.y++) {
         for (spot.x = py.pos.x - 1; spot.x <= py.pos.x + 1; spot.x++) {
             dg.floor[spot.y][spot.x].temporary_light = false;
@@ -1847,7 +1848,7 @@ bool spellSleepAllMonsters() {
 // NOTE: cannot polymorph a winning creature (BALROG)
 bool spellMassPolymorph() {
     bool morphed = false;
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
@@ -2027,7 +2028,9 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) && los(py.pos, monster.pos)) {
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT &&
+            ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) &&
+            los(py.pos, monster.pos)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 
             creature_recall[monster.creature_id].defenses |= creature_defense;
@@ -2192,7 +2195,7 @@ void spellLoseEXP(int32_t adjustment) {
 // Slow Poison -RAK-
 bool spellSlowPoison() {
     if (py.flags.poisoned > 0) {
-        py.flags.poisoned = (int16_t) (py.flags.poisoned / 2);
+        py.flags.poisoned = (int16_t)(py.flags.poisoned / 2);
         if (py.flags.poisoned < 1) {
             py.flags.poisoned = 1;
         }
@@ -2250,7 +2253,7 @@ static void replaceSpot(Coord_t coord, int typ) {
 //   This will NOT win the game.
 void spellDestroyArea(Coord_t coord) {
     if (dg.current_level > 0) {
-        Coord_t spot = Coord_t{0,0};
+        Coord_t spot = Coord_t{0, 0};
 
         for (spot.y = coord.y - 15; spot.y <= coord.y + 15; spot.y++) {
             for (spot.x = coord.x - 15; spot.x <= coord.x + 15; spot.x++) {

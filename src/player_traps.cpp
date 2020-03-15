@@ -173,11 +173,11 @@ static void chestParalysed() {
     }
 
     printMessage("You choke and pass out.");
-    py.flags.paralysis = (int16_t) (10 + randomNumber(20));
+    py.flags.paralysis = (int16_t)(10 + randomNumber(20));
 }
 
 static void chestSummonMonster(Coord_t coord) {
-    Coord_t position = Coord_t{0,0};
+    Coord_t position = Coord_t{0, 0};
 
     for (int i = 0; i < 3; i++) {
         position.y = coord.y;

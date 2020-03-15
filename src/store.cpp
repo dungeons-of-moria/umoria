@@ -23,7 +23,7 @@ void storeInitializeOwners() {
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
         Store_t &store = stores[store_id];
 
-        store.owner_id = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
+        store.owner_id = (uint8_t)(MAX_STORES * (randomNumber(count) - 1) + store_id);
         store.insults_counter = 0;
         store.turns_left_before_closing = 0;
         store.unique_items_counter = 0;
@@ -487,7 +487,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
 
                 // Set the automatic haggle increment so that RET will give
                 // a new_offer equal to the final_asking_price price.
-                store_last_increment = (int16_t) (final_asking_price - new_offer);
+                store_last_increment = (int16_t)(final_asking_price - new_offer);
                 final_flag++;
 
                 if (final_flag > 3) {
@@ -513,7 +513,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
                 // If the current increment would take you over the store's
                 // price, then decrease it to an exact match.
                 if (current_asking_price - last_offer < store_last_increment) {
-                    store_last_increment = (int16_t) (current_asking_price - last_offer);
+                    store_last_increment = (int16_t)(current_asking_price - last_offer);
                 }
             }
         }
@@ -699,7 +699,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
 
                     // Set the automatic haggle increment so that RET will give
                     // a new_offer equal to the final_asking_price price.
-                    store_last_increment = (int16_t) (final_asking_price - new_offer);
+                    store_last_increment = (int16_t)(final_asking_price - new_offer);
                     final_flag++;
 
                     if (final_flag > 3) {
@@ -729,7 +729,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                     // If the current decrement would take you under the store's
                     // price, then increase it to an exact match.
                     if (current_asking_price - last_offer > store_last_increment) {
-                        store_last_increment = (int16_t) (current_asking_price - last_offer);
+                        store_last_increment = (int16_t)(current_asking_price - last_offer);
                     }
                 }
             }
@@ -939,12 +939,7 @@ static bool setMagicShopItems(uint8_t item_id) {
 
 // Each store will buy only certain items, based on TVAL
 bool (*store_buy[MAX_STORES])(uint8_t) = {
-    setGeneralStoreItems,
-    setArmoryItems,
-    setWeaponsmithItems,
-    setTempleItems,
-    setAlchemistItems,
-    setMagicShopItems,
+    setGeneralStoreItems, setArmoryItems, setWeaponsmithItems, setTempleItems, setAlchemistItems, setMagicShopItems,
 };
 
 // Sell an item to the store -RAK-

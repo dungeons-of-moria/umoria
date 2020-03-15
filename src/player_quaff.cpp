@@ -156,7 +156,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 break;
             case PotionSpellTypes::gain_experience:
                 if (py.misc.exp < config::player::PLAYER_MAX_EXP) {
-                    auto exp = (uint32_t) ((py.misc.exp / 2) + 10);
+                    auto exp = (uint32_t)((py.misc.exp / 2) + 10);
                     if (exp > 100000L) {
                         exp = 100000L;
                     }
@@ -244,7 +244,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                     int32_t exp = py.misc.exp / 5;
 
                     if (py.misc.exp > SHRT_MAX) {
-                        auto scale = (int32_t) (INT_MAX / py.misc.exp);
+                        auto scale = (int32_t)(INT_MAX / py.misc.exp);
                         exp += (randomNumber((int) scale) * py.misc.exp) / (scale * 5);
                     } else {
                         exp += randomNumber((int) py.misc.exp) / 5;

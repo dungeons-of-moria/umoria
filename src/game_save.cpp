@@ -261,7 +261,7 @@ static bool sv_write() {
     if (l < start_time) {
         // someone is messing with the clock!,
         // assume that we have been playing for 1 day
-        l = (uint32_t) (start_time + 86400L);
+        l = (uint32_t)(start_time + 86400L);
     }
     wr_long(l);
 
@@ -269,7 +269,7 @@ static bool sv_write() {
     wr_string(game.character_died_from);
 
     // put the max_score in the save file
-    l = (uint32_t) (playerCalculateTotalPoints());
+    l = (uint32_t)(playerCalculateTotalPoints());
     wr_long(l);
 
     // put the date_of_birth in the save file
@@ -324,7 +324,7 @@ static bool sv_write() {
         for (int x = 0; x < MAX_WIDTH; x++) {
             Tile_t const &tile = dg.floor[y][x];
 
-            auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
+            auto char_tmp = (uint8_t)(tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 
             if (char_tmp != prev_char || count == UCHAR_MAX) {
                 wr_byte((uint8_t) count);
@@ -421,7 +421,7 @@ static bool _save_char(const std::string &filename) {
         wr_byte(CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
-        auto char_tmp = (uint8_t) (randomNumber(256) - 1);
+        auto char_tmp = (uint8_t)(randomNumber(256) - 1);
         wr_byte(char_tmp);
         // Note that xor_byte is now equal to char_tmp
 
@@ -484,7 +484,8 @@ bool loadGame(bool &generate) {
     // FIXME: check this if/else logic! -- MRC
     if (dg.game_turn >= 0) {
         printMessage("IMPOSSIBLE! Attempt to restore while still alive!");
-    } else if ((fd = open(config::files::save_game.c_str(), O_RDONLY, 0)) < 0 && (chmod(config::files::save_game.c_str(), 0400) < 0 || (fd = open(config::files::save_game.c_str(), O_RDONLY, 0)) < 0)) {
+    } else if ((fd = open(config::files::save_game.c_str(), O_RDONLY, 0)) < 0 &&
+               (chmod(config::files::save_game.c_str(), 0400) < 0 || (fd = open(config::files::save_game.c_str(), O_RDONLY, 0)) < 0)) {
         // Allow restoring a file belonging to someone else, if we can delete it.
         // Hence first try to read without doing a chmod.
 
@@ -809,7 +810,7 @@ bool loadGame(bool &generate) {
                 if (tile >= &dg.floor[MAX_HEIGHT][0]) {
                     goto error;
                 }
-                tile->feature_id = (uint8_t) (char_tmp & 0xF);
+                tile->feature_id = (uint8_t)(char_tmp & 0xF);
                 tile->perma_lit_room = (bool) ((char_tmp >> 4) & 0x1);
                 tile->field_mark = (bool) ((char_tmp >> 5) & 0x1);
                 tile->permanent_light = (bool) ((char_tmp >> 6) & 0x1);
@@ -841,7 +842,7 @@ bool loadGame(bool &generate) {
         }
 
         if (dg.game_turn < 0) {
-            error:
+        error:
             ok = false; // Assume bad data.
         } else {
             // don't overwrite the killed by string if character is dead
@@ -851,7 +852,7 @@ bool loadGame(bool &generate) {
             game.character_generated = true;
         }
 
-        closefiles:
+    closefiles:
 
         DEBUG(fclose(logfile));
 
@@ -896,7 +897,7 @@ bool loadGame(bool &generate) {
                     age = start_time - time_saved;
                 }
 
-                age = (uint32_t) ((age + 43200L) / 86400L); // age in days
+                age = (uint32_t)((age + 43200L) / 86400L); // age in days
                 if (age > 10) {
                     age = 10; // in case save file is very old
                 }
@@ -924,7 +925,6 @@ bool loadGame(bool &generate) {
     dg.game_turn = -1;
     putStringClearToEOL("Please try again without that save file.", Coord_t{1, 0});
 
-    // TODO: just check for a key press instead of calling printMessage?
     // We have messages for the player to read, this will ask for a keypress
     printMessage(CNIL);
 
@@ -1048,7 +1048,7 @@ static void wr_monster(Monster_t const &monster) {
 
 // get_byte reads a single byte from a file, without any xor_byte encryption
 static uint8_t get_byte() {
-    return (uint8_t) (getc(fileptr) & 0xFF);
+    return (uint8_t)(getc(fileptr) & 0xFF);
 }
 
 static bool rd_bool() {
@@ -1057,7 +1057,7 @@ static bool rd_bool() {
 
 static uint8_t rd_byte() {
     auto c = get_byte();
-    uint8_t decoded_byte = c ^xor_byte;
+    uint8_t decoded_byte = c ^ xor_byte;
     xor_byte = c;
 
     DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, decoded_byte));
@@ -1067,10 +1067,10 @@ static uint8_t rd_byte() {
 
 static uint16_t rd_short() {
     auto c = get_byte();
-    uint16_t decoded_int = c ^xor_byte;
+    uint16_t decoded_int = c ^ xor_byte;
 
     xor_byte = get_byte();
-    decoded_int |= (uint16_t) (c ^ xor_byte) << 8;
+    decoded_int |= (uint16_t)(c ^ xor_byte) << 8;
 
     DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, decoded_int));
 
@@ -1079,17 +1079,17 @@ static uint16_t rd_short() {
 
 static uint32_t rd_long() {
     auto c = get_byte();
-    uint32_t decoded_long = c ^xor_byte;
+    uint32_t decoded_long = c ^ xor_byte;
 
     xor_byte = get_byte();
-    decoded_long |= (uint32_t) (c ^ xor_byte) << 8;
+    decoded_long |= (uint32_t)(c ^ xor_byte) << 8;
     DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte));
 
     c = get_byte();
-    decoded_long |= (uint32_t) (c ^ xor_byte) << 16;
+    decoded_long |= (uint32_t)(c ^ xor_byte) << 16;
 
     xor_byte = get_byte();
-    decoded_long |= (uint32_t) (c ^ xor_byte) << 24;
+    decoded_long |= (uint32_t)(c ^ xor_byte) << 24;
     DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, decoded_long));
 
     return decoded_long;
@@ -1125,9 +1125,9 @@ static void rd_shorts(uint16_t *value, int count) {
 
     for (int i = 0; i < count; i++) {
         auto c = get_byte();
-        uint16_t s = c ^xor_byte;
+        uint16_t s = c ^ xor_byte;
         xor_byte = get_byte();
-        s |= (uint16_t) (c ^ xor_byte) << 8;
+        s |= (uint16_t)(c ^ xor_byte) << 8;
         *sptr++ = s;
         DEBUG(fprintf(logfile, "  %02X %02X = %d", (int) c, (int) xor_byte, (int) s));
     }

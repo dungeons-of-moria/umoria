@@ -83,7 +83,7 @@ enum class PriestSpellTypes {
 static void playerRecitePrayer(int prayer_type) {
     int dir;
 
-    switch ((PriestSpellTypes) (prayer_type + 1)) {
+    switch ((PriestSpellTypes)(prayer_type + 1)) {
         case PriestSpellTypes::detect_evil:
             (void) spellDetectEvil();
             break;

@@ -21,13 +21,13 @@ void dungeonDisplayMap() {
     clearScreen();
 
     int16_t priority[256] = {0};
-    priority[60] = 5;    // char '<'
-    priority[62] = 5;    // char '>'
-    priority[64] = 10;   // char '@'
-    priority[35] = -5;   // char '#'
-    priority[46] = -10;  // char '.'
-    priority[92] = -3;   // char '\'
-    priority[32] = -15;  // char ' '
+    priority[60] = 5;   // char '<'
+    priority[62] = 5;   // char '>'
+    priority[64] = 10;  // char '@'
+    priority[35] = -5;  // char '#'
+    priority[46] = -10; // char '.'
+    priority[92] = -3;  // char '\'
+    priority[32] = -15; // char ' '
 
     // Display highest priority object in the RATIO, by RATIO area
     constexpr uint8_t RATIO = 3;
@@ -184,7 +184,7 @@ char caveGetTileSymbol(Coord_t const &coord) {
     }
 
     if (py.flags.image > 0 && randomNumber(12) == 1) {
-        return (uint8_t) (randomNumber(95) + 31);
+        return (uint8_t)(randomNumber(95) + 31);
     }
 
     if (tile.creature_id > 1 && monsters[tile.creature_id].lit) {
@@ -295,7 +295,7 @@ void dungeonPlaceRandomObjectAt(Coord_t const &coord, bool must_be_small) {
 
 // Allocates an object for tunnels and rooms -RAK-
 void dungeonAllocateAndPlaceObject(bool (*set_function)(int), int object_type, int number) {
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     for (int i = 0; i < number; i++) {
         // don't put an object beneath the player, this could cause
@@ -368,7 +368,7 @@ void dungeonLightRoom(Coord_t const &coord) {
     int bottom = top + height_middle - 1;
     int right = left + width_middle - 1;
 
-    Coord_t location = Coord_t{0,0};
+    Coord_t location = Coord_t{0, 0};
 
     for (location.y = top; location.y <= bottom; location.y++) {
         for (location.x = left; location.x <= right; location.x++) {
@@ -458,7 +458,7 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
         right = from.x + 1;
     }
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
     for (coord.y = top; coord.y <= bottom; coord.y++) {
         // Leftmost to rightmost do
         for (coord.x = left; coord.x <= right; coord.x++) {
@@ -471,7 +471,7 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
 // With no light,  movement becomes involved.
 static void sub3_move_light(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
-        Coord_t coord = Coord_t{0,0};
+        Coord_t coord = Coord_t{0, 0};
 
         for (coord.y = from.y - 1; coord.y <= from.y + 1; coord.y++) {
             for (coord.x = from.x - 1; coord.x <= from.x + 1; coord.x++) {
@@ -576,7 +576,7 @@ int dungeonSummonObject(Coord_t coord, int amount, int object_type) {
     int real_type;
 
     if (object_type == 1 || object_type == 5) {
-        real_type = 1;   // object_type == 1 -> objects
+        real_type = 1; // object_type == 1 -> objects
     } else {
         real_type = 256; // object_type == 2 -> gold
     }

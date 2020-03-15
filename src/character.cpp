@@ -391,7 +391,7 @@ static void generateCharacterClass(uint8_t const class_id) {
 
     // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
     py.misc.hit_die += klass.hit_points;
-    py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
+    py.misc.max_hp = (int16_t)(playerStatAdjustmentConstitution() + py.misc.hit_die);
     py.misc.current_hp = py.misc.max_hp;
     py.misc.current_hp_fraction = 0;
 

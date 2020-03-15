@@ -44,7 +44,9 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t &monster = monsters[monster_id];
 
-    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((py.flags.status & config::player::status::PY_BLIND) == 0u) && coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x})) {
+    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT &&
+        ((py.flags.status & config::player::status::PY_BLIND) == 0u) &&
+        coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x})) {
         if (game.wizard_mode) {
             // Wizard sight.
             visible = true;
@@ -356,7 +358,6 @@ static void monsterPrintAttackDescription(char *msg, int attack_id) {
     }
 }
 
-
 static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monster, int attack_type, vtype_t monster_name, bool visible) {
     if (py.flags.confuse_monster && attack_type != 99) {
         printMessage("Your hands stop glowing.");
@@ -371,7 +372,7 @@ static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monste
             if (monster.confused_amount != 0u) {
                 monster.confused_amount += 3;
             } else {
-                monster.confused_amount = (uint8_t) (2 + randomNumber(16));
+                monster.confused_amount = (uint8_t)(2 + randomNumber(16));
             }
         }
 
@@ -381,7 +382,6 @@ static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monste
             creature_recall[monster.creature_id].defenses |= creature.defenses & config::monsters::defense::CD_NO_SLEEP;
         }
     }
-
 }
 
 // Make an attack on the player (chuckle.) -RAK-
@@ -406,7 +406,9 @@ static void monsterAttackPlayer(int monster_id) {
 
     int attack_counter = 0;
     for (auto &damage_type_id : creature.damage) {
-        if (damage_type_id == 0 || game.character_is_dead) break;
+        if (damage_type_id == 0 || game.character_is_dead) {
+            break;
+        }
 
         uint8_t attack_type = monster_attacks[damage_type_id].type_id;
         uint8_t attack_desc = monster_attacks[damage_type_id].description_id;
@@ -450,7 +452,8 @@ static void monsterAttackPlayer(int monster_id) {
             // had previously noticed the attack (in which case all this does
             // is help player learn damage), note that in the second case do
             // not increase attacks if creature repelled (no damage done)
-            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attack_counter] != 0 && attack_type != 99)) && creature_recall[monster.creature_id].attacks[attack_counter] < UCHAR_MAX) {
+            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attack_counter] != 0 && attack_type != 99)) &&
+                creature_recall[monster.creature_id].attacks[attack_counter] < UCHAR_MAX) {
                 creature_recall[monster.creature_id].attacks[attack_counter]++;
             }
 
@@ -515,7 +518,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
 
             // 50% chance of breaking door
             if (door_is_stuck) {
-                item.misc_use = (int16_t) (1 - randomNumber(2));
+                item.misc_use = (int16_t)(1 - randomNumber(2));
             }
             tile.feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(coord);
@@ -531,7 +534,7 @@ static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits
             inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, item);
 
             // 50% chance of breaking door
-            item.misc_use = (int16_t) (1 - randomNumber(2));
+            item.misc_use = (int16_t)(1 - randomNumber(2));
             tile.feature_id = TILE_CORR_FLOOR;
             dungeonLiteSpot(coord);
             printMessage("You hear a door burst open!");
@@ -573,7 +576,8 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
         // Creature is attempting to move on other creature?
 
         // Creature eats other creatures?
-        if (((move_bits & config::monsters::move::CM_EATS_OTHER) != 0u) && creatures_list[monster.creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
+        if (((move_bits & config::monsters::move::CM_EATS_OTHER) != 0u) &&
+            creatures_list[monster.creature_id].kill_exp_value >= creatures_list[monsters[creature_id].creature_id].kill_exp_value) {
             if (monsters[creature_id].lit) {
                 rcmove |= config::monsters::move::CM_EATS_OTHER;
             }
@@ -628,7 +632,7 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
     uint32_t move_bits = creatures_list[monster.creature_id].movement;
 
     // Up to 5 attempts at moving, give up.
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
     for (int i = 0; !do_turn && i < 5; i++) {
         // Get new position
         coord.y = monster.pos.y;
@@ -722,7 +726,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             } else if (py.flags.paralysis > 0) {
                 py.flags.paralysis += 2;
             } else {
-                py.flags.paralysis = (int16_t) (randomNumber(5) + 4);
+                py.flags.paralysis = (int16_t)(randomNumber(5) + 4);
             }
             break;
         case 11: // Cause Blindness
@@ -740,7 +744,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             } else if (py.flags.confused > 0) {
                 py.flags.confused += 2;
             } else {
-                py.flags.confused = (int16_t) (randomNumber(5) + 3);
+                py.flags.confused = (int16_t)(randomNumber(5) + 3);
             }
             break;
         case 13: // Cause Fear
@@ -749,7 +753,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             } else if (py.flags.afraid > 0) {
                 py.flags.afraid += 2;
             } else {
-                py.flags.afraid = (int16_t) (randomNumber(5) + 3);
+                py.flags.afraid = (int16_t)(randomNumber(5) + 3);
             }
             break;
         case 14: // Summon Monster
@@ -784,7 +788,7 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
             } else if (py.flags.slow > 0) {
                 py.flags.slow += 2;
             } else {
-                py.flags.slow = (int16_t) (randomNumber(5) + 3);
+                py.flags.slow = (int16_t)(randomNumber(5) + 3);
             }
             break;
         case 17: // Drain Mana
@@ -876,7 +880,7 @@ static bool monsterCastSpell(int monster_id) {
 
     // Extract all possible spells into spell_choice
     int spell_choice[30];
-    auto spell_flags = (uint32_t) (creature.spells & ~config::monsters::spells::CS_FREQ);
+    auto spell_flags = (uint32_t)(creature.spells & ~config::monsters::spells::CS_FREQ);
 
     int id = 0;
     while (spell_flags != 0) {
@@ -917,7 +921,7 @@ static bool monsterCastSpell(int monster_id) {
 // Places creature adjacent to given location -RAK-
 // Rats and Flys are fun!
 bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
-    Coord_t position = Coord_t{0,0};
+    Coord_t position = Coord_t{0, 0};
 
     for (int i = 0; i <= 18; i++) {
         position.y = coord.y - 2 + randomNumber(3);
@@ -985,7 +989,7 @@ bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
 static void monsterMultiplyCritter(Monster_t const &monster, int monster_id, uint32_t &rcmove) {
     int counter = 0;
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     for (coord.y = monster.pos.y - 1; coord.y <= monster.pos.y + 1; coord.y++) {
         for (coord.x = monster.pos.x - 1; coord.x <= monster.pos.x + 1; coord.x++) {
@@ -1171,7 +1175,9 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
-    if (((creature.movement & config::monsters::move::CM_MULTIPLY) != 0u) && config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total && (abs_rest_period % config::monsters::MON_MULTIPLY_ADJUST) == 0) {
+    if (((creature.movement & config::monsters::move::CM_MULTIPLY) != 0u) &&
+        config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total &&
+        (abs_rest_period % config::monsters::MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }
 
@@ -1260,7 +1266,8 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
 
         // Monsters trapped in rock must be given a turn also,
         // so that they will die/dig out immediately.
-        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius || (((creatures_list[monster.creature_id].movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.pos.y][monster.pos.x].feature_id >= MIN_CAVE_WALL)) {
+        if (monster.lit || monster.distance_from_player <= creatures_list[monster.creature_id].area_affect_radius ||
+            (((creatures_list[monster.creature_id].movement & config::monsters::move::CM_PHASE) == 0u) && dg.floor[monster.pos.y][monster.pos.x].feature_id >= MIN_CAVE_WALL)) {
             if (monster.sleep_count > 0) {
                 if (py.flags.aggravate) {
                     monster.sleep_count = 0;
@@ -1364,13 +1371,13 @@ int monsterTakeHit(int monster_id, int damage) {
     Recall_t &memory = creature_recall[monster.creature_id];
 
     if ((py.flags.blind < 1 && monster.lit) || ((creature.movement & config::monsters::move::CM_WIN) != 0u)) {
-        auto tmp = (uint32_t) ((memory.movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
+        auto tmp = (uint32_t)((memory.movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
 
         if (tmp > ((treasure_flags & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT)) {
-            treasure_flags = (uint32_t) ((treasure_flags & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
+            treasure_flags = (uint32_t)((treasure_flags & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
         }
 
-        memory.movement = (uint32_t) ((memory.movement & ~config::monsters::move::CM_TREASURE) | treasure_flags);
+        memory.movement = (uint32_t)((memory.movement & ~config::monsters::move::CM_TREASURE) | treasure_flags);
 
         if (memory.kills < SHRT_MAX) {
             memory.kills++;
@@ -1623,7 +1630,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
                 if (py.flags.free_action) {
                     printMessage("You are unaffected.");
                 } else {
-                    py.flags.paralysis = (int16_t) (randomNumber((int) creature_level) + 3);
+                    py.flags.paralysis = (int16_t)(randomNumber((int) creature_level) + 3);
                     printMessage("You are paralyzed.");
                 }
             } else {

@@ -293,9 +293,11 @@ static bool wizardRequestObjectId(int &id, const std::string &label, int start_i
 // Simplified wizard routine for creating an object
 void wizardGenerateObject() {
     int id;
-    if (!wizardRequestObjectId(id, "Dungeon/Store object", 0, 366)) return;
+    if (!wizardRequestObjectId(id, "Dungeon/Store object", 0, 366)) {
+        return;
+    }
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     for (int i = 0; i < 10; i++) {
         coord.y = py.pos.y - 3 + randomNumber(5);

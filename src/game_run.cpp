@@ -942,8 +942,6 @@ static void playerDetectEnchantment() {
         int chance = (i < 22 ? 50 : 10);
 
         if (item.category_id != TV_NOTHING && itemEnchanted(item) && randomNumber(chance) == 1) {
-            // extern const char *describe_use(int); // FIXME: Why here? We have it in externs.
-
             vtype_t tmp_str = {'\0'};
             (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
             playerDisturb(0, 0);
@@ -1505,7 +1503,12 @@ static void commandLocateOnMap() {
         if (panel.y == old_panel.y && panel.x == old_panel.x) {
             tmp_str[0] = '\0';
         } else {
-            (void) sprintf(tmp_str, "%s%s of", panel.y < old_panel.y ? " North" : panel.y > old_panel.y ? " South" : "", panel.x < old_panel.x ? " West" : panel.x > old_panel.x ? " East" : "");
+            (void) sprintf(
+                    tmp_str,
+                    "%s%s of",
+                    panel.y < old_panel.y ? " North" : panel.y > old_panel.y ? " South" : "",
+                    panel.x < old_panel.x ? " West" : panel.x > old_panel.x ? " East" : ""
+                   );
         }
 
         (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", panel.y, panel.x, tmp_str);
@@ -1554,7 +1557,7 @@ static void commandToggleSearch() {
 
 static void doWizardCommands(char com_val) {
     int i;
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     switch (com_val) {
         case CTRL_KEY('A'):
@@ -2068,7 +2071,7 @@ static void playerRegenerateHitPoints(int percent) {
     int32_t new_chp_fraction = (new_chp & 0xFFFF) + py.misc.current_hp_fraction;
 
     if (new_chp_fraction >= 0x10000L) {
-        py.misc.current_hp_fraction = (uint16_t) (new_chp_fraction - 0x10000L);
+        py.misc.current_hp_fraction = (uint16_t)(new_chp_fraction - 0x10000L);
         py.misc.current_hp++;
     } else {
         py.misc.current_hp_fraction = (uint16_t) new_chp_fraction;
@@ -2102,7 +2105,7 @@ static void playerRegenerateMana(int percent) {
     int32_t new_mana_fraction = (new_mana & 0xFFFF) + py.misc.current_mana_fraction;
 
     if (new_mana_fraction >= 0x10000L) {
-        py.misc.current_mana_fraction = (uint16_t) (new_mana_fraction - 0x10000L);
+        py.misc.current_mana_fraction = (uint16_t)(new_mana_fraction - 0x10000L);
         py.misc.current_mana++;
     } else {
         py.misc.current_mana_fraction = (uint16_t) new_mana_fraction;

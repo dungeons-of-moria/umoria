@@ -63,7 +63,7 @@
 constexpr int32_t RNG_M = INT_MAX; // m = 2^31 - 1
 constexpr int32_t RNG_A = 16807L;
 constexpr int32_t RNG_Q = RNG_M / RNG_A; // m div a 127773L
-constexpr int32_t RNG_R = RNG_M % RNG_A;   // m mod a 2836L
+constexpr int32_t RNG_R = RNG_M % RNG_A; // m mod a 2836L
 
 // 32 bit seed
 static uint32_t rnd_seed;
@@ -74,19 +74,19 @@ uint32_t getRandomSeed() {
 
 void setRandomSeed(uint32_t seed) {
     // set seed to value between 1 and m-1
-    rnd_seed = (uint32_t) ((seed % (RNG_M - 1)) + 1);
+    rnd_seed = (uint32_t)((seed % (RNG_M - 1)) + 1);
 }
 
 // returns a pseudo-random number from set 1, 2, ..., RNG_M - 1
 int32_t rnd() {
-    auto high = (int32_t) (rnd_seed / RNG_Q);
-    auto low = (int32_t) (rnd_seed % RNG_Q);
-    auto test = (int32_t) (RNG_A * low - RNG_R * high);
+    auto high = (int32_t)(rnd_seed / RNG_Q);
+    auto low = (int32_t)(rnd_seed % RNG_Q);
+    auto test = (int32_t)(RNG_A * low - RNG_R * high);
 
     if (test > 0) {
         rnd_seed = (uint32_t) test;
     } else {
-        rnd_seed = (uint32_t) (test + RNG_M);
+        rnd_seed = (uint32_t)(test + RNG_M);
     }
     return rnd_seed;
 }
@@ -97,7 +97,7 @@ main() {
     setRandomSeed(0L);
 
     for (int32_t i = 1; i < 10000; i++) {
-        (void)rnd();
+        (void) rnd();
     }
 
     int32_t random = rnd();

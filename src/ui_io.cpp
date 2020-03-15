@@ -17,20 +17,20 @@ static bool curses_on = false;
 // Spare window for saving the screen. -CJS-
 static WINDOW *save_screen;
 
-int eof_flag = 0;             // Is used to signal EOF/HANGUP condition
-bool panic_save = false;      // True if playing from a panic save
+int eof_flag = 0;        // Is used to signal EOF/HANGUP condition
+bool panic_save = false; // True if playing from a panic save
 
 // Set up the terminal into a suitable state -MRC-
 static void moriaTerminalInitialize() {
-    raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
     // cbreak();           // <curses.h> use raw() instead as it disables Ctrl chars
+    raw();                 // <curses.h> disable control characters. I.e. Ctrl-C does not work!
     noecho();              // <curses.h> do not echo typed characters
     nonl();                // <curses.h> disable translation return/newline for detection of return key
     keypad(stdscr, false); // <curses.h> disable keypad input as we handle that ourselves
     // curs_set(0);        // <curses.h> sets the appearance of the cursor based on the value of visibility
 
 #ifdef __APPLE__
-    set_escdelay(50);      // <curses.h> default delay on macOS is 1 second, let's do something about that!
+    set_escdelay(50); // <curses.h> default delay on macOS is 1 second, let's do something about that!
 #endif
 
     curses_on = true;
@@ -116,7 +116,8 @@ void flushInputBuffer() {
         return;
     }
 
-    while (checkForNonBlockingKeyPress(0));
+    while (checkForNonBlockingKeyPress(0))
+        ;
 }
 
 // Clears screen
@@ -151,7 +152,7 @@ void putString(const char *out_str, Coord_t coord) {
     }
 
     vtype_t str = {'\0'};
-    (void) strncpy(str, out_str, (size_t) (79 - coord.x));
+    (void) strncpy(str, out_str, (size_t)(79 - coord.x));
     str[79 - coord.x] = '\0';
 
     if (mvaddstr(coord.y, coord.x, str) == ERR) {
@@ -331,7 +332,7 @@ void printMessageNoCommandInterrupt(const std::string &msg) {
 // terminal, so that this operation can always be performed at
 // any input prompt. getKeyInput() never returns ^R.
 char getKeyInput() {
-    putQIO();         // Dump IO buffer
+    putQIO();               // Dump IO buffer
     game.command_count = 0; // Just to be safe -CJS-
 
     while (true) {
@@ -511,7 +512,7 @@ bool checkForNonBlockingKeyPress(int microseconds) {
 
     return result > 0;
 #else
-    struct timeval tbuf{};
+    struct timeval tbuf {};
     int ch;
     int smask;
 
@@ -543,7 +544,7 @@ void getDefaultPlayerName(char *buffer) {
     unsigned long bufCharCount = PLAYER_NAME_SIZE;
 
     if (!GetUserName(buffer, &bufCharCount)) {
-        (void)strcpy(buffer, defaultName);
+        (void) strcpy(buffer, defaultName);
     }
 #else
     char *p = getlogin();

@@ -92,13 +92,13 @@ static void dungeonPlaceBoundaryWalls() {
     Tile_t(*right_ptr)[MAX_WIDTH];
 
     // put permanent wall on leftmost row and rightmost row
-    left_ptr = (Tile_t(*)[MAX_WIDTH]) &dg.floor[0][0];
-    right_ptr = (Tile_t(*)[MAX_WIDTH]) &dg.floor[0][dg.width - 1];
+    left_ptr = (Tile_t(*)[MAX_WIDTH]) & dg.floor[0][0];
+    right_ptr = (Tile_t(*)[MAX_WIDTH]) & dg.floor[0][dg.width - 1];
 
     for (int i = 0; i < dg.height; i++) {
 #ifdef DEBUG
-        assert((Tile_t *)left_ptr == &floor[i][0]);
-        assert((Tile_t *)right_ptr == &floor[i][dg.width - 1]);
+        assert((Tile_t *) left_ptr == &floor[i][0]);
+        assert((Tile_t *) right_ptr == &floor[i][dg.width - 1]);
 #endif
 
         ((Tile_t *) left_ptr)->feature_id = TILE_BOUNDARY_WALL;
@@ -190,7 +190,7 @@ static void dungeonPlaceLockedDoor(Coord_t coord) {
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    treasure_list[cur_pos].misc_use = (int16_t) (randomNumber(10) + 10);
+    treasure_list[cur_pos].misc_use = (int16_t)(randomNumber(10) + 10);
 }
 
 static void dungeonPlaceStuckDoor(Coord_t coord) {
@@ -198,7 +198,7 @@ static void dungeonPlaceStuckDoor(Coord_t coord) {
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    treasure_list[cur_pos].misc_use = (int16_t) (-randomNumber(10) - 10);
+    treasure_list[cur_pos].misc_use = (int16_t)(-randomNumber(10) - 10);
 }
 
 static void dungeonPlaceSecretDoor(Coord_t coord) {
@@ -256,8 +256,8 @@ static void dungeonPlaceDownStairs(Coord_t coord) {
 
 // Places a staircase 1=up, 2=down -RAK-
 static void dungeonPlaceStairs(int stair_type, int number, int walls) {
-    Coord_t coord1 = Coord_t{0,0};
-    Coord_t coord2 = Coord_t{0,0};
+    Coord_t coord1 = Coord_t{0, 0};
+    Coord_t coord2 = Coord_t{0, 0};
 
     for (int i = 0; i < number; i++) {
         bool placed = false;
@@ -302,7 +302,7 @@ static void dungeonPlaceStairs(int stair_type, int number, int walls) {
 
 // Place a trap with a given displacement of point -RAK-
 static void dungeonPlaceVaultTrap(Coord_t coord, Coord_t displacement, int number) {
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
 
     for (int i = 0; i < number; i++) {
         bool placed = false;
@@ -321,7 +321,7 @@ static void dungeonPlaceVaultTrap(Coord_t coord, Coord_t displacement, int numbe
 
 // Place a trap with a given displacement of point -RAK-
 static void dungeonPlaceVaultMonster(Coord_t coord, int number) {
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
 
     for (int i = 0; i < number; i++) {
         spot.y = coord.y;
@@ -967,7 +967,7 @@ static void dungeonPlaceDoorIfNextToTwoWalls(Coord_t coord) {
 // Returns random co-ordinates -RAK-
 static void dungeonNewSpot(Coord_t &coord) {
     Tile_t *tile = nullptr;
-    Coord_t position = Coord_t{0,0};
+    Coord_t position = Coord_t{0, 0};
 
     do {
         position.y = (int32_t) randomNumber(dg.height - 2);
@@ -1017,8 +1017,8 @@ static void dungeonGenerate() {
     for (int row = 0; row < row_rooms; row++) {
         for (int col = 0; col < col_rooms; col++) {
             if (room_map[row][col]) {
-                locations[location_id].y = (int32_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
-                locations[location_id].x = (int32_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
+                locations[location_id].y = (int32_t)(row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
+                locations[location_id].x = (int32_t)(col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
                 if (dg.current_level > randomNumber(config::dungeon::DUN_UNUSUAL_ROOMS)) {
                     int room_type = randomNumber(3);
 
@@ -1088,7 +1088,7 @@ static void dungeonGenerate() {
     dungeonPlaceStairs(1, randomNumber(2), 3);
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance, monsterPlaceWinning
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
     dungeonNewSpot(coord);
     py.pos.y = coord.y;
     py.pos.x = coord.x;
@@ -1232,7 +1232,7 @@ static void townGeneration() {
     seedResetToOldSeed();
 
     // Set up the character coords, used by monsterPlaceNewWithinDistance below
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
     dungeonNewSpot(coord);
     py.pos.y = coord.y;
     py.pos.x = coord.x;
@@ -1265,8 +1265,8 @@ void generateCave() {
         dg.width = SCREEN_WIDTH;
     }
 
-    dg.panel.max_rows = (int16_t) ((dg.height / SCREEN_HEIGHT) * 2 - 2);
-    dg.panel.max_cols = (int16_t) ((dg.width / SCREEN_WIDTH) * 2 - 2);
+    dg.panel.max_rows = (int16_t)((dg.height / SCREEN_HEIGHT) * 2 - 2);
+    dg.panel.max_cols = (int16_t)((dg.width / SCREEN_WIDTH) * 2 - 2);
 
     dg.panel.row = dg.panel.max_rows;
     dg.panel.col = dg.panel.max_cols;

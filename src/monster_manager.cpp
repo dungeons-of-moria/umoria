@@ -14,10 +14,10 @@ Monster_t monsters[MON_TOTAL_ALLOCATIONS];
 int16_t monster_levels[MON_MAX_LEVELS + 1];
 
 // Values for a blank monster
-Monster_t blank_monster = {0, 0, 0, 0, Coord_t {0,0}, 0, false, 0, 0};
+Monster_t blank_monster = {0, 0, 0, 0, Coord_t{0, 0}, 0, false, 0, 0};
 
-int16_t next_free_monster_id;    // ID for the next available monster ptr
-int16_t monster_multiply_total;  // Total number of reproduction's of creatures
+int16_t next_free_monster_id;   // ID for the next available monster ptr
+int16_t monster_multiply_total; // Total number of reproduction's of creatures
 
 // Returns a pointer to next free space -RAK-
 // Returns -1 if could not allocate a monster.
@@ -52,7 +52,7 @@ bool monsterPlaceNew(Coord_t coord, int creature_id, bool sleeping) {
     }
 
     // the creatures_list[] speed value is 10 greater, so that it can be a uint8_t
-    monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster.speed = (int16_t)(creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
     monster.distance_from_player = (uint8_t) coordDistanceBetween(py.pos, coord);
     monster.lit = false;
@@ -63,7 +63,7 @@ bool monsterPlaceNew(Coord_t coord, int creature_id, bool sleeping) {
         if (creatures_list[creature_id].sleep_counter == 0) {
             monster.sleep_count = 0;
         } else {
-            monster.sleep_count = (int16_t) ((creatures_list[creature_id].sleep_counter * 2) + randomNumber((int) creatures_list[creature_id].sleep_counter * 10));
+            monster.sleep_count = (int16_t)((creatures_list[creature_id].sleep_counter * 2) + randomNumber((int) creatures_list[creature_id].sleep_counter * 10));
         }
     } else {
         monster.sleep_count = 0;
@@ -78,12 +78,17 @@ void monsterPlaceWinning() {
         return;
     }
 
-    Coord_t coord = Coord_t{0,0};
+    Coord_t coord = Coord_t{0, 0};
 
     do {
         coord.y = randomNumber(dg.height - 2);
         coord.x = randomNumber(dg.width - 2);
-    } while ((dg.floor[coord.y][coord.x].feature_id >= MIN_CLOSED_SPACE) || (dg.floor[coord.y][coord.x].creature_id != 0) || (dg.floor[coord.y][coord.x].treasure_id != 0) || (coordDistanceBetween(coord, py.pos) <= config::monsters::MON_MAX_SIGHT));
+    } while (
+            dg.floor[coord.y][coord.x].feature_id >= MIN_CLOSED_SPACE ||
+            dg.floor[coord.y][coord.x].creature_id != 0 ||
+            dg.floor[coord.y][coord.x].treasure_id != 0 ||
+            coordDistanceBetween(coord, py.pos) <= config::monsters::MON_MAX_SIGHT
+    );
 
     int creature_id = randomNumber(config::monsters::MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
 
@@ -113,7 +118,7 @@ void monsterPlaceWinning() {
     }
 
     // the creatures_list speed value is 10 greater, so that it can be a uint8_t
-    monster.speed = (int16_t) (creatures_list[creature_id].speed - 10 + py.flags.speed);
+    monster.speed = (int16_t)(creatures_list[creature_id].speed - 10 + py.flags.speed);
     monster.stunned_amount = 0;
     monster.distance_from_player = (uint8_t) coordDistanceBetween(py.pos, coord);
 
@@ -166,7 +171,11 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             position.y = randomNumber(dg.height - 2);
             position.x = randomNumber(dg.width - 2);
-        } while (dg.floor[position.y][position.x].feature_id >= MIN_CLOSED_SPACE || dg.floor[position.y][position.x].creature_id != 0 || coordDistanceBetween(position, py.pos) <= distance_from_source);
+        } while (
+                dg.floor[position.y][position.x].feature_id >= MIN_CLOSED_SPACE ||
+                dg.floor[position.y][position.x].creature_id != 0 ||
+                coordDistanceBetween(position, py.pos) <= distance_from_source
+        );
 
         int l = monsterGetOneSuitableForLevel(dg.current_level);
 
@@ -185,7 +194,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
 static bool placeMonsterAdjacentTo(int monsterID, Coord_t &coord, bool slp) {
     bool placed = false;
 
-    Coord_t position = Coord_t{0,0};
+    Coord_t position = Coord_t{0, 0};
 
     for (int i = 0; i <= 9; i++) {
         position.y = coord.y - 2 + randomNumber(3);

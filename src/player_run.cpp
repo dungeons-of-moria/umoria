@@ -346,7 +346,7 @@ void playerAreaAffect(int direction, Coord_t coord) {
 
     int max = (direction & 1) + 1;
 
-    Coord_t spot = Coord_t{0,0};
+    Coord_t spot = Coord_t{0, 0};
 
     // Look at every newly adjacent square.
     for (int i = -max; i <= max; i++) {
@@ -386,7 +386,7 @@ void playerAreaAffect(int direction, Coord_t coord) {
 
     // Two options!
 
-    Coord_t location = Coord_t{coord.y,coord.x};
+    Coord_t location = Coord_t{coord.y, coord.x};
     (void) playerMovePosition(option, location);
 
     if (!playerCanSeeDungeonWall(option, location) || !playerCanSeeDungeonWall(check_dir, location)) {

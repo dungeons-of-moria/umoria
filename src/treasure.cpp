@@ -51,7 +51,8 @@ static void magicalArmor(Inventory_t &item, int special, int level) {
 
     switch (randomNumber(9)) {
         case 1:
-            item.flags |= (config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID | config::treasure::flags::TR_RES_FIRE);
+            item.flags |=
+                (config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID | config::treasure::flags::TR_RES_FIRE);
             item.special_name_id = special_name_ids::SN_R;
             item.to_ac += 5;
             item.cost += 2500;
@@ -106,7 +107,8 @@ static void magicalSword(Inventory_t &item, int special, int level) {
     if (magicShouldBeEnchanted(3 * special / 2)) {
         switch (randomNumber(16)) {
             case 1: // Holy Avenger
-                item.flags |= (config::treasure::flags::TR_SEE_INVIS | config::treasure::flags::TR_SUST_STAT | config::treasure::flags::TR_SLAY_UNDEAD | config::treasure::flags::TR_SLAY_EVIL | config::treasure::flags::TR_STR);
+                item.flags |= (config::treasure::flags::TR_SEE_INVIS | config::treasure::flags::TR_SUST_STAT | config::treasure::flags::TR_SLAY_UNDEAD |
+                               config::treasure::flags::TR_SLAY_EVIL | config::treasure::flags::TR_STR);
                 item.to_hit += 5;
                 item.to_damage += 5;
                 item.to_ac += randomNumber(4);
@@ -119,7 +121,9 @@ static void magicalSword(Inventory_t &item, int special, int level) {
                 item.cost += 10000;
                 break;
             case 2: // Defender
-                item.flags |= (config::treasure::flags::TR_FFALL | config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_SEE_INVIS | config::treasure::flags::TR_FREE_ACT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID | config::treasure::flags::TR_RES_FIRE | config::treasure::flags::TR_REGEN | config::treasure::flags::TR_STEALTH);
+                item.flags |= (config::treasure::flags::TR_FFALL | config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_SEE_INVIS |
+                               config::treasure::flags::TR_FREE_ACT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID |
+                               config::treasure::flags::TR_RES_FIRE | config::treasure::flags::TR_REGEN | config::treasure::flags::TR_STEALTH);
                 item.to_hit += 3;
                 item.to_damage += 3;
                 item.to_ac += 5 + randomNumber(5);
@@ -307,7 +311,7 @@ static void cursedBoots(Inventory_t &item, int level) {
             break;
         default:
             item.special_name_id = special_name_ids::SN_GREAT_MASS;
-            item.weight = (uint16_t) (item.weight * 5);
+            item.weight = (uint16_t)(item.weight * 5);
             break;
     }
 
@@ -342,7 +346,7 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
                 item.cost += item.misc_use * 500;
                 break;
             default:
-                item.misc_use = (int16_t) (1 + randomNumber(4));
+                item.misc_use = (int16_t)(1 + randomNumber(4));
                 item.flags |= config::treasure::flags::TR_INFRA;
                 item.special_name_id = special_name_ids::SN_INFRAVISION;
                 item.cost += item.misc_use * 250;
@@ -368,7 +372,8 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
         case 3:
             item.identification |= config::identification::ID_SHOW_P1;
             item.misc_use = (int16_t) randomNumber(3);
-            item.flags |= (config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID | config::treasure::flags::TR_RES_FIRE | config::treasure::flags::TR_INT);
+            item.flags |= (config::treasure::flags::TR_RES_LIGHT | config::treasure::flags::TR_RES_COLD | config::treasure::flags::TR_RES_ACID |
+                           config::treasure::flags::TR_RES_FIRE | config::treasure::flags::TR_INT);
             item.special_name_id = special_name_ids::SN_MAGI;
             item.cost += 3000 + item.misc_use * 500;
             break;
@@ -381,7 +386,7 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
             break;
         case 5:
             item.identification |= config::identification::ID_SHOW_P1;
-            item.misc_use = (int16_t) (5 * (1 + randomNumber(4)));
+            item.misc_use = (int16_t)(5 * (1 + randomNumber(4)));
             item.flags |= (config::treasure::flags::TR_SEE_INVIS | config::treasure::flags::TR_SEARCH);
             item.special_name_id = special_name_ids::SN_SEEING;
             item.cost += 1000 + item.misc_use * 100;
@@ -472,7 +477,7 @@ static void processRings(Inventory_t &item, int level, int cursed) {
             }
             break;
         case 5:
-            item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 20, level));
+            item.misc_use = (int16_t)(5 * magicEnchantmentBonus(1, 20, level));
             item.cost += item.misc_use * 50;
             if (magicShouldBeEnchanted(cursed)) {
                 item.misc_use = -item.misc_use;
@@ -543,7 +548,7 @@ static void processAmulets(Inventory_t &item, int level, int cursed) {
             item.cost += item.misc_use * 100;
         }
     } else if (item.sub_category_id == 2) {
-        item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
+        item.misc_use = (int16_t)(5 * magicEnchantmentBonus(1, 25, level));
         if (magicShouldBeEnchanted(cursed)) {
             item.misc_use = -item.misc_use;
             item.cost = -item.cost;
@@ -553,7 +558,7 @@ static void processAmulets(Inventory_t &item, int level, int cursed) {
         }
     } else if (item.sub_category_id == 8) {
         // amulet of the magi is never cursed
-        item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
+        item.misc_use = (int16_t)(5 * magicEnchantmentBonus(1, 25, level));
         item.cost += 20 * item.misc_use;
     }
 }
@@ -760,7 +765,8 @@ static void magicalChests(Inventory_t &item, int level) {
         case 15:
         case 16:
         case 17:
-            item.flags |= (config::treasure::chests::CH_PARALYSED | config::treasure::chests::CH_POISON | config::treasure::chests::CH_LOSE_STR | config::treasure::chests::CH_LOCKED);
+            item.flags |=
+                (config::treasure::chests::CH_PARALYSED | config::treasure::chests::CH_POISON | config::treasure::chests::CH_LOSE_STR | config::treasure::chests::CH_LOCKED);
             item.special_name_id = special_name_ids::SN_MULTIPLE_TRAPS;
             break;
         default:

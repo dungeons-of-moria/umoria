@@ -71,13 +71,13 @@ bool los(Coord_t from, Coord_t to) {
     // In the computations below, dy (or dx) and m are multiplied by a scale factor,
     // scale = abs(delta_x * delta_y * 2), so that we can use integer arithmetic.
     {
-        int xx;          // x position
-        int yy;          // y position
-        int scale;       // above scale factor
-        int scale_half;  // above scale factor / 2
-        int x_sign;      // sign of delta_x
-        int y_sign;      // sign of delta_y
-        int slope;       // slope or 1/slope of LOS
+        int xx;         // x position
+        int yy;         // y position
+        int scale;      // above scale factor
+        int scale_half; // above scale factor / 2
+        int x_sign;     // sign of delta_x
+        int y_sign;     // sign of delta_y
+        int slope;      // slope or 1/slope of LOS
 
         int delta_multiply = delta_x * delta_y;
         scale_half = (int) std::abs((std::intmax_t) delta_multiply);
@@ -447,7 +447,7 @@ static bool lookRay(int y, int from, int to) {
             }
         } while (!transparent);
 
-        init_transparent:
+    init_transparent:
 
         // Find the end of this window of visibility.
         do {

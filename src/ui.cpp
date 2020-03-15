@@ -8,7 +8,9 @@
 
 #include "headers.h"
 
-static const char *stat_names[] = {"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : ",};
+static const char *stat_names[] = {
+    "STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : ",
+};
 #define BLANK_LENGTH 24
 static char blank_string[] = "                        ";
 
@@ -456,7 +458,7 @@ void printCharacterStatsBlock() {
     }
 
     // if speed non zero, print it, modify speed if Searching
-    int16_t speed = py.flags.speed - (int16_t) ((status & config::player::status::PY_SEARCH) >> 8);
+    int16_t speed = py.flags.speed - (int16_t)((status & config::player::status::PY_SEARCH) >> 8);
     if (speed != 0) {
         printCharacterSpeed();
     }
@@ -549,7 +551,7 @@ void printCharacterLevelExperience() {
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", Coord_t{12, 28});
     } else {
-        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), Coord_t{12, 28});
+        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t)(py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), Coord_t{12, 28});
     }
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, Coord_t{13, 28});
@@ -576,9 +578,15 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() +
+                playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) +
+               (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
+    int xsave = py.misc.saving_throw +
+                playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) +
+                (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
+    int xdev = py.misc.saving_throw +
+                playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) +
+                (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -677,7 +685,12 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
         col = 31;
     }
 
-    int consecutive_offset = (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE ? config::spells::NAME_OFFSET_SPELLS : config::spells::NAME_OFFSET_PRAYERS);
+    int consecutive_offset;
+    if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
+        consecutive_offset = config::spells::NAME_OFFSET_SPELLS;
+    } else {
+        consecutive_offset = config::spells::NAME_OFFSET_PRAYERS;
+    }
 
     eraseLine(Coord_t{1, col});
     putString("Name", Coord_t{1, col + 5});

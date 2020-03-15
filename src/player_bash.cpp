@@ -159,7 +159,7 @@ static void playerBashAttack(Coord_t coord) {
 
     if (randomNumber(150) > py.stats.used[py_attrs::A_DEX]) {
         printMessage("You are off balance.");
-        py.flags.paralysis = (int16_t) (1 + randomNumber(2));
+        py.flags.paralysis = (int16_t)(1 + randomNumber(2));
     }
 }
 
@@ -186,7 +186,7 @@ static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory
         inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
 
         // 50% chance of breaking door
-        item.misc_use = (int16_t) (1 - randomNumber(2));
+        item.misc_use = (int16_t)(1 - randomNumber(2));
 
         tile.feature_id = TILE_CORR_FLOOR;
 
@@ -201,7 +201,7 @@ static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory
 
     if (randomNumber(150) > py.stats.used[py_attrs::A_DEX]) {
         printMessage("You are off-balance.");
-        py.flags.paralysis = (int16_t) (1 + randomNumber(2));
+        py.flags.paralysis = (int16_t)(1 + randomNumber(2));
         return;
     }
 

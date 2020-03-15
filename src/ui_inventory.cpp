@@ -424,10 +424,12 @@ static bool uiCommandInventoryDropItem(char *command, bool selecting) {
 
 static bool uiCommandInventoryWearWieldItem(bool selecting) {
     // Note: simple loop to get the global wear_low value
-    for (wear_low = 0; wear_low < py.unique_inventory_items && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++);
+    for (wear_low = 0; wear_low < py.unique_inventory_items && inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++)
+        ;
 
     // Note: simple loop to get the global wear_high value
-    for (wear_high = wear_low; wear_high < py.unique_inventory_items && inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++);
+    for (wear_high = wear_low; wear_high < py.unique_inventory_items && inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++)
+        ;
 
     wear_high--;
 
@@ -499,7 +501,8 @@ static int inventoryGetItemMatchingInscription(char which, char command, int fro
         int m;
 
         // Note: simple loop to get id
-        for (m = from; m <= to && m < PLAYER_INVENTORY_SIZE && ((inventory[m].inscription[0] != which) || (inventory[m].inscription[1] != '\0')); m++);
+        for (m = from; m <= to && m < PLAYER_INVENTORY_SIZE && ((inventory[m].inscription[0] != which) || (inventory[m].inscription[1] != '\0')); m++)
+            ;
 
         if (m <= to) {
             item = m;
@@ -954,21 +957,12 @@ static void inventoryDisplayAppropriateHeader() {
         int weightRemainder = py.inventory_weight % 10;
 
         if (!config::options::show_inventory_weights || py.unique_inventory_items == 0) {
-            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s",
-                           weightQuotient,
-                           weightRemainder,
-                           (py.unique_inventory_items == 0 ? "nothing." : "-")
-            );
+            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s", weightQuotient, weightRemainder, (py.unique_inventory_items == 0 ? "nothing." : "-"));
         } else {
             int limitQuotient = playerCarryingLoadLimit() / 10;
             int limitRemainder = playerCarryingLoadLimit() % 10;
 
-            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -",
-                           weightQuotient,
-                           weightRemainder,
-                           limitQuotient,
-                           limitRemainder
-            );
+            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -", weightQuotient, weightRemainder, limitQuotient, limitRemainder);
         }
 
         putStringClearToEOL(msg, Coord_t{0, 0});
@@ -1144,7 +1138,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     (redraw_screen ? "" : " * to see,"),
                     (screen_id > 0 ? "Equip" : "Inven"),
                     prompt
-            );
+                   );
         } else {
             (void) sprintf(
                     description,
@@ -1154,7 +1148,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     (screen_id > 0 ? " 0-9," : ""),
                     (redraw_screen ? "" : " * for inventory list,"),
                     prompt
-            );
+                   );
         }
 
         putStringClearToEOL(description, Coord_t{0, 0});
@@ -1228,7 +1222,8 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                         int m;
 
                         // Note: loop to find the inventory item
-                        for (m = item_id_start; m < player_equipment::EQUIPMENT_WIELD && (inventory[m].inscription[0] != which || inventory[m].inscription[1] != '\0'); m++);
+                        for (m = item_id_start; m < player_equipment::EQUIPMENT_WIELD && (inventory[m].inscription[0] != which || inventory[m].inscription[1] != '\0'); m++)
+                            ;
 
                         if (m < player_equipment::EQUIPMENT_WIELD) {
                             command_key_id = m;

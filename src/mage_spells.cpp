@@ -73,7 +73,7 @@ static void castSpell(int spell_id) {
     int dir;
 
     switch ((MageSpellTypes) spell_id) {
-        case MageSpellTypes::magic_missile :
+        case MageSpellTypes::magic_missile:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBolt(py.pos, dir, diceRoll(Dice_t{2, 6}), magic_spell_flags::GF_MAGIC_MISSILE, spell_names[0]);
             }
@@ -125,7 +125,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellTypes::remove_curse:
             for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
-                inventory[id].flags = (uint32_t) (inventory[id].flags & ~config::treasure::flags::TR_CURSED);
+                inventory[id].flags = (uint32_t)(inventory[id].flags & ~config::treasure::flags::TR_CURSED);
             }
             break;
         case MageSpellTypes::frost_bolt:
