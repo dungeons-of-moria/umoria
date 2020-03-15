@@ -12,6 +12,7 @@ Tracking all changes since the 5.6.0 release.
     * Change `store_buy` function signature type to use `uint8_t`, and return a `bool`.
     * Various other types changes.
 - Typo fixes: `item_sub_catory`, `current_askin_price`.
+- Various fixes: `clang-format`, code inspection, and `clang-tidy`.
 
 
 ## 5.7.11 (2020-02-26)
