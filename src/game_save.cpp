@@ -409,8 +409,8 @@ static bool _save_char(const std::string &filename) {
         fileptr = fopen(config::files::save_game.c_str(), "wb");
     }
 
-    DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Saving data to %s\n", config::files::save_game));
+    DEBUG(logfile = fopen("IO_LOG", "a"))
+    DEBUG(fprintf(logfile, "Saving data to %s\n", config::files::save_game))
 
     if (fileptr != nullptr) {
         xor_byte = 0;
@@ -427,7 +427,7 @@ static bool _save_char(const std::string &filename) {
 
         ok = sv_write();
 
-        DEBUG(fclose(logfile));
+        DEBUG(fclose(logfile))
 
         if (fclose(fileptr) == EOF) {
             ok = false;
@@ -505,8 +505,8 @@ bool loadGame(bool &generate) {
         putStringClearToEOL("Restoring Memory...", Coord_t{0, 0});
         putQIO();
 
-        DEBUG(logfile = fopen("IO_LOG", "a"));
-        DEBUG(fprintf(logfile, "Reading data from %s\n", config::files::save_game));
+        DEBUG(logfile = fopen("IO_LOG", "a"))
+        DEBUG(fprintf(logfile, "Reading data from %s\n", config::files::save_game))
 
         // Note: setting these xor_byte is correct!
         xor_byte = 0;
@@ -940,77 +940,77 @@ static void wr_bool(bool value) {
 static void wr_byte(uint8_t value) {
     xor_byte ^= value;
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) xor_byte, (int) value));
+    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) xor_byte, (int) value))
 }
 
 static void wr_short(uint16_t value) {
     xor_byte ^= (value & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, "SHORT: %02X", (int) xor_byte));
+    DEBUG(fprintf(logfile, "SHORT: %02X", (int) xor_byte))
     xor_byte ^= ((value >> 8) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X = %d\n", (int) xor_byte, (int) value));
+    DEBUG(fprintf(logfile, " %02X = %d\n", (int) xor_byte, (int) value))
 }
 
 static void wr_long(uint32_t value) {
     xor_byte ^= (value & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, "LONG:  %02X", (int) xor_byte));
+    DEBUG(fprintf(logfile, "LONG:  %02X", (int) xor_byte))
     xor_byte ^= ((value >> 8) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X", (int) xor_byte));
+    DEBUG(fprintf(logfile, " %02X", (int) xor_byte))
     xor_byte ^= ((value >> 16) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X", (int) xor_byte));
+    DEBUG(fprintf(logfile, " %02X", (int) xor_byte))
     xor_byte ^= ((value >> 24) & 0xFF);
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X = %ld\n", (int) xor_byte, (int32_t) value));
+    DEBUG(fprintf(logfile, " %02X = %ld\n", (int) xor_byte, (int32_t) value))
 }
 
 static void wr_bytes(uint8_t *value, int count) {
     uint8_t *ptr;
 
-    DEBUG(fprintf(logfile, "%d BYTES:", count));
+    DEBUG(fprintf(logfile, "%d BYTES:", count))
     ptr = value;
     for (int i = 0; i < count; i++) {
         xor_byte ^= *ptr++;
         (void) putc((int) xor_byte, fileptr);
-        DEBUG(fprintf(logfile, "  %02X = %d", (int) xor_byte, (int) (ptr[-1])));
+        DEBUG(fprintf(logfile, "  %02X = %d", (int) xor_byte, (int) (ptr[-1])))
     }
-    DEBUG(fprintf(logfile, "\n"));
+    DEBUG(fprintf(logfile, "\n"))
 }
 
 static void wr_string(char *str) {
-    DEBUG(char *s = str);
-    DEBUG(fprintf(logfile, "STRING:"));
+    DEBUG(char *s = str)
+    DEBUG(fprintf(logfile, "STRING:"))
     while (*str != '\0') {
         xor_byte ^= *str++;
         (void) putc((int) xor_byte, fileptr);
-        DEBUG(fprintf(logfile, " %02X", (int) xor_byte));
+        DEBUG(fprintf(logfile, " %02X", (int) xor_byte))
     }
     xor_byte ^= *str;
     (void) putc((int) xor_byte, fileptr);
-    DEBUG(fprintf(logfile, " %02X = \"%s\"\n", (int) xor_byte, s));
+    DEBUG(fprintf(logfile, " %02X = \"%s\"\n", (int) xor_byte, s))
 }
 
 static void wr_shorts(uint16_t *value, int count) {
-    DEBUG(fprintf(logfile, "%d SHORTS:", count));
+    DEBUG(fprintf(logfile, "%d SHORTS:", count))
 
     uint16_t *sptr = value;
 
     for (int i = 0; i < count; i++) {
         xor_byte ^= (*sptr & 0xFF);
         (void) putc((int) xor_byte, fileptr);
-        DEBUG(fprintf(logfile, "  %02X", (int) xor_byte));
+        DEBUG(fprintf(logfile, "  %02X", (int) xor_byte))
         xor_byte ^= ((*sptr++ >> 8) & 0xFF);
         (void) putc((int) xor_byte, fileptr);
-        DEBUG(fprintf(logfile, " %02X = %d", (int) xor_byte, (int) sptr[-1]));
+        DEBUG(fprintf(logfile, " %02X = %d", (int) xor_byte, (int) sptr[-1]))
     }
-    DEBUG(fprintf(logfile, "\n"));
+    DEBUG(fprintf(logfile, "\n"))
 }
 
 static void wr_item(Inventory_t &item) {
-    DEBUG(fprintf(logfile, "ITEM:\n"));
+    DEBUG(fprintf(logfile, "ITEM:\n"))
     wr_short(item.id);
     wr_byte(item.special_name_id);
     wr_string(item.inscription);
@@ -1033,13 +1033,13 @@ static void wr_item(Inventory_t &item) {
 }
 
 static void wr_monster(Monster_t const &monster) {
-    DEBUG(fprintf(logfile, "MONSTER:\n"));
+    DEBUG(fprintf(logfile, "MONSTER:\n"))
     wr_short((uint16_t) monster.hp);
     wr_short((uint16_t) monster.sleep_count);
     wr_short((uint16_t) monster.speed);
     wr_short(monster.creature_id);
-    wr_byte(monster.pos.y);
-    wr_byte(monster.pos.x);
+    wr_byte((uint8_t) monster.pos.y);
+    wr_byte((uint8_t) monster.pos.x);
     wr_byte(monster.distance_from_player);
     wr_bool(monster.lit);
     wr_byte(monster.stunned_amount);
@@ -1060,7 +1060,7 @@ static uint8_t rd_byte() {
     uint8_t decoded_byte = c ^ xor_byte;
     xor_byte = c;
 
-    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, decoded_byte));
+    DEBUG(fprintf(logfile, "BYTE:  %02X = %d\n", (int) c, decoded_byte))
 
     return decoded_byte;
 }
@@ -1072,7 +1072,7 @@ static uint16_t rd_short() {
     xor_byte = get_byte();
     decoded_int |= (uint16_t)(c ^ xor_byte) << 8;
 
-    DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, decoded_int));
+    DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, decoded_int))
 
     return decoded_int;
 }
@@ -1083,44 +1083,44 @@ static uint32_t rd_long() {
 
     xor_byte = get_byte();
     decoded_long |= (uint32_t)(c ^ xor_byte) << 8;
-    DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte));
+    DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte))
 
     c = get_byte();
     decoded_long |= (uint32_t)(c ^ xor_byte) << 16;
 
     xor_byte = get_byte();
     decoded_long |= (uint32_t)(c ^ xor_byte) << 24;
-    DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, decoded_long));
+    DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, decoded_long))
 
     return decoded_long;
 }
 
 static void rd_bytes(uint8_t *value, int count) {
-    DEBUG(fprintf(logfile, "%d BYTES:", count));
+    DEBUG(fprintf(logfile, "%d BYTES:", count))
     uint8_t *ptr = value;
     for (int i = 0; i < count; i++) {
         auto c = get_byte();
         *ptr++ = c ^ xor_byte;
         xor_byte = c;
-        DEBUG(fprintf(logfile, "  %02X = %d", (int) c, (int) ptr[-1]));
+        DEBUG(fprintf(logfile, "  %02X = %d", (int) c, (int) ptr[-1]))
     }
-    DEBUG(fprintf(logfile, "\n"));
+    DEBUG(fprintf(logfile, "\n"))
 }
 
 static void rd_string(char *str) {
-    DEBUG(char *s = str);
-    DEBUG(fprintf(logfile, "STRING: "));
+    DEBUG(char *s = str)
+    DEBUG(fprintf(logfile, "STRING: "))
     do {
         auto c = get_byte();
         *str = c ^ xor_byte;
         xor_byte = c;
-        DEBUG(fprintf(logfile, "%02X ", (int) c));
+        DEBUG(fprintf(logfile, "%02X ", (int) c))
     } while (*str++ != '\0');
-    DEBUG(fprintf(logfile, "= \"%s\"\n", s));
+    DEBUG(fprintf(logfile, "= \"%s\"\n", s))
 }
 
 static void rd_shorts(uint16_t *value, int count) {
-    DEBUG(fprintf(logfile, "%d SHORTS:", count));
+    DEBUG(fprintf(logfile, "%d SHORTS:", count))
     uint16_t *sptr = value;
 
     for (int i = 0; i < count; i++) {
@@ -1129,13 +1129,13 @@ static void rd_shorts(uint16_t *value, int count) {
         xor_byte = get_byte();
         s |= (uint16_t)(c ^ xor_byte) << 8;
         *sptr++ = s;
-        DEBUG(fprintf(logfile, "  %02X %02X = %d", (int) c, (int) xor_byte, (int) s));
+        DEBUG(fprintf(logfile, "  %02X %02X = %d", (int) c, (int) xor_byte, (int) s))
     }
-    DEBUG(fprintf(logfile, "\n"));
+    DEBUG(fprintf(logfile, "\n"))
 }
 
 static void rd_item(Inventory_t &item) {
-    DEBUG(fprintf(logfile, "ITEM:\n"));
+    DEBUG(fprintf(logfile, "ITEM:\n"))
     item.id = rd_short();
     item.special_name_id = rd_byte();
     rd_string(item.inscription);
@@ -1158,7 +1158,7 @@ static void rd_item(Inventory_t &item) {
 }
 
 static void rd_monster(Monster_t &monster) {
-    DEBUG(fprintf(logfile, "MONSTER:\n"));
+    DEBUG(fprintf(logfile, "MONSTER:\n"))
     monster.hp = rd_short();
     monster.sleep_count = rd_short();
     monster.speed = rd_short();
@@ -1179,8 +1179,8 @@ void setFileptr(FILE *file) {
 }
 
 void saveHighScore(HighScore_t const &score) {
-    DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Saving score:\n"));
+    DEBUG(logfile = fopen("IO_LOG", "a"))
+    DEBUG(fprintf(logfile, "Saving score:\n"))
 
     // Save the encryption byte for robustness.
     wr_byte(xor_byte);
@@ -1198,12 +1198,12 @@ void saveHighScore(HighScore_t const &score) {
     wr_byte(score.character_class);
     wr_bytes((uint8_t *) score.name, PLAYER_NAME_SIZE);
     wr_bytes((uint8_t *) score.died_from, 25);
-    DEBUG(fclose(logfile));
+    DEBUG(fclose(logfile))
 }
 
 void readHighScore(HighScore_t &score) {
-    DEBUG(logfile = fopen("IO_LOG", "a"));
-    DEBUG(fprintf(logfile, "Reading score:\n"));
+    DEBUG(logfile = fopen("IO_LOG", "a"))
+    DEBUG(fprintf(logfile, "Reading score:\n"))
 
     // Read the encryption byte.
     xor_byte = get_byte();
@@ -1221,5 +1221,5 @@ void readHighScore(HighScore_t &score) {
     score.character_class = rd_byte();
     rd_bytes((uint8_t *) score.name, PLAYER_NAME_SIZE);
     rd_bytes((uint8_t *) score.died_from, 25);
-    DEBUG(fclose(logfile));
+    DEBUG(fclose(logfile))
 }

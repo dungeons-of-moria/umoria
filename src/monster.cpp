@@ -90,7 +90,7 @@ static int monsterMovementRate(int16_t speed) {
     int rate = 0;
     if ((dg.game_turn % (2 - speed)) == 0) {
         rate = 1;
-    };
+    }
 
     return rate;
 }

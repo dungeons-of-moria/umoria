@@ -2145,11 +2145,7 @@ static bool itemEnchanted(Inventory_t const &item) {
         return true;
     }
 
-    if ((0x07ffe980L & item.flags) != 0) {
-        return true;
-    }
-
-    return false;
+    return (0x07ffe980L & item.flags) != 0;
 }
 
 // Examine a Book -RAK-
