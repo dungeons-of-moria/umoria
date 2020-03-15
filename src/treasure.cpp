@@ -578,7 +578,6 @@ static int wandMagic(uint8_t id) {
         case 5:
             return randomNumber(8) + 6;
         case 6:
-            return randomNumber(20) + 12;
         case 7:
             return randomNumber(20) + 12;
         case 8:
@@ -594,7 +593,6 @@ static int wandMagic(uint8_t id) {
         case 13:
             return randomNumber(10) + 6;
         case 14:
-            return randomNumber(5) + 3;
         case 15:
             return randomNumber(5) + 3;
         case 16:
@@ -635,7 +633,6 @@ static int staffMagic(uint8_t id) {
         case 6:
             return randomNumber(5) + 3;
         case 7:
-            return randomNumber(3) + 1;
         case 8:
             return randomNumber(3) + 1;
         case 9:
@@ -643,9 +640,7 @@ static int staffMagic(uint8_t id) {
         case 10:
             return randomNumber(10) + 12;
         case 11:
-            return randomNumber(5) + 6;
         case 12:
-            return randomNumber(5) + 6;
         case 13:
             return randomNumber(5) + 6;
         case 14:
@@ -653,7 +648,6 @@ static int staffMagic(uint8_t id) {
         case 15:
             return randomNumber(3) + 4;
         case 16:
-            return randomNumber(5) + 6;
         case 17:
             return randomNumber(5) + 6;
         case 18:
@@ -661,7 +655,6 @@ static int staffMagic(uint8_t id) {
         case 19:
             return randomNumber(10) + 12;
         case 20:
-            return randomNumber(3) + 4;
         case 21:
             return randomNumber(3) + 4;
         case 22:

@@ -309,7 +309,6 @@ static void playerStepsOnTrap(Coord_t coord) {
             trapConstitutionDart(item, damage);
             break;
         case TrapTypes::secret_door:
-            break;
         case TrapTypes::scare_monster:
             break;
 

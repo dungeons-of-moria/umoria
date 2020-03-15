@@ -1211,7 +1211,6 @@ static char originalCommands(char command) {
             command = 'W';
             break;
         case 'M':
-            break;
         case 'R':
             break;
         case 'S':
@@ -1737,11 +1736,8 @@ static void doCommand(char command) {
             itemInscribe();
             game.player_free_turn = true;
             break;
-        case '!': // (!) escape to the shell
-        case '$':
-            // escaping to shell disabled -MRC-
-            game.player_free_turn = true;
-            break;
+        case '!':    // (!) escape to the shell
+        case '$':    // escaping to shell disabled -MRC-
         case ESCAPE: // (ESC)   do nothing.
         case ' ':    // (space) do nothing.
             game.player_free_turn = true;

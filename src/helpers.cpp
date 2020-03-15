@@ -129,11 +129,8 @@ bool stringToNumber(const char *str, int &number) {
 
     if (errno == ERANGE) {
         switch (num) {
-            case (int) LONG_MIN:
-                // underflow
-                break;
-            case (int) LONG_MAX:
-                // overflow
+            case (int) LONG_MIN: // underflow
+            case (int) LONG_MAX: // overflow
                 break;
             default:
                 // impossible
