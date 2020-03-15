@@ -5,12 +5,12 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
-- Change `spellLightLine` signature from non-standard `x, y` to `y, x`.
-- Use `Coord_t` in many function signatures; mostly the simple `(int y, int x)` variations.
-- Various type change:
+- Player (`row`,`col`) and Monster (`y`,`x`) now use `Coord_t` for their positions.
+- Use `Coord_t` in all functions that used `y, x` coordinates.
+- Type changes:
     * `rcmove` variable in `memoryUpdateRecall()` signature is now an `uint32_t` like everywhere else.
     * Change `store_buy` function signature type to use `uint8_t`, and return a `bool`.
-    * PLus various of types changes
+    * Various other types changes.
 - Typo fixes: `item_sub_catory`, `current_askin_price`.
 
 
