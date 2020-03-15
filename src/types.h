@@ -6,15 +6,6 @@
 //
 // See LICENSE and AUTHORS for more information.
 
-// Custom types for working with strings
-
-// maximum unsigned char: 255
-constexpr uint8_t MAX_UCHAR = std::numeric_limits<uint8_t>::max();
-// maximum short signed int: 32767
-constexpr int16_t MAX_SHORT = std::numeric_limits<int16_t>::max();
-// maximum long signed int: 0x7FFFFFFFL
-constexpr int32_t MAX_LONG = std::numeric_limits<int32_t>::max();
-
 // This used to be NULL, but that was technically incorrect.
 // CNIL is used instead of null to help avoid lint errors.
 constexpr char *CNIL = 0;

@@ -117,7 +117,7 @@ static bool parseGameSeed(const char *argv, uint32_t &seed) {
     if (!stringToNumber(argv, value)) {
         return false;
     }
-    if (value <= 0 || value > MAX_LONG) {
+    if (value <= 0 || value > INT_MAX) {
         return false;
     }
 

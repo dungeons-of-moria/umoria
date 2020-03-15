@@ -75,8 +75,8 @@ static bool memoryMonsterKnown(Recall_t const &memory) {
 }
 
 static void memoryWizardModeInit(Recall_t &memory, Creature_t const &creature) {
-    memory.kills = (uint16_t) MAX_SHORT;
-    memory.wake = memory.ignore = MAX_UCHAR;
+    memory.kills = (uint16_t) SHRT_MAX;
+    memory.wake = memory.ignore = UCHAR_MAX;
 
     uint32_t move = (uint32_t) ((creature.movement & config::monsters::move::CM_4D2_OBJ) != 0) * 8;
     move += (uint32_t) ((creature.movement & config::monsters::move::CM_2D2_OBJ) != 0) * 4;
@@ -95,12 +95,12 @@ static void memoryWizardModeInit(Recall_t &memory, Creature_t const &creature) {
 
     for (int i = 0; i < MON_MAX_ATTACKS; i++) {
         if (creature.damage[i] == 0) break;
-        memory.attacks[i] = MAX_UCHAR;
+        memory.attacks[i] = UCHAR_MAX;
     }
 
     // A little hack to enable the display of info for Quylthulgs.
     if ((memory.movement & config::monsters::move::CM_ONLY_MAGIC) != 0u) {
-        memory.attacks[0] = MAX_UCHAR;
+        memory.attacks[0] = UCHAR_MAX;
     }
 }
 
@@ -409,7 +409,7 @@ static void memoryWeaknesses(uint32_t defense) {
 
 // Do we know how aware it is?
 static void memoryAwareness(Creature_t const &creature, Recall_t const &memory) {
-    if (memory.wake * memory.wake > creature.sleep_counter || memory.ignore == MAX_UCHAR || (creature.sleep_counter == 0 && memory.kills >= 10)) {
+    if (memory.wake * memory.wake > creature.sleep_counter || memory.ignore == UCHAR_MAX || (creature.sleep_counter == 0 && memory.kills >= 10)) {
         memoryPrint(" It ");
 
         if (creature.sleep_counter > 200) {

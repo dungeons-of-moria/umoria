@@ -985,8 +985,8 @@ void magicTreasureMagicalAbility(int item_id, int level) {
                 item.items_count += randomNumber(6);
             }
 
-            if (missiles_counter == MAX_SHORT) {
-                missiles_counter = -MAX_SHORT - 1;
+            if (missiles_counter == SHRT_MAX) {
+                missiles_counter = -SHRT_MAX - 1;
             } else {
                 missiles_counter++;
             }

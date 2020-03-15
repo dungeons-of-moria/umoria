@@ -2061,7 +2061,7 @@ static void playerRegenerateHitPoints(int percent) {
 
     // check for overflow
     if (py.misc.current_hp < 0 && old_chp > 0) {
-        py.misc.current_hp = MAX_SHORT;
+        py.misc.current_hp = SHRT_MAX;
     }
 
     // mod 65536
@@ -2095,7 +2095,7 @@ static void playerRegenerateMana(int percent) {
 
     // check for overflow
     if (py.misc.current_mana < 0 && old_cmana > 0) {
-        py.misc.current_mana = MAX_SHORT;
+        py.misc.current_mana = SHRT_MAX;
     }
 
     // mod 65536

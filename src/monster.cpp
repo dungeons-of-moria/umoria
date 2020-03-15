@@ -450,11 +450,11 @@ static void monsterAttackPlayer(int monster_id) {
             // had previously noticed the attack (in which case all this does
             // is help player learn damage), note that in the second case do
             // not increase attacks if creature repelled (no damage done)
-            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attack_counter] != 0 && attack_type != 99)) && creature_recall[monster.creature_id].attacks[attack_counter] < MAX_UCHAR) {
+            if ((notice || (visible && creature_recall[monster.creature_id].attacks[attack_counter] != 0 && attack_type != 99)) && creature_recall[monster.creature_id].attacks[attack_counter] < UCHAR_MAX) {
                 creature_recall[monster.creature_id].attacks[attack_counter]++;
             }
 
-            if (game.character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
+            if (game.character_is_dead && creature_recall[monster.creature_id].deaths < SHRT_MAX) {
                 creature_recall[monster.creature_id].deaths++;
             }
         } else {
@@ -906,7 +906,7 @@ static bool monsterCastSpell(int monster_id) {
         if ((creature_recall[monster.creature_id].spells & config::monsters::spells::CS_FREQ) != config::monsters::spells::CS_FREQ) {
             creature_recall[monster.creature_id].spells++;
         }
-        if (game.character_is_dead && creature_recall[monster.creature_id].deaths < MAX_SHORT) {
+        if (game.character_is_dead && creature_recall[monster.creature_id].deaths < SHRT_MAX) {
             creature_recall[monster.creature_id].deaths++;
         }
     }
@@ -1219,7 +1219,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     if (((creature.movement & config::monsters::move::CM_ONLY_MAGIC) != 0u) && monster.distance_from_player < 2) {
         // A little hack for Quylthulgs, so that one will eventually
         // notice that they have no physical attacks.
-        if (creature_recall[monster.creature_id].attacks[0] < MAX_UCHAR) {
+        if (creature_recall[monster.creature_id].attacks[0] < UCHAR_MAX) {
             creature_recall[monster.creature_id].attacks[0]++;
         }
 
@@ -1239,11 +1239,11 @@ static void memoryUpdateRecall(Monster_t const &monster, bool wake, bool ignore,
     Recall_t &memory = creature_recall[monster.creature_id];
 
     if (wake) {
-        if (memory.wake < MAX_UCHAR) {
+        if (memory.wake < UCHAR_MAX) {
             memory.wake++;
         }
     } else if (ignore) {
-        if (memory.ignore < MAX_UCHAR) {
+        if (memory.ignore < UCHAR_MAX) {
             memory.ignore++;
         }
     }
@@ -1372,7 +1372,7 @@ int monsterTakeHit(int monster_id, int damage) {
 
         memory.movement = (uint32_t) ((memory.movement & ~config::monsters::move::CM_TREASURE) | treasure_flags);
 
-        if (memory.kills < MAX_SHORT) {
+        if (memory.kills < SHRT_MAX) {
             memory.kills++;
         }
     }

@@ -67,10 +67,10 @@ int randomNumberNormalDistribution(int mean, int standard) {
     // tmp = (tmp - 400) * standard / 81;
     // return tmp + mean;
 
-    int tmp = randomNumber(MAX_SHORT);
+    int tmp = randomNumber(SHRT_MAX);
 
     // off scale, assign random value between 4 and 5 times SD
-    if (tmp == MAX_SHORT) {
+    if (tmp == SHRT_MAX) {
         int offset = 4 * standard + randomNumber(standard);
 
         // one half are negative

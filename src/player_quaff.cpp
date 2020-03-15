@@ -243,8 +243,8 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                     // Lose between 1/5 and 2/5 of your experience
                     int32_t exp = py.misc.exp / 5;
 
-                    if (py.misc.exp > MAX_SHORT) {
-                        auto scale = (int32_t) (MAX_LONG / py.misc.exp);
+                    if (py.misc.exp > SHRT_MAX) {
+                        auto scale = (int32_t) (INT_MAX / py.misc.exp);
                         exp += (randomNumber((int) scale) * py.misc.exp) / (scale * 5);
                     } else {
                         exp += randomNumber((int) py.misc.exp) / 5;

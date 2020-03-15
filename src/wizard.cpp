@@ -128,7 +128,7 @@ void wizardCharacterAdjustment() {
     putStringClearToEOL("(1 - 32767) Hit points = ", Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, 25}, 5)) {
         bool valid_number = stringToNumber(input, number);
-        if (valid_number && number > 0 && number <= MAX_SHORT) {
+        if (valid_number && number > 0 && number <= SHRT_MAX) {
             py.misc.max_hp = (int16_t) number;
             py.misc.current_hp = (int16_t) number;
             py.misc.current_hp_fraction = 0;
@@ -142,7 +142,7 @@ void wizardCharacterAdjustment() {
     putStringClearToEOL("(0 - 32767) Mana       = ", Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, 25}, 5)) {
         bool valid_number = stringToNumber(input, number);
-        if (valid_number && number > -1 && number <= MAX_SHORT) {
+        if (valid_number && number > -1 && number <= SHRT_MAX) {
             py.misc.mana = (int16_t) number;
             py.misc.current_mana = (int16_t) number;
             py.misc.current_mana_fraction = 0;

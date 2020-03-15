@@ -1138,7 +1138,7 @@ void storeEnter(int store_id) {
 
 // eliminate need to bargain if player has haggled well in the past -DJB-
 static bool storeNoNeedToBargain(Store_t const &store, int32_t min_price) {
-    if (store.good_purchases == MAX_SHORT) {
+    if (store.good_purchases == SHRT_MAX) {
         return true;
     }
 
@@ -1151,11 +1151,11 @@ static bool storeNoNeedToBargain(Store_t const &store, int32_t min_price) {
 static void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price) {
     if (min_price > 9) {
         if (price == min_price) {
-            if (store.good_purchases < MAX_SHORT) {
+            if (store.good_purchases < SHRT_MAX) {
                 store.good_purchases++;
             }
         } else {
-            if (store.bad_purchases < MAX_SHORT) {
+            if (store.bad_purchases < SHRT_MAX) {
                 store.bad_purchases++;
             }
         }

@@ -208,7 +208,7 @@ void playerRestOn() {
 
         if (getStringInput(rest_str, Coord_t{0, 19}, 5)) {
             if (rest_str[0] == '*') {
-                rest_num = -MAX_SHORT;
+                rest_num = -SHRT_MAX;
             } else {
                 (void) stringToNumber(rest_str, rest_num);
             }
@@ -217,7 +217,7 @@ void playerRestOn() {
 
     // check for reasonable value, must be positive number
     // in range of a short, or must be -MAX_SHORT
-    if (rest_num == -MAX_SHORT || (rest_num > 0 && rest_num <= MAX_SHORT)) {
+    if (rest_num == -SHRT_MAX || (rest_num > 0 && rest_num <= SHRT_MAX)) {
         if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
             playerSearchOff();
         }

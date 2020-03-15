@@ -326,7 +326,7 @@ static bool sv_write() {
 
             auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 
-            if (char_tmp != prev_char || count == MAX_UCHAR) {
+            if (char_tmp != prev_char || count == UCHAR_MAX) {
                 wr_byte((uint8_t) count);
                 wr_byte(prev_char);
                 prev_char = char_tmp;
