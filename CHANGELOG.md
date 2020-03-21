@@ -13,7 +13,9 @@ Tracking all changes since the 5.6.0 release.
     * Various other types changes.
 - Typo fixes: `item_sub_catory`, `current_askin_price`.
 - Various fixes: `clang-format`, code inspection, and `clang-tidy`.
-
+- Move the Manual and FAQ to the `historical` directory. It seems that these
+  are very much out of date - possibly for any 5.x version - so it makes sense
+  to move them back in with the rest of the historical documents.
 
 ## 5.7.11 (2020-02-26)
 

@@ -184,8 +184,6 @@ file(COPY ${data_files} DESTINATION "${data_dir}")
 set(
         support_files
         ${PROJECT_SOURCE_DIR}/data/scores.dat
-        ${PROJECT_SOURCE_DIR}/docs/manual.md
-        ${PROJECT_SOURCE_DIR}/docs/faq.md
         ${PROJECT_SOURCE_DIR}/AUTHORS
         ${PROJECT_SOURCE_DIR}/LICENSE
 )
