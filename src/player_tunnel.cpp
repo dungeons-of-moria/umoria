@@ -14,7 +14,7 @@
 // prevent the player from getting a free attack by trying to tunnel
 // somewhere where it has no effect.
 static bool playerCanTunnel(int treasure_id, int tile_id) {
-    if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (treasure_list[treasure_id].category_id != TV_RUBBLE && treasure_list[treasure_id].category_id != TV_SECRET_DOOR))) {
+    if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (game.treasure.list[treasure_id].category_id != TV_RUBBLE && game.treasure.list[treasure_id].category_id != TV_SECRET_DOOR))) {
         game.player_free_turn = true;
 
         if (treasure_id == 0) {
@@ -157,9 +157,9 @@ void playerTunnel(int direction) {
         if (!dungeonDigAtLocation(coord, tile.feature_id, diggingAbility)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (tile.treasure_id != 0) {
-                if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
+                if (game.treasure.list[tile.treasure_id].category_id == TV_RUBBLE) {
                     dungeonDigRubble(coord, diggingAbility);
-                } else if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
+                } else if (game.treasure.list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
                     playerSearch(py.pos, py.misc.chance_in_search);

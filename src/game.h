@@ -8,6 +8,23 @@
 
 #pragma once
 
+constexpr uint8_t TREASURE_MAX_LEVELS = 50; // Maximum level of magic in dungeon
+
+// Note that the following constants are all related, if you change one, you
+// must also change all succeeding ones.
+// Also, player_base_provisions[] and store_choices[] may also have to be changed.
+constexpr uint16_t MAX_OBJECTS_IN_GAME = 420; // Number of objects for universe
+constexpr uint16_t MAX_DUNGEON_OBJECTS = 344; // Number of dungeon objects
+constexpr uint16_t OBJECT_IDENT_SIZE = 448;   // 7*64, see object_offset() in desc.cpp, could be MAX_OBJECTS o_o() rewritten
+
+// With LEVEL_MAX_OBJECTS set to 150, it's possible to get compacting
+// objects during level generation, although it is extremely rare.
+constexpr uint8_t LEVEL_MAX_OBJECTS = 175;        // Max objects per level
+
+// definitions for the pseudo-normal distribution generation
+constexpr uint16_t NORMAL_TABLE_SIZE = 256;
+constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
+
 typedef struct {
     uint32_t magic_seed = 0;              // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
     uint32_t town_seed = 0;               // Seed for town generation
@@ -32,28 +49,16 @@ typedef struct {
     bool teleport_player;                 // Handle teleport traps
 
     vtype_t character_died_from = {'\0'}; // What the character died from: starvation, Bat, etc.
+
+    struct {
+        Inventory_t list[LEVEL_MAX_OBJECTS];
+        int16_t current_id = 0; // Current treasure heap ptr
+    } treasure;
 } Game_t;
 
-constexpr uint8_t TREASURE_MAX_LEVELS = 50; // Maximum level of magic in dungeon
-
-// Note that the following constants are all related, if you change one, you
-// must also change all succeeding ones.
-// Also, player_base_provisions[] and store_choices[] may also have to be changed.
-constexpr uint16_t MAX_OBJECTS_IN_GAME = 420; // Number of objects for universe
-constexpr uint16_t MAX_DUNGEON_OBJECTS = 344; // Number of dungeon objects
-constexpr uint16_t OBJECT_IDENT_SIZE = 448;   // 7*64, see object_offset() in desc.cpp, could be MAX_OBJECTS o_o() rewritten
-
-// With LEVEL_MAX_OBJECTS set to 150, it's possible to get compacting
-// objects during level generation, although it is extremely rare.
-constexpr uint8_t LEVEL_MAX_OBJECTS = 175;        // Max objects per level
-
-// definitions for the pseudo-normal distribution generation
-constexpr uint16_t NORMAL_TABLE_SIZE = 256;
-constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
-
 extern Game_t game;
+
 extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
-extern int16_t current_treasure_id;
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
 extern int16_t treasure_levels[TREASURE_MAX_LEVELS + 1];
 

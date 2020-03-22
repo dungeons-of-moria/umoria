@@ -57,7 +57,7 @@ void playerBash() {
     }
 
     if (tile.treasure_id != 0) {
-        Inventory_t &item = treasure_list[tile.treasure_id];
+        Inventory_t &item = game.treasure.list[tile.treasure_id];
 
         if (item.category_id == TV_CLOSED_DOOR) {
             playerBashClosedDoor(coord, dir, tile, item);
@@ -183,7 +183,7 @@ static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory
     if (randomNumber(chance * (20 + abs_misc_use)) < 10 * (chance - abs_misc_use)) {
         printMessage("The door crashes open!");
 
-        inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, game.treasure.list[tile.treasure_id]);
 
         // 50% chance of breaking door
         item.misc_use = (int16_t)(1 - randomNumber(2));

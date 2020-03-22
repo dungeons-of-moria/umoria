@@ -56,11 +56,11 @@
 #include "character.h"
 #include "dice.h"
 #include "ui.h"           // before dungeon.h
+#include "inventory.h"    // before game.h
 #include "game.h"         // before dungeon.h
 #include "dungeon_tile.h"
 #include "dungeon.h"
 #include "helpers.h"
-#include "inventory.h"    // before identification.h
 #include "identification.h"
 #include "mage_spells.h"
 #include "monster.h"

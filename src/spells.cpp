@@ -160,7 +160,7 @@ bool spellDetectTreasureWithinVicinity() {
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             Tile_t &tile = dg.floor[coord.y][coord.x];
 
-            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(coord)) {
+            if (tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id == TV_GOLD && !caveTileVisible(coord)) {
                 tile.field_mark = true;
                 dungeonLiteSpot(coord);
                 detected = true;
@@ -181,7 +181,7 @@ bool spellDetectObjectsWithinVicinity() {
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             Tile_t &tile = dg.floor[coord.y][coord.x];
 
-            if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(coord)) {
+            if (tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id < TV_MAX_OBJECT && !caveTileVisible(coord)) {
                 tile.field_mark = true;
                 dungeonLiteSpot(coord);
                 detected = true;
@@ -206,12 +206,12 @@ bool spellDetectTrapsWithinVicinity() {
                 continue;
             }
 
-            if (treasure_list[tile.treasure_id].category_id == TV_INVIS_TRAP) {
+            if (game.treasure.list[tile.treasure_id].category_id == TV_INVIS_TRAP) {
                 tile.field_mark = true;
                 trapChangeVisibility(coord);
                 detected = true;
-            } else if (treasure_list[tile.treasure_id].category_id == TV_CHEST) {
-                Inventory_t &item = treasure_list[tile.treasure_id];
+            } else if (game.treasure.list[tile.treasure_id].category_id == TV_CHEST) {
+                Inventory_t &item = game.treasure.list[tile.treasure_id];
                 spellItemIdentifyAndRemoveRandomInscription(item);
             }
         }
@@ -234,13 +234,13 @@ bool spellDetectSecretDoorssWithinVicinity() {
                 continue;
             }
 
-            if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
+            if (game.treasure.list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                 // Secret doors
 
                 tile.field_mark = true;
                 trapChangeVisibility(coord);
                 detected = true;
-            } else if ((treasure_list[tile.treasure_id].category_id == TV_UP_STAIR || treasure_list[tile.treasure_id].category_id == TV_DOWN_STAIR) && !tile.field_mark) {
+            } else if ((game.treasure.list[tile.treasure_id].category_id == TV_UP_STAIR || game.treasure.list[tile.treasure_id].category_id == TV_DOWN_STAIR) && !tile.field_mark) {
                 // Staircases
 
                 tile.field_mark = true;
@@ -369,7 +369,7 @@ static void dungeonLightAreaAroundFloorTile(Coord_t coord) {
 
             if (tile.feature_id >= MIN_CAVE_WALL) {
                 tile.permanent_light = true;
-            } else if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id >= TV_MIN_VISIBLE && treasure_list[tile.treasure_id].category_id <= TV_MAX_VISIBLE) {
+            } else if (tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id >= TV_MIN_VISIBLE && game.treasure.list[tile.treasure_id].category_id <= TV_MAX_VISIBLE) {
                 tile.field_mark = true;
             }
         }
@@ -468,7 +468,7 @@ bool spellSurroundPlayerWithTraps() {
                 dungeonSetTrap(coord, randomNumber(config::dungeon::objects::MAX_TRAPS) - 1);
 
                 // don't let player gain exp from the newly created traps
-                treasure_list[tile.treasure_id].misc_use = 0;
+                game.treasure.list[tile.treasure_id].misc_use = 0;
 
                 // open pits are immediately visible, so call dungeonLiteSpot
                 dungeonLiteSpot(coord);
@@ -504,7 +504,7 @@ bool spellSurroundPlayerWithDoors() {
                 tile.feature_id = TILE_BLOCKED_FLOOR;
                 tile.treasure_id = (uint8_t) free_id;
 
-                inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[free_id]);
+                inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, game.treasure.list[free_id]);
                 dungeonLiteSpot(coord);
 
                 created = true;
@@ -529,7 +529,7 @@ bool spellDestroyAdjacentDoorsTraps() {
                 continue;
             }
 
-            Inventory_t &item = treasure_list[tile.treasure_id];
+            Inventory_t &item = game.treasure.list[tile.treasure_id];
 
             if ((item.category_id >= TV_INVIS_TRAP && item.category_id <= TV_CLOSED_DOOR && item.category_id != TV_RUBBLE) || item.category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(coord)) {
@@ -674,7 +674,7 @@ bool spellDisarmAllInDirection(Coord_t coord, int direction) {
         // note, must continue up to and including the first non open space,
         // because secret doors have feature_id greater than MAX_OPEN_SPACE
         if (tile->treasure_id != 0) {
-            Inventory_t &item = treasure_list[tile->treasure_id];
+            Inventory_t &item = game.treasure.list[tile->treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_VIS_TRAP) {
                 if (dungeonDeleteObject(coord)) {
@@ -892,7 +892,7 @@ void spellFireBall(Coord_t coord, int direction, int damage_hp, int spell_type, 
                     if (coordInBounds(spot) && coordDistanceBetween(coord, spot) <= max_distance && los(coord, spot)) {
                         tile = &dg.floor[spot.y][spot.x];
 
-                        if (tile->treasure_id != 0 && (*destroy)(&treasure_list[tile->treasure_id])) {
+                        if (tile->treasure_id != 0 && (*destroy)(&game.treasure.list[tile->treasure_id])) {
                             (void) dungeonDeleteObject(spot);
                         }
 
@@ -992,7 +992,7 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
             if (coordInBounds(location) && coordDistanceBetween(coord, location) <= max_distance && los(coord, location)) {
                 Tile_t const &tile = dg.floor[location.y][location.x];
 
-                if (tile.treasure_id != 0 && (*destroy)(&treasure_list[tile.treasure_id])) {
+                if (tile.treasure_id != 0 && (*destroy)(&game.treasure.list[tile.treasure_id])) {
                     (void) dungeonDeleteObject(location);
                 }
 
@@ -1404,14 +1404,14 @@ bool spellWallToMud(Coord_t coord, int direction) {
                 turned = true;
 
                 obj_desc_t description = {'\0'};
-                itemDescription(description, treasure_list[tile.treasure_id], false);
+                itemDescription(description, game.treasure.list[tile.treasure_id], false);
 
                 obj_desc_t out_val = {'\0'};
                 (void) sprintf(out_val, "The %s turns into mud.", description);
                 printMessage(out_val);
             }
 
-            if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
+            if (game.treasure.list[tile.treasure_id].category_id == TV_RUBBLE) {
                 (void) dungeonDeleteObject(coord);
                 if (randomNumber(10) == 1) {
                     dungeonPlaceRandomObjectAt(coord, false);
@@ -1465,7 +1465,7 @@ bool spellDestroyDoorsTrapsInDirection(Coord_t coord, int direction) {
 
         // must move into first closed spot, as it might be a secret door
         if (tile->treasure_id != 0) {
-            Inventory_t &item = treasure_list[tile->treasure_id];
+            Inventory_t &item = game.treasure.list[tile->treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_CLOSED_DOOR || item.category_id == TV_VIS_TRAP || item.category_id == TV_OPEN_DOOR || item.category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(coord)) {
@@ -2017,7 +2017,7 @@ void spellCreateFood() {
     }
 
     dungeonPlaceRandomObjectAt(py.pos, false);
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_MUSH, treasure_list[tile.treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_MUSH, game.treasure.list[tile.treasure_id]);
 }
 
 // Attempts to destroy a type of creature.  Success depends on
@@ -2092,7 +2092,7 @@ void spellWardingGlyph() {
     if (dg.floor[py.pos.y][py.pos.x].treasure_id == 0) {
         int free_id = popt();
         dg.floor[py.pos.y][py.pos.x].treasure_id = (uint8_t) free_id;
-        inventoryItemCopyTo(config::dungeon::objects::OBJ_SCARE_MON, treasure_list[free_id]);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_SCARE_MON, game.treasure.list[free_id]);
     }
 }
 

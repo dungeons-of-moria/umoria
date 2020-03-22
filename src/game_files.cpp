@@ -166,11 +166,11 @@ void outputRandomLevelObjectsToFile() {
 
     for (int i = 0; i < count; i++) {
         int object_id = itemGetRandomObjectId(level, small_objects);
-        inventoryItemCopyTo(sorted_objects[object_id], treasure_list[treasure_id]);
+        inventoryItemCopyTo(sorted_objects[object_id], game.treasure.list[treasure_id]);
 
         magicTreasureMagicalAbility(treasure_id, level);
 
-        Inventory_t &item = treasure_list[treasure_id];
+        Inventory_t &item = game.treasure.list[treasure_id];
         itemIdentifyAsStoreBought(item);
 
         if ((item.flags & config::treasure::flags::TR_CURSED) != 0u) {

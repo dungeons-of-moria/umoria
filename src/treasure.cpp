@@ -10,11 +10,6 @@
 
 #include "headers.h"
 
-Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
-
-// Current treasure heap ptr
-int16_t current_treasure_id;
-
 // Should the object be enchanted -RAK-
 static bool magicShouldBeEnchanted(int chance) {
     return randomNumber(100) <= chance;
@@ -870,7 +865,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
 
     int magicAmount;
 
-    Inventory_t &item = treasure_list[item_id];
+    Inventory_t &item = game.treasure.list[item_id];
 
     // some objects appear multiple times in the game_objects with different
     // levels, this is to make the object occur more often, however, for

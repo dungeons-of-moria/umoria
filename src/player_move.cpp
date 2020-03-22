@@ -249,7 +249,7 @@ static void playerStepsOnTrap(Coord_t coord) {
     playerEndRunning();
     trapChangeVisibility(coord);
 
-    Inventory_t const &item = treasure_list[dg.floor[coord.y][coord.x].treasure_id];
+    Inventory_t const &item = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id];
 
     int damage = diceRoll(item.damage);
 
@@ -356,9 +356,9 @@ static bool playerRandomMovement(int dir) {
 // on the TVAL of the object. Traps are set off, money and most objects
 // are picked up. Some objects, such as open doors, just sit there.
 static void carry(Coord_t coord, bool pickup) {
-    Inventory_t &item = treasure_list[dg.floor[coord.y][coord.x].treasure_id];
+    Inventory_t &item = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id];
 
-    int tileFlags = treasure_list[dg.floor[coord.y][coord.x].treasure_id].category_id;
+    int tileFlags = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id].category_id;
 
     if (tileFlags > TV_MAX_PICK_UP) {
         if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
@@ -501,7 +501,7 @@ void playerMove(int direction, bool do_pickup) {
 
                 // if stepped on falling rock trap, and space contains
                 // rubble, then step back into a clear area
-                if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
+                if (game.treasure.list[tile.treasure_id].category_id == TV_RUBBLE) {
                     dungeonMoveCreatureRecord(py.pos, old_coord);
                     dungeonMoveCharacterLight(py.pos, old_coord);
 
@@ -511,7 +511,7 @@ void playerMove(int direction, bool do_pickup) {
                     // check to see if we have stepped back onto another trap, if so, set it off
                     uint8_t id = dg.floor[py.pos.y][py.pos.x].treasure_id;
                     if (id != 0) {
-                        int val = treasure_list[id].category_id;
+                        int val = game.treasure.list[id].category_id;
                         if (val == TV_INVIS_TRAP || val == TV_VIS_TRAP || val == TV_STORE_DOOR) {
                             playerStepsOnTrap(py.pos);
                         }
@@ -522,9 +522,9 @@ void playerMove(int direction, bool do_pickup) {
             // Can't move onto floor space
 
             if ((py.running_tracker == 0) && tile.treasure_id != 0) {
-                if (treasure_list[tile.treasure_id].category_id == TV_RUBBLE) {
+                if (game.treasure.list[tile.treasure_id].category_id == TV_RUBBLE) {
                     printMessage("There is rubble blocking your way.");
-                } else if (treasure_list[tile.treasure_id].category_id == TV_CLOSED_DOOR) {
+                } else if (game.treasure.list[tile.treasure_id].category_id == TV_CLOSED_DOOR) {
                     printMessage("There is a closed door blocking your way.");
                 }
             } else {

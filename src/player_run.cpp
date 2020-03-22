@@ -256,7 +256,7 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t 
 
     if (py.carrying_light || tile.temporary_light || tile.permanent_light || tile.field_mark) {
         if (tile.treasure_id != 0) {
-            int tileID = treasure_list[tile.treasure_id].category_id;
+            int tileID = game.treasure.list[tile.treasure_id].category_id;
 
             if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config::options::run_ignore_doors)) {
                 playerEndRunning();

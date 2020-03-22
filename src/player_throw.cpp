@@ -140,7 +140,7 @@ static void inventoryDropOrThrowItem(Coord_t coord, Inventory_t *item) {
     if (flag) {
         int cur_pos = popt();
         dg.floor[position.y][position.x].treasure_id = (uint8_t) cur_pos;
-        treasure_list[cur_pos] = *item;
+        game.treasure.list[cur_pos] = *item;
         dungeonLiteSpot(position);
     } else {
         obj_desc_t description = {'\0'};

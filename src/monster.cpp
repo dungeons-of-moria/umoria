@@ -479,7 +479,7 @@ static void monsterAttackPlayer(int monster_id) {
 }
 
 static void monsterOpenDoor(Tile_t &tile, int16_t monster_hp, uint32_t move_bits, bool &do_turn, bool &do_move, uint32_t &rcmove, Coord_t coord) {
-    Inventory_t &item = treasure_list[tile.treasure_id];
+    Inventory_t &item = game.treasure.list[tile.treasure_id];
 
     // Creature can open doors.
     if ((move_bits & config::monsters::move::CM_OPEN_DOOR) != 0u) {
@@ -602,7 +602,7 @@ static void monsterAllowedToMove(Monster_t &monster, uint32_t move_bits, bool &d
     if ((move_bits & config::monsters::move::CM_PICKS_UP) != 0u) {
         uint8_t treasure_id = dg.floor[coord.y][coord.x].treasure_id;
 
-        if (treasure_id != 0 && treasure_list[treasure_id].category_id <= TV_MAX_OBJECT) {
+        if (treasure_id != 0 && game.treasure.list[treasure_id].category_id <= TV_MAX_OBJECT) {
             rcmove |= config::monsters::move::CM_PICKS_UP;
             (void) dungeonDeleteObject(coord);
         }
@@ -659,7 +659,7 @@ static void makeMove(int monster_id, int *directions, uint32_t &rcmove) {
         }
 
         // Glyph of warding present?
-        if (do_move && tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP && treasure_list[tile.treasure_id].sub_category_id == 99) {
+        if (do_move && tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id == TV_VIS_TRAP && game.treasure.list[tile.treasure_id].sub_category_id == 99) {
             glyphOfWardingProtection(monster.creature_id, move_bits, do_move, do_turn, coord);
         }
 

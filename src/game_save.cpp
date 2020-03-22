@@ -341,9 +341,9 @@ static bool sv_write() {
     wr_byte((uint8_t) count);
     wr_byte(prev_char);
 
-    wr_short((uint16_t) current_treasure_id);
-    for (int i = config::treasure::MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
-        wr_item(treasure_list[i]);
+    wr_short((uint16_t) game.treasure.current_id);
+    for (int i = config::treasure::MIN_TREASURE_LIST_ID; i < game.treasure.current_id; i++) {
+        wr_item(game.treasure.list[i]);
     }
     wr_short((uint16_t) next_free_monster_id);
     for (int i = config::monsters::MON_MIN_INDEX_ID; i < next_free_monster_id; i++) {
@@ -820,12 +820,12 @@ bool loadGame(bool &generate) {
             total_count += count;
         }
 
-        current_treasure_id = rd_short();
-        if (current_treasure_id > LEVEL_MAX_OBJECTS) {
+        game.treasure.current_id = rd_short();
+        if (game.treasure.current_id > LEVEL_MAX_OBJECTS) {
             goto error;
         }
-        for (int i = config::treasure::MIN_TREASURE_LIST_ID; i < current_treasure_id; i++) {
-            rd_item(treasure_list[i]);
+        for (int i = config::treasure::MIN_TREASURE_LIST_ID; i < game.treasure.current_id; i++) {
+            rd_item(game.treasure.list[i]);
         }
         next_free_monster_id = rd_short();
         if (next_free_monster_id > MON_TOTAL_ALLOCATIONS) {

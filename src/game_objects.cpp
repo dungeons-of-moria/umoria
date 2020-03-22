@@ -28,7 +28,7 @@ static void compactObjects() {
                 if (dg.floor[coord.y][coord.x].treasure_id != 0 && coordDistanceBetween(coord, py.pos) > current_distance) {
                     int chance;
 
-                    switch (treasure_list[dg.floor[coord.y][coord.x].treasure_id].category_id) {
+                    switch (game.treasure.list[dg.floor[coord.y][coord.x].treasure_id].category_id) {
                         case TV_VIS_TRAP:
                             chance = 15;
                             break;
@@ -71,32 +71,32 @@ static void compactObjects() {
 
 // Gives pointer to next free space -RAK-
 int popt() {
-    if (current_treasure_id == LEVEL_MAX_OBJECTS) {
+    if (game.treasure.current_id == LEVEL_MAX_OBJECTS) {
         compactObjects();
     }
 
-    return current_treasure_id++;
+    return game.treasure.current_id++;
 }
 
 // Pushes a record back onto free space list -RAK-
 // `dungeonDeleteObject()` should always be called instead, unless the object
 // in question is not in the dungeon, e.g. in store1.c and files.c
 void pusht(uint8_t treasure_id) {
-    if (treasure_id != current_treasure_id - 1) {
-        treasure_list[treasure_id] = treasure_list[current_treasure_id - 1];
+    if (treasure_id != game.treasure.current_id - 1) {
+        game.treasure.list[treasure_id] = game.treasure.list[game.treasure.current_id - 1];
 
         // must change the treasure_id in the cave of the object just moved
         for (int y = 0; y < dg.height; y++) {
             for (int x = 0; x < dg.width; x++) {
-                if (dg.floor[y][x].treasure_id == current_treasure_id - 1) {
+                if (dg.floor[y][x].treasure_id == game.treasure.current_id - 1) {
                     dg.floor[y][x].treasure_id = treasure_id;
                 }
             }
         }
     }
-    current_treasure_id--;
+    game.treasure.current_id--;
 
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, treasure_list[current_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, game.treasure.list[game.treasure.current_id]);
 }
 
 // Item too large to fit in chest? -DJG-

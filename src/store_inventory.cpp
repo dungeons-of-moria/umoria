@@ -353,10 +353,10 @@ static void storeItemCreate(int store_id, int16_t max_cost) {
 
     for (int tries = 0; tries <= 3; tries++) {
         int id = store_choices[store_id][randomNumber(STORE_MAX_ITEM_TYPES) - 1];
-        inventoryItemCopyTo(id, treasure_list[free_id]);
+        inventoryItemCopyTo(id, game.treasure.list[free_id]);
         magicTreasureMagicalAbility(free_id, config::treasure::LEVEL_TOWN_OBJECTS);
 
-        Inventory_t &item = treasure_list[free_id];
+        Inventory_t &item = game.treasure.list[free_id];
 
         if (storeCheckPlayerItemsCount(stores[store_id], item)) {
             // Item must be good: cost > 0.

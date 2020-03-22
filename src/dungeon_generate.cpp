@@ -166,45 +166,45 @@ static void dungeonPlaceStreamerRock(uint8_t rock_type, int chance_of_treasure) 
 static void dungeonPlaceOpenDoor(Coord_t coord) {
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_CORR_FLOOR;
 }
 
 static void dungeonPlaceBrokenDoor(Coord_t coord) {
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_CORR_FLOOR;
-    treasure_list[cur_pos].misc_use = 1;
+    game.treasure.list[cur_pos].misc_use = 1;
 }
 
 static void dungeonPlaceClosedDoor(Coord_t coord) {
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
 }
 
 static void dungeonPlaceLockedDoor(Coord_t coord) {
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    treasure_list[cur_pos].misc_use = (int16_t)(randomNumber(10) + 10);
+    game.treasure.list[cur_pos].misc_use = (int16_t)(randomNumber(10) + 10);
 }
 
 static void dungeonPlaceStuckDoor(Coord_t coord) {
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    treasure_list[cur_pos].misc_use = (int16_t)(-randomNumber(10) - 10);
+    game.treasure.list[cur_pos].misc_use = (int16_t)(-randomNumber(10) - 10);
 }
 
 static void dungeonPlaceSecretDoor(Coord_t coord) {
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_SECRET_DOOR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_SECRET_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
 }
 
@@ -240,7 +240,7 @@ static void dungeonPlaceUpStairs(Coord_t coord) {
 
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_UP_STAIR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_UP_STAIR, game.treasure.list[cur_pos]);
 }
 
 // Place a down staircase at given y, x -RAK-
@@ -251,7 +251,7 @@ static void dungeonPlaceDownStairs(Coord_t coord) {
 
     int cur_pos = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_DOWN_STAIR, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_DOWN_STAIR, game.treasure.list[cur_pos]);
 }
 
 // Places a staircase 1=up, 2=down -RAK-
@@ -1146,15 +1146,15 @@ static void dungeonBuildStore(int store_id, Coord_t coord) {
     int cur_pos = popt();
     dg.floor[y][x].treasure_id = (uint8_t) cur_pos;
 
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_STORE_DOOR + store_id, treasure_list[cur_pos]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_STORE_DOOR + store_id, game.treasure.list[cur_pos]);
 }
 
 // Link all free space in treasure list together
 static void treasureLinker() {
-    for (auto &item : treasure_list) {
+    for (auto &item : game.treasure.list) {
         inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, item);
     }
-    current_treasure_id = config::treasure::MIN_TREASURE_LIST_ID;
+    game.treasure.current_id = config::treasure::MIN_TREASURE_LIST_ID;
 }
 
 // Link all free space in monster list together

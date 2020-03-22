@@ -162,7 +162,7 @@ int coordCorridorWallsNextTo(Coord_t const &coord) {
             int treasure_id = dg.floor[y][x].treasure_id;
 
             // should fail if there is already a door present
-            if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || treasure_list[treasure_id].category_id < TV_MIN_DOORS)) {
+            if (tile_id == TILE_CORR_FLOOR && (treasure_id == 0 || game.treasure.list[treasure_id].category_id < TV_MIN_DOORS)) {
                 walls++;
             }
         }
@@ -195,8 +195,8 @@ char caveGetTileSymbol(Coord_t const &coord) {
         return ' ';
     }
 
-    if (tile.treasure_id != 0 && treasure_list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
-        return treasure_list[tile.treasure_id].sprite;
+    if (tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
+        return game.treasure.list[tile.treasure_id].sprite;
     }
 
     if (tile.feature_id <= MAX_CAVE_FLOOR) {
@@ -221,7 +221,7 @@ bool caveTileVisible(Coord_t const &coord) {
 void dungeonSetTrap(Coord_t const &coord, int sub_type_id) {
     int free_treasure_id = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_TRAP_LIST + sub_type_id, treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_TRAP_LIST + sub_type_id, game.treasure.list[free_treasure_id]);
 }
 
 // Change a trap from invisible to visible -RAK-
@@ -229,7 +229,7 @@ void dungeonSetTrap(Coord_t const &coord, int sub_type_id) {
 void trapChangeVisibility(Coord_t const &coord) {
     uint8_t treasure_id = dg.floor[coord.y][coord.x].treasure_id;
 
-    Inventory_t &item = treasure_list[treasure_id];
+    Inventory_t &item = game.treasure.list[treasure_id];
 
     if (item.category_id == TV_INVIS_TRAP) {
         item.category_id = TV_VIS_TRAP;
@@ -251,7 +251,7 @@ void dungeonPlaceRubble(Coord_t const &coord) {
     int free_treasure_id = popt();
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_RUBBLE, treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_RUBBLE, game.treasure.list[free_treasure_id]);
 }
 
 // Places a treasure (Gold or Gems) at given row, column -RAK-
@@ -269,8 +269,8 @@ void dungeonPlaceGold(Coord_t const &coord) {
     }
 
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
-    inventoryItemCopyTo(config::dungeon::objects::OBJ_GOLD_LIST + gold_type_id, treasure_list[free_treasure_id]);
-    treasure_list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) treasure_list[free_treasure_id].cost)) + randomNumber(8);
+    inventoryItemCopyTo(config::dungeon::objects::OBJ_GOLD_LIST + gold_type_id, game.treasure.list[free_treasure_id]);
+    game.treasure.list[free_treasure_id].cost += (8L * (int32_t) randomNumber((int) game.treasure.list[free_treasure_id].cost)) + randomNumber(8);
 
     if (dg.floor[coord.y][coord.x].creature_id == 1) {
         printMessage("You feel something roll beneath your feet.");
@@ -284,7 +284,7 @@ void dungeonPlaceRandomObjectAt(Coord_t const &coord, bool must_be_small) {
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
 
     int object_id = itemGetRandomObjectId(dg.current_level, must_be_small);
-    inventoryItemCopyTo(sorted_objects[object_id], treasure_list[free_treasure_id]);
+    inventoryItemCopyTo(sorted_objects[object_id], game.treasure.list[free_treasure_id]);
 
     magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
@@ -381,7 +381,7 @@ void dungeonLightRoom(Coord_t const &coord) {
                     tile.feature_id = TILE_LIGHT_FLOOR;
                 }
                 if (!tile.field_mark && tile.treasure_id != 0) {
-                    int treasure_id = treasure_list[tile.treasure_id].category_id;
+                    int treasure_id = game.treasure.list[tile.treasure_id].category_id;
                     if (treasure_id >= TV_MIN_VISIBLE && treasure_id <= TV_MAX_VISIBLE) {
                         tile.field_mark = true;
                     }
@@ -431,7 +431,7 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
             if (tile.feature_id >= MIN_CAVE_WALL) {
                 tile.permanent_light = true;
             } else if (!tile.field_mark && tile.treasure_id != 0) {
-                int tval = treasure_list[tile.treasure_id].category_id;
+                int tval = game.treasure.list[tile.treasure_id].category_id;
 
                 if (tval >= TV_MIN_VISIBLE && tval <= TV_MAX_VISIBLE) {
                     tile.field_mark = true;

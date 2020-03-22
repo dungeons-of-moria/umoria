@@ -521,13 +521,13 @@ static bool lookSee(Coord_t coord, bool &transparent) {
         const char *wall_description;
 
         if (tile.treasure_id != 0) {
-            if (treasure_list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
+            if (game.treasure.list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                 goto granite;
             }
 
-            if (los_rocks_and_objects == 0 && treasure_list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
+            if (los_rocks_and_objects == 0 && game.treasure.list[tile.treasure_id].category_id != TV_INVIS_TRAP) {
                 obj_desc_t obj_string = {'\0'};
-                itemDescription(obj_string, treasure_list[tile.treasure_id], true);
+                itemDescription(obj_string, game.treasure.list[tile.treasure_id], true);
 
                 (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
                 description = "It is in";

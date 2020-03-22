@@ -692,7 +692,7 @@ void playerSearch(Coord_t coord, int chance) {
 
             // Search for hidden objects
 
-            Inventory_t &item = treasure_list[dg.floor[spot.y][spot.x].treasure_id];
+            Inventory_t &item = game.treasure.list[dg.floor[spot.y][spot.x].treasure_id];
 
             if (item.category_id == TV_INVIS_TRAP) {
                 // Trap on floor?
@@ -1219,7 +1219,7 @@ static int16_t playerLockPickingSkill() {
 
 static void openClosedDoor(Coord_t coord) {
     Tile_t &tile = dg.floor[coord.y][coord.x];
-    Inventory_t &item = treasure_list[tile.treasure_id];
+    Inventory_t &item = game.treasure.list[tile.treasure_id];
 
     if (item.misc_use > 0) {
         // It's locked.
@@ -1241,7 +1241,7 @@ static void openClosedDoor(Coord_t coord) {
     }
 
     if (item.misc_use == 0) {
-        inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, treasure_list[tile.treasure_id]);
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_OPEN_DOOR, game.treasure.list[tile.treasure_id]);
         tile.feature_id = TILE_CORR_FLOOR;
         dungeonLiteSpot(coord);
         game.command_count = 0;
@@ -1250,7 +1250,7 @@ static void openClosedDoor(Coord_t coord) {
 
 static void openClosedChest(Coord_t coord) {
     Tile_t const &tile = dg.floor[coord.y][coord.x];
-    Inventory_t &item = treasure_list[tile.treasure_id];
+    Inventory_t &item = game.treasure.list[tile.treasure_id];
 
     bool success = false;
 
@@ -1290,11 +1290,11 @@ static void openClosedChest(Coord_t coord) {
         // Chest treasure is allocated as if a creature had been killed.
         // clear the cursed chest/monster win flag, so that people
         // can not win by opening a cursed chest
-        treasure_list[tile.treasure_id].flags &= ~config::treasure::flags::TR_CURSED;
+        game.treasure.list[tile.treasure_id].flags &= ~config::treasure::flags::TR_CURSED;
 
-        (void) monsterDeath(coord, treasure_list[tile.treasure_id].flags);
+        (void) monsterDeath(coord, game.treasure.list[tile.treasure_id].flags);
 
-        treasure_list[tile.treasure_id].flags = 0;
+        game.treasure.list[tile.treasure_id].flags = 0;
     }
 }
 
@@ -1311,7 +1311,7 @@ void playerOpenClosedObject() {
     bool no_object = false;
 
     Tile_t const &tile = dg.floor[coord.y][coord.x];
-    Inventory_t const &item = treasure_list[tile.treasure_id];
+    Inventory_t const &item = game.treasure.list[tile.treasure_id];
 
     if (tile.creature_id > 1 && tile.treasure_id != 0 && (item.category_id == TV_CLOSED_DOOR || item.category_id == TV_CHEST)) {
         objectBlockedByMonster(tile.creature_id);
@@ -1345,7 +1345,7 @@ void playerCloseDoor() {
     (void) playerMovePosition(dir, coord);
 
     Tile_t &tile = dg.floor[coord.y][coord.x];
-    Inventory_t &item = treasure_list[tile.treasure_id];
+    Inventory_t &item = game.treasure.list[tile.treasure_id];
 
     bool no_object = false;
 

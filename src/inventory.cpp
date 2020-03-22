@@ -60,7 +60,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
     int treasureID = popt();
 
     Inventory_t &item = py.inventory[item_id];
-    treasure_list[treasureID] = item;
+    game.treasure.list[treasureID] = item;
 
     dg.floor[py.pos.y][py.pos.x].treasure_id = (uint8_t) treasureID;
 
@@ -78,14 +78,14 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
             inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, py.inventory[py.pack.unique_items]);
         } else {
-            treasure_list[treasureID].items_count = 1;
+            game.treasure.list[treasureID].items_count = 1;
             py.pack.weight -= item.weight;
             item.items_count--;
         }
 
         obj_desc_t prt1 = {'\0'};
         obj_desc_t prt2 = {'\0'};
-        itemDescription(prt1, treasure_list[treasureID], true);
+        itemDescription(prt1, game.treasure.list[treasureID], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         printMessage(prt2);
     }

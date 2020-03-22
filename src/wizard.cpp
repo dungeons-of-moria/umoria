@@ -312,11 +312,11 @@ void wizardGenerateObject() {
             // place the object
             int free_treasure_id = popt();
             dg.floor[coord.y][coord.x].treasure_id = (uint8_t) free_treasure_id;
-            inventoryItemCopyTo(id, treasure_list[free_treasure_id]);
+            inventoryItemCopyTo(id, game.treasure.list[free_treasure_id]);
             magicTreasureMagicalAbility(free_treasure_id, dg.current_level);
 
             // auto identify the item
-            itemIdentify(treasure_list[free_treasure_id], free_treasure_id);
+            itemIdentify(game.treasure.list[free_treasure_id], free_treasure_id);
 
             i = 9;
         }
@@ -473,7 +473,7 @@ void wizardCreateObjects() {
 
         number = popt();
 
-        treasure_list[number] = forge;
+        game.treasure.list[number] = forge;
         tile.treasure_id = (uint8_t) number;
 
         printMessage("Allocated.");

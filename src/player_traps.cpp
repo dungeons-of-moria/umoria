@@ -117,12 +117,12 @@ void playerDisarmTrap() {
 
     bool no_disarm = false;
 
-    if (tile.creature_id > 1 && tile.treasure_id != 0 && (treasure_list[tile.treasure_id].category_id == TV_VIS_TRAP || treasure_list[tile.treasure_id].category_id == TV_CHEST)) {
+    if (tile.creature_id > 1 && tile.treasure_id != 0 && (game.treasure.list[tile.treasure_id].category_id == TV_VIS_TRAP || game.treasure.list[tile.treasure_id].category_id == TV_CHEST)) {
         objectBlockedByMonster(tile.creature_id);
     } else if (tile.treasure_id != 0) {
         int disarm_ability = playerTrapDisarmAbility();
 
-        Inventory_t &item = treasure_list[tile.treasure_id];
+        Inventory_t &item = game.treasure.list[tile.treasure_id];
 
         if (item.category_id == TV_VIS_TRAP) {
             playerDisarmFloorTrap(coord, disarm_ability, item.depth_first_found, dir, item.misc_use);
@@ -197,7 +197,7 @@ static void chestExplode(Coord_t coord) {
 // Chests have traps too. -RAK-
 // Note: Chest traps are based on the FLAGS value
 void chestTrap(Coord_t coord) {
-    uint32_t flags = treasure_list[dg.floor[coord.y][coord.x].treasure_id].flags;
+    uint32_t flags = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id].flags;
 
     if ((flags & config::treasure::chests::CH_LOSE_STR) != 0u) {
         chestLooseStrength();

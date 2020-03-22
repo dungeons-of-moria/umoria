@@ -2214,7 +2214,7 @@ static void examineBook() {
 static void dungeonGoUpLevel() {
     uint8_t tile_id = dg.floor[py.pos.y][py.pos.x].treasure_id;
 
-    if (tile_id != 0 && treasure_list[tile_id].category_id == TV_UP_STAIR) {
+    if (tile_id != 0 && game.treasure.list[tile_id].category_id == TV_UP_STAIR) {
         dg.current_level--;
 
         printMessage("You enter a maze of up staircases.");
@@ -2231,7 +2231,7 @@ static void dungeonGoUpLevel() {
 static void dungeonGoDownLevel() {
     uint8_t tile_id = dg.floor[py.pos.y][py.pos.x].treasure_id;
 
-    if (tile_id != 0 && treasure_list[tile_id].category_id == TV_DOWN_STAIR) {
+    if (tile_id != 0 && game.treasure.list[tile_id].category_id == TV_DOWN_STAIR) {
         dg.current_level++;
 
         printMessage("You enter a maze of down staircases.");
@@ -2263,7 +2263,7 @@ static void dungeonJamDoor() {
         return;
     }
 
-    Inventory_t &item = treasure_list[tile.treasure_id];
+    Inventory_t &item = game.treasure.list[tile.treasure_id];
 
     uint8_t item_id = item.category_id;
     if (item_id != TV_CLOSED_DOOR && item_id != TV_OPEN_DOOR) {
