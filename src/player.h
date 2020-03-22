@@ -89,7 +89,7 @@ typedef struct {
         int16_t current_hp;             // Current hit points
         uint16_t current_hp_fraction;   // Current hit points fraction * 2^16
         char history[4][60];            // History record
-    } misc;
+    } misc{};
 
     // Stats now kept in arrays, for more efficient access. -CJS-
     struct {
@@ -97,7 +97,7 @@ typedef struct {
         uint8_t current[6];  // What is natural
         int16_t modified[6]; // What is modified, may be +/-
         uint8_t used[6];     // What is used
-    } stats;
+    } stats{};
 
     struct {
         uint32_t status;             // Status of player
@@ -149,20 +149,20 @@ typedef struct {
         uint32_t spells_worked;           // bit mask of spells tried and worked
         uint32_t spells_forgotten;        // bit mask of spells learned but forgotten
         uint8_t spells_learned_order[32]; // order spells learned/remembered/forgotten
-    } flags;
+    } flags{};
 
     // location in dungeon
-    Coord_t pos;
+    Coord_t pos{};
 
     // calculated base hp values at each level, store them so that
     // drain life + restore life does not affect hit points.
-    uint16_t base_hp_levels[PLAYER_MAX_LEVEL];
+    uint16_t base_hp_levels[PLAYER_MAX_LEVEL]{};
 
     // Base experience levels, may be adjusted up for race and/or class
-    uint32_t base_exp_levels[PLAYER_MAX_LEVEL];
+    uint32_t base_exp_levels[PLAYER_MAX_LEVEL]{};
 
-    uint8_t running_tracker;   // Tracker for number of turns taken during one run cycle
-    bool temporary_light_only; // Track if temporary light about player
+    uint8_t running_tracker = 0;       // Tracker for number of turns taken during one run cycle
+    bool temporary_light_only = false; // Track if temporary light about player
 
     int32_t max_score = 0; // Maximum score attained
 
@@ -172,11 +172,11 @@ typedef struct {
         int16_t heaviness = 0;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
     } pack;
 
-    Inventory_t inventory[PLAYER_INVENTORY_SIZE];
+    Inventory_t inventory[PLAYER_INVENTORY_SIZE]{};
 
-    int16_t equipment_count = 0; // Number of equipped items
-    bool weapon_is_heavy;        // Weapon is too heavy -CJS-
-    bool carrying_light;         // `true` when player is carrying light
+    int16_t equipment_count = 0;  // Number of equipped items
+    bool weapon_is_heavy = false; // Weapon is too heavy -CJS-
+    bool carrying_light = false;  // `true` when player is carrying light
 } Player_t;
 
 extern Player_t py;

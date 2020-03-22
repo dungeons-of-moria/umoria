@@ -35,7 +35,9 @@ typedef struct {
 
     bool total_winner = false;            // Character beat the Balrog
 
+    bool teleport_player = false;         // Handle teleport traps
     bool player_free_turn = false;        // Player has a free turn, so do not move creatures
+
     bool to_be_wizard = false;            // Player requests to be Wizard - used during startup, when -w option used
     bool wizard_mode = false;             // Character is a Wizard when true
     int16_t noscore = 0;                  // Don't save a score for this game. -CJS-
@@ -43,16 +45,13 @@ typedef struct {
     bool use_last_direction = false;      // `true` when repeat commands should use last known direction
     char doing_inventory_command = 0;     // Track inventory commands -CJS-
     char last_command = ' ';              // Save of the previous player command
-
     int command_count = 0;                // How many times to repeat a specific command -CJS-
-
-    bool teleport_player;                 // Handle teleport traps
 
     vtype_t character_died_from = {'\0'}; // What the character died from: starvation, Bat, etc.
 
     struct {
-        Inventory_t list[LEVEL_MAX_OBJECTS];
         int16_t current_id = 0; // Current treasure heap ptr
+        Inventory_t list[LEVEL_MAX_OBJECTS]{};
     } treasure;
 } Game_t;
 
