@@ -461,7 +461,7 @@ void itemIdentify(Inventory_t &item, int &item_id) {
 
     int j;
 
-    for (int i = 0; i < py.pack_unique_items; i++) {
+    for (int i = 0; i < py.pack.unique_items; i++) {
         Inventory_t const &t_ptr = inventory[i];
 
         if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
@@ -475,9 +475,9 @@ void itemIdentify(Inventory_t &item, int &item_id) {
             printMessage("You combine similar objects from the shop and dungeon.");
 
             inventory[item_id].items_count += inventory[i].items_count;
-            py.pack_unique_items--;
+            py.pack.unique_items--;
 
-            for (j = i; j < py.pack_unique_items; j++) {
+            for (j = i; j < py.pack.unique_items; j++) {
                 inventory[j] = inventory[j + 1];
             }
 
@@ -892,7 +892,7 @@ void itemTypeRemainingCountDescription(int item_id) {
 
 // Add a comment to an object description. -CJS-
 void itemInscribe() {
-    if (py.pack_unique_items == 0 && py.equipment_count == 0) {
+    if (py.pack.unique_items == 0 && py.equipment_count == 0) {
         printMessage("You are not carrying anything to inscribe.");
         return;
     }

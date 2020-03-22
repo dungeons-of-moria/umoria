@@ -18,7 +18,7 @@ static void inventoryThrow(int item_id, Inventory_t *treasure) {
     if (item->items_count > 1) {
         treasure->items_count = 1;
         item->items_count--;
-        py.pack_weight -= item->weight;
+        py.pack.weight -= item->weight;
         py.flags.status |= config::player::status::PY_STR_WGT;
     } else {
         inventoryDestroyItem(item_id);
@@ -157,14 +157,14 @@ static void inventoryDropOrThrowItem(Coord_t coord, Inventory_t *item) {
 // Note: Extra damage and chance of hitting when missiles are used
 // with correct weapon. i.e. wield bow and throw arrow.
 void playerThrowItem() {
-    if (py.pack_unique_items == 0) {
+    if (py.pack.unique_items == 0) {
         printMessage("But you are not carrying anything.");
         game.player_free_turn = true;
         return;
     }
 
     int item_id;
-    if (!inventoryGetInputForItemId(item_id, "Fire/Throw which one?", 0, py.pack_unique_items - 1, CNIL, CNIL)) {
+    if (!inventoryGetInputForItemId(item_id, "Fire/Throw which one?", 0, py.pack.unique_items - 1, CNIL, CNIL)) {
         return;
     }
 

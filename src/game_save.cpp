@@ -215,14 +215,14 @@ static bool sv_write() {
 
     wr_short((uint16_t) missiles_counter);
     wr_long((uint32_t) dg.game_turn);
-    wr_short((uint16_t) py.pack_unique_items);
-    for (int i = 0; i < py.pack_unique_items; i++) {
+    wr_short((uint16_t) py.pack.unique_items);
+    for (int i = 0; i < py.pack.unique_items; i++) {
         wr_item(inventory[i]);
     }
     for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         wr_item(inventory[i]);
     }
-    wr_short((uint16_t) py.pack_weight);
+    wr_short((uint16_t) py.pack.weight);
     wr_short((uint16_t) py.equipment_count);
     wr_long(py.flags.spells_learnt);
     wr_long(py.flags.spells_worked);
@@ -391,8 +391,8 @@ static bool _save_char(const std::string &filename) {
 
     putQIO();
     playerDisturb(1, 0);                   // Turn off resting and searching.
-    playerChangeSpeed(-py.pack_heaviness); // Fix the speed
-    py.pack_heaviness = 0;
+    playerChangeSpeed(-py.pack.heaviness); // Fix the speed
+    py.pack.heaviness = 0;
     bool ok = false;
 
     fileptr = nullptr; // Do not assume it has been init'ed
@@ -660,17 +660,17 @@ bool loadGame(bool &generate) {
 
             missiles_counter = rd_short();
             dg.game_turn = rd_long();
-            py.pack_unique_items = rd_short();
-            if (py.pack_unique_items > player_equipment::EQUIPMENT_WIELD) {
+            py.pack.unique_items = rd_short();
+            if (py.pack.unique_items > player_equipment::EQUIPMENT_WIELD) {
                 goto error;
             }
-            for (int i = 0; i < py.pack_unique_items; i++) {
+            for (int i = 0; i < py.pack.unique_items; i++) {
                 rd_item(inventory[i]);
             }
             for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
                 rd_item(inventory[i]);
             }
-            py.pack_weight = rd_short();
+            py.pack.weight = rd_short();
             py.equipment_count = rd_short();
             py.flags.spells_learnt = rd_long();
             py.flags.spells_worked = rd_long();
@@ -880,7 +880,7 @@ bool loadGame(bool &generate) {
 
             if (dg.game_turn >= 0) { // Only if a full restoration.
                 py.weapon_is_heavy = false;
-                py.pack_heaviness = 0;
+                py.pack.heaviness = 0;
                 playerStrength();
 
                 // rotate store inventory, depending on how old the save file

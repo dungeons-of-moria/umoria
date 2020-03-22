@@ -314,7 +314,7 @@ bool playerTestAttackHits(int attack_id, uint8_t level) {
             }
             break;
         case 13: // Steal Object
-            if (playerTestBeingHit(2, (int) level, 0, (int) py.misc.level, CLASS_MISC_HIT) && py.pack_unique_items > 0) {
+            if (playerTestBeingHit(2, (int) level, 0, (int) py.misc.level, CLASS_MISC_HIT) && py.pack.unique_items > 0) {
                 success = true;
             }
             break;
@@ -356,7 +356,7 @@ bool playerTestAttackHits(int attack_id, uint8_t level) {
             break;
         case 24: // Eat charges
             // check to make sure an object exists
-            if (playerTestBeingHit(15, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT) && py.pack_unique_items > 0) {
+            if (playerTestBeingHit(15, (int) level, 0, py.misc.ac + py.misc.magical_ac, CLASS_MISC_HIT) && py.pack.unique_items > 0) {
                 success = true;
             }
             break;
@@ -599,7 +599,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
     Inventory_t &item = inventory[item_id];
 
-    py.pack_weight -= item.weight * item.items_count;
+    py.pack.weight -= item.weight * item.items_count;
     py.equipment_count--;
 
     const char *p = nullptr;
@@ -764,20 +764,20 @@ void playerStrength() {
 
     int limit = playerCarryingLoadLimit();
 
-    if (limit < py.pack_weight) {
-        limit = py.pack_weight / (limit + 1);
+    if (limit < py.pack.weight) {
+        limit = py.pack.weight / (limit + 1);
     } else {
         limit = 0;
     }
 
-    if (py.pack_heaviness != limit) {
-        if (py.pack_heaviness < limit) {
+    if (py.pack.heaviness != limit) {
+        if (py.pack.heaviness < limit) {
             printMessage("Your pack is so heavy that it slows you down.");
         } else {
             printMessage("You move more easily under the weight of your pack.");
         }
-        playerChangeSpeed(limit - py.pack_heaviness);
-        py.pack_heaviness = (int16_t) limit;
+        playerChangeSpeed(limit - py.pack.heaviness);
+        py.pack.heaviness = (int16_t) limit;
     }
 
     py.flags.status &= ~config::player::status::PY_STR_WGT;
@@ -811,7 +811,7 @@ static int lastKnownSpell() {
 static uint32_t playerDetermineLearnableSpells() {
     uint32_t spell_flag = 0;
 
-    for (int i = 0; i < py.pack_unique_items; i++) {
+    for (int i = 0; i < py.pack.unique_items; i++) {
         if (inventory[i].category_id == TV_MAGIC_BOOK) {
             spell_flag |= inventory[i].flags;
         }
@@ -1196,7 +1196,7 @@ static void playerAttackMonster(Coord_t coord) {
         // Use missiles up
         if (item.category_id >= TV_SLING_AMMO && item.category_id <= TV_SPIKE) {
             item.items_count--;
-            py.pack_weight -= item.weight;
+            py.pack.weight -= item.weight;
             py.flags.status |= config::player::status::PY_STR_WGT;
 
             if (item.items_count == 0) {

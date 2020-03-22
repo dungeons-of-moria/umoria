@@ -111,7 +111,7 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
         // Set some default values -MRC-
         py.temporary_light_only = false;
         py.weapon_is_heavy = false;
-        py.pack_heaviness = 0;
+        py.pack.heaviness = 0;
 
         // prevent ^c quit from entering score into scoreboard,
         // and prevent signal from creating panic save until this
@@ -931,7 +931,7 @@ static void playerUpdateStatusFlags() {
 // Allow for a slim chance of detect enchantment -CJS-
 static void playerDetectEnchantment() {
     for (int i = 0; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (i == py.pack_unique_items) {
+        if (i == py.pack.unique_items) {
             i = 22;
         }
 
@@ -2296,7 +2296,7 @@ static void dungeonJamDoor() {
 
             if (inventory[item_pos_start].items_count > 1) {
                 inventory[item_pos_start].items_count--;
-                py.pack_weight -= inventory[item_pos_start].weight;
+                py.pack.weight -= inventory[item_pos_start].weight;
             } else {
                 inventoryDestroyItem(item_pos_start);
             }
