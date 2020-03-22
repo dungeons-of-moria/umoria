@@ -29,6 +29,8 @@ typedef struct {
 
     int command_count = 0;                // How many times to repeat a specific command -CJS-
 
+    bool teleport_player;                 // Handle teleport traps
+
     vtype_t character_died_from = {'\0'}; // What the character died from: starvation, Bat, etc.
 } Game_t;
 

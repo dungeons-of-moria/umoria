@@ -111,7 +111,7 @@ static void trapStrengthDart(Inventory_t const &item, int dam) {
 }
 
 static void trapTeleport(Coord_t coord) {
-    teleport_player = true;
+    game.teleport_player = true;
 
     printMessage("You hit a teleport trap!");
 

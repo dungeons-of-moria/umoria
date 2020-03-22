@@ -256,7 +256,7 @@ static void resetDungeonFlags() {
     game.command_count = 0;
     dg.generate_new_level = false;
     py.running_tracker = 0;
-    teleport_player = false;
+    game.teleport_player = false;
     monster_multiply_total = 0;
     dg.floor[py.pos.y][py.pos.x].creature_id = 1;
 }
@@ -2478,7 +2478,7 @@ static void playDungeon() {
         }
 
         // Teleport?
-        if (teleport_player) {
+        if (game.teleport_player) {
             playerTeleport(100);
         }
 

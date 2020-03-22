@@ -180,7 +180,6 @@ typedef struct {
 } Player_t;
 
 extern Player_t py;
-extern bool teleport_player;
 
 extern ClassRankTitle_t class_rank_titles[PLAYER_MAX_CLASSES][PLAYER_MAX_LEVEL];
 extern Race_t character_races[PLAYER_MAX_RACES];
