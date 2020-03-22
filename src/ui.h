@@ -50,6 +50,9 @@ extern bool message_ready_to_print;
 extern vtype_t messages[MESSAGE_HISTORY_SIZE];
 extern int16_t last_message_id;
 
+extern int eof_flag;
+extern bool panic_save;
+
 // UI - IO
 bool terminalInitialize();
 void terminalRestore();

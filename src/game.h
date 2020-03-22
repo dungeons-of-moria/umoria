@@ -52,8 +52,6 @@ constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
 
 extern Game_t game;
-extern int eof_flag;
-extern bool panic_save;
 extern int16_t sorted_objects[MAX_DUNGEON_OBJECTS];
 extern int16_t current_treasure_id;
 extern uint16_t normal_table[NORMAL_TABLE_SIZE];
