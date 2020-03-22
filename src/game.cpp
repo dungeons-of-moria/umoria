@@ -263,11 +263,9 @@ static char mapRoguelikeKeysToKeypad(char command) {
 // Prompts for a direction -RAK-
 // Direction memory added, for repeated commands.  -CJS
 bool getDirectionWithMemory(char *prompt, int &direction) {
-    static char prev_dir; // Direction memory. -CJS-
-
     // used in counted commands. -CJS-
     if (game.use_last_direction) {
-        direction = prev_dir;
+        direction = py.prev_dir;
         return true;
     }
 
@@ -293,8 +291,8 @@ bool getDirectionWithMemory(char *prompt, int &direction) {
         }
 
         if (command >= '1' && command <= '9' && command != '5') {
-            prev_dir = command - '0';
-            direction = prev_dir;
+            py.prev_dir = command - '0';
+            direction = py.prev_dir;
             return true;
         }
 

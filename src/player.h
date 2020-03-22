@@ -151,8 +151,8 @@ typedef struct {
         uint8_t spells_learned_order[32]; // order spells learned/remembered/forgotten
     } flags{};
 
-    // location in dungeon
-    Coord_t pos{};
+    Coord_t pos{};       // location in dungeon
+    char prev_dir = ' '; // Direction memory. -CJS-
 
     // calculated base hp values at each level, store them so that
     // drain life + restore life does not affect hit points.
