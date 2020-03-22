@@ -15,8 +15,6 @@ Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
 // Current treasure heap ptr
 int16_t current_treasure_id;
 
-int16_t missiles_counter = 0; // Counter for missiles
-
 // Should the object be enchanted -RAK-
 static bool magicShouldBeEnchanted(int chance) {
     return randomNumber(100) <= chance;
@@ -769,7 +767,7 @@ static void magicalChests(Inventory_t &item, int level) {
     }
 }
 
-static void magicalProjectiles(Inventory_t &item, int special, int level) {
+static void magicalProjectileAdjustment(Inventory_t &item, int special, int level) {
     item.to_hit += magicEnchantmentBonus(1, 35, level);
     item.to_damage += magicEnchantmentBonus(1, 35, level);
 
@@ -821,11 +819,42 @@ static void magicalProjectiles(Inventory_t &item, int special, int level) {
     }
 }
 
-static void cursedProjectiles(Inventory_t &item, int level) {
+static void cursedProjectileAdjustment(Inventory_t &item, int level) {
     item.to_hit -= magicEnchantmentBonus(5, 55, level);
     item.to_damage -= magicEnchantmentBonus(5, 55, level);
     item.flags |= config::treasure::flags::TR_CURSED;
     item.cost = 0;
+}
+
+// Counter for missiles
+// Note: converted to uint16_t when saving the game.
+int16_t missiles_counter = 0;
+
+static void magicalProjectile(Inventory_t &item, int special, int level, int chance, int cursed) {
+    if (item.category_id == TV_SLING_AMMO || item.category_id == TV_BOLT || item.category_id == TV_ARROW) {
+        // always show to_hit/to_damage values if identified
+        item.identification |= config::identification::ID_SHOW_HIT_DAM;
+
+        if (magicShouldBeEnchanted(chance)) {
+            magicalProjectileAdjustment(item, special, level);
+        } else if (magicShouldBeEnchanted(cursed)) {
+            cursedProjectileAdjustment(item, level);
+        }
+    }
+
+    item.items_count = 0;
+
+    for (int i = 0; i < 7; i++) {
+        item.items_count += randomNumber(6);
+    }
+
+    if (missiles_counter == SHRT_MAX) {
+        missiles_counter = -SHRT_MAX - 1;
+    } else {
+        missiles_counter++;
+    }
+
+    item.misc_use = missiles_counter;
 }
 
 // Chance of treasure having magic abilities -RAK-
@@ -967,30 +996,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
         case TV_SPIKE:
         case TV_BOLT:
         case TV_ARROW:
-            if (item.category_id == TV_SLING_AMMO || item.category_id == TV_BOLT || item.category_id == TV_ARROW) {
-                // always show to_hit/to_damage values if identified
-                item.identification |= config::identification::ID_SHOW_HIT_DAM;
-
-                if (magicShouldBeEnchanted(chance)) {
-                    magicalProjectiles(item, special, level);
-                } else if (magicShouldBeEnchanted(cursed)) {
-                    cursedProjectiles(item, level);
-                }
-            }
-
-            item.items_count = 0;
-
-            for (int i = 0; i < 7; i++) {
-                item.items_count += randomNumber(6);
-            }
-
-            if (missiles_counter == SHRT_MAX) {
-                missiles_counter = -SHRT_MAX - 1;
-            } else {
-                missiles_counter++;
-            }
-
-            item.misc_use = missiles_counter;
+            magicalProjectile(item, special, level, chance, cursed);
             break;
         case TV_FOOD:
             // make sure all food rations have the same level

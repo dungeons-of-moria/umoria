@@ -73,8 +73,6 @@ constexpr uint8_t TV_STORE_DOOR = 110;
 constexpr uint8_t TV_MAX_VISIBLE = 110;
 
 extern Inventory_t treasure_list[LEVEL_MAX_OBJECTS];
-
-// Converted to uint16_t when saving the game.
 extern int16_t missiles_counter;
 
 void magicTreasureMagicalAbility(int item_id, int level);
