@@ -1,4 +1,4 @@
-Command summary: (@ is optional count, ~ is direction, ^R redraws, ESC aborts)
+Command Summary (@ is optional count, ~ is direction, ^R redraws, ESC aborts)
   c ~     Close a door              |   C       Character description
   d       Drop an item              | @ D ~     Disarm a trap/chest
   e       Equipment list            |   E       Eat some food
