@@ -28,16 +28,16 @@ void inventoryDestroyItem(int item_id) {
 
     if (item.items_count > 1 && item.sub_category_id <= ITEM_SINGLE_STACK_MAX) {
         item.items_count--;
-        py.inventory_weight -= item.weight;
+        py.pack_weight -= item.weight;
     } else {
-        py.inventory_weight -= item.weight * item.items_count;
+        py.pack_weight -= item.weight * item.items_count;
 
-        for (int i = item_id; i < py.unique_inventory_items - 1; i++) {
+        for (int i = item_id; i < py.pack_unique_items - 1; i++) {
             inventory[i] = inventory[i + 1];
         }
 
-        inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[py.unique_inventory_items - 1]);
-        py.unique_inventory_items--;
+        inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[py.pack_unique_items - 1]);
+        py.pack_unique_items--;
     }
 
     py.flags.status |= config::player::status::PY_STR_WGT;
@@ -70,18 +70,18 @@ void inventoryDropItem(int item_id, bool drop_all) {
         playerTakeOff(item_id, -1);
     } else {
         if (drop_all || item.items_count == 1) {
-            py.inventory_weight -= item.weight * item.items_count;
-            py.unique_inventory_items--;
+            py.pack_weight -= item.weight * item.items_count;
+            py.pack_unique_items--;
 
-            while (item_id < py.unique_inventory_items) {
+            while (item_id < py.pack_unique_items) {
                 inventory[item_id] = inventory[item_id + 1];
                 item_id++;
             }
 
-            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[py.unique_inventory_items]);
+            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[py.pack_unique_items]);
         } else {
             treasure_list[treasureID].items_count = 1;
-            py.inventory_weight -= item.weight;
+            py.pack_weight -= item.weight;
             item.items_count--;
         }
 
@@ -99,7 +99,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
 static int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_percentage) {
     int damage = 0;
 
-    for (int i = 0; i < py.unique_inventory_items; i++) {
+    for (int i = 0; i < py.pack_unique_items; i++) {
         if ((*item_type)(&inventory[i]) && randomNumber(100) < chance_percentage) {
             inventoryDestroyItem(i);
             damage++;
@@ -132,7 +132,7 @@ bool inventoryDiminishLightAttack(bool noticed) {
 }
 
 bool inventoryDiminishChargesAttack(uint8_t creature_level, int16_t &monster_hp, bool noticed) {
-    Inventory_t &item = inventory[randomNumber(py.unique_inventory_items) - 1];
+    Inventory_t &item = inventory[randomNumber(py.pack_unique_items) - 1];
 
     bool has_charges = item.category_id == TV_STAFF || item.category_id == TV_WAND;
 
@@ -215,7 +215,7 @@ bool executeDisenchantAttack() {
 
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(Inventory_t const &item) {
-    if (py.unique_inventory_items < player_equipment::EQUIPMENT_WIELD) {
+    if (py.pack_unique_items < player_equipment::EQUIPMENT_WIELD) {
         return true;
     }
 
@@ -223,7 +223,7 @@ bool inventoryCanCarryItemCount(Inventory_t const &item) {
         return false;
     }
 
-    for (int i = 0; i < py.unique_inventory_items; i++) {
+    for (int i = 0; i < py.pack_unique_items; i++) {
         bool same_character = inventory[i].category_id == item.category_id;
         bool same_category = inventory[i].sub_category_id == item.sub_category_id;
 
@@ -251,7 +251,7 @@ bool inventoryCanCarryItemCount(Inventory_t const &item) {
 // return false if picking up an object would change the players speed
 bool inventoryCanCarryItem(Inventory_t const &item) {
     int limit = playerCarryingLoadLimit();
-    int newWeight = item.items_count * item.weight + py.inventory_weight;
+    int newWeight = item.items_count * item.weight + py.pack_weight;
 
     if (limit < newWeight) {
         limit = newWeight / (limit + 1);
@@ -290,16 +290,16 @@ int inventoryCarryItem(Inventory_t &new_item) {
         if ((is_same_category && is_always_known) || new_item.category_id > item.category_id) {
             // For items which are always `is_known`, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
-            for (int i = py.unique_inventory_items - 1; i >= slot_id; i--) {
+            for (int i = py.pack_unique_items - 1; i >= slot_id; i--) {
                 inventory[i + 1] = inventory[i];
             }
             inventory[slot_id] = new_item;
-            py.unique_inventory_items++;
+            py.pack_unique_items++;
             break;
         }
     }
 
-    py.inventory_weight += new_item.items_count * new_item.weight;
+    py.pack_weight += new_item.items_count * new_item.weight;
     py.flags.status |= config::player::status::PY_STR_WGT;
 
     return slot_id;
@@ -312,7 +312,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
 
     bool at_end_of_range = false;
 
-    for (int i = 0; i < py.unique_inventory_items; i++) {
+    for (int i = 0; i < py.pack_unique_items; i++) {
         auto item_id = (int) inventory[i].category_id;
 
         if (!at_end_of_range) {
@@ -329,7 +329,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
     }
 
     if (at_end_of_range && k == -1) {
-        k = py.unique_inventory_items - 1;
+        k = py.pack_unique_items - 1;
     }
 
     return at_end_of_range;

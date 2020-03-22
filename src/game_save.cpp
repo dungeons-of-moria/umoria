@@ -215,14 +215,14 @@ static bool sv_write() {
 
     wr_short((uint16_t) missiles_counter);
     wr_long((uint32_t) dg.game_turn);
-    wr_short((uint16_t) py.unique_inventory_items);
-    for (int i = 0; i < py.unique_inventory_items; i++) {
+    wr_short((uint16_t) py.pack_unique_items);
+    for (int i = 0; i < py.pack_unique_items; i++) {
         wr_item(inventory[i]);
     }
     for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         wr_item(inventory[i]);
     }
-    wr_short((uint16_t) py.inventory_weight);
+    wr_short((uint16_t) py.pack_weight);
     wr_short((uint16_t) py.equipment_count);
     wr_long(py.flags.spells_learnt);
     wr_long(py.flags.spells_worked);
@@ -660,17 +660,17 @@ bool loadGame(bool &generate) {
 
             missiles_counter = rd_short();
             dg.game_turn = rd_long();
-            py.unique_inventory_items = rd_short();
-            if (py.unique_inventory_items > player_equipment::EQUIPMENT_WIELD) {
+            py.pack_unique_items = rd_short();
+            if (py.pack_unique_items > player_equipment::EQUIPMENT_WIELD) {
                 goto error;
             }
-            for (int i = 0; i < py.unique_inventory_items; i++) {
+            for (int i = 0; i < py.pack_unique_items; i++) {
                 rd_item(inventory[i]);
             }
             for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
                 rd_item(inventory[i]);
             }
-            py.inventory_weight = rd_short();
+            py.pack_weight = rd_short();
             py.equipment_count = rd_short();
             py.flags.spells_learnt = rd_long();
             py.flags.spells_worked = rd_long();

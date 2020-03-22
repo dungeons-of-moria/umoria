@@ -1659,7 +1659,7 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
             if (py.flags.paralysis < 1 && randomNumber(124) < py.stats.used[py_attrs::A_DEX]) {
                 printMessage("You grab hold of your backpack!");
             } else {
-                inventoryDestroyItem(randomNumber(py.unique_inventory_items) - 1);
+                inventoryDestroyItem(randomNumber(py.pack_unique_items) - 1);
                 printMessage("Your backpack feels lighter.");
             }
             if (randomNumber(2) == 1) {

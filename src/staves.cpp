@@ -39,7 +39,7 @@ enum class StaffSpellTypes {
 };
 
 static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
-    if (py.unique_inventory_items == 0) {
+    if (py.pack_unique_items == 0) {
         printMessage("But you are not carrying anything.");
         return false;
     }
@@ -377,7 +377,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
 void wandAim() {
     game.player_free_turn = true;
 
-    if (py.unique_inventory_items == 0) {
+    if (py.pack_unique_items == 0) {
         printMessage("But you are not carrying anything.");
         return;
     }

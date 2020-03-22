@@ -166,10 +166,9 @@ typedef struct {
 
     int32_t max_score = 0; // Maximum score attained
 
-    // TODO: create a pack/inventory object?
-    int16_t unique_inventory_items = 0;
-    int16_t inventory_weight = 0; // Current carried weight
-    int16_t pack_heaviness;       // Heaviness of pack - used to calculate if pack is too heavy -CJS-
+    int16_t pack_unique_items = 0; // unique_inventory_items in pack
+    int16_t pack_weight = 0;       // Weight of currently carried items
+    int16_t pack_heaviness;        // Heaviness of pack - used to calculate if pack is too heavy -CJS-
 
     // TODO: create an equipment object?
     int16_t equipment_count = 0; // Number of equipped items

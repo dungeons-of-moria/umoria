@@ -944,12 +944,12 @@ bool (*store_buy[MAX_STORES])(uint8_t) = {
 
 // Sell an item to the store -RAK-
 static bool storeSellAnItem(int store_id, int &current_top_item_id) {
-    int first_item = py.unique_inventory_items;
+    int first_item = py.pack_unique_items;
     int last_item = -1;
 
     char mask[player_equipment::EQUIPMENT_WIELD];
 
-    for (int counter = 0; counter < py.unique_inventory_items; counter++) {
+    for (int counter = 0; counter < py.pack_unique_items; counter++) {
         bool flag = (*store_buy[store_id])(inventory[counter].category_id);
 
         if (flag) {

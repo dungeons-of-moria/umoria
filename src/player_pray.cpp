@@ -31,7 +31,7 @@ static bool playerCanPray(int &item_pos_begin, int &item_pos_end) {
         return false;
     }
 
-    if (py.unique_inventory_items == 0) {
+    if (py.pack_unique_items == 0) {
         printMessage("But you are not carrying anything!");
         return false;
     }

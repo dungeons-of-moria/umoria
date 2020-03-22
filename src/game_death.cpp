@@ -85,7 +85,7 @@ retry:
                 printMessage(CNIL);
                 printMessage("You are carrying:");
                 clearToBottom(1);
-                (void) displayInventory(0, py.unique_inventory_items - 1, true, 0, CNIL);
+                (void) displayInventory(0, py.pack_unique_items - 1, true, 0, CNIL);
                 printMessage(CNIL);
             }
         }
