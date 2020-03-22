@@ -806,7 +806,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
             storeDestroyItem(store_id, item_id, true);
 
             obj_desc_t description = {'\0'};
-            itemDescription(description, inventory[new_item_id], true);
+            itemDescription(description, py.inventory[new_item_id], true);
 
             obj_desc_t msg = {'\0'};
             (void) sprintf(msg, "You have %s (%c)", description, new_item_id + 'a');
@@ -950,7 +950,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     char mask[player_equipment::EQUIPMENT_WIELD];
 
     for (int counter = 0; counter < py.pack.unique_items; counter++) {
-        bool flag = (*store_buy[store_id])(inventory[counter].category_id);
+        bool flag = (*store_buy[store_id])(py.inventory[counter].category_id);
 
         if (flag) {
             mask[counter] = 1;
@@ -977,7 +977,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     }
 
     Inventory_t sold_item{};
-    inventoryTakeOneItem(&sold_item, &inventory[item_id]);
+    inventoryTakeOneItem(&sold_item, &py.inventory[item_id]);
 
     obj_desc_t description = {'\0'};
     itemDescription(description, sold_item, true);
@@ -1002,10 +1002,10 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
         py.misc.au += price;
 
         // identify object in inventory to set objects_identified array
-        itemIdentify(inventory[item_id], item_id);
+        itemIdentify(py.inventory[item_id], item_id);
 
         // retake sold_item so that it will be identified
-        inventoryTakeOneItem(&sold_item, &inventory[item_id]);
+        inventoryTakeOneItem(&sold_item, &py.inventory[item_id]);
 
         // call spellItemIdentifyAndRemoveRandomInscription for store item, so charges/pluses are known
         spellItemIdentifyAndRemoveRandomInscription(sold_item);

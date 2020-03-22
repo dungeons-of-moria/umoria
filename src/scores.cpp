@@ -246,7 +246,7 @@ int32_t playerCalculateTotalPoints() {
     int32_t total = py.misc.max_exp + (100 * py.misc.max_dungeon_depth);
     total += py.misc.au / 100;
 
-    for (auto &item : inventory) {
+    for (auto &item : py.inventory) {
         total += storeItemValue(item);
     }
 

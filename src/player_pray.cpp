@@ -129,7 +129,7 @@ static void playerRecitePrayer(int prayer_type) {
             spellCreateFood();
             break;
         case PriestSpellTypes::remove_curse:
-            for (auto &entry : inventory) {
+            for (auto &entry : py.inventory) {
                 // only clear flag for items that are wielded or worn
                 if (entry.category_id >= TV_MIN_WEAR && entry.category_id <= TV_MAX_WEAR) {
                     entry.flags &= ~config::treasure::flags::TR_CURSED;

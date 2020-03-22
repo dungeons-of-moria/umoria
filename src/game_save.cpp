@@ -217,10 +217,10 @@ static bool sv_write() {
     wr_long((uint32_t) dg.game_turn);
     wr_short((uint16_t) py.pack.unique_items);
     for (int i = 0; i < py.pack.unique_items; i++) {
-        wr_item(inventory[i]);
+        wr_item(py.inventory[i]);
     }
     for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-        wr_item(inventory[i]);
+        wr_item(py.inventory[i]);
     }
     wr_short((uint16_t) py.pack.weight);
     wr_short((uint16_t) py.equipment_count);
@@ -665,10 +665,10 @@ bool loadGame(bool &generate) {
                 goto error;
             }
             for (int i = 0; i < py.pack.unique_items; i++) {
-                rd_item(inventory[i]);
+                rd_item(py.inventory[i]);
             }
             for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-                rd_item(inventory[i]);
+                rd_item(py.inventory[i]);
             }
             py.pack.weight = rd_short();
             py.equipment_count = rd_short();

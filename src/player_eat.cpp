@@ -59,7 +59,7 @@ void playerEat() {
 
     bool identified = false;
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t *item = &py.inventory[item_id];
     uint32_t item_flags = item->flags;
 
     while (item_flags != 0) {
@@ -215,8 +215,8 @@ void playerEat() {
 
             displayCharacterExperience();
 
-            itemIdentify(inventory[item_id], item_id);
-            item = &inventory[item_id];
+            itemIdentify(py.inventory[item_id], item_id);
+            item = &py.inventory[item_id];
         }
     } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         itemSetAsTried(*item);

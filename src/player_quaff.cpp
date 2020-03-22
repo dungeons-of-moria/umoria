@@ -358,7 +358,7 @@ void quaff() {
     game.player_free_turn = false;
 
     bool identified;
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t *item = &py.inventory[item_id];
 
     if (item->flags == 0) {
         printMessage("You feel less thirsty.");
@@ -373,8 +373,8 @@ void quaff() {
             py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
-            itemIdentify(inventory[item_id], item_id);
-            item = &inventory[item_id];
+            itemIdentify(py.inventory[item_id], item_id);
+            item = &py.inventory[item_id];
         }
     } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         itemSetAsTried(*item);

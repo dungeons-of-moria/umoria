@@ -106,9 +106,9 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
 // TODO: split into two functions; getting spell ID and casting an actual spell
 int castSpellGetId(const char *prompt, int item_id, int &spell_id, int &spell_chance) {
     // NOTE: `flags` gets set again, since getAndClearFirstBit modified it
-    uint32_t flags = inventory[item_id].flags;
+    uint32_t flags = py.inventory[item_id].flags;
     int first_spell = getAndClearFirstBit(flags);
-    flags = inventory[item_id].flags & py.flags.spells_learnt;
+    flags = py.inventory[item_id].flags & py.flags.spells_learnt;
 
     // TODO(cook) move access to `magic_spells[]` directly to the for loop it's used in, below?
     Spell_t *spells = magic_spells[py.misc.class_id - 1];
@@ -403,9 +403,9 @@ bool spellIdentifyItem() {
         return false;
     }
 
-    itemIdentify(inventory[item_id], item_id);
+    itemIdentify(py.inventory[item_id], item_id);
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
     spellItemIdentifyAndRemoveRandomInscription(item);
 
     obj_desc_t description = {'\0'};
@@ -1105,7 +1105,7 @@ bool spellRechargeItem(int number_of_charges) {
         return false;
     }
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     // recharge  I = recharge(20) = 1/6  failure for empty 10th level wand
     // recharge II = recharge(60) = 1/10 failure for empty 10th level wand
@@ -2310,8 +2310,8 @@ bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
     for (int id = player_equipment::EQUIPMENT_WIELD; id <= player_equipment::EQUIPMENT_OUTER; id++) {
-        if ((inventory[id].flags & config::treasure::flags::TR_CURSED) != 0u) {
-            inventory[id].flags &= ~config::treasure::flags::TR_CURSED;
+        if ((py.inventory[id].flags & config::treasure::flags::TR_CURSED) != 0u) {
+            py.inventory[id].flags &= ~config::treasure::flags::TR_CURSED;
             playerRecalculateBonuses();
             removed = true;
         }

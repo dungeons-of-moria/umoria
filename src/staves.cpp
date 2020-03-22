@@ -215,7 +215,7 @@ void staffUse() {
     // From here on player uses up a turn
     game.player_free_turn = false;
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     if (!staffPlayerCanUse(item)) {
         return;
@@ -230,7 +230,7 @@ void staffUse() {
 
             displayCharacterExperience();
 
-            itemIdentify(inventory[item_id], item_id);
+            itemIdentify(py.inventory[item_id], item_id);
         }
     } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         itemSetAsTried(item);
@@ -405,7 +405,7 @@ void wandAim() {
         direction = getRandomDirection();
     }
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     int player_class_lev_adj = class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3;
     int chance = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) - (int) item.depth_first_found + player_class_lev_adj;
@@ -443,7 +443,7 @@ void wandAim() {
             py.misc.exp += (item.depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
-            itemIdentify(inventory[item_id], item_id);
+            itemIdentify(py.inventory[item_id], item_id);
         }
     } else if (!itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification)) {
         itemSetAsTried(item);

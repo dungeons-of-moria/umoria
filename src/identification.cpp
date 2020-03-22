@@ -462,7 +462,7 @@ void itemIdentify(Inventory_t &item, int &item_id) {
     int j;
 
     for (int i = 0; i < py.pack.unique_items; i++) {
-        Inventory_t const &t_ptr = inventory[i];
+        Inventory_t const &t_ptr = py.inventory[i];
 
         if (t_ptr.category_id == x1 && t_ptr.sub_category_id == x2 && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
             // make *item_id the smaller number
@@ -474,14 +474,14 @@ void itemIdentify(Inventory_t &item, int &item_id) {
 
             printMessage("You combine similar objects from the shop and dungeon.");
 
-            inventory[item_id].items_count += inventory[i].items_count;
+            py.inventory[item_id].items_count += py.inventory[i].items_count;
             py.pack.unique_items--;
 
             for (j = i; j < py.pack.unique_items; j++) {
-                inventory[j] = inventory[j + 1];
+                py.inventory[j] = py.inventory[j + 1];
             }
 
-            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, inventory[j]);
+            inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, py.inventory[j]);
         }
     }
 }
@@ -862,11 +862,11 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
 
 // Describe number of remaining charges. -RAK-
 void itemChargesRemainingDescription(int item_id) {
-    if (!spellItemIdentified(inventory[item_id])) {
+    if (!spellItemIdentified(py.inventory[item_id])) {
         return;
     }
 
-    int rem_num = inventory[item_id].misc_use;
+    int rem_num = py.inventory[item_id].misc_use;
 
     vtype_t out_val = {'\0'};
     (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
@@ -875,7 +875,7 @@ void itemChargesRemainingDescription(int item_id) {
 
 // Describe amount of item remaining. -RAK-
 void itemTypeRemainingCountDescription(int item_id) {
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     item.items_count--;
 
@@ -903,15 +903,15 @@ void itemInscribe() {
     }
 
     obj_desc_t msg = {'\0'};
-    itemDescription(msg, inventory[item_id], true);
+    itemDescription(msg, py.inventory[item_id], true);
 
     obj_desc_t inscription = {'\0'};
     (void) sprintf(inscription, "Inscribing %s", msg);
 
     printMessage(inscription);
 
-    if (inventory[item_id].inscription[0] != '\0') {
-        (void) sprintf(inscription, "Replace %s New inscription:", inventory[item_id].inscription);
+    if (py.inventory[item_id].inscription[0] != '\0') {
+        (void) sprintf(inscription, "Replace %s New inscription:", py.inventory[item_id].inscription);
     } else {
         (void) strcpy(inscription, "Inscription: ");
     }
@@ -924,7 +924,7 @@ void itemInscribe() {
     putStringClearToEOL(inscription, Coord_t{0, 0});
 
     if (getStringInput(inscription, Coord_t{0, (int) strlen(inscription)}, msg_len)) {
-        itemReplaceInscription(inventory[item_id], inscription);
+        itemReplaceInscription(py.inventory[item_id], inscription);
     }
 }
 

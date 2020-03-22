@@ -429,7 +429,7 @@ void playerAdjustBonusesForItem(Inventory_t const &item, int factor) {
 
 static void playerRecalculateBonusesFromInventory() {
     for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
-        Inventory_t const &item = inventory[i];
+        Inventory_t const &item = py.inventory[i];
 
         if (item.category_id != TV_NOTHING) {
             py.misc.plusses_to_hit += item.to_hit;
@@ -463,11 +463,11 @@ static void playerRecalculateBonusesFromInventory() {
 
 static void playerRecalculateSustainStatsFromInventory() {
     for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
-        if ((inventory[i].flags & config::treasure::flags::TR_SUST_STAT) == 0u) {
+        if ((py.inventory[i].flags & config::treasure::flags::TR_SUST_STAT) == 0u) {
             continue;
         }
 
-        switch (inventory[i].misc_use) {
+        switch (py.inventory[i].misc_use) {
             case 1:
                 py.flags.sustain_str = true;
                 break;
@@ -523,7 +523,7 @@ void playerRecalculateBonuses() {
     py.misc.display_ac += py.misc.display_to_ac;
 
     if (py.weapon_is_heavy) {
-        py.misc.display_to_hit += (py.stats.used[py_attrs::A_STR] * 15 - inventory[player_equipment::EQUIPMENT_WIELD].weight);
+        py.misc.display_to_hit += (py.stats.used[py_attrs::A_STR] * 15 - py.inventory[player_equipment::EQUIPMENT_WIELD].weight);
     }
 
     // Add in temporary spell increases
@@ -597,7 +597,7 @@ void playerRecalculateBonuses() {
 void playerTakeOff(int item_id, int pack_position_id) {
     py.flags.status |= config::player::status::PY_STR_WGT;
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     py.pack.weight -= item.weight * item.items_count;
     py.equipment_count--;
@@ -746,7 +746,7 @@ int playerCarryingLoadLimit() {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void playerStrength() {
-    Inventory_t const &item = inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t const &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id != TV_NOTHING && py.stats.used[py_attrs::A_STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
@@ -812,8 +812,8 @@ static uint32_t playerDetermineLearnableSpells() {
     uint32_t spell_flag = 0;
 
     for (int i = 0; i < py.pack.unique_items; i++) {
-        if (inventory[i].category_id == TV_MAGIC_BOOK) {
-            spell_flag |= inventory[i].flags;
+        if (py.inventory[i].category_id == TV_MAGIC_BOOK) {
+            spell_flag |= py.inventory[i].flags;
         }
     }
 
@@ -1115,7 +1115,7 @@ static void playerAttackMonster(Coord_t coord) {
 
     Monster_t &monster = monsters[creature_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
 
     monster.sleep_count = 0;
 

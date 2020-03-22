@@ -77,8 +77,6 @@ enum player_equipment {
     EQUIPMENT_AUX,
 };
 
-extern Inventory_t inventory[PLAYER_INVENTORY_SIZE];
-
 uint32_t inventoryCollectAllItemFlags();
 
 void inventoryDestroyItem(int item_id);

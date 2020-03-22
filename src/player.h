@@ -172,7 +172,8 @@ typedef struct {
         int16_t heaviness = 0;    // Heaviness of pack - used to calculate if pack is too heavy -CJS-
     } pack;
 
-    // TODO: create an equipment object?
+    Inventory_t inventory[PLAYER_INVENTORY_SIZE];
+
     int16_t equipment_count = 0; // Number of equipped items
     bool weapon_is_heavy;        // Weapon is too heavy -CJS-
     bool carrying_light;         // `true` when player is carrying light

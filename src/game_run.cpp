@@ -164,7 +164,7 @@ static void initializeCharacterInventory() {
     Inventory_t item{};
 
     // this is needed for bash to work right, it can't hurt anyway
-    for (auto &entry : inventory) {
+    for (auto &entry : py.inventory) {
         inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, entry);
     }
 
@@ -263,7 +263,7 @@ static void resetDungeonFlags() {
 
 // Check light status for dungeon setup
 static void playerInitializePlayerLight() {
-    py.carrying_light = (inventory[player_equipment::EQUIPMENT_LIGHT].misc_use > 0);
+    py.carrying_light = (py.inventory[player_equipment::EQUIPMENT_LIGHT].misc_use > 0);
 }
 
 // Check for a maximum level
@@ -275,7 +275,7 @@ static void playerUpdateMaxDungeonDepth() {
 
 // Check light status
 static void playerUpdateLightStatus() {
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_LIGHT];
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_LIGHT];
 
     if (py.carrying_light) {
         if (item.misc_use > 0) {
@@ -935,7 +935,7 @@ static void playerDetectEnchantment() {
             i = 22;
         }
 
-        Inventory_t &item = inventory[i];
+        Inventory_t &item = py.inventory[i];
 
         // if in inventory, succeed 1 out of 50 times,
         // if in equipment list, success 1 out of 10 times
@@ -2172,7 +2172,7 @@ static void examineBook() {
         int spell_index[31];
         bool can_read = true;
 
-        uint8_t treasure_type = inventory[item_id].category_id;
+        uint8_t treasure_type = py.inventory[item_id].category_id;
 
         if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
             if (treasure_type != TV_MAGIC_BOOK) {
@@ -2191,7 +2191,7 @@ static void examineBook() {
             return;
         }
 
-        uint32_t item_flags = inventory[item_id].flags;
+        uint32_t item_flags = py.inventory[item_id].flags;
 
         int spell_id = 0;
         while (item_flags != 0u) {
@@ -2294,9 +2294,9 @@ static void dungeonJamDoor() {
             // Series is: 0 20 30 37 43 48 52 56 60 64 67 70 ...
             item.misc_use -= 1 + 190 / (10 - item.misc_use);
 
-            if (inventory[item_pos_start].items_count > 1) {
-                inventory[item_pos_start].items_count--;
-                py.pack.weight -= inventory[item_pos_start].weight;
+            if (py.inventory[item_pos_start].items_count > 1) {
+                py.inventory[item_pos_start].items_count--;
+                py.pack.weight -= py.inventory[item_pos_start].weight;
             } else {
                 inventoryDestroyItem(item_pos_start);
             }
@@ -2316,7 +2316,7 @@ static void dungeonJamDoor() {
 static void inventoryRefillLamp() {
     game.player_free_turn = true;
 
-    if (inventory[player_equipment::EQUIPMENT_LIGHT].sub_category_id != 0) {
+    if (py.inventory[player_equipment::EQUIPMENT_LIGHT].sub_category_id != 0) {
         printMessage("But you are not using a lamp.");
         return;
     }
@@ -2329,8 +2329,8 @@ static void inventoryRefillLamp() {
 
     game.player_free_turn = false;
 
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_LIGHT];
-    item.misc_use += inventory[item_pos_start].misc_use;
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_LIGHT];
+    item.misc_use += py.inventory[item_pos_start].misc_use;
 
     if (item.misc_use > config::treasure::OBJECT_LAMP_MAX_CAPACITY) {
         item.misc_use = config::treasure::OBJECT_LAMP_MAX_CAPACITY;

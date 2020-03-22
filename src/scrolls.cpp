@@ -43,28 +43,28 @@ static int inventoryItemIdOfCursedEquipment() {
     int item_count = 0;
     int items[6];
 
-    if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
+    if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
         items[item_count] = player_equipment::EQUIPMENT_BODY;
         item_count++;
     }
-    if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
+    if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
         items[item_count] = player_equipment::EQUIPMENT_ARM;
         item_count++;
     }
-    if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
+    if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
         items[item_count] = player_equipment::EQUIPMENT_OUTER;
         item_count++;
     }
-    if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
+    if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
         items[item_count] = player_equipment::EQUIPMENT_HANDS;
         item_count++;
     }
-    if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
+    if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
         items[item_count] = player_equipment::EQUIPMENT_HEAD;
         item_count++;
     }
     // also enchant boots
-    if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
+    if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
         items[item_count] = player_equipment::EQUIPMENT_FEET;
         item_count++;
     }
@@ -75,17 +75,17 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if ((inventory[player_equipment::EQUIPMENT_BODY].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    if ((py.inventory[player_equipment::EQUIPMENT_BODY].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_BODY;
-    } else if ((inventory[player_equipment::EQUIPMENT_ARM].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if ((py.inventory[player_equipment::EQUIPMENT_ARM].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_ARM;
-    } else if ((inventory[player_equipment::EQUIPMENT_OUTER].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if ((py.inventory[player_equipment::EQUIPMENT_OUTER].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if ((inventory[player_equipment::EQUIPMENT_HEAD].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if ((py.inventory[player_equipment::EQUIPMENT_HEAD].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if ((inventory[player_equipment::EQUIPMENT_HANDS].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if ((py.inventory[player_equipment::EQUIPMENT_HANDS].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if ((inventory[player_equipment::EQUIPMENT_FEET].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if ((py.inventory[player_equipment::EQUIPMENT_FEET].flags & config::treasure::flags::TR_CURSED) != 0u) {
         item_id = player_equipment::EQUIPMENT_FEET;
     }
 
@@ -93,7 +93,7 @@ static int inventoryItemIdOfCursedEquipment() {
 }
 
 static bool scrollEnchantWeaponToHit() {
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -117,7 +117,7 @@ static bool scrollEnchantWeaponToHit() {
 }
 
 static bool scrollEnchantWeaponToDamage() {
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -157,7 +157,7 @@ static bool scrollEnchantItemToAC() {
         return false;
     }
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
@@ -185,10 +185,10 @@ static int scrollIdentifyItem(int item_id, bool &is_used_up) {
     // to move to a different place.  Check for that here.  It can
     // move arbitrarily far if an identify scroll was used on
     // another identify scroll, but it always moves down.
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t *item = &py.inventory[item_id];
     while (item_id > 0 && (item->category_id != TV_SCROLL1 || item->flags != 0x00000008)) {
         item_id--;
-        item = &inventory[item_id];
+        item = &py.inventory[item_id];
     }
 
     return item_id;
@@ -233,7 +233,7 @@ static bool scrollConfuseMonster() {
 }
 
 static bool scrollEnchantWeapon() {
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -281,7 +281,7 @@ static bool scrollEnchantWeapon() {
 }
 
 static bool scrollCurseWeapon() {
-    Inventory_t &item = inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -317,7 +317,7 @@ static bool scrollEnchantArmor() {
         return false;
     }
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
@@ -347,29 +347,29 @@ static bool scrollEnchantArmor() {
 static bool scrollCurseArmor() {
     int item_id;
 
-    if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING && randomNumber(4) == 1) {
+    if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING && randomNumber(4) == 1) {
         item_id = player_equipment::EQUIPMENT_BODY;
-    } else if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = player_equipment::EQUIPMENT_ARM;
-    } else if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING && randomNumber(3) == 1) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING && randomNumber(3) == 1) {
         item_id = player_equipment::EQUIPMENT_FEET;
-    } else if (inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
         item_id = player_equipment::EQUIPMENT_BODY;
-    } else if (inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
         item_id = player_equipment::EQUIPMENT_ARM;
-    } else if (inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
         item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if (inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
         item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if (inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
         item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if (inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
+    } else if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
         item_id = player_equipment::EQUIPMENT_FEET;
     } else {
         item_id = 0;
@@ -379,7 +379,7 @@ static bool scrollCurseArmor() {
         return false;
     }
 
-    Inventory_t &item = inventory[item_id];
+    Inventory_t &item = py.inventory[item_id];
 
     obj_desc_t msg = {'\0'};
     obj_desc_t desc = {'\0'};
@@ -440,7 +440,7 @@ void scrollRead() {
     bool used_up = true;
     bool identified = false;
 
-    Inventory_t *item = &inventory[item_id];
+    Inventory_t *item = &py.inventory[item_id];
     uint32_t item_flags = item->flags;
 
     while (item_flags != 0) {
@@ -597,7 +597,7 @@ void scrollRead() {
         }
     }
 
-    item = &inventory[item_id];
+    item = &py.inventory[item_id];
 
     if (identified) {
         if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
@@ -605,7 +605,7 @@ void scrollRead() {
             py.misc.exp += (item->depth_first_found + (py.misc.level >> 1)) / py.misc.level;
             displayCharacterExperience();
 
-            itemIdentify(inventory[item_id], item_id);
+            itemIdentify(py.inventory[item_id], item_id);
         }
     } else if (!itemSetColorlessAsIdentified(item->category_id, item->sub_category_id, item->identification)) {
         itemSetAsTried(*item);

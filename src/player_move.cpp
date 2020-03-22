@@ -412,7 +412,7 @@ static void carry(Coord_t coord, bool pickup) {
         if (pickup) {
             int locn = inventoryCarryItem(item);
 
-            itemDescription(description, inventory[locn], true);
+            itemDescription(description, py.inventory[locn], true);
             (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
             (void) dungeonDeleteObject(coord);

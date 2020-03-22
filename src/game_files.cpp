@@ -329,11 +329,11 @@ static void writeEquipmentListToFile(FILE *file1) {
     int itemSlotID = 0;
 
     for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
-        if (inventory[i].category_id == TV_NOTHING) {
+        if (py.inventory[i].category_id == TV_NOTHING) {
             continue;
         }
 
-        itemDescription(description, inventory[i], true);
+        itemDescription(description, py.inventory[i], true);
         (void) fprintf(file1, "  %c) %-19s: %s\n", itemSlotID + 'a', equipmentPlacementDescription(i), description);
 
         itemSlotID++;
@@ -354,7 +354,7 @@ static void writeInventoryToFile(FILE *file1) {
     obj_desc_t description = {'\0'};
 
     for (int i = 0; i < py.pack.unique_items; i++) {
-        itemDescription(description, inventory[i], true);
+        itemDescription(description, py.inventory[i], true);
         (void) fprintf(file1, "%c) %s\n", i + 'a', description);
     }
 

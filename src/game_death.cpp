@@ -63,7 +63,7 @@ retry:
 
     vtype_t str = {'\0'};
     if (getStringInput(str, Coord_t{22, 18}, 60)) {
-        for (auto &item : inventory) {
+        for (auto &item : py.inventory) {
             itemSetAsIdentified(item.category_id, item.sub_category_id);
             spellItemIdentifyAndRemoveRandomInscription(item);
         }
