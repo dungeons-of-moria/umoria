@@ -7,15 +7,19 @@ Tracking all changes since the 5.6.0 release.
 
 - Player (`row`,`col`) and Monster (`y`,`x`) now use `Coord_t` for their positions.
 - Use `Coord_t` in all functions that used `y, x` coordinates.
+- Reorganise some game arrays and variables, placing them on an object:
+    * put `inventory` onto `Player_t`
+    * put `treasure_list` and `current_treasure_id` onto `Game_t`
 - Type changes:
     * `rcmove` variable in `memoryUpdateRecall()` signature is now an `uint32_t` like everywhere else.
     * Change `store_buy` function signature type to use `uint8_t`, and return a `bool`.
     * Various other types changes.
 - Typo fixes: `item_sub_catory`, `current_askin_price`.
-- Various fixes: `clang-format`, code inspection, and `clang-tidy`.
-- Move the Manual and FAQ to the `historical` directory. It seems that these
-  are very much out of date - possibly for any 5.x version - so it makes sense
-  to move them back in with the rest of the historical documents.
+- Various `clang-format` and `clang-tidy` updates.
+- Move the Manual and FAQ to the `historical` directory and remove from release.
+  It seems that these are very much out of date - possibly for any 5.x version - so
+  it makes sense to move them back in with the rest of the historical documents.
+
 
 ## 5.7.11 (2020-02-26)
 
