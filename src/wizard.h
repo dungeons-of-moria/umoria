@@ -9,6 +9,11 @@
 #pragma once
 
 bool enterWizardMode();
+void wizardCureAll();
+void wizardDropRandomItems();
+void wizardJumpLevel();
+void wizardGainExperience();
+void wizardSummonMonster();
 void wizardLightUpDungeon();
 void wizardCharacterAdjustment();
 void wizardGenerateObject();

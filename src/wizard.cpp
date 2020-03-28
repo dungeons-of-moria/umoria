@@ -30,6 +30,97 @@ bool enterWizardMode() {
     return false;
 }
 
+void wizardCureAll() {
+    (void) spellRemoveCurseFromAllItems();
+    (void) playerCureBlindness();
+    (void) playerCureConfusion();
+    (void) playerCurePoison();
+    (void) playerRemoveFear();
+    (void) playerStatRestore(py_attrs::A_STR);
+    (void) playerStatRestore(py_attrs::A_INT);
+    (void) playerStatRestore(py_attrs::A_WIS);
+    (void) playerStatRestore(py_attrs::A_CON);
+    (void) playerStatRestore(py_attrs::A_DEX);
+    (void) playerStatRestore(py_attrs::A_CHR);
+
+    if (py.flags.slow > 1) {
+        py.flags.slow = 1;
+    }
+    if (py.flags.image > 1) {
+        py.flags.image = 1;
+    }
+}
+
+// Generate random items
+void wizardDropRandomItems() {
+    int i;
+
+    if (game.command_count > 0) {
+        i = game.command_count;
+        game.command_count = 0;
+    } else {
+        i = 1;
+    }
+    dungeonPlaceRandomObjectNear(py.pos, i);
+
+    drawDungeonPanel();
+}
+
+// Go up/down to specified depth
+void wizardJumpLevel() {
+    int i;
+
+    if (game.command_count > 0) {
+        if (game.command_count > 99) {
+            i = 0;
+        } else {
+            i = game.command_count;
+        }
+        game.command_count = 0;
+    } else {
+        i = -1;
+        vtype_t input = {0};
+
+        putStringClearToEOL("Go to which level (0-99) ? ", Coord_t{0, 0});
+
+        if (getStringInput(input, Coord_t{0, 27}, 10)) {
+            (void) stringToNumber(input, i);
+        }
+    }
+
+    if (i >= 0) {
+        dg.current_level = (int16_t) i;
+        if (dg.current_level > 99) {
+            dg.current_level = 99;
+        }
+        dg.generate_new_level = true;
+    } else {
+        messageLineClear();
+    }
+}
+
+// Increase Experience
+void wizardGainExperience() {
+    if (game.command_count > 0) {
+        py.misc.exp = game.command_count;
+        game.command_count = 0;
+    } else if (py.misc.exp == 0) {
+        py.misc.exp = 1;
+    } else {
+        py.misc.exp = py.misc.exp * 2;
+    }
+    displayCharacterExperience();
+}
+
+// Summon a random monster
+void wizardSummonMonster() {
+    Coord_t coord = Coord_t{py.pos.y, py.pos.x};
+
+    (void) monsterSummon(coord, true);
+
+    updateMonsters(false);
+}
+
 // Light up the dungeon -RAK-
 void wizardLightUpDungeon() {
     bool flag;

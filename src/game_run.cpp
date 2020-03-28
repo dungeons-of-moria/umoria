@@ -1333,56 +1333,56 @@ static char originalCommands(char command) {
 }
 
 static bool moveWithoutPickup(char *command) {
-    char com_val = *command;
+    char cmd = *command;
 
     // hack for move without pickup.  Map '-' to a movement command.
-    if (com_val != '-') {
+    if (cmd != '-') {
         return true;
     }
 
-    int dir_val;
+    int direction;
 
     // Save current game.command_count as getDirectionWithMemory() may change it
     int countSave = game.command_count;
 
-    if (getDirectionWithMemory(CNIL, dir_val)) {
+    if (getDirectionWithMemory(CNIL, direction)) {
         // Restore game.command_count
         game.command_count = countSave;
 
-        switch (dir_val) {
+        switch (direction) {
             case 1:
-                com_val = 'b';
+                cmd = 'b';
                 break;
             case 2:
-                com_val = 'j';
+                cmd = 'j';
                 break;
             case 3:
-                com_val = 'n';
+                cmd = 'n';
                 break;
             case 4:
-                com_val = 'h';
+                cmd = 'h';
                 break;
             case 6:
-                com_val = 'l';
+                cmd = 'l';
                 break;
             case 7:
-                com_val = 'y';
+                cmd = 'y';
                 break;
             case 8:
-                com_val = 'k';
+                cmd = 'k';
                 break;
             case 9:
-                com_val = 'u';
+                cmd = 'u';
                 break;
             default:
-                com_val = '~';
+                cmd = '~';
                 break;
         }
     } else {
-        com_val = ' ';
+        cmd = ' ';
     }
 
-    *command = com_val;
+    *command = cmd;
 
     return false;
 }
@@ -1554,31 +1554,11 @@ static void commandToggleSearch() {
     }
 }
 
-static void doWizardCommands(char com_val) {
-    int i;
-    Coord_t coord = Coord_t{0, 0};
-
-    switch (com_val) {
+static void doWizardCommands(char command) {
+    switch (command) {
         case CTRL_KEY('A'):
             // Cure all!
-            (void) spellRemoveCurseFromAllItems();
-            (void) playerCureBlindness();
-            (void) playerCureConfusion();
-            (void) playerCurePoison();
-            (void) playerRemoveFear();
-            (void) playerStatRestore(py_attrs::A_STR);
-            (void) playerStatRestore(py_attrs::A_INT);
-            (void) playerStatRestore(py_attrs::A_WIS);
-            (void) playerStatRestore(py_attrs::A_CON);
-            (void) playerStatRestore(py_attrs::A_DEX);
-            (void) playerStatRestore(py_attrs::A_CHR);
-
-            if (py.flags.slow > 1) {
-                py.flags.slow = 1;
-            }
-            if (py.flags.image > 1) {
-                py.flags.image = 1;
-            }
+            wizardCureAll();
             break;
         case CTRL_KEY('E'):
             // Edit Character
@@ -1591,45 +1571,11 @@ static void doWizardCommands(char com_val) {
             break;
         case CTRL_KEY('G'):
             // Generate random items
-            if (game.command_count > 0) {
-                i = game.command_count;
-                game.command_count = 0;
-            } else {
-                i = 1;
-            }
-            dungeonPlaceRandomObjectNear(py.pos, i);
-
-            drawDungeonPanel();
+            wizardDropRandomItems();
             break;
         case CTRL_KEY('D'):
             // Go up/down to specified depth
-            if (game.command_count > 0) {
-                if (game.command_count > 99) {
-                    i = 0;
-                } else {
-                    i = game.command_count;
-                }
-                game.command_count = 0;
-            } else {
-                i = -1;
-                vtype_t input = {0};
-
-                putStringClearToEOL("Go to which level (0-99) ? ", Coord_t{0, 0});
-
-                if (getStringInput(input, Coord_t{0, 27}, 10)) {
-                    (void) stringToNumber(input, i);
-                }
-            }
-
-            if (i >= 0) {
-                dg.current_level = (int16_t) i;
-                if (dg.current_level > 99) {
-                    dg.current_level = 99;
-                }
-                dg.generate_new_level = true;
-            } else {
-                messageLineClear();
-            }
+            wizardJumpLevel();
             break;
         case CTRL_KEY('O'):
             // Print random level object to a file
@@ -1666,23 +1612,11 @@ static void doWizardCommands(char com_val) {
             break;
         case '+':
             // Increase Experience
-            if (game.command_count > 0) {
-                py.misc.exp = game.command_count;
-                game.command_count = 0;
-            } else if (py.misc.exp == 0) {
-                py.misc.exp = 1;
-            } else {
-                py.misc.exp = py.misc.exp * 2;
-            }
-            displayCharacterExperience();
+            wizardGainExperience();
             break;
         case '&':
             // Summon a random monster
-            coord.y = py.pos.y;
-            coord.x = py.pos.x;
-            (void) monsterSummon(coord, true);
-
-            updateMonsters(false);
+            wizardSummonMonster();
             break;
         case '@':
             // Generate an object
