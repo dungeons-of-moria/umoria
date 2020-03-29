@@ -9,33 +9,33 @@
 #include "headers.h"
 
 enum class StaffSpellTypes {
-    light = 1,
-    detect_doors_stairs,
-    trap_location,
-    treasure_location,
-    object_location,
-    teleportation,
-    earthquakes,
-    summoning,
+    StaffLight = 1, // TODO: name would clash with PlayerEquipment::Light
+    DetectDoorsStairs,
+    TrapLocation,
+    TreasureLocation,
+    ObjectLocation,
+    Teleportation,
+    Earthquakes,
+    Summoning,
     // skipping 9
-    destruction = 10,
-    starlight,
-    haste_monsters,
-    slow_monsters,
-    sleep_monsters,
-    cure_light_wounds,
-    detect_invisible,
-    speed,
-    slowness,
-    mass_polymorph,
-    remove_curse,
-    detect_evil,
-    curing,
-    dispel_evil,
+    Destruction = 10,
+    Starlight,
+    HasteMonsters,
+    SlowMonsters,
+    SleepMonsters,
+    CureLightWounds,
+    DetectInvisible,
+    Speed,
+    Slowness,
+    MassPolymorph,
+    RemoveCurse,
+    DetectEvil,
+    Curing,
+    DispelEvil,
     // skipping 24
-    darkness = 25,
+    Darkness = 25,
     // skipping lots...
-    store_bought_flag = 32,
+    StoreBoughtFlag = 32,
 };
 
 static bool staffPlayerIsCarrying(int &item_pos_start, int &item_pos_end) {
@@ -95,30 +95,30 @@ static bool staffDischarge(Inventory_t &item) {
     uint32_t flags = item.flags;
     while (flags != 0) {
         switch ((StaffSpellTypes)(getAndClearFirstBit(flags) + 1)) {
-            case StaffSpellTypes::light:
+            case StaffSpellTypes::StaffLight:
                 identified = spellLightArea(py.pos);
                 break;
-            case StaffSpellTypes::detect_doors_stairs:
+            case StaffSpellTypes::DetectDoorsStairs:
                 identified = spellDetectSecretDoorssWithinVicinity();
                 break;
-            case StaffSpellTypes::trap_location:
+            case StaffSpellTypes::TrapLocation:
                 identified = spellDetectTrapsWithinVicinity();
                 break;
-            case StaffSpellTypes::treasure_location:
+            case StaffSpellTypes::TreasureLocation:
                 identified = spellDetectTreasureWithinVicinity();
                 break;
-            case StaffSpellTypes::object_location:
+            case StaffSpellTypes::ObjectLocation:
                 identified = spellDetectObjectsWithinVicinity();
                 break;
-            case StaffSpellTypes::teleportation:
+            case StaffSpellTypes::Teleportation:
                 playerTeleport(100);
                 identified = true;
                 break;
-            case StaffSpellTypes::earthquakes:
+            case StaffSpellTypes::Earthquakes:
                 identified = true;
                 spellEarthquake();
                 break;
-            case StaffSpellTypes::summoning:
+            case StaffSpellTypes::Summoning:
                 identified = false;
 
                 for (int i = 0; i < randomNumber(4); i++) {
@@ -126,45 +126,45 @@ static bool staffDischarge(Inventory_t &item) {
                     identified |= monsterSummon(coord, false);
                 }
                 break;
-            case StaffSpellTypes::destruction:
+            case StaffSpellTypes::Destruction:
                 identified = true;
                 spellDestroyArea(py.pos);
                 break;
-            case StaffSpellTypes::starlight:
+            case StaffSpellTypes::Starlight:
                 identified = true;
                 spellStarlite(py.pos);
                 break;
-            case StaffSpellTypes::haste_monsters:
+            case StaffSpellTypes::HasteMonsters:
                 identified = spellSpeedAllMonsters(1);
                 break;
-            case StaffSpellTypes::slow_monsters:
+            case StaffSpellTypes::SlowMonsters:
                 identified = spellSpeedAllMonsters(-1);
                 break;
-            case StaffSpellTypes::sleep_monsters:
+            case StaffSpellTypes::SleepMonsters:
                 identified = spellSleepAllMonsters();
                 break;
-            case StaffSpellTypes::cure_light_wounds:
+            case StaffSpellTypes::CureLightWounds:
                 identified = spellChangePlayerHitPoints(randomNumber(8));
                 break;
-            case StaffSpellTypes::detect_invisible:
+            case StaffSpellTypes::DetectInvisible:
                 identified = spellDetectInvisibleCreaturesWithinVicinity();
                 break;
-            case StaffSpellTypes::speed:
+            case StaffSpellTypes::Speed:
                 if (py.flags.fast == 0) {
                     identified = true;
                 }
                 py.flags.fast += randomNumber(30) + 15;
                 break;
-            case StaffSpellTypes::slowness:
+            case StaffSpellTypes::Slowness:
                 if (py.flags.slow == 0) {
                     identified = true;
                 }
                 py.flags.slow += randomNumber(30) + 15;
                 break;
-            case StaffSpellTypes::mass_polymorph:
+            case StaffSpellTypes::MassPolymorph:
                 identified = spellMassPolymorph();
                 break;
-            case StaffSpellTypes::remove_curse:
+            case StaffSpellTypes::RemoveCurse:
                 if (spellRemoveCurseFromAllItems()) {
                     if (py.flags.blind < 1) {
                         printMessage("The staff glows blue for a moment..");
@@ -172,21 +172,21 @@ static bool staffDischarge(Inventory_t &item) {
                     identified = true;
                 }
                 break;
-            case StaffSpellTypes::detect_evil:
+            case StaffSpellTypes::DetectEvil:
                 identified = spellDetectEvil();
                 break;
-            case StaffSpellTypes::curing:
+            case StaffSpellTypes::Curing:
                 if (playerCureBlindness() || playerCurePoison() || playerCureConfusion()) {
                     identified = true;
                 }
                 break;
-            case StaffSpellTypes::dispel_evil:
+            case StaffSpellTypes::DispelEvil:
                 identified = spellDispelCreature(config::monsters::defense::CD_EVIL, 60);
                 break;
-            case StaffSpellTypes::darkness:
+            case StaffSpellTypes::Darkness:
                 identified = spellDarkenArea(py.pos);
                 break;
-            case StaffSpellTypes::store_bought_flag:
+            case StaffSpellTypes::StoreBoughtFlag:
                 // store bought flag
                 break;
             default:
@@ -241,30 +241,30 @@ void staffUse() {
 }
 
 enum class WandSpellTypes {
-    light = 1,
-    lightning_bolt,
-    frost_bolt,
-    fire_bolt,
-    stone_to_mud,
-    polymorph,
-    heal_monster,
-    haste_monster,
-    slow_monster,
-    confuse_monster,
-    sleep_monster,
-    drain_life,
-    trap_door_destruction,
-    magic_missile,
-    wall_building,
-    clone_monster,
-    teleport_away,
-    disarming,
-    lightning_ball,
-    cold_ball,
-    fire_ball,
-    stinking_cloud,
-    acid_ball,
-    wonder,
+    WandLight = 1, // TODO: name would clash with PlayerEquipment::Light
+    LightningBolt,
+    FrostBolt,
+    FireBolt,
+    StoneToMud,
+    Polymorph,
+    HealMonster,
+    HasteMonster,
+    SlowMonster,
+    ConfuseMonster,
+    SleepMonster,
+    DrainLife,
+    TrapDoorDestruction,
+    WandMagicMissile, // TODO: name would clash with MagicSpellFlags::MagicMissile
+    WallBuilding,
+    CloneMonster,
+    TeleportAway,
+    Disarming,
+    LightningBall,
+    ColdBall,
+    FireBall,
+    StinkingCloud,
+    AcidBall,
+    Wonder,
 };
 
 static bool wandDischarge(Inventory_t &item, int direction) {
@@ -282,87 +282,87 @@ static bool wandDischarge(Inventory_t &item, int direction) {
 
         // Wand types
         switch ((WandSpellTypes)(getAndClearFirstBit(flags) + 1)) {
-            case WandSpellTypes::light:
+            case WandSpellTypes::WandLight:
                 printMessage("A line of blue shimmering light appears.");
                 spellLightLine(py.pos, direction);
                 identified = true;
                 break;
-            case WandSpellTypes::lightning_bolt:
+            case WandSpellTypes::LightningBolt:
                 spellFireBolt(coord, direction, diceRoll(Dice_t{4, 8}), MagicSpellFlags::Lightning, spell_names[8]);
                 identified = true;
                 break;
-            case WandSpellTypes::frost_bolt:
+            case WandSpellTypes::FrostBolt:
                 spellFireBolt(coord, direction, diceRoll(Dice_t{6, 8}), MagicSpellFlags::Frost, spell_names[14]);
                 identified = true;
                 break;
-            case WandSpellTypes::fire_bolt:
+            case WandSpellTypes::FireBolt:
                 spellFireBolt(coord, direction, diceRoll(Dice_t{9, 8}), MagicSpellFlags::Fire, spell_names[22]);
                 identified = true;
                 break;
-            case WandSpellTypes::stone_to_mud:
+            case WandSpellTypes::StoneToMud:
                 identified = spellWallToMud(coord, direction);
                 break;
-            case WandSpellTypes::polymorph:
+            case WandSpellTypes::Polymorph:
                 identified = spellPolymorphMonster(coord, direction);
                 break;
-            case WandSpellTypes::heal_monster:
+            case WandSpellTypes::HealMonster:
                 identified = spellChangeMonsterHitPoints(coord, direction, -diceRoll(Dice_t{4, 6}));
                 break;
-            case WandSpellTypes::haste_monster:
+            case WandSpellTypes::HasteMonster:
                 identified = spellSpeedMonster(coord, direction, 1);
                 break;
-            case WandSpellTypes::slow_monster:
+            case WandSpellTypes::SlowMonster:
                 identified = spellSpeedMonster(coord, direction, -1);
                 break;
-            case WandSpellTypes::confuse_monster:
+            case WandSpellTypes::ConfuseMonster:
                 identified = spellConfuseMonster(coord, direction);
                 break;
-            case WandSpellTypes::sleep_monster:
+            case WandSpellTypes::SleepMonster:
                 identified = spellSleepMonster(coord, direction);
                 break;
-            case WandSpellTypes::drain_life:
+            case WandSpellTypes::DrainLife:
                 identified = spellDrainLifeFromMonster(coord, direction);
                 break;
-            case WandSpellTypes::trap_door_destruction:
+            case WandSpellTypes::TrapDoorDestruction:
                 identified = spellDestroyDoorsTrapsInDirection(coord, direction);
                 break;
-            case WandSpellTypes::magic_missile:
+            case WandSpellTypes::WandMagicMissile:
                 spellFireBolt(coord, direction, diceRoll(Dice_t{2, 6}), MagicSpellFlags::MagicMissile, spell_names[0]);
                 identified = true;
                 break;
-            case WandSpellTypes::wall_building:
+            case WandSpellTypes::WallBuilding:
                 identified = spellBuildWall(coord, direction);
                 break;
-            case WandSpellTypes::clone_monster:
+            case WandSpellTypes::CloneMonster:
                 identified = spellCloneMonster(coord, direction);
                 break;
-            case WandSpellTypes::teleport_away:
+            case WandSpellTypes::TeleportAway:
                 identified = spellTeleportAwayMonsterInDirection(coord, direction);
                 break;
-            case WandSpellTypes::disarming:
+            case WandSpellTypes::Disarming:
                 identified = spellDisarmAllInDirection(coord, direction);
                 break;
-            case WandSpellTypes::lightning_ball:
+            case WandSpellTypes::LightningBall:
                 spellFireBall(coord, direction, 32, MagicSpellFlags::Lightning, "Lightning Ball");
                 identified = true;
                 break;
-            case WandSpellTypes::cold_ball:
+            case WandSpellTypes::ColdBall:
                 spellFireBall(coord, direction, 48, MagicSpellFlags::Frost, "Cold Ball");
                 identified = true;
                 break;
-            case WandSpellTypes::fire_ball:
+            case WandSpellTypes::FireBall:
                 spellFireBall(coord, direction, 72, MagicSpellFlags::Fire, spell_names[28]);
                 identified = true;
                 break;
-            case WandSpellTypes::stinking_cloud:
+            case WandSpellTypes::StinkingCloud:
                 spellFireBall(coord, direction, 12, MagicSpellFlags::PoisonGas, spell_names[6]);
                 identified = true;
                 break;
-            case WandSpellTypes::acid_ball:
+            case WandSpellTypes::AcidBall:
                 spellFireBall(coord, direction, 60, MagicSpellFlags::Acid, "Acid Ball");
                 identified = true;
                 break;
-            case WandSpellTypes::wonder:
+            case WandSpellTypes::Wonder:
                 flags = (uint32_t)(1L << (randomNumber(23) - 1));
                 break;
             default:
