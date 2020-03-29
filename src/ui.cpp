@@ -142,22 +142,17 @@ void dungeonResetView() {
     }
 }
 
-// Converts stat num into string -RAK-
+// Converts stat num into string
 void statsAsString(uint8_t stat, char *stat_string) {
-    if (stat <= 18) {
-        (void) sprintf(stat_string, "%6d", stat);
-        return;
-    }
-
-    int value = 18;
     int percentile = stat - 18;
 
-    if (percentile == 100) {
+    if (stat <= 18) {
+        (void) sprintf(stat_string, "%6d", stat);
+    } else if (percentile == 100) {
         (void) strcpy(stat_string, "18/100");
-        return;
+    } else {
+        (void) sprintf(stat_string, " 18/%02d", percentile);
     }
-
-    (void) sprintf(stat_string, " %2d/%02d", value, percentile);
 }
 
 // Print character stat in given row, column -RAK-
