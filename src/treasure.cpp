@@ -90,9 +90,9 @@ static void magicalSword(Inventory_t &item, int special, int level) {
     item.to_hit += magicEnchantmentBonus(0, 40, level);
 
     // Magical damage bonus now proportional to weapon base damage
-    int damageBonus = maxDiceRoll(item.damage);
+    int damage_bonus = maxDiceRoll(item.damage);
 
-    item.to_damage += magicEnchantmentBonus(0, 4 * damageBonus, damageBonus * level / 10);
+    item.to_damage += magicEnchantmentBonus(0, 4 * damage_bonus, damage_bonus * level / 10);
 
     // the 3*special/2 is needed because weapons are not as common as
     // before change to treasure distribution, this helps keep same
@@ -187,9 +187,9 @@ static void cursedSword(Inventory_t &item, int level) {
     item.to_hit -= magicEnchantmentBonus(1, 55, level);
 
     // Magical damage bonus now proportional to weapon base damage
-    int damageBonus = maxDiceRoll(item.damage);
+    int damage_bonus = maxDiceRoll(item.damage);
 
-    item.to_damage -= magicEnchantmentBonus(1, 11 * damageBonus / 2, damageBonus * level / 10);
+    item.to_damage -= magicEnchantmentBonus(1, 11 * damage_bonus / 2, damage_bonus * level / 10);
     item.flags |= config::treasure::flags::TR_CURSED;
     item.cost = 0;
 }
@@ -266,13 +266,13 @@ static void magicalBoots(Inventory_t &item, int special, int level) {
         return;
     }
 
-    int magicType = randomNumber(12);
+    int magic_type = randomNumber(12);
 
-    if (magicType > 5) {
+    if (magic_type > 5) {
         item.flags |= config::treasure::flags::TR_FFALL;
         item.special_name_id = SpecialNameIds::SN_SLOW_DESCENT;
         item.cost += 250;
-    } else if (magicType == 1) {
+    } else if (magic_type == 1) {
         item.flags |= config::treasure::flags::TR_SPEED;
         item.special_name_id = SpecialNameIds::SN_SPEED;
         item.identification |= config::identification::ID_SHOW_P1;
@@ -289,9 +289,9 @@ static void magicalBoots(Inventory_t &item, int special, int level) {
 }
 
 static void cursedBoots(Inventory_t &item, int level) {
-    int magicType = randomNumber(3);
+    int magic_type = randomNumber(3);
 
-    switch (magicType) {
+    switch (magic_type) {
         case 1:
             item.flags |= config::treasure::flags::TR_SPEED;
             item.special_name_id = SpecialNameIds::SN_SLOWNESS;
@@ -323,9 +323,9 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
     if (item.sub_category_id < 6) {
         item.identification |= config::identification::ID_SHOW_P1;
 
-        int magicType = randomNumber(3);
+        int magic_type = randomNumber(3);
 
-        switch (magicType) {
+        switch (magic_type) {
             case 1:
                 item.misc_use = (int16_t) randomNumber(2);
                 item.flags |= config::treasure::flags::TR_INT;
@@ -679,9 +679,9 @@ static void magicalCloak(Inventory_t &item, int special, int level) {
 }
 
 static void cursedCloak(Inventory_t &item, int level) {
-    int magicType = randomNumber(3);
+    int magic_type = randomNumber(3);
 
-    switch (magicType) {
+    switch (magic_type) {
         case 1:
             item.flags |= config::treasure::flags::TR_AGGRAVATE;
             item.special_name_id = SpecialNameIds::SN_IRRITATION;
@@ -710,9 +710,9 @@ static void cursedCloak(Inventory_t &item, int level) {
 }
 
 static void magicalChests(Inventory_t &item, int level) {
-    int magicType = randomNumber(level + 4);
+    int magic_type = randomNumber(level + 4);
 
-    switch (magicType) {
+    switch (magic_type) {
         case 1:
             item.flags = 0;
             item.special_name_id = SpecialNameIds::SN_EMPTY;
@@ -863,7 +863,7 @@ void magicTreasureMagicalAbility(int item_id, int level) {
     int special = chance / config::treasure::OBJECT_CHANCE_SPECIAL;
     int cursed = (10 * chance) / config::treasure::OBJECT_CHANCE_CURSED;
 
-    int magicAmount;
+    int magic_amount;
 
     Inventory_t &item = game.treasure.list[item_id];
 
@@ -959,15 +959,15 @@ void magicTreasureMagicalAbility(int item_id, int level) {
             }
             break;
         case TV_WAND:
-            magicAmount = wandMagic(item.sub_category_id);
-            if (magicAmount != -1) {
-                item.misc_use = (uint16_t) magicAmount;
+            magic_amount = wandMagic(item.sub_category_id);
+            if (magic_amount != -1) {
+                item.misc_use = (uint16_t) magic_amount;
             }
             break;
         case TV_STAFF:
-            magicAmount = staffMagic(item.sub_category_id);
-            if (magicAmount != -1) {
-                item.misc_use = (uint16_t) magicAmount;
+            magic_amount = staffMagic(item.sub_category_id);
+            if (magic_amount != -1) {
+                item.misc_use = (uint16_t) magic_amount;
             }
 
             // Change the level the items was first found on value
