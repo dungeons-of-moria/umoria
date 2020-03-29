@@ -8,10 +8,10 @@
 
 #include "headers.h"
 
-static void inventoryItemWeightText(char *text, int itemID) {
-    int totalWeight = py.inventory[itemID].weight * py.inventory[itemID].items_count;
-    int quotient = totalWeight / 10;
-    int remainder = totalWeight % 10;
+static void inventoryItemWeightText(char *text, int item_id) {
+    int total_weight = py.inventory[item_id].weight * py.inventory[item_id].items_count;
+    int quotient = total_weight / 10;
+    int remainder = total_weight % 10;
 
     (void) sprintf(text, "%3d.%d lb", quotient, remainder);
 }
@@ -124,8 +124,8 @@ const char *playerItemWearingDescription(int body_location) {
     }
 }
 
-static const char *itemPositionDescription(int positionID, uint16_t weight) {
-    switch (positionID) {
+static const char *itemPositionDescription(int position_id, uint16_t weight) {
+    switch (position_id) {
         case PlayerEquipment::Wield:
             if (py.stats.used[PlayerAttr::STR] * 15 < weight) {
                 return "Just lifting";
@@ -366,9 +366,9 @@ static void setInventoryCommandScreenState(char command) {
             screen_base = 0;
         }
 
-        int savedState = screen_state;
+        int saved_state = screen_state;
         screen_state = WRONG_SCR;
-        uiCommandDisplayInventoryScreen(savedState);
+        uiCommandDisplayInventoryScreen(saved_state);
 
         return;
     }
@@ -465,9 +465,9 @@ static void uiCommandInventoryUnwieldItem() {
 
     game.player_free_turn = false;
 
-    Inventory_t savedItem = py.inventory[PlayerEquipment::Auxiliary];
+    Inventory_t saved_item = py.inventory[PlayerEquipment::Auxiliary];
     py.inventory[PlayerEquipment::Auxiliary] = py.inventory[PlayerEquipment::Wield];
-    py.inventory[PlayerEquipment::Wield] = savedItem;
+    py.inventory[PlayerEquipment::Wield] = saved_item;
 
     if (screen_state == EQUIP_SCR) {
         screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
@@ -477,13 +477,13 @@ static void uiCommandInventoryUnwieldItem() {
     playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Wield], 1); // Add bonuses
 
     if (py.inventory[PlayerEquipment::Wield].category_id != TV_NOTHING) {
-        obj_desc_t msgLabel = {'\0'};
-        (void) strcpy(msgLabel, "Primary weapon   : ");
+        obj_desc_t msg_label = {'\0'};
+        (void) strcpy(msg_label, "Primary weapon   : ");
 
         obj_desc_t description = {'\0'};
         itemDescription(description, py.inventory[PlayerEquipment::Wield], true);
 
-        printMessage(strcat(msgLabel, description));
+        printMessage(strcat(msg_label, description));
     } else {
         printMessage("No primary weapon.");
     }
@@ -518,13 +518,13 @@ static int inventoryGetItemMatchingInscription(char which, char command, int fro
     return item;
 }
 
-static void buildCommandHeading(char *prt1, int from, int to, const char *swap, char command, const char *prompt) {
+static void buildCommandHeading(char *str, int from, int to, const char *swap, char command, const char *prompt) {
     from = from + 'a';
     to = to + 'a';
 
-    const char *listItems = "";
+    const char *list_items = "";
     if (screen_state == BLANK_SCR) {
-        listItems = ", * to list";
+        list_items = ", * to list";
     }
 
     const char *digits = "";
@@ -532,7 +532,7 @@ static void buildCommandHeading(char *prt1, int from, int to, const char *swap, 
         digits = ", 0-9";
     }
 
-    (void) sprintf(prt1, "(%c-%c%s%s%s, space to break, ESC to exit) %s which one?", from, to, listItems, swap, digits, prompt);
+    (void) sprintf(str, "(%c-%c%s%s%s, space to break, ESC to exit) %s which one?", from, to, list_items, swap, digits, prompt);
 }
 
 static void drawInventoryScreenForCommand(char command) {
@@ -635,24 +635,24 @@ static int inventoryGetSlotToWearEquipment(int item) {
     return slot;
 }
 
-static void inventoryItemIsCursedMessage(int itemID) {
+static void inventoryItemIsCursedMessage(int item_id) {
     obj_desc_t description = {'\0'};
-    itemDescription(description, py.inventory[itemID], false);
+    itemDescription(description, py.inventory[item_id], false);
 
-    obj_desc_t itemText = {'\0'};
-    (void) sprintf(itemText, "The %s you are ", description);
+    obj_desc_t item_text = {'\0'};
+    (void) sprintf(item_text, "The %s you are ", description);
 
-    if (itemID == PlayerEquipment::Head) {
-        (void) strcat(itemText, "wielding ");
+    if (item_id == PlayerEquipment::Head) {
+        (void) strcat(item_text, "wielding ");
     } else {
-        (void) strcat(itemText, "wearing ");
+        (void) strcat(item_text, "wearing ");
     }
 
-    printMessage(strcat(itemText, "appears to be cursed."));
+    printMessage(strcat(item_text, "appears to be cursed."));
 }
 
 static bool selectItemCommands(char *command, char *which, bool selecting) {
-    int itemToTakeOff;
+    int item_to_take_off;
     int slot = 0;
 
     int from, to;
@@ -696,11 +696,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             continue;
         }
 
-        obj_desc_t headingText = {'\0'};
-        buildCommandHeading(headingText, from, to, swap, *command, prompt);
+        obj_desc_t heading_text = {'\0'};
+        buildCommandHeading(heading_text, from, to, swap, *command, prompt);
 
         // Abort everything.
-        if (!getCommand(headingText, *which)) {
+        if (!getCommand(heading_text, *which)) {
             *which = ESCAPE;
             selecting = false;
             continue; // can we just return false from the function? -MRC-
@@ -738,15 +738,15 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
         if (*command == 'r' || *command == 't') {
             // Get its place in the equipment list.
-            itemToTakeOff = item_id;
+            item_to_take_off = item_id;
             item_id = 21;
 
             do {
                 item_id++;
                 if (py.inventory[item_id].category_id != TV_NOTHING) {
-                    itemToTakeOff--;
+                    item_to_take_off--;
                 }
-            } while (itemToTakeOff >= 0);
+            } while (item_to_take_off >= 0);
 
             if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
                 item_id = -1;
@@ -814,8 +814,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 game.player_free_turn = false;
 
                 // first remove new item from inventory
-                Inventory_t savedItem = py.inventory[item_id];
-                Inventory_t *item = &savedItem;
+                Inventory_t saved_item = py.inventory[item_id];
+                Inventory_t *item = &saved_item;
 
                 wear_high--;
 
@@ -834,21 +834,21 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 // from equipment list, if necessary.
                 item = &py.inventory[slot];
                 if (item->category_id != TV_NOTHING) {
-                    int savedCounter = py.pack.unique_items;
+                    int saved_counter = py.pack.unique_items;
 
-                    itemToTakeOff = inventoryCarryItem(*item);
+                    item_to_take_off = inventoryCarryItem(*item);
 
                     // If item removed did not stack with anything
                     // in inventory, then increment wear_high.
-                    if (py.pack.unique_items != savedCounter) {
+                    if (py.pack.unique_items != saved_counter) {
                         wear_high++;
                     }
 
-                    playerTakeOff(slot, itemToTakeOff);
+                    playerTakeOff(slot, item_to_take_off);
                 }
 
                 // third, wear new item
-                *item = savedItem;
+                *item = saved_item;
                 py.equipment_count++;
 
                 playerAdjustBonusesForItem(*item, 1);
@@ -866,11 +866,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 itemDescription(description, *item, true);
 
                 // Get the right equipment letter.
-                itemToTakeOff = PlayerEquipment::Wield;
+                item_to_take_off = PlayerEquipment::Wield;
                 item_id = 0;
 
-                while (itemToTakeOff != slot) {
-                    if (py.inventory[itemToTakeOff++].category_id != TV_NOTHING) {
+                while (item_to_take_off != slot) {
+                    if (py.inventory[item_to_take_off++].category_id != TV_NOTHING) {
                         item_id++;
                     }
                 }
@@ -953,16 +953,16 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 static void inventoryDisplayAppropriateHeader() {
     if (screen_state == INVEN_SCR) {
         obj_desc_t msg = {'\0'};
-        int weightQuotient = py.pack.weight / 10;
-        int weightRemainder = py.pack.weight % 10;
+        int w_quotient = py.pack.weight / 10;
+        int w_remainder = py.pack.weight % 10;
 
         if (!config::options::show_inventory_weights || py.pack.unique_items == 0) {
-            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s", weightQuotient, weightRemainder, (py.pack.unique_items == 0 ? "nothing." : "-"));
+            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s", w_quotient, w_remainder, (py.pack.unique_items == 0 ? "nothing." : "-"));
         } else {
-            int limitQuotient = playerCarryingLoadLimit() / 10;
-            int limitRemainder = playerCarryingLoadLimit() % 10;
+            int l_quotient = playerCarryingLoadLimit() / 10;
+            int l_remainder = playerCarryingLoadLimit() % 10;
 
-            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -", weightQuotient, weightRemainder, limitQuotient, limitRemainder);
+            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -", w_quotient, w_remainder, l_quotient, l_remainder);
         }
 
         putStringClearToEOL(msg, Coord_t{0, 0});

@@ -149,15 +149,15 @@ void statsAsString(uint8_t stat, char *stat_string) {
         return;
     }
 
-    int part1 = 18;
-    int part2 = stat - 18;
+    int value = 18;
+    int percentile = stat - 18;
 
-    if (part2 == 100) {
+    if (percentile == 100) {
         (void) strcpy(stat_string, "18/100");
         return;
     }
 
-    (void) sprintf(stat_string, " %2d/%02d", part1, part2);
+    (void) sprintf(stat_string, " %2d/%02d", value, percentile);
 }
 
 // Print character stat in given row, column -RAK-
@@ -319,33 +319,33 @@ void printCharacterMovementState() {
     }
 
     if ((py.flags.status & config::player::status::PY_REST) != 0u) {
-        char restString[16];
+        char rest_string[16];
 
         if (py.flags.rest < 0) {
-            (void) strcpy(restString, "Rest *");
+            (void) strcpy(rest_string, "Rest *");
         } else if (config::options::display_counts) {
-            (void) sprintf(restString, "Rest %-5d", py.flags.rest);
+            (void) sprintf(rest_string, "Rest %-5d", py.flags.rest);
         } else {
-            (void) strcpy(restString, "Rest");
+            (void) strcpy(rest_string, "Rest");
         }
 
-        putString(restString, Coord_t{23, 38});
+        putString(rest_string, Coord_t{23, 38});
 
         return;
     }
 
     if (game.command_count > 0) {
-        char repeatString[16];
+        char repeat_string[16];
 
         if (config::options::display_counts) {
-            (void) sprintf(repeatString, "Repeat %-3d", game.command_count);
+            (void) sprintf(repeat_string, "Repeat %-3d", game.command_count);
         } else {
-            (void) strcpy(repeatString, "Repeat");
+            (void) strcpy(repeat_string, "Repeat");
         }
 
         py.flags.status |= config::player::status::PY_REPEAT;
 
-        putString(repeatString, Coord_t{23, 38});
+        putString(repeat_string, Coord_t{23, 38});
 
         if ((py.flags.status & config::player::status::PY_SEARCH) != 0u) {
             putString("Search", Coord_t{23, 38});

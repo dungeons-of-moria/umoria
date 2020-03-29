@@ -538,7 +538,7 @@ bool checkForNonBlockingKeyPress(int microseconds) {
 // Find a default user name from the system.
 void getDefaultPlayerName(char *buffer) {
     // Gotta have some name
-    const char *defaultName = "X";
+    const char *default_name = "X";
 
 #ifdef _WIN32
     unsigned long bufCharCount = PLAYER_NAME_SIZE;
@@ -559,7 +559,7 @@ void getDefaultPlayerName(char *buffer) {
     }
 
     if (buffer[0] == 0) {
-        (void) strcpy(buffer, defaultName);
+        (void) strcpy(buffer, default_name);
     }
 #endif
 }
