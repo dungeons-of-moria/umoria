@@ -11,28 +11,30 @@
 #include "headers.h"
 
 enum class FoodMagicTypes {
-    poison = 1,
-    blindness,
-    paranoia,
-    confusion,
-    hallucination,
-    cure_poison,
-    cure_blindness,
-    cure_paranoia,
-    cure_confusion,
-    weakness,
-    unhealth,
-    restore_str = 16, // 12-15 are no longer used
-    restore_con,
-    restore_int,
-    restore_wis,
-    restore_dex,
-    restore_chr,
-    first_aid,
-    minor_cures,
-    light_cures,
-    major_cures = 26, // 25 no longer used
-    poisonous_food,
+    Poison = 1,
+    Blindness,
+    Paranoia,
+    Confusion,
+    Hallucination,
+    CurePoison,
+    CureBlindness,
+    CureParanoia,
+    CureConfusion,
+    Weakness,
+    Unhealth,
+    // 12-15 are no longer used
+    RestoreSTR = 16,
+    RestoreCON,
+    RestoreINT,
+    RestoreWIS,
+    RestoreDEX,
+    RestoreCHR,
+    FirstAid,
+    MinorCures,
+    LightCures,
+    // 25 no longer used
+    MajorCures = 26,
+    PoisonousFood,
 };
 
 // Eat some food. -RAK-
@@ -64,51 +66,51 @@ void playerEat() {
 
     while (item_flags != 0) {
         switch ((FoodMagicTypes)(getAndClearFirstBit(item_flags) + 1)) {
-            case FoodMagicTypes::poison:
+            case FoodMagicTypes::Poison:
                 py.flags.poisoned += randomNumber(10) + item->depth_first_found;
                 identified = true;
                 break;
-            case FoodMagicTypes::blindness:
+            case FoodMagicTypes::Blindness:
                 py.flags.blind += randomNumber(250) + 10 * item->depth_first_found + 100;
                 drawCavePanel();
                 printMessage("A veil of darkness surrounds you.");
                 identified = true;
                 break;
-            case FoodMagicTypes::paranoia:
+            case FoodMagicTypes::Paranoia:
                 py.flags.afraid += randomNumber(10) + item->depth_first_found;
                 printMessage("You feel terrified!");
                 identified = true;
                 break;
-            case FoodMagicTypes::confusion:
+            case FoodMagicTypes::Confusion:
                 py.flags.confused += randomNumber(10) + item->depth_first_found;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
-            case FoodMagicTypes::hallucination:
+            case FoodMagicTypes::Hallucination:
                 py.flags.image += randomNumber(200) + 25 * item->depth_first_found + 200;
                 printMessage("You feel drugged.");
                 identified = true;
                 break;
-            case FoodMagicTypes::cure_poison:
+            case FoodMagicTypes::CurePoison:
                 identified = playerCurePoison();
                 break;
-            case FoodMagicTypes::cure_blindness:
+            case FoodMagicTypes::CureBlindness:
                 identified = playerCureBlindness();
                 break;
-            case FoodMagicTypes::cure_paranoia:
+            case FoodMagicTypes::CureParanoia:
                 if (py.flags.afraid > 1) {
                     py.flags.afraid = 1;
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::cure_confusion:
+            case FoodMagicTypes::CureConfusion:
                 identified = playerCureConfusion();
                 break;
-            case FoodMagicTypes::weakness:
+            case FoodMagicTypes::Weakness:
                 spellLoseSTR();
                 identified = true;
                 break;
-            case FoodMagicTypes::unhealth:
+            case FoodMagicTypes::Unhealth:
                 spellLoseCON();
                 identified = true;
                 break;
@@ -130,49 +132,49 @@ void playerEat() {
                 identified = true;
                 break;
 #endif
-            case FoodMagicTypes::restore_str:
+            case FoodMagicTypes::RestoreSTR:
                 if (playerStatRestore(PlayerAttr::STR)) {
                     printMessage("You feel your strength returning.");
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::restore_con:
+            case FoodMagicTypes::RestoreCON:
                 if (playerStatRestore(PlayerAttr::CON)) {
                     printMessage("You feel your health returning.");
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::restore_int:
+            case FoodMagicTypes::RestoreINT:
                 if (playerStatRestore(PlayerAttr::INT)) {
                     printMessage("Your head spins a moment.");
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::restore_wis:
+            case FoodMagicTypes::RestoreWIS:
                 if (playerStatRestore(PlayerAttr::WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::restore_dex:
+            case FoodMagicTypes::RestoreDEX:
                 if (playerStatRestore(PlayerAttr::DEX)) {
                     printMessage("You feel more dexterous.");
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::restore_chr:
+            case FoodMagicTypes::RestoreCHR:
                 if (playerStatRestore(PlayerAttr::CHR)) {
                     printMessage("Your skin stops itching.");
                     identified = true;
                 }
                 break;
-            case FoodMagicTypes::first_aid:
+            case FoodMagicTypes::FirstAid:
                 identified = spellChangePlayerHitPoints(randomNumber(6));
                 break;
-            case FoodMagicTypes::minor_cures:
+            case FoodMagicTypes::MinorCures:
                 identified = spellChangePlayerHitPoints(randomNumber(12));
                 break;
-            case FoodMagicTypes::light_cures:
+            case FoodMagicTypes::LightCures:
                 identified = spellChangePlayerHitPoints(randomNumber(18));
                 break;
 #if 0 // 25 is no longer used
@@ -180,10 +182,10 @@ void playerEat() {
                 identified = hp_player(damroll(3, 6));
                 break;
 #endif
-            case FoodMagicTypes::major_cures:
+            case FoodMagicTypes::MajorCures:
                 identified = spellChangePlayerHitPoints(diceRoll(Dice_t{3, 12}));
                 break;
-            case FoodMagicTypes::poisonous_food:
+            case FoodMagicTypes::PoisonousFood:
                 playerTakesHit(randomNumber(18), "poisonous food.");
                 identified = true;
                 break;
