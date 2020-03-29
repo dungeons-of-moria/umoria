@@ -216,32 +216,32 @@ static void trapConstitutionDart(Inventory_t const &item, int dam) {
 }
 
 enum class TrapTypes {
-    open_pit = 1,
-    arrow_pit,
-    covered_pit,
-    trap_door,
-    sleeping_gas,
-    hidden_object,
-    dart_of_str,
-    teleport,
-    rockfall,
-    corroding_gas,
-    summon_monster,
-    fire_trap,
-    acid_trap,
-    poison_gas,
-    blinding_gas,
-    confuse_gas,
-    slow_dart,
-    dart_of_con,
-    secret_door,
-    scare_monster = 99,
-    general_store = 101,
-    armory,
-    weaponsmith,
-    temple,
-    alchemist,
-    magic_shop,
+    OpenPit = 1,
+    ArrowPit,
+    CoveredPit,
+    TrapDoor,
+    SleepingGas,
+    HiddenObject,
+    DartOfStr,
+    Teleport,
+    Rockfall,
+    CorrodingGas,
+    SummonMonster,
+    FireTrap,
+    AcidTrap,
+    PoisonGasTrap, // TODO: name would clash with MagicSpellFlags::PoisonGas
+    BlindingGas,
+    ConfuseGas,
+    SlowDart,
+    DartOfCon,
+    SecretDoor,
+    ScareMonster = 99,
+    GeneralStore = 101,
+    Armory,
+    Weaponsmith,
+    Temple,
+    Alchemist,
+    MagicShop,
 };
 
 // Player hit a trap.  (Chuckle) -RAK-
@@ -254,81 +254,81 @@ static void playerStepsOnTrap(Coord_t coord) {
     int damage = diceRoll(item.damage);
 
     switch ((TrapTypes) item.sub_category_id) {
-        case TrapTypes::open_pit:
+        case TrapTypes::OpenPit:
             trapOpenPit(item, damage);
             break;
-        case TrapTypes::arrow_pit:
+        case TrapTypes::ArrowPit:
             trapArrow(item, damage);
             break;
-        case TrapTypes::covered_pit:
+        case TrapTypes::CoveredPit:
             trapCoveredPit(item, damage, coord);
             break;
-        case TrapTypes::trap_door:
+        case TrapTypes::TrapDoor:
             trapDoor(item, damage);
             break;
-        case TrapTypes::sleeping_gas:
+        case TrapTypes::SleepingGas:
             trapSleepingGas();
             break;
-        case TrapTypes::hidden_object:
+        case TrapTypes::HiddenObject:
             trapHiddenObject(coord);
             break;
-        case TrapTypes::dart_of_str:
+        case TrapTypes::DartOfStr:
             trapStrengthDart(item, damage);
             break;
-        case TrapTypes::teleport:
+        case TrapTypes::Teleport:
             trapTeleport(coord);
             break;
-        case TrapTypes::rockfall:
+        case TrapTypes::Rockfall:
             trapRockfall(coord, damage);
             break;
-        case TrapTypes::corroding_gas:
+        case TrapTypes::CorrodingGas:
             trapCorrodeGas();
             break;
-        case TrapTypes::summon_monster:
+        case TrapTypes::SummonMonster:
             trapSummonMonster(coord);
             break;
-        case TrapTypes::fire_trap:
+        case TrapTypes::FireTrap:
             trapFire(damage);
             break;
-        case TrapTypes::acid_trap:
+        case TrapTypes::AcidTrap:
             trapAcid(damage);
             break;
-        case TrapTypes::poison_gas:
+        case TrapTypes::PoisonGasTrap:
             trapPoisonGas(damage);
             break;
-        case TrapTypes::blinding_gas:
+        case TrapTypes::BlindingGas:
             trapBlindGas();
             break;
-        case TrapTypes::confuse_gas:
+        case TrapTypes::ConfuseGas:
             trapConfuseGas();
             break;
-        case TrapTypes::slow_dart:
+        case TrapTypes::SlowDart:
             trapSlowDart(item, damage);
             break;
-        case TrapTypes::dart_of_con:
+        case TrapTypes::DartOfCon:
             trapConstitutionDart(item, damage);
             break;
-        case TrapTypes::secret_door:
-        case TrapTypes::scare_monster:
+        case TrapTypes::SecretDoor:
+        case TrapTypes::ScareMonster:
             break;
 
             // Town level traps are special, the stores.
-        case TrapTypes::general_store:
+        case TrapTypes::GeneralStore:
             storeEnter(0);
             break;
-        case TrapTypes::armory:
+        case TrapTypes::Armory:
             storeEnter(1);
             break;
-        case TrapTypes::weaponsmith:
+        case TrapTypes::Weaponsmith:
             storeEnter(2);
             break;
-        case TrapTypes::temple:
+        case TrapTypes::Temple:
             storeEnter(3);
             break;
-        case TrapTypes::alchemist:
+        case TrapTypes::Alchemist:
             storeEnter(4);
             break;
-        case TrapTypes::magic_shop:
+        case TrapTypes::MagicShop:
             storeEnter(5);
             break;
 
@@ -346,11 +346,11 @@ static bool playerRandomMovement(int dir) {
     }
 
     // 75% random movement
-    bool playerRandomMove = randomNumber(4) > 1;
+    bool player_random_move = randomNumber(4) > 1;
 
-    bool playerIsConfused = py.flags.confused > 0;
+    bool player_is_confused = py.flags.confused > 0;
 
-    return playerIsConfused && playerRandomMove;
+    return player_is_confused && player_random_move;
 }
 
 // Player is on an object. Many things can happen based -RAK-
@@ -359,10 +359,10 @@ static bool playerRandomMovement(int dir) {
 static void carry(Coord_t coord, bool pickup) {
     Inventory_t &item = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id];
 
-    int tileFlags = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id].category_id;
+    int tile_flags = game.treasure.list[dg.floor[coord.y][coord.x].treasure_id].category_id;
 
-    if (tileFlags > TV_MAX_PICK_UP) {
-        if (tileFlags == TV_INVIS_TRAP || tileFlags == TV_VIS_TRAP || tileFlags == TV_STORE_DOOR) {
+    if (tile_flags > TV_MAX_PICK_UP) {
+        if (tile_flags == TV_INVIS_TRAP || tile_flags == TV_VIS_TRAP || tile_flags == TV_STORE_DOOR) {
             // OOPS!
             playerStepsOnTrap(coord);
         }
@@ -375,7 +375,7 @@ static void carry(Coord_t coord, bool pickup) {
     playerEndRunning();
 
     // There's GOLD in them thar hills!
-    if (tileFlags == TV_GOLD) {
+    if (tile_flags == TV_GOLD) {
         py.misc.au += item.cost;
 
         itemDescription(description, item, true);
