@@ -1273,7 +1273,7 @@ static void openClosedChest(Coord_t coord) {
 
     if (success) {
         item.flags &= ~config::treasure::chests::CH_LOCKED;
-        item.special_name_id = special_name_ids::SN_EMPTY;
+        item.special_name_id = SpecialNameIds::SN_EMPTY;
         spellItemIdentifyAndRemoveRandomInscription(item);
         item.cost = 0;
     }

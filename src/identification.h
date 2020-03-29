@@ -9,7 +9,7 @@
 #pragma once
 
 // indexes into the special name table
-enum special_name_ids {
+enum SpecialNameIds {
     SN_NULL,
     SN_R,
     SN_RA,
@@ -79,7 +79,7 @@ constexpr uint8_t MAX_TITLES = 45;     // Used with scrolls
 constexpr uint8_t MAX_SYLLABLES = 153; // Used with scrolls
 
 extern uint8_t objects_identified[OBJECT_IDENT_SIZE];
-extern const char *special_item_names[special_name_ids::SN_ARRAY_SIZE];
+extern const char *special_item_names[SpecialNameIds::SN_ARRAY_SIZE];
 
 // Following are arrays for descriptive pieces
 extern const char *colors[MAX_COLORS];

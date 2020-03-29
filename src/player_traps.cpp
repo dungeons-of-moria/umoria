@@ -78,9 +78,9 @@ static void playerDisarmChestTrap(Coord_t coord, int total, Inventory_t &item) {
             item.flags &= ~config::treasure::chests::CH_TRAPPED;
 
             if ((item.flags & config::treasure::chests::CH_LOCKED) != 0u) {
-                item.special_name_id = special_name_ids::SN_LOCKED;
+                item.special_name_id = SpecialNameIds::SN_LOCKED;
             } else {
-                item.special_name_id = special_name_ids::SN_DISARMED;
+                item.special_name_id = SpecialNameIds::SN_DISARMED;
             }
 
             printMessage("You have disarmed the chest.");
