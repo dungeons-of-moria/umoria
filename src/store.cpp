@@ -14,7 +14,7 @@
 static int16_t store_last_increment;
 
 static bool storeNoNeedToBargain(Store_t const &store, int32_t min_price);
-static void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price);
+static void storeUpdateBargainingSkills(Store_t &store, int32_t price, int32_t min_price);
 
 // Initializes the stores with owners -RAK-
 void storeInitializeOwners() {
@@ -114,9 +114,9 @@ static void displayStoreInventory(Store_t &store, int item_pos_start) {
         item_pos_end = store.unique_items_counter;
     }
 
-    int item_identifier;
+    int item_line_num;
 
-    for (item_identifier = (item_pos_start % 12); item_pos_start < item_pos_end; item_identifier++) {
+    for (item_line_num = (item_pos_start % 12); item_pos_start < item_pos_end; item_line_num++) {
         Inventory_t &item = store.inventory[item_pos_start].item;
 
         // Save the current number of items
@@ -133,8 +133,8 @@ static void displayStoreInventory(Store_t &store, int item_pos_start) {
         item.items_count = (uint8_t) current_item_count;
 
         obj_desc_t msg = {'\0'};
-        (void) sprintf(msg, "%c) %s", 'a' + item_identifier, description);
-        putStringClearToEOL(msg, Coord_t{item_identifier + 5, 0});
+        (void) sprintf(msg, "%c) %s", 'a' + item_line_num, description);
+        putStringClearToEOL(msg, Coord_t{item_line_num + 5, 0});
 
         current_item_count = store.inventory[item_pos_start].cost;
 
@@ -149,14 +149,14 @@ static void displayStoreInventory(Store_t &store, int item_pos_start) {
             (void) sprintf(msg, "%9d [Fixed]", current_item_count);
         }
 
-        putStringClearToEOL(msg, Coord_t{item_identifier + 5, 59});
+        putStringClearToEOL(msg, Coord_t{item_line_num + 5, 59});
         item_pos_start++;
     }
 
-    if (item_identifier < 12) {
-        for (int i = 0; i < (11 - item_identifier + 1); i++) {
+    if (item_line_num < 12) {
+        for (int i = 0; i < (11 - item_line_num + 1); i++) {
             // clear remaining lines
-            eraseLine(Coord_t{i + item_identifier + 5, 0});
+            eraseLine(Coord_t{i + item_line_num + 5, 0});
         }
     }
 
@@ -201,20 +201,20 @@ static void displayStore(Store_t &store, const char *owner_name, int current_top
 }
 
 // Get the ID of a store item and return it's value -RAK-
-static bool storeGetItemID(int &item_id, const char *prompt, int item_pos_start, int item_pos_end) {
+// Returns true if the item was found.
+static bool storeGetItemId(int &item_id, const char *prompt, int item_pos_start, int item_pos_end) {
     item_id = -1;
+    bool item_found = false;
 
     vtype_t msg = {'\0'};
     (void) sprintf(msg, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
 
-    char command;
-    bool item_found = false;
-
-    while (getCommand(msg, command)) {
-        command -= 'a';
-        if (command >= item_pos_start && command <= item_pos_end) {
+    char key_char;
+    while (getCommand(msg, key_char)) {
+        key_char -= 'a';
+        if (key_char >= item_pos_start && key_char <= item_pos_end) {
             item_found = true;
-            item_id = command;
+            item_id = key_char;
             break;
         }
         terminalBellSound();
@@ -230,15 +230,17 @@ static bool storeIncreaseInsults(int store_id) {
 
     store.insults_counter++;
 
-    if (store.insults_counter > store_owners[store.owner_id].max_insults) {
-        printSpeechGetOutOfMyStore();
-        store.insults_counter = 0;
-        store.bad_purchases++;
-        store.turns_left_before_closing = dg.game_turn + 2500 + randomNumber(2500);
-        return true;
+    if (store.insults_counter <= store_owners[store.owner_id].max_insults) {
+        return false;
     }
 
-    return false;
+    // customer angered the store owner with too many insults!
+    printSpeechGetOutOfMyStore();
+    store.insults_counter = 0;
+    store.bad_purchases++;
+    store.turns_left_before_closing = dg.game_turn + 2500 + randomNumber(2500);
+
+    return true;
 }
 
 // Decrease insults -RAK-
@@ -249,6 +251,7 @@ static void storeDecreaseInsults(int store_id) {
 }
 
 // Have insulted while haggling -RAK-
+// Returns true if the store owner was angered.
 static bool storeHaggleInsults(int store_id) {
     if (storeIncreaseInsults(store_id)) {
         return true;
@@ -262,116 +265,144 @@ static bool storeHaggleInsults(int store_id) {
     return false;
 }
 
-static bool storeGetHaggle(const char *comment, int32_t &new_offer, int num_offer) {
-    if (num_offer == 0) {
+// Returns true if the customer made a valid offer
+static bool storeGetHaggle(const char *prompt, int32_t &new_offer, int offer_count) {
+    bool valid_offer = true;
+
+    if (offer_count == 0) {
         store_last_increment = 0;
     }
 
     bool increment = false;
+    int32_t adjustment = 0;
 
-    auto comment_len = (int) strlen(comment);
-    int save_comment_len = comment_len;
+    auto prompt_len = (int) strlen(prompt);
+    int start_len = prompt_len;
 
     char *p = nullptr;
     vtype_t msg = {'\0'};
-    vtype_t default_offer = {'\0'};
+    vtype_t last_offer_str = {'\0'};
 
-    bool flag = true;
-    int32_t offer_adjust = 0;
+    // Get a customers new offer
+    while (valid_offer && adjustment == 0) {
+        putStringClearToEOL(prompt, Coord_t{0, 0});
 
-    while (flag && offer_adjust == 0) {
-        putStringClearToEOL(comment, Coord_t{0, 0});
-
-        if ((num_offer != 0) && store_last_increment != 0) {
+        if ((offer_count != 0) && store_last_increment != 0) {
             auto abs_store_last_increment = (int) std::abs((std::intmax_t) store_last_increment);
-            (void) sprintf(default_offer, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs_store_last_increment);
-            putStringClearToEOL(default_offer, Coord_t{0, save_comment_len});
-            comment_len = save_comment_len + (int) strlen(default_offer);
+
+            (void) sprintf(last_offer_str, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs_store_last_increment);
+            putStringClearToEOL(last_offer_str, Coord_t{0, start_len});
+
+            prompt_len = start_len + (int) strlen(last_offer_str);
         }
 
-        if (!getStringInput(msg, Coord_t{0, comment_len}, 40)) {
-            flag = false;
+        if (!getStringInput(msg, Coord_t{0, prompt_len}, 40)) {
+            // customer aborted, i.e. pressed escape
+            valid_offer = false;
         }
 
         for (p = msg; *p == ' '; p++) {
             // fast forward to next space character
         }
-
         if (*p == '+' || *p == '-') {
             increment = true;
         }
 
-        if ((num_offer != 0) && increment) {
-            stringToNumber(msg, offer_adjust);
+        if ((offer_count != 0) && increment) {
+            stringToNumber(msg, adjustment);
 
             // Don't accept a zero here.  Turn off increment if it was zero
             // because a zero will not exit.  This can be zero if the user
             // did not type a number after the +/- sign.
-            if (offer_adjust == 0) {
+            if (adjustment == 0) {
                 increment = false;
             } else {
-                store_last_increment = (int16_t) offer_adjust;
+                store_last_increment = (int16_t) adjustment;
             }
-        } else if ((num_offer != 0) && *msg == '\0') {
-            offer_adjust = store_last_increment;
+        } else if ((offer_count != 0) && *msg == '\0') {
+            adjustment = store_last_increment;
             increment = true;
         } else {
-            stringToNumber(msg, offer_adjust);
+            stringToNumber(msg, adjustment);
         }
 
         // don't allow incremental haggling, if player has not made an offer yet
-        if (flag && num_offer == 0 && increment) {
+        if (valid_offer && offer_count == 0 && increment) {
             printMessage("You haven't even made your first offer yet!");
-            offer_adjust = 0;
+            adjustment = 0;
             increment = false;
         }
     }
 
-    if (flag) {
+    if (valid_offer) {
         if (increment) {
-            new_offer += offer_adjust;
+            new_offer += adjustment;
         } else {
-            new_offer = offer_adjust;
+            new_offer = adjustment;
         }
     } else {
         messageLineClear();
     }
 
-    return flag;
+    return valid_offer;
 }
 
-static int storeReceiveOffer(int store_id, const char *comment, int32_t &new_offer, int32_t last_offer, int num_offer, int factor) {
-    int receive = 0;
-    bool success = false;
+// The status of the customer bid.
+// Note: a received bid may still result in a rejected offer.
+enum class BidState {
+    Received = 0, // the big was received successfully
+    Rejected,     // the bid was rejected, or cancelled by the customer
+    Offended,     // customer tried to sell an undesirable item
+    Insulted,     // the store owner was insulted too many times by the bid
+};
 
-    while (!success) {
-        if (storeGetHaggle(comment, new_offer, num_offer)) {
+static BidState storeReceiveOffer(int store_id, const char *prompt, int32_t &new_offer, int32_t last_offer, int offer_count, int factor) {
+    BidState status = BidState::Received;
+
+    bool done = false;
+    while (!done) {
+        if (storeGetHaggle(prompt, new_offer, offer_count)) {
+            // customer submitted valid offer
             if (new_offer * factor >= last_offer * factor) {
-                success = true;
+                done = true;
             } else if (storeHaggleInsults(store_id)) {
-                receive = 2;
-                success = true;
+                // customer angered the store owner!
+                status = BidState::Insulted;
+                done = true;
             } else {
                 // new_offer rejected, reset new_offer so that incremental
                 // haggling works correctly
                 new_offer = last_offer;
             }
         } else {
-            receive = 1;
-            success = true;
+            // customer aborted offer
+            status = BidState::Rejected;
+            done = true;
         }
     }
 
-    return receive;
+    return status;
+}
+
+static void storePurchaseCustomerAdjustment(int32_t &min_sell, int32_t &max_sell) {
+    int charisma = playerStatAdjustmentCharisma();
+
+    max_sell = max_sell * charisma / 100;
+    if (max_sell <= 0) {
+        max_sell = 1;
+    }
+
+    min_sell = min_sell * charisma / 100;
+    if (min_sell <= 0) {
+        min_sell = 1;
+    }
 }
 
 // Haggling routine -RAK-
-static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &item) {
-    bool did_not_haggle = false;
+static BidState storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &item) {
+    BidState status = BidState::Received;
 
-    price = 0;
-    int purchase = 0;
-    int final_flag = 0;
+    int32_t new_price = 0;
 
     Store_t const &store = stores[store_id];
     Owner_t const &owner = store_owners[store.owner_id];
@@ -379,15 +410,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
     int32_t max_sell, min_sell;
     int32_t cost = storeItemSellPrice(store, min_sell, max_sell, item);
 
-    max_sell = max_sell * playerStatAdjustmentCharisma() / 100;
-    if (max_sell <= 0) {
-        max_sell = 1;
-    }
-
-    min_sell = min_sell * playerStatAdjustmentCharisma() / 100;
-    if (min_sell <= 0) {
-        min_sell = 1;
-    }
+    storePurchaseCustomerAdjustment(min_sell, max_sell);
 
     // cast max_inflate to signed so that subtraction works correctly
     int32_t max_buy = cost * (200 - (int) owner.max_inflate) / 100;
@@ -395,49 +418,57 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
         max_buy = 1;
     }
 
-    int32_t min_per = owner.haggles_per;
-    int32_t max_per = min_per * 3;
-
     displayStoreHaggleCommands(1);
 
-    int32_t current_asking_price = max_sell;
     int32_t final_asking_price = min_sell;
-    int32_t min_offer = max_buy;
-    int32_t last_offer = min_offer;
-    int32_t new_offer = 0;
-    int num_offer = 0; // this prevents incremental haggling on first try
+    int32_t current_asking_price = max_sell;
+
     const char *comment = "Asking";
+    bool accepted_without_haggle = false;
+    int offers_count = 0; // this prevents incremental haggling on first try
 
     // go right to final price if player has bargained well
     if (storeNoNeedToBargain(stores[store_id], final_asking_price)) {
         printMessage("After a long bargaining session, you agree upon the price.");
         current_asking_price = min_sell;
         comment = "Final offer";
-        did_not_haggle = true;
+        accepted_without_haggle = true;
 
         // Set up automatic increment, so that a return will accept the final price.
         store_last_increment = (int16_t) min_sell;
-        num_offer = 1;
+        offers_count = 1;
     }
 
-    bool flag = false;
+    int32_t min_offer = max_buy;
+    int32_t last_offer = min_offer;
+    int32_t new_offer = 0;
 
-    while (!flag) {
-        bool loop_flag;
+    int32_t min_per = owner.haggles_per;
+    int32_t max_per = min_per * 3;
+
+    int final_flag = 0;
+
+    bool rejected = false;
+    bool bidding_open;
+
+    while (!rejected) {
         do {
-            loop_flag = true;
+            bidding_open = true;
 
             vtype_t msg = {'\0'};
             (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
             putString(msg, Coord_t{1, 0});
 
-            purchase = storeReceiveOffer(store_id, "What do you offer? ", new_offer, last_offer, num_offer, 1);
+            status = storeReceiveOffer(store_id, "What do you offer? ", new_offer, last_offer, offers_count, 1);
 
-            if (purchase != 0) {
-                flag = true;
+            if (status != BidState::Received) {
+                rejected = true;
             } else {
+                // review the received bid
+
                 if (new_offer > current_asking_price) {
                     printSpeechSorry();
+
                     // rejected, reset new_offer for incremental haggling
                     new_offer = last_offer;
 
@@ -448,21 +479,21 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
                         store_last_increment = 0;
                     }
                 } else if (new_offer == current_asking_price) {
-                    flag = true;
-                    price = new_offer;
+                    rejected = true;
+                    new_price = new_offer;
                 } else {
-                    loop_flag = false;
+                    bidding_open = false;
                 }
             }
-        } while (!flag && loop_flag);
+        } while (!rejected && bidding_open);
 
-        if (!flag) {
+        if (!rejected) {
             int32_t adjustment = (new_offer - last_offer) * 100 / (current_asking_price - last_offer);
 
             if (adjustment < min_per) {
-                flag = storeHaggleInsults(store_id);
-                if (flag) {
-                    purchase = 2;
+                rejected = storeHaggleInsults(store_id);
+                if (rejected) {
+                    status = BidState::Insulted;
                 }
             } else if (adjustment > max_per) {
                 adjustment = adjustment * 75 / 100;
@@ -489,20 +520,20 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
 
                 if (final_flag > 3) {
                     if (storeIncreaseInsults(store_id)) {
-                        purchase = 2;
+                        status = BidState::Insulted;
                     } else {
-                        purchase = 1;
+                        status = BidState::Rejected;
                     }
-                    flag = true;
+                    rejected = true;
                 }
             } else if (new_offer >= current_asking_price) {
-                flag = true;
-                price = new_offer;
+                rejected = true;
+                new_price = new_offer;
             }
 
-            if (!flag) {
+            if (!rejected) {
                 last_offer = new_offer;
-                num_offer++; // enable incremental haggling
+                offers_count++; // enable incremental haggling
 
                 eraseLine(Coord_t{1, 0});
                 vtype_t msg = {'\0'};
@@ -521,15 +552,49 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
     }
 
     // update bargaining info
-    if (purchase == 0 && !did_not_haggle) {
-        storeUpdateBargainInfo(stores[store_id], price, final_asking_price);
+    if (status == BidState::Received && !accepted_without_haggle) {
+        storeUpdateBargainingSkills(stores[store_id], new_price, final_asking_price);
     }
 
-    return purchase;
+    price = new_price; // update callers price before returning
+
+    return status;
+}
+
+static void storeSellCustomerAdjustment(Owner_t const &owner, int32_t &cost, int32_t &min_buy, int32_t &max_buy, int32_t &max_sell) {
+    cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
+    cost = cost * (200 - race_gold_adjustments[owner.race][py.misc.race_id]) / 100;
+    if (cost < 1) {
+        cost = 1;
+    }
+
+    max_sell = cost * owner.max_inflate / 100;
+
+    // cast max_inflate to signed so that subtraction works correctly
+    max_buy = cost * (200 - (int) owner.max_inflate) / 100;
+    min_buy = cost * (200 - owner.min_inflate) / 100;
+    if (min_buy < 1) {
+        min_buy = 1;
+    }
+    if (max_buy < 1) {
+        max_buy = 1;
+    }
+    if (min_buy < max_buy) {
+        min_buy = max_buy;
+    }
 }
 
 // Haggling routine -RAK-
-static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item) {
+static BidState storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item) {
+    BidState status = BidState::Received;
+
+    int32_t new_price = 0;
+
+    Store_t const &store = stores[store_id];
+    int32_t cost = storeItemValue(item);
+
+    bool rejected = false;
+
     int32_t max_gold = 0;
     int32_t min_per = 0;
     int32_t max_per = 0;
@@ -537,60 +602,31 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
     int32_t min_buy = 0;
     int32_t max_buy = 0;
 
-    bool flag = false;
-    bool did_not_haggle = false;
-
-    price = 0;
-    int sell = 0;
-    int final_flag = 0;
-
-    Store_t const &store = stores[store_id];
-    int32_t cost = storeItemValue(item);
-
     if (cost < 1) {
-        sell = 3;
-        flag = true;
+        status = BidState::Offended;
+        rejected = true;
     } else {
         Owner_t const &owner = store_owners[store.owner_id];
 
-        cost = cost * (200 - playerStatAdjustmentCharisma()) / 100;
-        cost = cost * (200 - race_gold_adjustments[owner.race][py.misc.race_id]) / 100;
-
-        if (cost < 1) {
-            cost = 1;
-        }
-
-        max_sell = cost * owner.max_inflate / 100;
-
-        // cast max_inflate to signed so that subtraction works correctly
-        max_buy = cost * (200 - (int) owner.max_inflate) / 100;
-        min_buy = cost * (200 - owner.min_inflate) / 100;
-
-        if (min_buy < 1) {
-            min_buy = 1;
-        }
-
-        if (max_buy < 1) {
-            max_buy = 1;
-        }
-
-        if (min_buy < max_buy) {
-            min_buy = max_buy;
-        }
+        storeSellCustomerAdjustment(owner, cost, min_buy, max_buy, max_sell);
 
         min_per = owner.haggles_per;
         max_per = min_per * 3;
         max_gold = owner.max_cost;
     }
 
-    int32_t current_asking_price;
     int32_t final_asking_price = 0;
-    const char *comment = nullptr;
+    int32_t current_asking_price = 0;
 
-    if (!flag) {
+    int final_flag = 0;
+
+    const char *comment = nullptr;
+    bool accepted_without_haggle = false;
+
+    if (!rejected) {
         displayStoreHaggleCommands(-1);
 
-        int num_offer = 0; // this prevents incremental haggling on first try
+        int offer_count = 0; // this prevents incremental haggling on first try
 
         if (max_buy > max_gold) {
             final_flag = 1;
@@ -601,7 +637,7 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
             current_asking_price = max_gold;
             final_asking_price = max_gold;
             printMessage("I am sorry, but I have not the money to afford such a fine item.");
-            did_not_haggle = true;
+            accepted_without_haggle = true;
         } else {
             current_asking_price = max_buy;
             final_asking_price = min_buy;
@@ -617,12 +653,12 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                 printMessage("After a long bargaining session, you agree upon the price.");
                 current_asking_price = final_asking_price;
                 comment = "Final offer";
-                did_not_haggle = true;
+                accepted_without_haggle = true;
 
                 // Set up automatic increment, so that a return
                 // will accept the final price.
                 store_last_increment = (int16_t) final_asking_price;
-                num_offer = 1;
+                offer_count = 1;
             }
         }
 
@@ -634,20 +670,23 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
             current_asking_price = 1;
         }
 
+        bool bidding_open;
+
         do {
-            bool loop_flag;
             do {
-                loop_flag = true;
+                bidding_open = true;
 
                 vtype_t msg = {'\0'};
                 (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
                 putString(msg, Coord_t{1, 0});
 
-                sell = storeReceiveOffer(store_id, "What price do you ask? ", new_offer, last_offer, num_offer, -1);
+                status = storeReceiveOffer(store_id, "What price do you ask? ", new_offer, last_offer, offer_count, -1);
 
-                if (sell != 0) {
-                    flag = true;
+                if (status != BidState::Received) {
+                    rejected = true;
                 } else {
+                    // review the received bid
+
                     if (new_offer < current_asking_price) {
                         printSpeechSorry();
 
@@ -661,21 +700,21 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                             store_last_increment = 0;
                         }
                     } else if (new_offer == current_asking_price) {
-                        flag = true;
-                        price = new_offer;
+                        rejected = true;
+                        new_price = new_offer;
                     } else {
-                        loop_flag = false;
+                        bidding_open = false;
                     }
                 }
-            } while (!flag && loop_flag);
+            } while (!rejected && bidding_open);
 
-            if (!flag) {
+            if (!rejected) {
                 int32_t adjustment = (last_offer - new_offer) * 100 / (last_offer - current_asking_price);
 
                 if (adjustment < min_per) {
-                    flag = storeHaggleInsults(store_id);
-                    if (flag) {
-                        sell = 2;
+                    rejected = storeHaggleInsults(store_id);
+                    if (rejected) {
+                        status = BidState::Insulted;
                     }
                 } else if (adjustment > max_per) {
                     adjustment = adjustment * 75 / 100;
@@ -702,20 +741,20 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
 
                     if (final_flag > 3) {
                         if (storeIncreaseInsults(store_id)) {
-                            sell = 2;
+                            status = BidState::Insulted;
                         } else {
-                            sell = 1;
+                            status = BidState::Rejected;
                         }
-                        flag = true;
+                        rejected = true;
                     }
                 } else if (new_offer <= current_asking_price) {
-                    flag = true;
-                    price = new_offer;
+                    rejected = true;
+                    new_price = new_offer;
                 }
 
-                if (!flag) {
+                if (!rejected) {
                     last_offer = new_offer;
-                    num_offer++; // enable incremental haggling
+                    offer_count++; // enable incremental haggling
 
                     eraseLine(Coord_t{1, 0});
                     vtype_t msg = {'\0'};
@@ -731,15 +770,17 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                     }
                 }
             }
-        } while (!flag);
+        } while (!rejected);
     }
 
     // update bargaining info
-    if (sell == 0 && !did_not_haggle) {
-        storeUpdateBargainInfo(stores[store_id], price, final_asking_price);
+    if (status == BidState::Received && !accepted_without_haggle) {
+        storeUpdateBargainingSkills(stores[store_id], new_price, final_asking_price);
     }
 
-    return sell;
+    price = new_price; // update callers price before returning
+
+    return status;
 }
 
 // Get the number of store items to display on the screen
@@ -756,7 +797,10 @@ static int storeItemsToDisplay(int store_counter, int current_top_item_id) {
 }
 
 // Buy an item from a store -RAK-
+// Returns true is the owner kicks out the customer
 static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
+    bool kick_customer = false; // don't kick them out of the store!
+
     Store_t &store = stores[store_id];
 
     if (store.unique_items_counter < 1) {
@@ -766,7 +810,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
 
     int item_id;
     int item_count = storeItemsToDisplay(store.unique_items_counter, current_top_item_id);
-    if (!storeGetItemID(item_id, "Which item are you interested in? ", 0, item_count)) {
+    if (!storeGetItemId(item_id, "Which item are you interested in? ", 0, item_count)) {
         return false;
     }
 
@@ -782,17 +826,18 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
         return false;
     }
 
-    int choice = 0;
+    BidState status = BidState::Received;
     int32_t price;
-    bool purchased = false;
 
     if (store.inventory[item_id].cost > 0) {
         price = store.inventory[item_id].cost;
     } else {
-        choice = storePurchaseHaggle(store_id, price, sell_item);
+        status = storePurchaseHaggle(store_id, price, sell_item);
     }
 
-    if (choice == 0) {
+    if (status == BidState::Insulted) {
+        kick_customer = true;
+    } else if (status == BidState::Received) {
         if (py.misc.au >= price) {
             printSpeechFinishedHaggling();
             storeDecreaseInsults(store_id);
@@ -830,21 +875,19 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
             displayPlayerRemainingGold();
         } else {
             if (storeIncreaseInsults(store_id)) {
-                purchased = true;
+                kick_customer = true;
             } else {
                 printSpeechFinishedHaggling();
                 printMessage("Liar!  You have not the gold!");
             }
         }
-    } else if (choice == 2) {
-        purchased = true;
     }
 
     // Less intuitive, but looks better here than in storePurchaseHaggle.
     displayStoreCommands();
     eraseLine(Coord_t{1, 0});
 
-    return purchased;
+    return kick_customer;
 }
 
 // Functions to emulate the original Pascal sets
@@ -941,7 +984,10 @@ bool (*store_buy[MAX_STORES])(uint8_t) = {
 };
 
 // Sell an item to the store -RAK-
+// Returns true is the owner kicks out the customer
 static bool storeSellAnItem(int store_id, int &current_top_item_id) {
+    bool kick_customer = false; // don't kick them out of the store!
+
     int first_item = py.pack.unique_items;
     int last_item = -1;
 
@@ -990,11 +1036,18 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     }
 
     int32_t price;
-    bool sold = false;
 
-    int choice = storeSellHaggle(store_id, price, sold_item);
+    BidState status = storeSellHaggle(store_id, price, sold_item);
 
-    if (choice == 0) {
+    if (status == BidState::Insulted) {
+        kick_customer = true;
+    } else if (status == BidState::Offended) {
+        printMessage("How dare you!");
+        printMessage("I will not buy that!");
+        kick_customer = storeIncreaseInsults(store_id);
+    } else if (status == BidState::Received) {
+        // bid received, and accepted!
+
         printSpeechFinishedHaggling();
         storeDecreaseInsults(store_id);
         py.misc.au += price;
@@ -1034,19 +1087,13 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
             }
         }
         displayPlayerRemainingGold();
-    } else if (choice == 2) {
-        sold = true;
-    } else if (choice == 3) {
-        printMessage("How dare you!");
-        printMessage("I will not buy that!");
-        sold = storeIncreaseInsults(store_id);
     }
 
     // Less intuitive, but looks better here than in storeSellHaggle.
     eraseLine(Coord_t{1, 0});
     displayStoreCommands();
 
-    return sold;
+    return kick_customer;
 }
 
 // Entering a store -RAK-
@@ -1135,22 +1182,24 @@ static bool storeNoNeedToBargain(Store_t const &store, int32_t min_price) {
         return true;
     }
 
-    int bargain_record = (store.good_purchases - 3 * store.bad_purchases - 5);
+    int record = (store.good_purchases - 3 * store.bad_purchases - 5);
 
-    return ((bargain_record > 0) && ((int32_t) bargain_record * (int32_t) bargain_record > min_price / 50));
+    return ((record > 0) && (record * record > min_price / 50));
 }
 
 // update the bargain info -DJB-
-static void storeUpdateBargainInfo(Store_t &store, int32_t price, int32_t min_price) {
-    if (min_price > 9) {
-        if (price == min_price) {
-            if (store.good_purchases < SHRT_MAX) {
-                store.good_purchases++;
-            }
-        } else {
-            if (store.bad_purchases < SHRT_MAX) {
-                store.bad_purchases++;
-            }
+static void storeUpdateBargainingSkills(Store_t &store, int32_t price, int32_t min_price) {
+    if (min_price < 10) {
+        return;
+    }
+
+    if (price == min_price) {
+        if (store.good_purchases < SHRT_MAX) {
+            store.good_purchases++;
+        }
+    } else {
+        if (store.bad_purchases < SHRT_MAX) {
+            store.bad_purchases++;
         }
     }
 }
