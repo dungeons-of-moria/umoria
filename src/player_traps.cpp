@@ -117,7 +117,8 @@ void playerDisarmTrap() {
 
     bool no_disarm = false;
 
-    if (tile.creature_id > 1 && tile.treasure_id != 0 && (game.treasure.list[tile.treasure_id].category_id == TV_VIS_TRAP || game.treasure.list[tile.treasure_id].category_id == TV_CHEST)) {
+    if (tile.creature_id > 1 && tile.treasure_id != 0 &&
+        (game.treasure.list[tile.treasure_id].category_id == TV_VIS_TRAP || game.treasure.list[tile.treasure_id].category_id == TV_CHEST)) {
         objectBlockedByMonster(tile.creature_id);
     } else if (tile.treasure_id != 0) {
         int disarm_ability = playerTrapDisarmAbility();

@@ -369,7 +369,8 @@ static void dungeonLightAreaAroundFloorTile(Coord_t coord) {
 
             if (tile.feature_id >= MIN_CAVE_WALL) {
                 tile.permanent_light = true;
-            } else if (tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id >= TV_MIN_VISIBLE && game.treasure.list[tile.treasure_id].category_id <= TV_MAX_VISIBLE) {
+            } else if (tile.treasure_id != 0 && game.treasure.list[tile.treasure_id].category_id >= TV_MIN_VISIBLE &&
+                       game.treasure.list[tile.treasure_id].category_id <= TV_MAX_VISIBLE) {
                 tile.field_mark = true;
             }
         }
@@ -1467,7 +1468,8 @@ bool spellDestroyDoorsTrapsInDirection(Coord_t coord, int direction) {
         if (tile->treasure_id != 0) {
             Inventory_t &item = game.treasure.list[tile->treasure_id];
 
-            if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_CLOSED_DOOR || item.category_id == TV_VIS_TRAP || item.category_id == TV_OPEN_DOOR || item.category_id == TV_SECRET_DOOR) {
+            if (item.category_id == TV_INVIS_TRAP || item.category_id == TV_CLOSED_DOOR || item.category_id == TV_VIS_TRAP || item.category_id == TV_OPEN_DOOR ||
+                item.category_id == TV_SECRET_DOOR) {
                 if (dungeonDeleteObject(coord)) {
                     destroyed = true;
                     printMessage("There is a bright flash of light!");
@@ -2028,8 +2030,7 @@ bool spellDispelCreature(int creature_defense, int damage) {
     for (int id = next_free_monster_id - 1; id >= config::monsters::MON_MIN_INDEX_ID; id--) {
         Monster_t const &monster = monsters[id];
 
-        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT &&
-            ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) &&
+        if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((creature_defense & creatures_list[monster.creature_id].defenses) != 0) &&
             los(py.pos, monster.pos)) {
             Creature_t const &creature = creatures_list[monster.creature_id];
 

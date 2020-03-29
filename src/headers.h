@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // System specific headers
-// clang-format off
 
+// clang-format off
 #pragma once
 
 #ifdef _WIN32

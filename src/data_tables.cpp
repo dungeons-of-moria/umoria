@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // Data tables for attack/RNG/etc.
-// clang-format off
 
+// clang-format off
 #include "headers.h"
 
 // Following are arrays for descriptive pieces

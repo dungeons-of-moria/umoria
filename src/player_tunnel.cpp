@@ -14,7 +14,8 @@
 // prevent the player from getting a free attack by trying to tunnel
 // somewhere where it has no effect.
 static bool playerCanTunnel(int treasure_id, int tile_id) {
-    if (tile_id < MIN_CAVE_WALL && (treasure_id == 0 || (game.treasure.list[treasure_id].category_id != TV_RUBBLE && game.treasure.list[treasure_id].category_id != TV_SECRET_DOOR))) {
+    if (tile_id < MIN_CAVE_WALL &&
+        (treasure_id == 0 || (game.treasure.list[treasure_id].category_id != TV_RUBBLE && game.treasure.list[treasure_id].category_id != TV_SECRET_DOOR))) {
         game.player_free_turn = true;
 
         if (treasure_id == 0) {

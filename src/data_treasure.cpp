@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // Treasure data
-// clang-format off
 
+// clang-format off
 #include "headers.h"
 
 // Object description:  Objects are defined here.  Each object has

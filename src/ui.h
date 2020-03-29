@@ -36,7 +36,7 @@ constexpr uint8_t MESSAGE_HISTORY_SIZE = 22;
 constexpr uint8_t STAT_COLUMN = 0;
 
 constexpr char CTRL_KEY(char x) {
-    return static_cast<char>((x) & 0x1F);
+    return static_cast<char>((x) &0x1F);
 }
 
 #undef DELETE
@@ -92,7 +92,6 @@ FILE *tfopen(const char *file, const char *mode);
 int topen(const char *file, int flags, int mode);
 bool tilde(const char *file, char *expanded);
 #endif
-
 
 // UI
 bool coordOutsidePanel(Coord_t coord, bool force);

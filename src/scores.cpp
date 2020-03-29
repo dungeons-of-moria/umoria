@@ -115,7 +115,7 @@ void recordNewHighScore() {
         // birthdate/gender/race/class are the same, and game.character_died_from
         // of score file entry is "(saved)"
         if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-            (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
+             (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
             new_entry.gender == old_entry.gender && new_entry.race == old_entry.race && new_entry.character_class == old_entry.character_class) {
             (void) fclose(highscore_fp);
             return;
@@ -151,7 +151,7 @@ void recordNewHighScore() {
             // birth_date/gender/race/class are the same, and game.character_died_from
             // of score file entry is "(saved)"
             if (((new_entry.uid != 0 && new_entry.uid == old_entry.uid) ||
-                (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
+                 (new_entry.uid == 0 && (strcmp(old_entry.died_from, "(saved)") == 0) && new_entry.birth_date == old_entry.birth_date)) &&
                 new_entry.gender == old_entry.gender && new_entry.race == old_entry.race && new_entry.character_class == old_entry.character_class) {
                 break;
             }
@@ -212,18 +212,17 @@ void showScoresScreen() {
         clearScreen();
         // Put twenty scores on each page, on lines 2 through 21.
         while ((feof(highscore_fp) == 0) && i < 21) {
-            (void) sprintf(
-                    msg,
-                    "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s",
-                    rank,
-                    score.points,
-                    score.name,
-                    score.gender,
-                    character_races[score.race].name,
-                    classes[score.character_class].title,
-                    score.level,
-                    score.died_from
-                   );
+            (void) sprintf(msg,                                               //
+                           "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s", //
+                           rank,                                              //
+                           score.points,                                      //
+                           score.name,                                        //
+                           score.gender,                                      //
+                           character_races[score.race].name,                  //
+                           classes[score.character_class].title,              //
+                           score.level,                                       //
+                           score.died_from                                    //
+            );
             i++;
             putStringClearToEOL(msg, Coord_t{i, 0});
             rank++;

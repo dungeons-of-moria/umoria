@@ -7,6 +7,7 @@
 // See LICENSE and AUTHORS for more information.
 
 // Sets up curses for the correct system.
+
 // clang-format off
 
 #ifdef _WIN32

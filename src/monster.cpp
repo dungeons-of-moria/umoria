@@ -44,8 +44,7 @@ void monsterUpdateVisibility(int monster_id) {
     bool visible = false;
     Monster_t &monster = monsters[monster_id];
 
-    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT &&
-        ((py.flags.status & config::player::status::PY_BLIND) == 0u) &&
+    if (monster.distance_from_player <= config::monsters::MON_MAX_SIGHT && ((py.flags.status & config::player::status::PY_BLIND) == 0u) &&
         coordInsidePanel(Coord_t{monster.pos.y, monster.pos.x})) {
         if (game.wizard_mode) {
             // Wizard sight.
@@ -1175,8 +1174,7 @@ static void monsterMove(int monster_id, uint32_t &rcmove) {
     // Does the critter multiply?
     // rest could be negative, to be safe, only use mod with positive values.
     auto abs_rest_period = (int) std::abs((std::intmax_t) py.flags.rest);
-    if (((creature.movement & config::monsters::move::CM_MULTIPLY) != 0u) &&
-        config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total &&
+    if (((creature.movement & config::monsters::move::CM_MULTIPLY) != 0u) && config::monsters::MON_MAX_MULTIPLY_PER_LEVEL >= monster_multiply_total &&
         (abs_rest_period % config::monsters::MON_MULTIPLY_ADJUST) == 0) {
         monsterMultiplyCritter(monster, monster_id, rcmove);
     }

@@ -17,27 +17,27 @@ typedef struct {
     int16_t dex_adjustment;
     int16_t con_adjustment;
     int16_t chr_adjustment;
-    uint8_t base_age;            // Base age of character
-    uint8_t max_age;             // Maximum age of character
-    uint8_t male_height_base;    // base height for males
-    uint8_t male_height_mod;     // mod height for males
-    uint8_t male_weight_base;    // base weight for males
-    uint8_t male_weight_mod;     // mod weight for males
-    uint8_t female_height_base;  // base height females
-    uint8_t female_height_mod;   // mod height for females
-    uint8_t female_weight_base;  // base weight for female
-    uint8_t female_weight_mod;   // mod weight for females
-    int16_t disarm_chance_base;  // base chance to disarm
-    int16_t search_chance_base;  // base chance for search
-    int16_t stealth;             // Stealth of character
-    int16_t fos;                 // frequency of auto search
-    int16_t base_to_hit;         // adj base chance to hit
-    int16_t base_to_hit_bows;    // adj base to hit with bows
-    int16_t saving_throw_base;   // Race base for saving throw
-    uint8_t hit_points_base;     // Base hit points for race
-    uint8_t infra_vision;        // See infra-red
-    uint8_t exp_factor_base;     // Base experience factor
-    uint8_t classes_bit_field;   // Bit field for class types
+    uint8_t base_age;           // Base age of character
+    uint8_t max_age;            // Maximum age of character
+    uint8_t male_height_base;   // base height for males
+    uint8_t male_height_mod;    // mod height for males
+    uint8_t male_weight_base;   // base weight for males
+    uint8_t male_weight_mod;    // mod weight for males
+    uint8_t female_height_base; // base height females
+    uint8_t female_height_mod;  // mod height for females
+    uint8_t female_weight_base; // base weight for female
+    uint8_t female_weight_mod;  // mod weight for females
+    int16_t disarm_chance_base; // base chance to disarm
+    int16_t search_chance_base; // base chance for search
+    int16_t stealth;            // Stealth of character
+    int16_t fos;                // frequency of auto search
+    int16_t base_to_hit;        // adj base chance to hit
+    int16_t base_to_hit_bows;   // adj base to hit with bows
+    int16_t saving_throw_base;  // Race base for saving throw
+    uint8_t hit_points_base;    // Base hit points for race
+    uint8_t infra_vision;       // See infra-red
+    uint8_t exp_factor_base;    // Base experience factor
+    uint8_t classes_bit_field;  // Bit field for class types
 } Race_t;
 
 // Class type for the generated player character

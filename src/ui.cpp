@@ -578,15 +578,12 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() +
-                playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) +
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) +
                (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw +
-                playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) +
-                (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw +
-                playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) +
-                (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
+    int xsave =
+        py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3);
+    int xdev =
+        py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT) + (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);

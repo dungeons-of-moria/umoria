@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // Store owner's speech text
-// clang-format off
 
+// clang-format off
 #include "headers.h"
 
 // Store owners have different characteristics for pricing and haggling

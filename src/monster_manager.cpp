@@ -83,11 +83,10 @@ void monsterPlaceWinning() {
     do {
         coord.y = randomNumber(dg.height - 2);
         coord.x = randomNumber(dg.width - 2);
-    } while (
-            dg.floor[coord.y][coord.x].feature_id >= MIN_CLOSED_SPACE ||
-            dg.floor[coord.y][coord.x].creature_id != 0 ||
-            dg.floor[coord.y][coord.x].treasure_id != 0 ||
-            coordDistanceBetween(coord, py.pos) <= config::monsters::MON_MAX_SIGHT
+    } while (dg.floor[coord.y][coord.x].feature_id >= MIN_CLOSED_SPACE ||           //
+             dg.floor[coord.y][coord.x].creature_id != 0 ||                         //
+             dg.floor[coord.y][coord.x].treasure_id != 0 ||                         //
+             coordDistanceBetween(coord, py.pos) <= config::monsters::MON_MAX_SIGHT //
     );
 
     int creature_id = randomNumber(config::monsters::MON_ENDGAME_MONSTERS) - 1 + monster_levels[MON_MAX_LEVELS];
@@ -171,10 +170,9 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
         do {
             position.y = randomNumber(dg.height - 2);
             position.x = randomNumber(dg.width - 2);
-        } while (
-                dg.floor[position.y][position.x].feature_id >= MIN_CLOSED_SPACE ||
-                dg.floor[position.y][position.x].creature_id != 0 ||
-                coordDistanceBetween(position, py.pos) <= distance_from_source
+        } while (dg.floor[position.y][position.x].feature_id >= MIN_CLOSED_SPACE || //
+                 dg.floor[position.y][position.x].creature_id != 0 ||               //
+                 coordDistanceBetween(position, py.pos) <= distance_from_source     //
         );
 
         int l = monsterGetOneSuitableForLevel(dg.current_level);

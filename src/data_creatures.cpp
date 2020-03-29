@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // Creatures must be defined here
-// clang-format off
 
+// clang-format off
 #include "headers.h"
 
 // See types.h under Creature_t for a complete list of all variables

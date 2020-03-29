@@ -8,6 +8,8 @@
 
 // Basic Configuration
 
+// clang-format off
+
 namespace config {
     namespace files {
         extern const std::string splash_screen;

@@ -20,4 +20,3 @@ bool isVowel(char ch);
 bool stringToNumber(const char *str, int &number);
 uint32_t getCurrentUnixTime();
 void humanDateString(char *day);
-

@@ -1502,12 +1502,11 @@ static void commandLocateOnMap() {
         if (panel.y == old_panel.y && panel.x == old_panel.x) {
             tmp_str[0] = '\0';
         } else {
-            (void) sprintf(
-                    tmp_str,
-                    "%s%s of",
-                    panel.y < old_panel.y ? " North" : panel.y > old_panel.y ? " South" : "",
-                    panel.x < old_panel.x ? " West" : panel.x > old_panel.x ? " East" : ""
-                   );
+            (void) sprintf(tmp_str,                                                                  //
+                           "%s%s of",                                                                //
+                           panel.y < old_panel.y ? " North" : panel.y > old_panel.y ? " South" : "", //
+                           panel.x < old_panel.x ? " West" : panel.x > old_panel.x ? " East" : ""    //
+            );
         }
 
         (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", panel.y, panel.x, tmp_str);

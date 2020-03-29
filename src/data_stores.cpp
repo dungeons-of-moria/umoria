@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // Store data
-// clang-format off
 
+// clang-format off
 #include "headers.h"
 
 // Buying and selling adjustments for character race VS store owner race

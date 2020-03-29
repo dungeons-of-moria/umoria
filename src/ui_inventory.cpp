@@ -1128,27 +1128,25 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
         vtype_t description = {'\0'};
 
         if (full) {
-            (void) sprintf(
-                    description,
-                    "(%s: %c-%c,%s%s / for %s, or ESC) %s",
-                    (screen_id > 0 ? "Inven" : "Equip"),
-                    item_id_start + 'a',
-                    item_id_end + 'a',
-                    (screen_id > 0 ? " 0-9," : ""),
-                    (redraw_screen ? "" : " * to see,"),
-                    (screen_id > 0 ? "Equip" : "Inven"),
-                    prompt
-                   );
+            (void) sprintf(description,                            //
+                           "(%s: %c-%c,%s%s / for %s, or ESC) %s", //
+                           (screen_id > 0 ? "Inven" : "Equip"),    //
+                           item_id_start + 'a',                    //
+                           item_id_end + 'a',                      //
+                           (screen_id > 0 ? " 0-9," : ""),         //
+                           (redraw_screen ? "" : " * to see,"),    //
+                           (screen_id > 0 ? "Equip" : "Inven"),    //
+                           prompt                                  //
+            );
         } else {
-            (void) sprintf(
-                    description,
-                    "(Items %c-%c,%s%s ESC to exit) %s",
-                    item_id_start + 'a',
-                    item_id_end + 'a',
-                    (screen_id > 0 ? " 0-9," : ""),
-                    (redraw_screen ? "" : " * for inventory list,"),
-                    prompt
-                   );
+            (void) sprintf(description,                                     //
+                           "(Items %c-%c,%s%s ESC to exit) %s",             //
+                           item_id_start + 'a',                             //
+                           item_id_end + 'a',                               //
+                           (screen_id > 0 ? " 0-9," : ""),                  //
+                           (redraw_screen ? "" : " * for inventory list,"), //
+                           prompt                                           //
+            );
         }
 
         putStringClearToEOL(description, Coord_t{0, 0});

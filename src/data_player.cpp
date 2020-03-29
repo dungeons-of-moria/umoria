@@ -7,8 +7,8 @@
 // See LICENSE and AUTHORS for more information.
 
 // Player character data
-// clang-format off
 
+// clang-format off
 #include "headers.h"
 
 // Class rank titles for different levels
