@@ -32,28 +32,28 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 
 // Compute the digging ability of player; based on strength, and type of tool used
 static int playerDiggingAbility(Inventory_t const &weapon) {
-    int diggingAbility = py.stats.used[PlayerAttr::STR];
+    int digging_ability = py.stats.used[PlayerAttr::STR];
 
     if ((weapon.flags & config::treasure::flags::TR_TUNNEL) != 0u) {
-        diggingAbility += 25 + weapon.misc_use * 50;
+        digging_ability += 25 + weapon.misc_use * 50;
     } else {
-        diggingAbility += maxDiceRoll(weapon.damage) + weapon.to_hit + weapon.to_damage;
+        digging_ability += maxDiceRoll(weapon.damage) + weapon.to_hit + weapon.to_damage;
 
         // divide by two so that digging without shovel isn't too easy
-        diggingAbility >>= 1;
+        digging_ability >>= 1;
     }
 
     // If this weapon is too heavy for the player to wield properly,
     // then also make it harder to dig with it.
     if (py.weapon_is_heavy) {
-        diggingAbility += (py.stats.used[PlayerAttr::STR] * 15) - weapon.weight;
+        digging_ability += (py.stats.used[PlayerAttr::STR] * 15) - weapon.weight;
 
-        if (diggingAbility < 0) {
-            diggingAbility = 0;
+        if (digging_ability < 0) {
+            digging_ability = 0;
         }
     }
 
-    return diggingAbility;
+    return digging_ability;
 }
 
 static void dungeonDigGraniteWall(Coord_t coord, int digging_ability) {
@@ -153,13 +153,13 @@ void playerTunnel(int direction) {
     }
 
     if (item.category_id != TV_NOTHING) {
-        int diggingAbility = playerDiggingAbility(item);
+        int digging_ability = playerDiggingAbility(item);
 
-        if (!dungeonDigAtLocation(coord, tile.feature_id, diggingAbility)) {
+        if (!dungeonDigAtLocation(coord, tile.feature_id, digging_ability)) {
             // Is there an object in the way?  (Rubble and secret doors)
             if (tile.treasure_id != 0) {
                 if (game.treasure.list[tile.treasure_id].category_id == TV_RUBBLE) {
-                    dungeonDigRubble(coord, diggingAbility);
+                    dungeonDigRubble(coord, digging_ability);
                 } else if (game.treasure.list[tile.treasure_id].category_id == TV_SECRET_DOOR) {
                     // Found secret door!
                     printMessageNoCommandInterrupt("You tunnel into the granite wall.");
