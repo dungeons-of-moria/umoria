@@ -1932,8 +1932,8 @@ bool spellChangePlayerHitPoints(int adjustment) {
     return true;
 }
 
-static void earthquakeHitsMonster(int monsterID) {
-    Monster_t &monster = monsters[monsterID];
+static void earthquakeHitsMonster(int monster_id) {
+    Monster_t &monster = monsters[monster_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
 
     if ((creature.movement & config::monsters::move::CM_PHASE) == 0u) {
@@ -1949,7 +1949,7 @@ static void earthquakeHitsMonster(int monsterID) {
 
         printMonsterActionText(name, "wails out in pain!");
 
-        if (monsterTakeHit(monsterID, damage) >= 0) {
+        if (monsterTakeHit(monster_id, damage) >= 0) {
             printMonsterActionText(name, "is embedded in the rock.");
             displayCharacterExperience();
         }
