@@ -189,7 +189,7 @@ void monsterPlaceNewWithinDistance(int number, int distance_from_source, bool sl
     }
 }
 
-static bool placeMonsterAdjacentTo(int monsterID, Coord_t &coord, bool slp) {
+static bool placeMonsterAdjacentTo(int monster_id, Coord_t &coord, bool slp) {
     bool placed = false;
 
     Coord_t position = Coord_t{0, 0};
@@ -201,7 +201,7 @@ static bool placeMonsterAdjacentTo(int monsterID, Coord_t &coord, bool slp) {
         if (coordInBounds(position)) {
             if (dg.floor[position.y][position.x].feature_id <= MAX_OPEN_SPACE && dg.floor[position.y][position.x].creature_id == 0) {
                 // Place_monster() should always return true here.
-                if (!monsterPlaceNew(position, monsterID, slp)) {
+                if (!monsterPlaceNew(position, monster_id, slp)) {
                     return false;
                 }
 

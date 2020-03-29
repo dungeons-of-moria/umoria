@@ -803,16 +803,16 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
                     printMessage(msg);
                 }
 
-                int r1 = (randomNumber((int) level) >> 1) + 1;
-                if (r1 > py.misc.current_mana) {
-                    r1 = py.misc.current_mana;
+                int num = (randomNumber((int) level) >> 1) + 1;
+                if (num > py.misc.current_mana) {
+                    num = py.misc.current_mana;
                     py.misc.current_mana = 0;
                     py.misc.current_mana_fraction = 0;
                 } else {
-                    py.misc.current_mana -= r1;
+                    py.misc.current_mana -= num;
                 }
                 printCharacterCurrentMana();
-                monster.hp += 6 * (r1);
+                monster.hp += 6 * (num);
             }
             break;
         case 20: // Breath Light
