@@ -11,53 +11,53 @@
 #include "headers.h"
 
 enum class PotionSpellTypes {
-    strength = 1,
-    weakness,
-    restore_strength,
-    intelligence,
-    lose_intelligence,
-    restore_intelligence,
-    wisdom,
-    lose_wisdom,
-    restore_wisdom,
-    charisma,
-    ugliness,
-    restore_charisma,
-    cure_light_wounds,
-    cure_serious_wounds,
-    cure_critical_wounds,
-    healing,
-    constitution,
-    gain_experience,
-    sleep,
-    blindness,
-    confusion,
-    poison,
-    haste_self,
-    slowness,
+    Strength = 1,
+    Weakness,
+    RestoreStrength,
+    Intelligence,
+    LoseIntelligence,
+    RestoreIntelligence,
+    Wisdom,
+    LoseWisdom,
+    RestoreWisdom,
+    Charisma,
+    Ugliness,
+    RestoreCharisma,
+    CureLightWounds,
+    CureSeriousWounds,
+    CureCriticalWounds,
+    Healing,
+    Constitution,
+    GainExperience,
+    Sleep,
+    Blindness,
+    Confusion,
+    Poison,
+    HasteSelf,
+    Slowness,
     // 25 not used
-    dexterity = 26,
-    restore_dexterity,
-    restore_constitution,
-    cure_blindness,
-    cure_confusion,
-    cure_poison,
+    Dexterity = 26,
+    RestoreDexterity,
+    RestoreConstitution,
+    CureBlindness,
+    CureConfusion,
+    CurePoison,
     // 32 not used
     // 33 not used
-    lose_experience = 34,
-    salt_water,
-    invulnerability,
-    heroism,
-    super_heroism,
-    boldness,
-    restore_life_levels,
-    resist_heat,
-    resist_cold,
-    detect_invisible,
-    slow_poison,
-    neutralize_poison,
-    restore_mana,
-    infra_vision,
+    LoseExperience = 34,
+    SaltWater,
+    Invulnerability,
+    Heroism,
+    SuperHeroism,
+    Boldness,
+    RestoreLifeLevels,
+    ResistHeat,
+    ResistCold,
+    DetectInvisible,
+    SlowPoison,
+    NeutralizePoison,
+    RestoreMana,
+    InfraVision,
 };
 
 static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
@@ -72,89 +72,89 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
 
         // Potions
         switch ((PotionSpellTypes) potion_id) {
-            case PotionSpellTypes::strength:
+            case PotionSpellTypes::Strength:
                 if (playerStatRandomIncrease(PlayerAttr::STR)) {
                     printMessage("Wow!  What bulging muscles!");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::weakness:
+            case PotionSpellTypes::Weakness:
                 spellLoseSTR();
                 identified = true;
                 break;
-            case PotionSpellTypes::restore_strength:
+            case PotionSpellTypes::RestoreStrength:
                 if (playerStatRestore(PlayerAttr::STR)) {
                     printMessage("You feel warm all over.");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::intelligence:
+            case PotionSpellTypes::Intelligence:
                 if (playerStatRandomIncrease(PlayerAttr::INT)) {
                     printMessage("Aren't you brilliant!");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::lose_intelligence:
+            case PotionSpellTypes::LoseIntelligence:
                 spellLoseINT();
                 identified = true;
                 break;
-            case PotionSpellTypes::restore_intelligence:
+            case PotionSpellTypes::RestoreIntelligence:
                 if (playerStatRestore(PlayerAttr::INT)) {
                     printMessage("You have have a warm feeling.");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::wisdom:
+            case PotionSpellTypes::Wisdom:
                 if (playerStatRandomIncrease(PlayerAttr::WIS)) {
                     printMessage("You suddenly have a profound thought!");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::lose_wisdom:
+            case PotionSpellTypes::LoseWisdom:
                 spellLoseWIS();
                 identified = true;
                 break;
-            case PotionSpellTypes::restore_wisdom:
+            case PotionSpellTypes::RestoreWisdom:
                 if (playerStatRestore(PlayerAttr::WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::charisma:
+            case PotionSpellTypes::Charisma:
                 if (playerStatRandomIncrease(PlayerAttr::CHR)) {
                     printMessage("Gee, ain't you cute!");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::ugliness:
+            case PotionSpellTypes::Ugliness:
                 spellLoseCHR();
                 identified = true;
                 break;
-            case PotionSpellTypes::restore_charisma:
+            case PotionSpellTypes::RestoreCharisma:
                 if (playerStatRestore(PlayerAttr::CHR)) {
                     printMessage("You feel your looks returning.");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::cure_light_wounds:
+            case PotionSpellTypes::CureLightWounds:
                 identified = spellChangePlayerHitPoints(diceRoll(Dice_t{2, 7}));
                 break;
-            case PotionSpellTypes::cure_serious_wounds:
+            case PotionSpellTypes::CureSeriousWounds:
                 identified = spellChangePlayerHitPoints(diceRoll(Dice_t{4, 7}));
                 break;
-            case PotionSpellTypes::cure_critical_wounds:
+            case PotionSpellTypes::CureCriticalWounds:
                 identified = spellChangePlayerHitPoints(diceRoll(Dice_t{6, 7}));
                 break;
-            case PotionSpellTypes::healing:
+            case PotionSpellTypes::Healing:
                 identified = spellChangePlayerHitPoints(1000);
                 break;
-            case PotionSpellTypes::constitution:
+            case PotionSpellTypes::Constitution:
                 if (playerStatRandomIncrease(PlayerAttr::CON)) {
                     printMessage("You feel tingly for a moment.");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::gain_experience:
+            case PotionSpellTypes::GainExperience:
                 if (py.misc.exp < config::player::PLAYER_MAX_EXP) {
                     auto exp = (uint32_t)((py.misc.exp / 2) + 10);
                     if (exp > 100000L) {
@@ -167,7 +167,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::sleep:
+            case PotionSpellTypes::Sleep:
                 if (!py.flags.free_action) {
                     // paralysis must == 0, otherwise could not drink potion
                     printMessage("You fall asleep.");
@@ -175,68 +175,68 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::blindness:
+            case PotionSpellTypes::Blindness:
                 if (py.flags.blind == 0) {
                     printMessage("You are covered by a veil of darkness.");
                     identified = true;
                 }
                 py.flags.blind += randomNumber(100) + 100;
                 break;
-            case PotionSpellTypes::confusion:
+            case PotionSpellTypes::Confusion:
                 if (py.flags.confused == 0) {
                     printMessage("Hey!  This is good stuff!  * Hick! *");
                     identified = true;
                 }
                 py.flags.confused += randomNumber(20) + 12;
                 break;
-            case PotionSpellTypes::poison:
+            case PotionSpellTypes::Poison:
                 if (py.flags.poisoned == 0) {
                     printMessage("You feel very sick.");
                     identified = true;
                 }
                 py.flags.poisoned += randomNumber(15) + 10;
                 break;
-            case PotionSpellTypes::haste_self:
+            case PotionSpellTypes::HasteSelf:
                 if (py.flags.fast == 0) {
                     identified = true;
                 }
                 py.flags.fast += randomNumber(25) + 15;
                 break;
-            case PotionSpellTypes::slowness:
+            case PotionSpellTypes::Slowness:
                 if (py.flags.slow == 0) {
                     identified = true;
                 }
                 py.flags.slow += randomNumber(25) + 15;
                 break;
-            case PotionSpellTypes::dexterity:
+            case PotionSpellTypes::Dexterity:
                 if (playerStatRandomIncrease(PlayerAttr::DEX)) {
                     printMessage("You feel more limber!");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::restore_dexterity:
+            case PotionSpellTypes::RestoreDexterity:
                 if (playerStatRestore(PlayerAttr::DEX)) {
                     printMessage("You feel less clumsy.");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::restore_constitution:
+            case PotionSpellTypes::RestoreConstitution:
                 if (playerStatRestore(PlayerAttr::CON)) {
                     printMessage("You feel your health returning!");
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::cure_blindness:
+            case PotionSpellTypes::CureBlindness:
                 identified = playerCureBlindness();
                 break;
-            case PotionSpellTypes::cure_confusion:
+            case PotionSpellTypes::CureConfusion:
                 identified = playerCureConfusion();
                 break;
-            case PotionSpellTypes::cure_poison:
+            case PotionSpellTypes::CurePoison:
                 identified = playerCurePoison();
                 break;
                 // case 33: break; // this is no longer useful, now that there is a 'G'ain magic spells command
-            case PotionSpellTypes::lose_experience:
+            case PotionSpellTypes::LoseExperience:
                 if (py.misc.exp > 0) {
                     printMessage("You feel your memories fade.");
 
@@ -253,7 +253,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::salt_water:
+            case PotionSpellTypes::SaltWater:
                 (void) playerCurePoison();
                 if (py.flags.food > 150) {
                     py.flags.food = 150;
@@ -263,55 +263,55 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 printMessage("The potion makes you vomit!");
                 identified = true;
                 break;
-            case PotionSpellTypes::invulnerability:
+            case PotionSpellTypes::Invulnerability:
                 if (py.flags.invulnerability == 0) {
                     identified = true;
                 }
                 py.flags.invulnerability += randomNumber(10) + 10;
                 break;
-            case PotionSpellTypes::heroism:
+            case PotionSpellTypes::Heroism:
                 if (py.flags.heroism == 0) {
                     identified = true;
                 }
                 py.flags.heroism += randomNumber(25) + 25;
                 break;
-            case PotionSpellTypes::super_heroism:
+            case PotionSpellTypes::SuperHeroism:
                 if (py.flags.super_heroism == 0) {
                     identified = true;
                 }
                 py.flags.super_heroism += randomNumber(25) + 25;
                 break;
-            case PotionSpellTypes::boldness:
+            case PotionSpellTypes::Boldness:
                 identified = playerRemoveFear();
                 break;
-            case PotionSpellTypes::restore_life_levels:
+            case PotionSpellTypes::RestoreLifeLevels:
                 identified = spellRestorePlayerLevels();
                 break;
-            case PotionSpellTypes::resist_heat:
+            case PotionSpellTypes::ResistHeat:
                 if (py.flags.heat_resistance == 0) {
                     identified = true;
                 }
                 py.flags.heat_resistance += randomNumber(10) + 10;
                 break;
-            case PotionSpellTypes::resist_cold:
+            case PotionSpellTypes::ResistCold:
                 if (py.flags.cold_resistance == 0) {
                     identified = true;
                 }
                 py.flags.cold_resistance += randomNumber(10) + 10;
                 break;
-            case PotionSpellTypes::detect_invisible:
+            case PotionSpellTypes::DetectInvisible:
                 if (py.flags.detect_invisible == 0) {
                     identified = true;
                 }
                 playerDetectInvisible(randomNumber(12) + 12);
                 break;
-            case PotionSpellTypes::slow_poison:
+            case PotionSpellTypes::SlowPoison:
                 identified = spellSlowPoison();
                 break;
-            case PotionSpellTypes::neutralize_poison:
+            case PotionSpellTypes::NeutralizePoison:
                 identified = playerCurePoison();
                 break;
-            case PotionSpellTypes::restore_mana:
+            case PotionSpellTypes::RestoreMana:
                 if (py.misc.current_mana < py.misc.mana) {
                     py.misc.current_mana = py.misc.mana;
                     printMessage("Your feel your head clear.");
@@ -319,7 +319,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                     identified = true;
                 }
                 break;
-            case PotionSpellTypes::infra_vision:
+            case PotionSpellTypes::InfraVision:
                 if (py.flags.timed_infra == 0) {
                     printMessage("Your eyes begin to tingle.");
                     identified = true;
