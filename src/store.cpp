@@ -420,7 +420,6 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
         num_offer = 1;
     }
 
-    vtype_t msg = {'\0'};
     bool flag = false;
 
     while (!flag) {
@@ -428,6 +427,7 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
         do {
             loop_flag = true;
 
+            vtype_t msg = {'\0'};
             (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
             putString(msg, Coord_t{1, 0});
 
@@ -457,29 +457,26 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
         } while (!flag && loop_flag);
 
         if (!flag) {
-            int32_t x1 = (new_offer - last_offer) * 100 / (current_asking_price - last_offer);
+            int32_t adjustment = (new_offer - last_offer) * 100 / (current_asking_price - last_offer);
 
-            if (x1 < min_per) {
+            if (adjustment < min_per) {
                 flag = storeHaggleInsults(store_id);
                 if (flag) {
                     purchase = 2;
                 }
-            } else if (x1 > max_per) {
-                x1 = x1 * 75 / 100;
-                if (x1 < max_per) {
-                    x1 = max_per;
+            } else if (adjustment > max_per) {
+                adjustment = adjustment * 75 / 100;
+                if (adjustment < max_per) {
+                    adjustment = max_per;
                 }
             }
 
-            int32_t x2 = x1 + randomNumber(5) - 3;
-            int32_t x3 = ((current_asking_price - new_offer) * x2 / 100) + 1;
+            adjustment = ((current_asking_price - new_offer) * (adjustment + randomNumber(5) - 3) / 100) + 1;
 
             // don't let the price go up
-            if (x3 < 0) {
-                x3 = 0;
+            if (adjustment > 0) {
+                current_asking_price -= adjustment;
             }
-
-            current_asking_price -= x3;
 
             if (current_asking_price < final_asking_price) {
                 current_asking_price = final_asking_price;
@@ -502,12 +499,16 @@ static int storePurchaseHaggle(int store_id, int32_t &price, Inventory_t const &
                 flag = true;
                 price = new_offer;
             }
+
             if (!flag) {
                 last_offer = new_offer;
                 num_offer++; // enable incremental haggling
+
                 eraseLine(Coord_t{1, 0});
+                vtype_t msg = {'\0'};
                 (void) sprintf(msg, "Your last offer : %d", last_offer);
                 putString(msg, Coord_t{1, 39});
+
                 printSpeechSellingHaggle(last_offer, current_asking_price, final_flag);
 
                 // If the current increment would take you over the store's
@@ -669,29 +670,26 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
             } while (!flag && loop_flag);
 
             if (!flag) {
-                int32_t x1 = (last_offer - new_offer) * 100 / (last_offer - current_asking_price);
+                int32_t adjustment = (last_offer - new_offer) * 100 / (last_offer - current_asking_price);
 
-                if (x1 < min_per) {
+                if (adjustment < min_per) {
                     flag = storeHaggleInsults(store_id);
                     if (flag) {
                         sell = 2;
                     }
-                } else if (x1 > max_per) {
-                    x1 = x1 * 75 / 100;
-                    if (x1 < max_per) {
-                        x1 = max_per;
+                } else if (adjustment > max_per) {
+                    adjustment = adjustment * 75 / 100;
+                    if (adjustment < max_per) {
+                        adjustment = max_per;
                     }
                 }
 
-                int32_t x2 = x1 + randomNumber(5) - 3;
-                int32_t x3 = ((new_offer - current_asking_price) * x2 / 100) + 1;
+                adjustment = ((new_offer - current_asking_price) * (adjustment + randomNumber(5) - 3) / 100) + 1;
 
                 // don't let the price go down
-                if (x3 < 0) {
-                    x3 = 0;
+                if (adjustment > 0) {
+                    current_asking_price += adjustment;
                 }
-
-                current_asking_price += x3;
 
                 if (current_asking_price > final_asking_price) {
                     current_asking_price = final_asking_price;
@@ -718,8 +716,8 @@ static int storeSellHaggle(int store_id, int32_t &price, Inventory_t const &item
                 if (!flag) {
                     last_offer = new_offer;
                     num_offer++; // enable incremental haggling
-                    eraseLine(Coord_t{1, 0});
 
+                    eraseLine(Coord_t{1, 0});
                     vtype_t msg = {'\0'};
                     (void) sprintf(msg, "Your last bid %d", last_offer);
                     putString(msg, Coord_t{1, 39});
