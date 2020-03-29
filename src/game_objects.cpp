@@ -160,12 +160,12 @@ int itemGetRandomObjectId(int level, bool must_be_small) {
                 object_id = j;
             }
 
-            int foundLevel = game_objects[sorted_objects[object_id]].depth_first_found;
+            int found_level = game_objects[sorted_objects[object_id]].depth_first_found;
 
-            if (foundLevel == 0) {
+            if (found_level == 0) {
                 object_id = randomNumber(treasure_levels[0]) - 1;
             } else {
-                object_id = randomNumber(treasure_levels[foundLevel] - treasure_levels[foundLevel - 1]) - 1 + treasure_levels[foundLevel - 1];
+                object_id = randomNumber(treasure_levels[found_level] - treasure_levels[found_level - 1]) - 1 + treasure_levels[found_level - 1];
             }
         }
     } while (must_be_small && itemBiggerThanChest(game_objects[sorted_objects[object_id]]));

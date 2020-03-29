@@ -148,51 +148,51 @@ void setGameOptions() {
     }
     eraseLine(Coord_t{max + 1, 0});
 
-    int optionID = 0;
+    int option_id = 0;
     while (true) {
-        moveCursor(Coord_t{optionID + 1, 40});
+        moveCursor(Coord_t{option_id + 1, 40});
 
         switch (getKeyInput()) {
             case ESCAPE:
                 return;
             case '-':
-                if (optionID > 0) {
-                    optionID--;
+                if (option_id > 0) {
+                    option_id--;
                 } else {
-                    optionID = max - 1;
+                    option_id = max - 1;
                 }
                 break;
             case ' ':
             case '\n':
             case '\r':
-                if (optionID + 1 < max) {
-                    optionID++;
+                if (option_id + 1 < max) {
+                    option_id++;
                 } else {
-                    optionID = 0;
+                    option_id = 0;
                 }
                 break;
             case 'y':
             case 'Y':
-                putString("yes", Coord_t{optionID + 1, 40});
+                putString("yes", Coord_t{option_id + 1, 40});
 
-                *game_options[optionID].o_var = true;
+                *game_options[option_id].o_var = true;
 
-                if (optionID + 1 < max) {
-                    optionID++;
+                if (option_id + 1 < max) {
+                    option_id++;
                 } else {
-                    optionID = 0;
+                    option_id = 0;
                 }
                 break;
             case 'n':
             case 'N':
-                putString("no ", Coord_t{optionID + 1, 40});
+                putString("no ", Coord_t{option_id + 1, 40});
 
-                *game_options[optionID].o_var = false;
+                *game_options[option_id].o_var = false;
 
-                if (optionID + 1 < max) {
-                    optionID++;
+                if (option_id + 1 < max) {
+                    option_id++;
                 } else {
-                    optionID = 0;
+                    option_id = 0;
                 }
                 break;
             default:

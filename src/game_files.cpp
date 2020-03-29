@@ -28,15 +28,15 @@ bool initializeScoreFile() {
 void displaySplashScreen() {
     vtype_t in_line = {'\0'};
 
-    FILE *file1 = fopen(config::files::splash_screen.c_str(), "r");
-    if (file1 != nullptr) {
+    FILE *screen_file = fopen(config::files::splash_screen.c_str(), "r");
+    if (screen_file != nullptr) {
         clearScreen();
-        for (int i = 0; fgets(in_line, 80, file1) != CNIL; i++) {
+        for (int i = 0; fgets(in_line, 80, screen_file) != CNIL; i++) {
             putString(in_line, Coord_t{i, 0});
         }
         waitForContinueKey(23);
 
-        (void) fclose(file1);
+        (void) fclose(screen_file);
     }
 }
 
@@ -189,59 +189,59 @@ void outputRandomLevelObjectsToFile() {
 }
 
 // Write character sheet to the file
-static void writeCharacterSheetToFile(FILE *file1) {
+static void writeCharacterSheetToFile(FILE *char_file) {
     putStringClearToEOL("Writing character sheet...", Coord_t{0, 0});
     putQIO();
 
     const char *colon = ":";
     const char *blank = " ";
 
-    vtype_t statDescription = {'\0'};
+    vtype_t stat_description = {'\0'};
 
-    (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+    (void) fprintf(char_file, "%c\n\n", CTRL_KEY('L'));
 
-    (void) fprintf(file1, " Name%9s %-23s", colon, py.misc.name);
-    (void) fprintf(file1, " Age%11s %6d", colon, (int) py.misc.age);
-    statsAsString(py.stats.used[py_attrs::A_STR], statDescription);
-    (void) fprintf(file1, "   STR : %s\n", statDescription);
-    (void) fprintf(file1, " Race%9s %-23s", colon, character_races[py.misc.race_id].name);
-    (void) fprintf(file1, " Height%8s %6d", colon, (int) py.misc.height);
-    statsAsString(py.stats.used[py_attrs::A_INT], statDescription);
-    (void) fprintf(file1, "   INT : %s\n", statDescription);
-    (void) fprintf(file1, " Sex%10s %-23s", colon, (playerGetGenderLabel()));
-    (void) fprintf(file1, " Weight%8s %6d", colon, (int) py.misc.weight);
-    statsAsString(py.stats.used[py_attrs::A_WIS], statDescription);
-    (void) fprintf(file1, "   WIS : %s\n", statDescription);
-    (void) fprintf(file1, " Class%8s %-23s", colon, classes[py.misc.class_id].title);
-    (void) fprintf(file1, " Social Class : %6d", py.misc.social_class);
-    statsAsString(py.stats.used[py_attrs::A_DEX], statDescription);
-    (void) fprintf(file1, "   DEX : %s\n", statDescription);
-    (void) fprintf(file1, " Title%8s %-23s", colon, playerRankTitle());
-    (void) fprintf(file1, "%22s", blank);
-    statsAsString(py.stats.used[py_attrs::A_CON], statDescription);
-    (void) fprintf(file1, "   CON : %s\n", statDescription);
-    (void) fprintf(file1, "%34s", blank);
-    (void) fprintf(file1, "%26s", blank);
-    statsAsString(py.stats.used[py_attrs::A_CHR], statDescription);
-    (void) fprintf(file1, "   CHR : %s\n\n", statDescription);
+    (void) fprintf(char_file, " Name%9s %-23s", colon, py.misc.name);
+    (void) fprintf(char_file, " Age%11s %6d", colon, (int) py.misc.age);
+    statsAsString(py.stats.used[py_attrs::A_STR], stat_description);
+    (void) fprintf(char_file, "   STR : %s\n", stat_description);
+    (void) fprintf(char_file, " Race%9s %-23s", colon, character_races[py.misc.race_id].name);
+    (void) fprintf(char_file, " Height%8s %6d", colon, (int) py.misc.height);
+    statsAsString(py.stats.used[py_attrs::A_INT], stat_description);
+    (void) fprintf(char_file, "   INT : %s\n", stat_description);
+    (void) fprintf(char_file, " Sex%10s %-23s", colon, (playerGetGenderLabel()));
+    (void) fprintf(char_file, " Weight%8s %6d", colon, (int) py.misc.weight);
+    statsAsString(py.stats.used[py_attrs::A_WIS], stat_description);
+    (void) fprintf(char_file, "   WIS : %s\n", stat_description);
+    (void) fprintf(char_file, " Class%8s %-23s", colon, classes[py.misc.class_id].title);
+    (void) fprintf(char_file, " Social Class : %6d", py.misc.social_class);
+    statsAsString(py.stats.used[py_attrs::A_DEX], stat_description);
+    (void) fprintf(char_file, "   DEX : %s\n", stat_description);
+    (void) fprintf(char_file, " Title%8s %-23s", colon, playerRankTitle());
+    (void) fprintf(char_file, "%22s", blank);
+    statsAsString(py.stats.used[py_attrs::A_CON], stat_description);
+    (void) fprintf(char_file, "   CON : %s\n", stat_description);
+    (void) fprintf(char_file, "%34s", blank);
+    (void) fprintf(char_file, "%26s", blank);
+    statsAsString(py.stats.used[py_attrs::A_CHR], stat_description);
+    (void) fprintf(char_file, "   CHR : %s\n\n", stat_description);
 
-    (void) fprintf(file1, " + To Hit    : %6d", py.misc.display_to_hit);
-    (void) fprintf(file1, "%7sLevel      : %7d", blank, (int) py.misc.level);
-    (void) fprintf(file1, "    Max Hit Points : %6d\n", py.misc.max_hp);
-    (void) fprintf(file1, " + To Damage : %6d", py.misc.display_to_damage);
-    (void) fprintf(file1, "%7sExperience : %7d", blank, py.misc.exp);
-    (void) fprintf(file1, "    Cur Hit Points : %6d\n", py.misc.current_hp);
-    (void) fprintf(file1, " + To AC     : %6d", py.misc.display_to_ac);
-    (void) fprintf(file1, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
-    (void) fprintf(file1, "    Max Mana%8s %6d\n", colon, py.misc.mana);
-    (void) fprintf(file1, "   Total AC  : %6d", py.misc.display_ac);
+    (void) fprintf(char_file, " + To Hit    : %6d", py.misc.display_to_hit);
+    (void) fprintf(char_file, "%7sLevel      : %7d", blank, (int) py.misc.level);
+    (void) fprintf(char_file, "    Max Hit Points : %6d\n", py.misc.max_hp);
+    (void) fprintf(char_file, " + To Damage : %6d", py.misc.display_to_damage);
+    (void) fprintf(char_file, "%7sExperience : %7d", blank, py.misc.exp);
+    (void) fprintf(char_file, "    Cur Hit Points : %6d\n", py.misc.current_hp);
+    (void) fprintf(char_file, " + To AC     : %6d", py.misc.display_to_ac);
+    (void) fprintf(char_file, "%7sMax Exp    : %7d", blank, py.misc.max_exp);
+    (void) fprintf(char_file, "    Max Mana%8s %6d\n", colon, py.misc.mana);
+    (void) fprintf(char_file, "   Total AC  : %6d", py.misc.display_ac);
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
-        (void) fprintf(file1, "%7sExp to Adv : *******", blank);
+        (void) fprintf(char_file, "%7sExp to Adv : *******", blank);
     } else {
-        (void) fprintf(file1, "%7sExp to Adv : %7d", blank, (int32_t)(py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100));
+        (void) fprintf(char_file, "%7sExp to Adv : %7d", blank, (int32_t)(py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100));
     }
-    (void) fprintf(file1, "    Cur Mana%8s %6d\n", colon, py.misc.current_mana);
-    (void) fprintf(file1, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
+    (void) fprintf(char_file, "    Cur Mana%8s %6d\n", colon, py.misc.current_mana);
+    (void) fprintf(char_file, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
     int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + //
                (class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTH] * py.misc.level);
@@ -267,26 +267,26 @@ static void writeCharacterSheetToFile(FILE *file1) {
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
 
-    (void) fprintf(file1, "(Miscellaneous Abilities)\n\n");
-    (void) fprintf(file1, " Fighting    : %-10s", statRating(Coord_t{12, xbth}));
-    (void) fprintf(file1, "   Stealth     : %-10s", statRating(Coord_t{1, xstl}));
-    (void) fprintf(file1, "   Perception  : %s\n", statRating(Coord_t{3, xfos}));
-    (void) fprintf(file1, " Bows/Throw  : %-10s", statRating(Coord_t{12, xbthb}));
-    (void) fprintf(file1, "   Disarming   : %-10s", statRating(Coord_t{8, xdis}));
-    (void) fprintf(file1, "   Searching   : %s\n", statRating(Coord_t{6, xsrh}));
-    (void) fprintf(file1, " Saving Throw: %-10s", statRating(Coord_t{6, xsave}));
-    (void) fprintf(file1, "   Magic Device: %-10s", statRating(Coord_t{6, xdev}));
-    (void) fprintf(file1, "   Infra-Vision: %s\n\n", xinfra);
+    (void) fprintf(char_file, "(Miscellaneous Abilities)\n\n");
+    (void) fprintf(char_file, " Fighting    : %-10s", statRating(Coord_t{12, xbth}));
+    (void) fprintf(char_file, "   Stealth     : %-10s", statRating(Coord_t{1, xstl}));
+    (void) fprintf(char_file, "   Perception  : %s\n", statRating(Coord_t{3, xfos}));
+    (void) fprintf(char_file, " Bows/Throw  : %-10s", statRating(Coord_t{12, xbthb}));
+    (void) fprintf(char_file, "   Disarming   : %-10s", statRating(Coord_t{8, xdis}));
+    (void) fprintf(char_file, "   Searching   : %s\n", statRating(Coord_t{6, xsrh}));
+    (void) fprintf(char_file, " Saving Throw: %-10s", statRating(Coord_t{6, xsave}));
+    (void) fprintf(char_file, "   Magic Device: %-10s", statRating(Coord_t{6, xdev}));
+    (void) fprintf(char_file, "   Infra-Vision: %s\n\n", xinfra);
 
     // Write out the character's history
-    (void) fprintf(file1, "Character Background\n");
+    (void) fprintf(char_file, "Character Background\n");
     for (auto &entry : py.misc.history) {
-        (void) fprintf(file1, " %s\n", entry);
+        (void) fprintf(char_file, " %s\n", entry);
     }
 }
 
-static const char *equipmentPlacementDescription(int itemID) {
-    switch (itemID) {
+static const char *equipmentPlacementDescription(int item_id) {
+    switch (item_id) {
         case player_equipment::EQUIPMENT_WIELD:
             return "You are wielding";
         case player_equipment::EQUIPMENT_HEAD:
@@ -317,16 +317,16 @@ static const char *equipmentPlacementDescription(int itemID) {
 }
 
 // Write out the equipment list.
-static void writeEquipmentListToFile(FILE *file1) {
-    (void) fprintf(file1, "\n  [Character's Equipment List]\n\n");
+static void writeEquipmentListToFile(FILE *equip_file) {
+    (void) fprintf(equip_file, "\n  [Character's Equipment List]\n\n");
 
     if (py.equipment_count == 0) {
-        (void) fprintf(file1, "  Character has no equipment in use.\n");
+        (void) fprintf(equip_file, "  Character has no equipment in use.\n");
         return;
     }
 
     obj_desc_t description = {'\0'};
-    int itemSlotID = 0;
+    int item_slot_id = 0;
 
     for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
         if (py.inventory[i].category_id == TV_NOTHING) {
@@ -334,20 +334,20 @@ static void writeEquipmentListToFile(FILE *file1) {
         }
 
         itemDescription(description, py.inventory[i], true);
-        (void) fprintf(file1, "  %c) %-19s: %s\n", itemSlotID + 'a', equipmentPlacementDescription(i), description);
+        (void) fprintf(equip_file, "  %c) %-19s: %s\n", item_slot_id + 'a', equipmentPlacementDescription(i), description);
 
-        itemSlotID++;
+        item_slot_id++;
     }
 
-    (void) fprintf(file1, "%c\n\n", CTRL_KEY('L'));
+    (void) fprintf(equip_file, "%c\n\n", CTRL_KEY('L'));
 }
 
 // Write out the character's inventory.
-static void writeInventoryToFile(FILE *file1) {
-    (void) fprintf(file1, "  [General Inventory List]\n\n");
+static void writeInventoryToFile(FILE *inv_file) {
+    (void) fprintf(inv_file, "  [General Inventory List]\n\n");
 
     if (py.pack.unique_items == 0) {
-        (void) fprintf(file1, "  Character has no objects in inventory.\n");
+        (void) fprintf(inv_file, "  Character has no objects in inventory.\n");
         return;
     }
 
@@ -355,10 +355,10 @@ static void writeInventoryToFile(FILE *file1) {
 
     for (int i = 0; i < py.pack.unique_items; i++) {
         itemDescription(description, py.inventory[i], true);
-        (void) fprintf(file1, "%c) %s\n", i + 'a', description);
+        (void) fprintf(inv_file, "%c) %s\n", i + 'a', description);
     }
 
-    (void) fprintf(file1, "%c", CTRL_KEY('L'));
+    (void) fprintf(inv_file, "%c", CTRL_KEY('L'));
 }
 
 // Print the character to a file or device -RAK-

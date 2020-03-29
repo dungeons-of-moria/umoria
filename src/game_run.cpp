@@ -951,33 +951,33 @@ static void playerDetectEnchantment() {
     }
 }
 
-static int getCommandRepeatCount(char &lastInputCommand) {
+static int getCommandRepeatCount(char &last_input_command) {
     putStringClearToEOL("Repeat count:", Coord_t{0, 0});
 
-    if (lastInputCommand == '#') {
-        lastInputCommand = '0';
+    if (last_input_command == '#') {
+        last_input_command = '0';
     }
 
     char text_buffer[8];
     int repeat_count = 0;
 
     while (true) {
-        if (lastInputCommand == DELETE || lastInputCommand == CTRL_KEY('H')) {
+        if (last_input_command == DELETE || last_input_command == CTRL_KEY('H')) {
             repeat_count /= 10;
             (void) sprintf(text_buffer, "%d", (int16_t) repeat_count);
             putStringClearToEOL(text_buffer, Coord_t{0, 14});
-        } else if (lastInputCommand >= '0' && lastInputCommand <= '9') {
+        } else if (last_input_command >= '0' && last_input_command <= '9') {
             if (repeat_count > 99) {
                 terminalBellSound();
             } else {
-                repeat_count = repeat_count * 10 + lastInputCommand - '0';
+                repeat_count = repeat_count * 10 + last_input_command - '0';
                 (void) sprintf(text_buffer, "%d", repeat_count);
                 putStringClearToEOL(text_buffer, Coord_t{0, 14});
             }
         } else {
             break;
         }
-        lastInputCommand = getKeyInput();
+        last_input_command = getKeyInput();
     }
 
     if (repeat_count == 0) {
@@ -987,38 +987,38 @@ static int getCommandRepeatCount(char &lastInputCommand) {
     }
 
     // a special hack to allow numbers as commands
-    if (lastInputCommand == ' ') {
+    if (last_input_command == ' ') {
         putStringClearToEOL("Command:", Coord_t{0, 20});
-        lastInputCommand = getKeyInput();
+        last_input_command = getKeyInput();
     }
 
     return repeat_count;
 }
 
-static char parseAlternateCtrlInput(char lastInputCommand) {
+static char parseAlternateCtrlInput(char last_input_command) {
     if (game.command_count > 0) {
         printCharacterMovementState();
     }
 
-    if (getCommand("Control-", lastInputCommand)) {
-        if (lastInputCommand >= 'A' && lastInputCommand <= 'Z') {
-            lastInputCommand -= 'A' - 1;
-        } else if (lastInputCommand >= 'a' && lastInputCommand <= 'z') {
-            lastInputCommand -= 'a' - 1;
+    if (getCommand("Control-", last_input_command)) {
+        if (last_input_command >= 'A' && last_input_command <= 'Z') {
+            last_input_command -= 'A' - 1;
+        } else if (last_input_command >= 'a' && last_input_command <= 'z') {
+            last_input_command -= 'a' - 1;
         } else {
-            lastInputCommand = ' ';
+            last_input_command = ' ';
             printMessage("Type ^ <letter> for a control char");
         }
     } else {
-        lastInputCommand = ' ';
+        last_input_command = ' ';
     }
 
-    return lastInputCommand;
+    return last_input_command;
 }
 
 // Accept a command and execute it
 static void executeInputCommands(char &command, int &find_count) {
-    char lastInputCommand = command;
+    char last_input_command = command;
 
     // Accept a command and execute it
     do {
@@ -1054,17 +1054,17 @@ static void executeInputCommands(char &command, int &find_count) {
         if (game.command_count > 0) {
             game.use_last_direction = true;
         } else {
-            lastInputCommand = getKeyInput();
+            last_input_command = getKeyInput();
 
             // Get a count for a command.
             int repeat_count = 0;
-            if ((config::options::use_roguelike_keys && lastInputCommand >= '0' && lastInputCommand <= '9') || (!config::options::use_roguelike_keys && lastInputCommand == '#')) {
-                repeat_count = getCommandRepeatCount(lastInputCommand);
+            if ((config::options::use_roguelike_keys && last_input_command >= '0' && last_input_command <= '9') || (!config::options::use_roguelike_keys && last_input_command == '#')) {
+                repeat_count = getCommandRepeatCount(last_input_command);
             }
 
             // Another way of typing control codes -CJS-
-            if (lastInputCommand == '^') {
-                lastInputCommand = parseAlternateCtrlInput(lastInputCommand);
+            if (last_input_command == '^') {
+                last_input_command = parseAlternateCtrlInput(last_input_command);
             }
 
             // move cursor to player char again, in case it moved
@@ -1072,13 +1072,13 @@ static void executeInputCommands(char &command, int &find_count) {
 
             // Commands are always converted to rogue form. -CJS-
             if (!config::options::use_roguelike_keys) {
-                lastInputCommand = originalCommands(lastInputCommand);
+                last_input_command = originalCommands(last_input_command);
             }
 
             if (repeat_count > 0) {
-                if (!validCountCommand(lastInputCommand)) {
+                if (!validCountCommand(last_input_command)) {
                     game.player_free_turn = true;
-                    lastInputCommand = ' ';
+                    last_input_command = ' ';
                     printMessage("Invalid command with a count.");
                 } else {
                     game.command_count = repeat_count;
@@ -1092,7 +1092,7 @@ static void executeInputCommands(char &command, int &find_count) {
         panelMoveCursor(py.pos);
         putQIO();
 
-        doCommand(lastInputCommand);
+        doCommand(last_input_command);
 
         // Find is counted differently, as the command changes.
         if (py.running_tracker != 0) {
@@ -1105,7 +1105,7 @@ static void executeInputCommands(char &command, int &find_count) {
         }
     } while (game.player_free_turn && !dg.generate_new_level && (eof_flag == 0));
 
-    command = lastInputCommand;
+    command = last_input_command;
 }
 
 static char originalCommands(char command) {
@@ -1343,11 +1343,11 @@ static bool moveWithoutPickup(char *command) {
     int direction;
 
     // Save current game.command_count as getDirectionWithMemory() may change it
-    int countSave = game.command_count;
+    int count_save = game.command_count;
 
     if (getDirectionWithMemory(CNIL, direction)) {
         // Restore game.command_count
-        game.command_count = countSave;
+        game.command_count = count_save;
 
         switch (direction) {
             case 1:
@@ -1425,7 +1425,7 @@ static void commandPreviousMessage() {
 
     terminalSaveScreen();
 
-    uint8_t lineNumber = max_messages;
+    uint8_t line_number = max_messages;
     int16_t msg_id = last_message_id;
 
     while (max_messages > 0) {
@@ -1440,8 +1440,8 @@ static void commandPreviousMessage() {
         }
     }
 
-    eraseLine(Coord_t{lineNumber, 0});
-    waitForContinueKey(lineNumber);
+    eraseLine(Coord_t{line_number, 0});
+    waitForContinueKey(line_number);
     terminalRestoreScreen();
 }
 
@@ -2312,7 +2312,7 @@ static void playDungeon() {
 
     // Note: yes, this last input command needs to be persisted
     // over different iterations of the main loop below -MRC-
-    char lastInputCommand = {0};
+    char last_input_command = {0};
 
     // Loop until dead,  or new level
     // Exit when `dg.generate_new_level` and `eof_flag` are both set
@@ -2402,7 +2402,7 @@ static void playDungeon() {
 
         // Accept a command?
         if (py.flags.paralysis < 1 && py.flags.rest == 0 && !game.character_is_dead) {
-            executeInputCommands(lastInputCommand, find_count);
+            executeInputCommands(last_input_command, find_count);
         } else {
             // if paralyzed, resting, or dead, flush output
             // but first move the cursor onto the player, for aesthetics
