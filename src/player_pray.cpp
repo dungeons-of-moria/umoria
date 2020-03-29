@@ -189,7 +189,7 @@ static void playerRecitePrayer(int prayer_type) {
             (void) playerCurePoison();
             (void) spellChangePlayerHitPoints(1000);
 
-            for (int i = py_attrs::A_STR; i <= py_attrs::A_CHR; i++) {
+            for (int i = PlayerAttr::STR; i <= PlayerAttr::CHR; i++) {
                 (void) playerStatRestore(i);
             }
 
@@ -259,7 +259,7 @@ void pray() {
             py.misc.current_mana_fraction = 0;
             if (randomNumber(3) == 1) {
                 printMessage("You have damaged your health!");
-                (void) playerStatRandomDecrease(py_attrs::A_CON);
+                (void) playerStatRandomDecrease(PlayerAttr::CON);
             }
         } else {
             py.misc.current_mana -= spell.mana_required;

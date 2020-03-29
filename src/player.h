@@ -8,22 +8,22 @@
 
 #pragma once
 
-enum py_class_level_adj {
-    CLASS_BTH,
-    CLASS_BTHB,
-    CLASS_DEVICE,
-    CLASS_DISARM,
-    CLASS_SAVE,
+enum PlayerClassLevelAdj {
+    BTH,
+    BTHB,
+    DEVICE,
+    DISARM,
+    SAVE,
 };
 
 // Attribute indexes -CJS-
-enum py_attrs {
-    A_STR,
-    A_INT,
-    A_WIS,
-    A_DEX,
-    A_CON,
-    A_CHR,
+enum PlayerAttr {
+    STR,
+    INT,
+    WIS,
+    DEX,
+    CON,
+    CHR,
 };
 
 // this depends on the fact that py_class_level_adj::CLASS_SAVE values are all the same,

@@ -98,23 +98,23 @@ static void playerBashAttack(Coord_t coord) {
         (void) sprintf(name, "the %s", creature.name);
     }
 
-    int base_to_hit = py.stats.used[py_attrs::A_STR];
+    int base_to_hit = py.stats.used[PlayerAttr::STR];
     base_to_hit += py.inventory[PlayerEquipment::Arm].weight / 2;
     base_to_hit += py.misc.weight / 10;
 
     if (!monster.lit) {
         base_to_hit /= 2;
-        base_to_hit -= py.stats.used[py_attrs::A_DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
-        base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTH] / 2;
+        base_to_hit -= py.stats.used[PlayerAttr::DEX] * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
+        base_to_hit -= py.misc.level * class_level_adj[py.misc.class_id][PlayerClassLevelAdj::BTH] / 2;
     }
 
-    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[py_attrs::A_DEX], (int) creature.ac, py_class_level_adj::CLASS_BTH)) {
+    if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[PlayerAttr::DEX], (int) creature.ac, PlayerClassLevelAdj::BTH)) {
         vtype_t msg = {'\0'};
         (void) sprintf(msg, "You hit %s.", name);
         printMessage(msg);
 
         int damage = diceRoll(py.inventory[PlayerEquipment::Arm].damage);
-        damage = playerWeaponCriticalBlow(py.inventory[PlayerEquipment::Arm].weight / 4 + py.stats.used[py_attrs::A_STR], 0, damage, py_class_level_adj::CLASS_BTH);
+        damage = playerWeaponCriticalBlow(py.inventory[PlayerEquipment::Arm].weight / 4 + py.stats.used[PlayerAttr::STR], 0, damage, PlayerClassLevelAdj::BTH);
         damage += py.misc.weight / 60;
         damage += 3;
 
@@ -157,7 +157,7 @@ static void playerBashAttack(Coord_t coord) {
         printMessage(msg);
     }
 
-    if (randomNumber(150) > py.stats.used[py_attrs::A_DEX]) {
+    if (randomNumber(150) > py.stats.used[PlayerAttr::DEX]) {
         printMessage("You are off balance.");
         py.flags.paralysis = (int16_t)(1 + randomNumber(2));
     }
@@ -176,7 +176,7 @@ static void playerBashPosition(Coord_t coord) {
 static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory_t &item) {
     printMessageNoCommandInterrupt("You smash into the door!");
 
-    int chance = py.stats.used[py_attrs::A_STR] + py.misc.weight / 2;
+    int chance = py.stats.used[PlayerAttr::STR] + py.misc.weight / 2;
 
     // Use (roughly) similar method as for monsters.
     auto abs_misc_use = (int) std::abs((std::intmax_t) item.misc_use);
@@ -199,7 +199,7 @@ static void playerBashClosedDoor(Coord_t coord, int dir, Tile_t &tile, Inventory
         return;
     }
 
-    if (randomNumber(150) > py.stats.used[py_attrs::A_DEX]) {
+    if (randomNumber(150) > py.stats.used[PlayerAttr::DEX]) {
         printMessage("You are off-balance.");
         py.flags.paralysis = (int16_t)(1 + randomNumber(2));
         return;

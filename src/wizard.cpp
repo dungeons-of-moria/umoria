@@ -36,12 +36,12 @@ void wizardCureAll() {
     (void) playerCureConfusion();
     (void) playerCurePoison();
     (void) playerRemoveFear();
-    (void) playerStatRestore(py_attrs::A_STR);
-    (void) playerStatRestore(py_attrs::A_INT);
-    (void) playerStatRestore(py_attrs::A_WIS);
-    (void) playerStatRestore(py_attrs::A_CON);
-    (void) playerStatRestore(py_attrs::A_DEX);
-    (void) playerStatRestore(py_attrs::A_CHR);
+    (void) playerStatRestore(PlayerAttr::STR);
+    (void) playerStatRestore(PlayerAttr::INT);
+    (void) playerStatRestore(PlayerAttr::WIS);
+    (void) playerStatRestore(PlayerAttr::CON);
+    (void) playerStatRestore(PlayerAttr::DEX);
+    (void) playerStatRestore(PlayerAttr::CHR);
 
     if (py.flags.slow > 1) {
         py.flags.slow = 1;
@@ -154,8 +154,8 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
-            py.stats.max[py_attrs::A_STR] = (uint8_t) number;
-            (void) playerStatRestore(py_attrs::A_STR);
+            py.stats.max[PlayerAttr::STR] = (uint8_t) number;
+            (void) playerStatRestore(PlayerAttr::STR);
         }
     } else {
         return;
@@ -165,8 +165,8 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
-            py.stats.max[py_attrs::A_INT] = (uint8_t) number;
-            (void) playerStatRestore(py_attrs::A_INT);
+            py.stats.max[PlayerAttr::INT] = (uint8_t) number;
+            (void) playerStatRestore(PlayerAttr::INT);
         }
     } else {
         return;
@@ -176,8 +176,8 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
-            py.stats.max[py_attrs::A_WIS] = (uint8_t) number;
-            (void) playerStatRestore(py_attrs::A_WIS);
+            py.stats.max[PlayerAttr::WIS] = (uint8_t) number;
+            (void) playerStatRestore(PlayerAttr::WIS);
         }
     } else {
         return;
@@ -187,8 +187,8 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
-            py.stats.max[py_attrs::A_DEX] = (uint8_t) number;
-            (void) playerStatRestore(py_attrs::A_DEX);
+            py.stats.max[PlayerAttr::DEX] = (uint8_t) number;
+            (void) playerStatRestore(PlayerAttr::DEX);
         }
     } else {
         return;
@@ -198,8 +198,8 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
-            py.stats.max[py_attrs::A_CON] = (uint8_t) number;
-            (void) playerStatRestore(py_attrs::A_CON);
+            py.stats.max[PlayerAttr::CON] = (uint8_t) number;
+            (void) playerStatRestore(PlayerAttr::CON);
         }
     } else {
         return;
@@ -209,8 +209,8 @@ void wizardCharacterAdjustment() {
     if (getStringInput(input, Coord_t{0, 25}, 3)) {
         bool valid_number = stringToNumber(input, number);
         if (valid_number && number > 2 && number < 119) {
-            py.stats.max[py_attrs::A_CHR] = (uint8_t) number;
-            (void) playerStatRestore(py_attrs::A_CHR);
+            py.stats.max[PlayerAttr::CHR] = (uint8_t) number;
+            (void) playerStatRestore(PlayerAttr::CHR);
         }
     } else {
         return;

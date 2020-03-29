@@ -42,7 +42,7 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         plus_to_hit -= py.inventory[PlayerEquipment::Wield].to_hit;
     }
 
-    distance = (((py.stats.used[py_attrs::A_STR] + 20) * 10) / weight);
+    distance = (((py.stats.used[PlayerAttr::STR] + 20) * 10) / weight);
     if (distance > 10) {
         distance = 10;
     }
@@ -219,11 +219,11 @@ void playerThrowItem() {
                 // off most bonuses, and reduce bth_with_bows depending on distance.
                 if (!m_ptr.lit) {
                     tbth /= current_distance + 2;
-                    tbth -= py.misc.level * class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTHB] / 2;
+                    tbth -= py.misc.level * class_level_adj[py.misc.class_id][PlayerClassLevelAdj::BTHB] / 2;
                     tbth -= tpth * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
                 }
 
-                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr.creature_id].ac, py_class_level_adj::CLASS_BTHB)) {
+                if (playerTestBeingHit(tbth, (int) py.misc.level, tpth, (int) creatures_list[m_ptr.creature_id].ac, PlayerClassLevelAdj::BTHB)) {
                     int damage = m_ptr.creature_id;
 
                     obj_desc_t description = {'\0'};
@@ -241,7 +241,7 @@ void playerThrowItem() {
                     printMessage(msg);
 
                     tdam = itemMagicAbilityDamage(thrown_item, tdam, damage);
-                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, py_class_level_adj::CLASS_BTHB);
+                    tdam = playerWeaponCriticalBlow((int) thrown_item.weight, tpth, tdam, PlayerClassLevelAdj::BTHB);
 
                     if (tdam < 0) {
                         tdam = 0;

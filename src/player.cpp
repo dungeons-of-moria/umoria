@@ -499,7 +499,7 @@ void playerRecalculateBonuses() {
         py.flags.food_digested -= 3;
     }
 
-    int savedDisplayAC = py.misc.display_ac;
+    int saved_display_ac = py.misc.display_ac;
 
     playerResetFlags();
 
@@ -520,7 +520,7 @@ void playerRecalculateBonuses() {
     py.misc.display_ac += py.misc.display_to_ac;
 
     if (py.weapon_is_heavy) {
-        py.misc.display_to_hit += (py.stats.used[py_attrs::A_STR] * 15 - py.inventory[PlayerEquipment::Wield].weight);
+        py.misc.display_to_hit += (py.stats.used[PlayerAttr::STR] * 15 - py.inventory[PlayerEquipment::Wield].weight);
     }
 
     // Add in temporary spell increases
@@ -539,7 +539,7 @@ void playerRecalculateBonuses() {
     }
 
     // can't print AC here because might be in a store
-    if (savedDisplayAC != py.misc.display_ac) {
+    if (saved_display_ac != py.misc.display_ac) {
         py.flags.status |= config::player::status::PY_ARMOR;
     }
 
@@ -732,7 +732,7 @@ void playerSearch(Coord_t coord, int chance) {
 
 // Computes current weight limit -RAK-
 int playerCarryingLoadLimit() {
-    int weight_cap = py.stats.used[py_attrs::A_STR] * config::player::PLAYER_WEIGHT_CAP + py.misc.weight;
+    int weight_cap = py.stats.used[PlayerAttr::STR] * config::player::PLAYER_WEIGHT_CAP + py.misc.weight;
 
     if (weight_cap > 3000) {
         weight_cap = 3000;
@@ -745,7 +745,7 @@ int playerCarryingLoadLimit() {
 void playerStrength() {
     Inventory_t const &item = py.inventory[PlayerEquipment::Wield];
 
-    if (item.category_id != TV_NOTHING && py.stats.used[py_attrs::A_STR] * 15 < item.weight) {
+    if (item.category_id != TV_NOTHING && py.stats.used[PlayerAttr::STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
             py.weapon_is_heavy = true;
@@ -839,10 +839,10 @@ void playerGainSpells() {
         if (!playerCanRead()) {
             return;
         }
-        stat = py_attrs::A_INT;
+        stat = PlayerAttr::INT;
         offset = config::spells::NAME_OFFSET_SPELLS;
     } else {
-        stat = py_attrs::A_WIS;
+        stat = PlayerAttr::WIS;
         offset = config::spells::NAME_OFFSET_PRAYERS;
     }
 
@@ -850,7 +850,7 @@ void playerGainSpells() {
 
     if (new_spells == 0) {
         vtype_t tmp_str = {'\0'};
-        (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == py_attrs::A_INT ? "spell" : "prayer"));
+        (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == PlayerAttr::INT ? "spell" : "prayer"));
         printMessage(tmp_str);
 
         game.player_free_turn = true;
@@ -861,7 +861,7 @@ void playerGainSpells() {
 
     // determine which spells player can learn
     // mages need the book to learn a spell, priests do not need the book
-    if (stat == py_attrs::A_INT) {
+    if (stat == PlayerAttr::INT) {
         spell_flag = playerDetermineLearnableSpells();
     } else {
         spell_flag = 0x7FFFFFFF;
@@ -893,7 +893,7 @@ void playerGainSpells() {
 
     if (new_spells == 0) {
         // do nothing
-    } else if (stat == py_attrs::A_INT) {
+    } else if (stat == PlayerAttr::INT) {
         // get to choose which mage spells will be learned
         terminalSaveScreen();
         displaySpellsList(spell_bank, spell_id, false, -1);
@@ -1046,9 +1046,9 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 
 // Saving throws for player character. -RAK-
 bool playerSavingThrow() {
-    int class_level_adjustment = class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_SAVE] * py.misc.level / 3;
+    int class_level_adjustment = class_level_adj[py.misc.class_id][PlayerClassLevelAdj::SAVE] * py.misc.level / 3;
 
-    int saving = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(py_attrs::A_WIS) + class_level_adjustment;
+    int saving = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::WIS) + class_level_adjustment;
 
     return randomNumber(100) <= saving;
 }
@@ -1091,8 +1091,8 @@ static void playerCalculateToHitBlows(int weapon_id, int weapon_weight, int &blo
     total_to_hit += py.misc.plusses_to_hit;
 }
 
-static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
-    if (creatureLit) {
+static int playerCalculateBaseToHit(bool creature_lit, int tot_tohit) {
+    if (creature_lit) {
         return py.misc.bth;
     }
 
@@ -1101,7 +1101,7 @@ static int playerCalculateBaseToHit(bool creatureLit, int tot_tohit) {
 
     bth = py.misc.bth / 2;
     bth -= tot_tohit * (BTH_PER_PLUS_TO_HIT_ADJUST - 1);
-    bth -= py.misc.level * class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_BTH] / 2;
+    bth -= py.misc.level * class_level_adj[py.misc.class_id][PlayerClassLevelAdj::BTH] / 2;
 
     return bth;
 }
@@ -1135,7 +1135,7 @@ static void playerAttackMonster(Coord_t coord) {
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
-        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, py_class_level_adj::CLASS_BTH)) {
+        if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, PlayerClassLevelAdj::BTH)) {
             (void) sprintf(msg, "You miss %s.", name);
             printMessage(msg);
             continue;
@@ -1147,11 +1147,11 @@ static void playerAttackMonster(Coord_t coord) {
         if (item.category_id != TV_NOTHING) {
             damage = diceRoll(item.damage);
             damage = itemMagicAbilityDamage(item, damage, monster.creature_id);
-            damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, py_class_level_adj::CLASS_BTH);
+            damage = playerWeaponCriticalBlow((int) item.weight, total_to_hit, damage, PlayerClassLevelAdj::BTH);
         } else {
             // Bare hands!?
             damage = diceRoll(Dice_t{1, 1});
-            damage = playerWeaponCriticalBlow(1, 0, damage, py_class_level_adj::CLASS_BTH);
+            damage = playerWeaponCriticalBlow(1, 0, damage, PlayerClassLevelAdj::BTH);
         }
 
         damage += py.misc.plusses_to_damage;
@@ -1211,8 +1211,8 @@ static int16_t playerLockPickingSkill() {
 
     skill += 2;
     skill *= playerDisarmAdjustment();
-    skill += playerStatAdjustmentWisdomIntelligence(py_attrs::A_INT);
-    skill += class_level_adj[py.misc.class_id][py_class_level_adj::CLASS_DISARM] * py.misc.level / 3;
+    skill += playerStatAdjustmentWisdomIntelligence(PlayerAttr::INT);
+    skill += class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DISARM] * py.misc.level / 3;
 
     return skill;
 }
@@ -1495,42 +1495,42 @@ static int numberOfSpellsKnown() {
 
 // remember forgotten spells while forgotten spells exist of new_spells_to_learn positive,
 // remember the spells in the order that they were learned
-static int rememberForgottenSpells(Spell_t *msp_ptr, int allowedSpells, int newSpells, const char *p, int offset) {
+static int rememberForgottenSpells(Spell_t *msp_ptr, int allowed_spells, int new_spells, const char *p, int offset) {
     uint32_t mask;
 
-    for (int n = 0; ((py.flags.spells_forgotten != 0u) && (newSpells != 0) && (n < allowedSpells) && (n < 32)); n++) {
-        // orderID is (i+1)th spell learned
-        int orderID = py.flags.spells_learned_order[n];
+    for (int n = 0; ((py.flags.spells_forgotten != 0u) && (new_spells != 0) && (n < allowed_spells) && (n < 32)); n++) {
+        // order ID is (i+1)th spell learned
+        int order_id = py.flags.spells_learned_order[n];
 
         // shifting by amounts greater than number of bits in long gives
         // an undefined result, so don't shift for unknown spells
-        if (orderID == 99) {
+        if (order_id == 99) {
             mask = 0x0;
         } else {
-            mask = (uint32_t)(1L << orderID);
+            mask = (uint32_t)(1L << order_id);
         }
 
         if ((mask & py.flags.spells_forgotten) != 0u) {
-            if (msp_ptr[orderID].level_required <= py.misc.level) {
-                newSpells--;
+            if (msp_ptr[order_id].level_required <= py.misc.level) {
+                new_spells--;
                 py.flags.spells_forgotten &= ~mask;
                 py.flags.spells_learnt |= mask;
 
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[orderID + offset]);
+                (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[order_id + offset]);
                 printMessage(msg);
             } else {
-                allowedSpells++;
+                allowed_spells++;
             }
         }
     }
 
-    return newSpells;
+    return new_spells;
 }
 
 // determine which spells player can learn must check all spells here,
 // in gain_spell() we actually check if the books are present
-static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
+static int learnableSpells(Spell_t *msp_ptr, int new_spells) {
     auto spell_flag = (uint32_t)(0x7FFFFFFFL & ~py.flags.spells_learnt);
 
     int id = 0;
@@ -1545,38 +1545,38 @@ static int learnableSpells(Spell_t *msp_ptr, int newSpells) {
         }
     }
 
-    if (newSpells > id) {
-        newSpells = id;
+    if (new_spells > id) {
+        new_spells = id;
     }
 
-    return newSpells;
+    return new_spells;
 }
 
 // forget spells until new_spells_to_learn zero or no more spells know,
 // spells are forgotten in the opposite order that they were learned
 // NOTE: newSpells is always a negative value
-static void forgetSpells(int newSpells, const char *p, int offset) {
+static void forgetSpells(int new_spells, const char *p, int offset) {
     uint32_t mask;
 
-    for (int i = 31; (newSpells != 0) && (py.flags.spells_learnt != 0u); i--) {
+    for (int i = 31; (new_spells != 0) && (py.flags.spells_learnt != 0u); i--) {
         // orderID is the (i+1)th spell learned
-        int orderID = py.flags.spells_learned_order[i];
+        int order_id = py.flags.spells_learned_order[i];
 
         // shifting by amounts greater than number of bits in long gives
         // an undefined result, so don't shift for unknown spells
-        if (orderID == 99) {
+        if (order_id == 99) {
             mask = 0x0;
         } else {
-            mask = (uint32_t)(1L << orderID);
+            mask = (uint32_t)(1L << order_id);
         }
 
         if ((mask & py.flags.spells_learnt) != 0u) {
             py.flags.spells_learnt &= ~mask;
             py.flags.spells_forgotten |= mask;
-            newSpells++;
+            new_spells++;
 
             vtype_t msg = {'\0'};
-            (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[orderID + offset]);
+            (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[order_id + offset]);
             printMessage(msg);
         }
     }
@@ -1590,7 +1590,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
     const char *magic_type_str = nullptr;
     int offset;
 
-    if (stat == py_attrs::A_INT) {
+    if (stat == PlayerAttr::INT) {
         magic_type_str = "spell";
         offset = config::spells::NAME_OFFSET_SPELLS;
     } else {
