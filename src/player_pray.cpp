@@ -145,7 +145,7 @@ static void playerRecitePrayer(int prayer_type) {
             break;
         case PriestSpellTypes::orb_of_draining:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.pos, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), magic_spell_flags::GF_HOLY_ORB, "Black Sphere");
+                spellFireBall(py.pos, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), MagicSpellFlags::HolyOrb, "Black Sphere");
             }
             break;
         case PriestSpellTypes::cure_serious_wounds:

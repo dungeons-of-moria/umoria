@@ -11,38 +11,38 @@
 #include "headers.h"
 
 // names based on spell_names[62] in data_player.cpp
-enum class MageSpellTypes {
-    magic_missile = 1,
-    detect_monsters,
-    phase_door,
-    light_area,
-    cure_light_wounds,
-    find_hidden_traps_doors,
-    stinking_cloud,
-    confusion,
-    lightning_bolt,
-    trap_door_destruction,
-    sleep_i,
-    cure_poison,
-    teleport_self,
-    remove_curse,
-    frost_bolt,
-    wall_to_mud,
-    create_food,
-    recharge_item_1,
-    sleep_ii,
-    polymorph_other,
-    identify_item,
-    sleep_iii,
-    fire_bolt,
-    speed_monster,
-    frost_ball,
-    recharge_item_ii,
-    teleport_other,
-    haste_self,
-    fire_ball,
-    word_of_destruction,
-    genocide,
+enum class MageSpellId {
+    MagicMissile = 1,
+    DetectMonsters,
+    PhaseDoor,
+    LightArea,
+    CureLightWounds,
+    FindHiddenTrapsDoors,
+    StinkingCloud,
+    Confusion,
+    LightningBolt,
+    TrapDoorDestruction,
+    Sleep1,
+    CurePoison,
+    TeleportSelf,
+    RemoveCurse,
+    FrostBolt,
+    WallToMud,
+    CreateFood,
+    RechargeItem1,
+    Sleep2,
+    PolymorphOther,
+    IdentifyItem,
+    Sleep3,
+    FireBolt,
+    SpeedMonster,
+    FrostBall,
+    RechargeItem2,
+    TeleportOther,
+    HasteSelf,
+    FireBall,
+    WordOfDestruction,
+    Genocide,
 };
 
 static bool canReadSpells() {
@@ -72,127 +72,127 @@ static bool canReadSpells() {
 static void castSpell(int spell_id) {
     int dir;
 
-    switch ((MageSpellTypes) spell_id) {
-        case MageSpellTypes::magic_missile:
+    switch ((MageSpellId) spell_id) {
+        case MageSpellId::MagicMissile:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.pos, dir, diceRoll(Dice_t{2, 6}), magic_spell_flags::GF_MAGIC_MISSILE, spell_names[0]);
+                spellFireBolt(py.pos, dir, diceRoll(Dice_t{2, 6}), MagicSpellFlags::MagicMissile, spell_names[0]);
             }
             break;
-        case MageSpellTypes::detect_monsters:
+        case MageSpellId::DetectMonsters:
             (void) spellDetectMonsters();
             break;
-        case MageSpellTypes::phase_door:
+        case MageSpellId::PhaseDoor:
             playerTeleport(10);
             break;
-        case MageSpellTypes::light_area:
+        case MageSpellId::LightArea:
             (void) spellLightArea(py.pos);
             break;
-        case MageSpellTypes::cure_light_wounds:
+        case MageSpellId::CureLightWounds:
             (void) spellChangePlayerHitPoints(diceRoll(Dice_t{4, 4}));
             break;
-        case MageSpellTypes::find_hidden_traps_doors:
+        case MageSpellId::FindHiddenTrapsDoors:
             (void) spellDetectSecretDoorssWithinVicinity();
             (void) spellDetectTrapsWithinVicinity();
             break;
-        case MageSpellTypes::stinking_cloud:
+        case MageSpellId::StinkingCloud:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.pos, dir, 12, magic_spell_flags::GF_POISON_GAS, spell_names[6]);
+                spellFireBall(py.pos, dir, 12, MagicSpellFlags::PoisonGas, spell_names[6]);
             }
             break;
-        case MageSpellTypes::confusion:
+        case MageSpellId::Confusion:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellConfuseMonster(py.pos, dir);
             }
             break;
-        case MageSpellTypes::lightning_bolt:
+        case MageSpellId::LightningBolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.pos, dir, diceRoll(Dice_t{4, 8}), magic_spell_flags::GF_LIGHTNING, spell_names[8]);
+                spellFireBolt(py.pos, dir, diceRoll(Dice_t{4, 8}), MagicSpellFlags::Lightning, spell_names[8]);
             }
             break;
-        case MageSpellTypes::trap_door_destruction:
+        case MageSpellId::TrapDoorDestruction:
             (void) spellDestroyAdjacentDoorsTraps();
             break;
-        case MageSpellTypes::sleep_i:
+        case MageSpellId::Sleep1:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellSleepMonster(py.pos, dir);
             }
             break;
-        case MageSpellTypes::cure_poison:
+        case MageSpellId::CurePoison:
             (void) playerCurePoison();
             break;
-        case MageSpellTypes::teleport_self:
+        case MageSpellId::TeleportSelf:
             playerTeleport((py.misc.level * 5));
             break;
-        case MageSpellTypes::remove_curse:
+        case MageSpellId::RemoveCurse:
             for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
                 py.inventory[id].flags = (uint32_t)(py.inventory[id].flags & ~config::treasure::flags::TR_CURSED);
             }
             break;
-        case MageSpellTypes::frost_bolt:
+        case MageSpellId::FrostBolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.pos, dir, diceRoll(Dice_t{6, 8}), magic_spell_flags::GF_FROST, spell_names[14]);
+                spellFireBolt(py.pos, dir, diceRoll(Dice_t{6, 8}), MagicSpellFlags::Frost, spell_names[14]);
             }
             break;
-        case MageSpellTypes::wall_to_mud:
+        case MageSpellId::WallToMud:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellWallToMud(py.pos, dir);
             }
             break;
-        case MageSpellTypes::create_food:
+        case MageSpellId::CreateFood:
             spellCreateFood();
             break;
-        case MageSpellTypes::recharge_item_1:
+        case MageSpellId::RechargeItem1:
             (void) spellRechargeItem(20);
             break;
-        case MageSpellTypes::sleep_ii:
+        case MageSpellId::Sleep2:
             (void) monsterSleep(py.pos);
             break;
-        case MageSpellTypes::polymorph_other:
+        case MageSpellId::PolymorphOther:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellPolymorphMonster(py.pos, dir);
             }
             break;
-        case MageSpellTypes::identify_item:
+        case MageSpellId::IdentifyItem:
             (void) spellIdentifyItem();
             break;
-        case MageSpellTypes::sleep_iii:
+        case MageSpellId::Sleep3:
             (void) spellSleepAllMonsters();
             break;
-        case MageSpellTypes::fire_bolt:
+        case MageSpellId::FireBolt:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBolt(py.pos, dir, diceRoll(Dice_t{9, 8}), magic_spell_flags::GF_FIRE, spell_names[22]);
+                spellFireBolt(py.pos, dir, diceRoll(Dice_t{9, 8}), MagicSpellFlags::Fire, spell_names[22]);
             }
             break;
-        case MageSpellTypes::speed_monster:
+        case MageSpellId::SpeedMonster:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellSpeedMonster(py.pos, dir, -1);
             }
             break;
-        case MageSpellTypes::frost_ball:
+        case MageSpellId::FrostBall:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.pos, dir, 48, magic_spell_flags::GF_FROST, spell_names[24]);
+                spellFireBall(py.pos, dir, 48, MagicSpellFlags::Frost, spell_names[24]);
             }
             break;
-        case MageSpellTypes::recharge_item_ii:
+        case MageSpellId::RechargeItem2:
             (void) spellRechargeItem(60);
             break;
-        case MageSpellTypes::teleport_other:
+        case MageSpellId::TeleportOther:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellTeleportAwayMonsterInDirection(py.pos, dir);
             }
             break;
-        case MageSpellTypes::haste_self:
+        case MageSpellId::HasteSelf:
             py.flags.fast += randomNumber(20) + py.misc.level;
             break;
-        case MageSpellTypes::fire_ball:
+        case MageSpellId::FireBall:
             if (getDirectionWithMemory(CNIL, dir)) {
-                spellFireBall(py.pos, dir, 72, magic_spell_flags::GF_FIRE, spell_names[28]);
+                spellFireBall(py.pos, dir, 72, MagicSpellFlags::Fire, spell_names[28]);
             }
             break;
-        case MageSpellTypes::word_of_destruction:
+        case MageSpellId::WordOfDestruction:
             spellDestroyArea(py.pos);
             break;
-        case MageSpellTypes::genocide:
+        case MageSpellId::Genocide:
             (void) spellGenocide();
             break;
         default:

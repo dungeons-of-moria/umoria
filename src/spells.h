@@ -8,6 +8,17 @@
 
 #pragma once
 
+// spell types used by get_flags(), breathe(), fire_bolt() and fire_ball()
+enum MagicSpellFlags {
+    MagicMissile,
+    Lightning,
+    PoisonGas,
+    Acid,
+    Frost,
+    Fire,
+    HolyOrb,
+};
+
 // Spell_t is a base data object.
 // Holds the base game data for a spell
 // Note: the names for the spells are stored in spell_names[] array at index i, +31 if priest

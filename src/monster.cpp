@@ -818,27 +818,27 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
         case 20: // Breath Light
             (void) strcat(monster_name, "breathes lightning.");
             printMessage(monster_name);
-            spellBreath(py.pos, monster_id, (monster.hp / 4), magic_spell_flags::GF_LIGHTNING, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 4), MagicSpellFlags::Lightning, death_description);
             break;
         case 21: // Breath Gas
             (void) strcat(monster_name, "breathes gas.");
             printMessage(monster_name);
-            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_POISON_GAS, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), MagicSpellFlags::PoisonGas, death_description);
             break;
         case 22: // Breath Acid
             (void) strcat(monster_name, "breathes acid.");
             printMessage(monster_name);
-            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_ACID, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), MagicSpellFlags::Acid, death_description);
             break;
         case 23: // Breath Frost
             (void) strcat(monster_name, "breathes frost.");
             printMessage(monster_name);
-            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_FROST, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), MagicSpellFlags::Frost, death_description);
             break;
         case 24: // Breath Fire
             (void) strcat(monster_name, "breathes fire.");
             printMessage(monster_name);
-            spellBreath(py.pos, monster_id, (monster.hp / 3), magic_spell_flags::GF_FIRE, death_description);
+            spellBreath(py.pos, monster_id, (monster.hp / 3), MagicSpellFlags::Fire, death_description);
             break;
         default:
             (void) strcat(monster_name, "cast unknown spell.");

@@ -711,37 +711,37 @@ bool spellDisarmAllInDirection(Coord_t coord, int direction) {
 // Return flags for given type area affect -RAK-
 static void spellGetAreaAffectFlags(int spell_type, uint32_t &weapon_type, int &harm_type, bool (**destroy)(Inventory_t *)) {
     switch (spell_type) {
-        case magic_spell_flags::GF_MAGIC_MISSILE:
+        case MagicSpellFlags::MagicMissile:
             weapon_type = 0;
             harm_type = 0;
             *destroy = setNull;
             break;
-        case magic_spell_flags::GF_LIGHTNING:
+        case MagicSpellFlags::Lightning:
             weapon_type = config::monsters::spells::CS_BR_LIGHT;
             harm_type = config::monsters::defense::CD_LIGHT;
             *destroy = setLightningDestroyableItems;
             break;
-        case magic_spell_flags::GF_POISON_GAS:
+        case MagicSpellFlags::PoisonGas:
             weapon_type = config::monsters::spells::CS_BR_GAS;
             harm_type = config::monsters::defense::CD_POISON;
             *destroy = setNull;
             break;
-        case magic_spell_flags::GF_ACID:
+        case MagicSpellFlags::Acid:
             weapon_type = config::monsters::spells::CS_BR_ACID;
             harm_type = config::monsters::defense::CD_ACID;
             *destroy = setAcidDestroyableItems;
             break;
-        case magic_spell_flags::GF_FROST:
+        case MagicSpellFlags::Frost:
             weapon_type = config::monsters::spells::CS_BR_FROST;
             harm_type = config::monsters::defense::CD_FROST;
             *destroy = setFrostDestroyableItems;
             break;
-        case magic_spell_flags::GF_FIRE:
+        case MagicSpellFlags::Fire:
             weapon_type = config::monsters::spells::CS_BR_FIRE;
             harm_type = config::monsters::defense::CD_FIRE;
             *destroy = setFireDestroyableItems;
             break;
-        case magic_spell_flags::GF_HOLY_ORB:
+        case MagicSpellFlags::HolyOrb:
             weapon_type = 0;
             harm_type = config::monsters::defense::CD_EVIL;
             *destroy = setNull;
@@ -1056,19 +1056,19 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
                         }
 
                         switch (spell_type) {
-                            case magic_spell_flags::GF_LIGHTNING:
+                            case MagicSpellFlags::Lightning:
                                 damageLightningBolt(damage, spell_name.c_str());
                                 break;
-                            case magic_spell_flags::GF_POISON_GAS:
+                            case MagicSpellFlags::PoisonGas:
                                 damagePoisonedGas(damage, spell_name.c_str());
                                 break;
-                            case magic_spell_flags::GF_ACID:
+                            case MagicSpellFlags::Acid:
                                 damageAcid(damage, spell_name.c_str());
                                 break;
-                            case magic_spell_flags::GF_FROST:
+                            case MagicSpellFlags::Frost:
                                 damageCold(damage, spell_name.c_str());
                                 break;
-                            case magic_spell_flags::GF_FIRE:
+                            case MagicSpellFlags::Fire:
                                 damageFire(damage, spell_name.c_str());
                                 break;
                             default:
