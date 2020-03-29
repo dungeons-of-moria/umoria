@@ -46,37 +46,37 @@ static bool playerCanPray(int &item_pos_begin, int &item_pos_end) {
 
 // names based on spell_names[62] in data_player.cpp
 enum class PriestSpellTypes {
-    detect_evil = 1,
-    cure_light_wounds,
-    bless,
-    remove_fear,
-    call_light,
-    find_traps,
-    detect_doors_stairs,
-    slow_poison,
-    blind_creature,
-    portal,
-    cure_medium_wounds,
-    chant,
-    sanctuary,
-    create_food,
-    remove_curse,
-    resist_head_cold,
-    neutralize_poison,
-    orb_of_draining,
-    cure_serious_wounds,
-    sense_invisible,
-    protect_from_evil,
-    earthquake,
-    sense_surroundings,
-    cure_critical_wounds,
-    turn_undead,
-    prayer,
-    dispel_undead,
-    heal,
-    dispel_evil,
-    glyph_of_warding,
-    holy_word,
+    DetectEvil = 1,
+    CureLightWounds,
+    Bless,
+    RemoveFear,
+    CallLight,
+    FindTraps,
+    DetectDoorsStairs,
+    SlowPoison,
+    BlindCreature,
+    Portal,
+    CureMediumWounds,
+    Chant,
+    Sanctuary,
+    CreateFood,
+    RemoveCurse,
+    ResistHeadCold,
+    NeutralizePoison,
+    OrbOfDraining,
+    CureSeriousWounds,
+    SenseInvisible,
+    ProtectFromEvil,
+    Earthquake,
+    SenseSurroundings,
+    CureCriticalWounds,
+    TurnUndead,
+    Prayer,
+    DispelUndead,
+    Heal,
+    DispelEvil,
+    GlyphOfWarding,
+    HolyWord,
 };
 
 // Recite a prayers.
@@ -84,51 +84,51 @@ static void playerRecitePrayer(int prayer_type) {
     int dir;
 
     switch ((PriestSpellTypes)(prayer_type + 1)) {
-        case PriestSpellTypes::detect_evil:
+        case PriestSpellTypes::DetectEvil:
             (void) spellDetectEvil();
             break;
-        case PriestSpellTypes::cure_light_wounds:
+        case PriestSpellTypes::CureLightWounds:
             (void) spellChangePlayerHitPoints(diceRoll(Dice_t{3, 3}));
             break;
-        case PriestSpellTypes::bless:
+        case PriestSpellTypes::Bless:
             playerBless(randomNumber(12) + 12);
             break;
-        case PriestSpellTypes::remove_fear:
+        case PriestSpellTypes::RemoveFear:
             (void) playerRemoveFear();
             break;
-        case PriestSpellTypes::call_light:
+        case PriestSpellTypes::CallLight:
             (void) spellLightArea(py.pos);
             break;
-        case PriestSpellTypes::find_traps:
+        case PriestSpellTypes::FindTraps:
             (void) spellDetectTrapsWithinVicinity();
             break;
-        case PriestSpellTypes::detect_doors_stairs:
+        case PriestSpellTypes::DetectDoorsStairs:
             (void) spellDetectSecretDoorssWithinVicinity();
             break;
-        case PriestSpellTypes::slow_poison:
+        case PriestSpellTypes::SlowPoison:
             (void) spellSlowPoison();
             break;
-        case PriestSpellTypes::blind_creature:
+        case PriestSpellTypes::BlindCreature:
             if (getDirectionWithMemory(CNIL, dir)) {
                 (void) spellConfuseMonster(py.pos, dir);
             }
             break;
-        case PriestSpellTypes::portal:
+        case PriestSpellTypes::Portal:
             playerTeleport((py.misc.level * 3));
             break;
-        case PriestSpellTypes::cure_medium_wounds:
+        case PriestSpellTypes::CureMediumWounds:
             (void) spellChangePlayerHitPoints(diceRoll(Dice_t{4, 4}));
             break;
-        case PriestSpellTypes::chant:
+        case PriestSpellTypes::Chant:
             playerBless(randomNumber(24) + 24);
             break;
-        case PriestSpellTypes::sanctuary:
+        case PriestSpellTypes::Sanctuary:
             (void) monsterSleep(py.pos);
             break;
-        case PriestSpellTypes::create_food:
+        case PriestSpellTypes::CreateFood:
             spellCreateFood();
             break;
-        case PriestSpellTypes::remove_curse:
+        case PriestSpellTypes::RemoveCurse:
             for (auto &entry : py.inventory) {
                 // only clear flag for items that are wielded or worn
                 if (entry.category_id >= TV_MIN_WEAR && entry.category_id <= TV_MAX_WEAR) {
@@ -136,55 +136,55 @@ static void playerRecitePrayer(int prayer_type) {
                 }
             }
             break;
-        case PriestSpellTypes::resist_head_cold:
+        case PriestSpellTypes::ResistHeadCold:
             py.flags.heat_resistance += randomNumber(10) + 10;
             py.flags.cold_resistance += randomNumber(10) + 10;
             break;
-        case PriestSpellTypes::neutralize_poison:
+        case PriestSpellTypes::NeutralizePoison:
             (void) playerCurePoison();
             break;
-        case PriestSpellTypes::orb_of_draining:
+        case PriestSpellTypes::OrbOfDraining:
             if (getDirectionWithMemory(CNIL, dir)) {
                 spellFireBall(py.pos, dir, (diceRoll(Dice_t{3, 6}) + py.misc.level), MagicSpellFlags::HolyOrb, "Black Sphere");
             }
             break;
-        case PriestSpellTypes::cure_serious_wounds:
+        case PriestSpellTypes::CureSeriousWounds:
             (void) spellChangePlayerHitPoints(diceRoll(Dice_t{8, 4}));
             break;
-        case PriestSpellTypes::sense_invisible:
+        case PriestSpellTypes::SenseInvisible:
             playerDetectInvisible(randomNumber(24) + 24);
             break;
-        case PriestSpellTypes::protect_from_evil:
+        case PriestSpellTypes::ProtectFromEvil:
             (void) playerProtectEvil();
             break;
-        case PriestSpellTypes::earthquake:
+        case PriestSpellTypes::Earthquake:
             spellEarthquake();
             break;
-        case PriestSpellTypes::sense_surroundings:
+        case PriestSpellTypes::SenseSurroundings:
             spellMapCurrentArea();
             break;
-        case PriestSpellTypes::cure_critical_wounds:
+        case PriestSpellTypes::CureCriticalWounds:
             (void) spellChangePlayerHitPoints(diceRoll(Dice_t{16, 4}));
             break;
-        case PriestSpellTypes::turn_undead:
+        case PriestSpellTypes::TurnUndead:
             (void) spellTurnUndead();
             break;
-        case PriestSpellTypes::prayer:
+        case PriestSpellTypes::Prayer:
             playerBless(randomNumber(48) + 48);
             break;
-        case PriestSpellTypes::dispel_undead:
+        case PriestSpellTypes::DispelUndead:
             (void) spellDispelCreature(config::monsters::defense::CD_UNDEAD, (3 * py.misc.level));
             break;
-        case PriestSpellTypes::heal:
+        case PriestSpellTypes::Heal:
             (void) spellChangePlayerHitPoints(200);
             break;
-        case PriestSpellTypes::dispel_evil:
+        case PriestSpellTypes::DispelEvil:
             (void) spellDispelCreature(config::monsters::defense::CD_EVIL, (3 * py.misc.level));
             break;
-        case PriestSpellTypes::glyph_of_warding:
+        case PriestSpellTypes::GlyphOfWarding:
             spellWardingGlyph();
             break;
-        case PriestSpellTypes::holy_word:
+        case PriestSpellTypes::HolyWord:
             (void) playerRemoveFear();
             (void) playerCurePoison();
             (void) spellChangePlayerHitPoints(1000);
