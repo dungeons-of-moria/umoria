@@ -43,29 +43,29 @@ static int inventoryItemIdOfCursedEquipment() {
     int item_count = 0;
     int items[6];
 
-    if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        items[item_count] = player_equipment::EQUIPMENT_BODY;
+    if (py.inventory[PlayerEquipment::Body].category_id != TV_NOTHING) {
+        items[item_count] = PlayerEquipment::Body;
         item_count++;
     }
-    if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        items[item_count] = player_equipment::EQUIPMENT_ARM;
+    if (py.inventory[PlayerEquipment::Arm].category_id != TV_NOTHING) {
+        items[item_count] = PlayerEquipment::Arm;
         item_count++;
     }
-    if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        items[item_count] = player_equipment::EQUIPMENT_OUTER;
+    if (py.inventory[PlayerEquipment::Outer].category_id != TV_NOTHING) {
+        items[item_count] = PlayerEquipment::Outer;
         item_count++;
     }
-    if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        items[item_count] = player_equipment::EQUIPMENT_HANDS;
+    if (py.inventory[PlayerEquipment::Hands].category_id != TV_NOTHING) {
+        items[item_count] = PlayerEquipment::Hands;
         item_count++;
     }
-    if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        items[item_count] = player_equipment::EQUIPMENT_HEAD;
+    if (py.inventory[PlayerEquipment::Head].category_id != TV_NOTHING) {
+        items[item_count] = PlayerEquipment::Head;
         item_count++;
     }
     // also enchant boots
-    if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        items[item_count] = player_equipment::EQUIPMENT_FEET;
+    if (py.inventory[PlayerEquipment::Feet].category_id != TV_NOTHING) {
+        items[item_count] = PlayerEquipment::Feet;
         item_count++;
     }
 
@@ -75,25 +75,25 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if ((py.inventory[player_equipment::EQUIPMENT_BODY].flags & config::treasure::flags::TR_CURSED) != 0u) {
-        item_id = player_equipment::EQUIPMENT_BODY;
-    } else if ((py.inventory[player_equipment::EQUIPMENT_ARM].flags & config::treasure::flags::TR_CURSED) != 0u) {
-        item_id = player_equipment::EQUIPMENT_ARM;
-    } else if ((py.inventory[player_equipment::EQUIPMENT_OUTER].flags & config::treasure::flags::TR_CURSED) != 0u) {
-        item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if ((py.inventory[player_equipment::EQUIPMENT_HEAD].flags & config::treasure::flags::TR_CURSED) != 0u) {
-        item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if ((py.inventory[player_equipment::EQUIPMENT_HANDS].flags & config::treasure::flags::TR_CURSED) != 0u) {
-        item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if ((py.inventory[player_equipment::EQUIPMENT_FEET].flags & config::treasure::flags::TR_CURSED) != 0u) {
-        item_id = player_equipment::EQUIPMENT_FEET;
+    if ((py.inventory[PlayerEquipment::Body].flags & config::treasure::flags::TR_CURSED) != 0u) {
+        item_id = PlayerEquipment::Body;
+    } else if ((py.inventory[PlayerEquipment::Arm].flags & config::treasure::flags::TR_CURSED) != 0u) {
+        item_id = PlayerEquipment::Arm;
+    } else if ((py.inventory[PlayerEquipment::Outer].flags & config::treasure::flags::TR_CURSED) != 0u) {
+        item_id = PlayerEquipment::Outer;
+    } else if ((py.inventory[PlayerEquipment::Head].flags & config::treasure::flags::TR_CURSED) != 0u) {
+        item_id = PlayerEquipment::Head;
+    } else if ((py.inventory[PlayerEquipment::Hands].flags & config::treasure::flags::TR_CURSED) != 0u) {
+        item_id = PlayerEquipment::Hands;
+    } else if ((py.inventory[PlayerEquipment::Feet].flags & config::treasure::flags::TR_CURSED) != 0u) {
+        item_id = PlayerEquipment::Feet;
     }
 
     return item_id;
 }
 
 static bool scrollEnchantWeaponToHit() {
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[PlayerEquipment::Wield];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -117,7 +117,7 @@ static bool scrollEnchantWeaponToHit() {
 }
 
 static bool scrollEnchantWeaponToDamage() {
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[PlayerEquipment::Wield];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -233,7 +233,7 @@ static bool scrollConfuseMonster() {
 }
 
 static bool scrollEnchantWeapon() {
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[PlayerEquipment::Wield];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -281,7 +281,7 @@ static bool scrollEnchantWeapon() {
 }
 
 static bool scrollCurseWeapon() {
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[PlayerEquipment::Wield];
 
     if (item.category_id == TV_NOTHING) {
         return false;
@@ -347,30 +347,30 @@ static bool scrollEnchantArmor() {
 static bool scrollCurseArmor() {
     int item_id;
 
-    if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING && randomNumber(4) == 1) {
-        item_id = player_equipment::EQUIPMENT_BODY;
-    } else if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = player_equipment::EQUIPMENT_ARM;
-    } else if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING && randomNumber(3) == 1) {
-        item_id = player_equipment::EQUIPMENT_FEET;
-    } else if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        item_id = player_equipment::EQUIPMENT_BODY;
-    } else if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        item_id = player_equipment::EQUIPMENT_ARM;
-    } else if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        item_id = player_equipment::EQUIPMENT_OUTER;
-    } else if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        item_id = player_equipment::EQUIPMENT_HEAD;
-    } else if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        item_id = player_equipment::EQUIPMENT_HANDS;
-    } else if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        item_id = player_equipment::EQUIPMENT_FEET;
+    if (py.inventory[PlayerEquipment::Body].category_id != TV_NOTHING && randomNumber(4) == 1) {
+        item_id = PlayerEquipment::Body;
+    } else if (py.inventory[PlayerEquipment::Arm].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = PlayerEquipment::Arm;
+    } else if (py.inventory[PlayerEquipment::Outer].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = PlayerEquipment::Outer;
+    } else if (py.inventory[PlayerEquipment::Head].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = PlayerEquipment::Head;
+    } else if (py.inventory[PlayerEquipment::Hands].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = PlayerEquipment::Hands;
+    } else if (py.inventory[PlayerEquipment::Feet].category_id != TV_NOTHING && randomNumber(3) == 1) {
+        item_id = PlayerEquipment::Feet;
+    } else if (py.inventory[PlayerEquipment::Body].category_id != TV_NOTHING) {
+        item_id = PlayerEquipment::Body;
+    } else if (py.inventory[PlayerEquipment::Arm].category_id != TV_NOTHING) {
+        item_id = PlayerEquipment::Arm;
+    } else if (py.inventory[PlayerEquipment::Outer].category_id != TV_NOTHING) {
+        item_id = PlayerEquipment::Outer;
+    } else if (py.inventory[PlayerEquipment::Head].category_id != TV_NOTHING) {
+        item_id = PlayerEquipment::Head;
+    } else if (py.inventory[PlayerEquipment::Hands].category_id != TV_NOTHING) {
+        item_id = PlayerEquipment::Hands;
+    } else if (py.inventory[PlayerEquipment::Feet].category_id != TV_NOTHING) {
+        item_id = PlayerEquipment::Feet;
     } else {
         item_id = 0;
     }

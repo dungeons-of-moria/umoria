@@ -13,7 +13,7 @@
 uint32_t inventoryCollectAllItemFlags() {
     uint32_t flags = 0;
 
-    for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
+    for (int i = PlayerEquipment::Wield; i < PlayerEquipment::Light; i++) {
         flags |= py.inventory[i].flags;
     }
 
@@ -57,14 +57,14 @@ void inventoryDropItem(int item_id, bool drop_all) {
         (void) dungeonDeleteObject(py.pos);
     }
 
-    int treasureID = popt();
+    int treasure_id = popt();
 
     Inventory_t &item = py.inventory[item_id];
-    game.treasure.list[treasureID] = item;
+    game.treasure.list[treasure_id] = item;
 
-    dg.floor[py.pos.y][py.pos.x].treasure_id = (uint8_t) treasureID;
+    dg.floor[py.pos.y][py.pos.x].treasure_id = (uint8_t) treasure_id;
 
-    if (item_id >= player_equipment::EQUIPMENT_WIELD) {
+    if (item_id >= PlayerEquipment::Wield) {
         playerTakeOff(item_id, -1);
     } else {
         if (drop_all || item.items_count == 1) {
@@ -78,14 +78,14 @@ void inventoryDropItem(int item_id, bool drop_all) {
 
             inventoryItemCopyTo(config::dungeon::objects::OBJ_NOTHING, py.inventory[py.pack.unique_items]);
         } else {
-            game.treasure.list[treasureID].items_count = 1;
+            game.treasure.list[treasure_id].items_count = 1;
             py.pack.weight -= item.weight;
             item.items_count--;
         }
 
         obj_desc_t prt1 = {'\0'};
         obj_desc_t prt2 = {'\0'};
-        itemDescription(prt1, game.treasure.list[treasureID], true);
+        itemDescription(prt1, game.treasure.list[treasure_id], true);
         (void) sprintf(prt2, "Dropped %s", prt1);
         printMessage(prt2);
     }
@@ -108,7 +108,7 @@ static int inventoryDamageItem(bool (*item_type)(Inventory_t *), int chance_perc
 }
 
 bool inventoryDiminishLightAttack(bool noticed) {
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_LIGHT];
+    Inventory_t &item = py.inventory[PlayerEquipment::Light];
 
     if (item.misc_use > 0) {
         item.misc_use -= (250 + randomNumber(250));
@@ -153,25 +153,25 @@ bool executeDisenchantAttack() {
 
     switch (randomNumber(7)) {
         case 1:
-            item_id = player_equipment::EQUIPMENT_WIELD;
+            item_id = PlayerEquipment::Wield;
             break;
         case 2:
-            item_id = player_equipment::EQUIPMENT_BODY;
+            item_id = PlayerEquipment::Body;
             break;
         case 3:
-            item_id = player_equipment::EQUIPMENT_ARM;
+            item_id = PlayerEquipment::Arm;
             break;
         case 4:
-            item_id = player_equipment::EQUIPMENT_OUTER;
+            item_id = PlayerEquipment::Outer;
             break;
         case 5:
-            item_id = player_equipment::EQUIPMENT_HANDS;
+            item_id = PlayerEquipment::Hands;
             break;
         case 6:
-            item_id = player_equipment::EQUIPMENT_HEAD;
+            item_id = PlayerEquipment::Head;
             break;
         case 7:
-            item_id = player_equipment::EQUIPMENT_FEET;
+            item_id = PlayerEquipment::Feet;
             break;
         default:
             return false;
@@ -213,7 +213,7 @@ bool executeDisenchantAttack() {
 
 // this code must be identical to the inventoryCarryItem() code below
 bool inventoryCanCarryItemCount(Inventory_t const &item) {
-    if (py.pack.unique_items < player_equipment::EQUIPMENT_WIELD) {
+    if (py.pack.unique_items < PlayerEquipment::Wield) {
         return true;
     }
 
@@ -249,10 +249,10 @@ bool inventoryCanCarryItemCount(Inventory_t const &item) {
 // return false if picking up an object would change the players speed
 bool inventoryCanCarryItem(Inventory_t const &item) {
     int limit = playerCarryingLoadLimit();
-    int newWeight = item.items_count * item.weight + py.pack.weight;
+    int new_weight = item.items_count * item.weight + py.pack.weight;
 
-    if (limit < newWeight) {
-        limit = newWeight / (limit + 1);
+    if (limit < new_weight) {
+        limit = new_weight / (limit + 1);
     } else {
         limit = 0;
     }
@@ -361,65 +361,65 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
 // Note: This routine affects magical AC bonuses so
 // that stores can detect the damage.
 static bool damageMinusAC(uint32_t typ_dam) {
-    int itemsCount = 0;
+    int items_count = 0;
     uint8_t items[6];
 
-    if (py.inventory[player_equipment::EQUIPMENT_BODY].category_id != TV_NOTHING) {
-        items[itemsCount] = player_equipment::EQUIPMENT_BODY;
-        itemsCount++;
+    if (py.inventory[PlayerEquipment::Body].category_id != TV_NOTHING) {
+        items[items_count] = PlayerEquipment::Body;
+        items_count++;
     }
 
-    if (py.inventory[player_equipment::EQUIPMENT_ARM].category_id != TV_NOTHING) {
-        items[itemsCount] = player_equipment::EQUIPMENT_ARM;
-        itemsCount++;
+    if (py.inventory[PlayerEquipment::Arm].category_id != TV_NOTHING) {
+        items[items_count] = PlayerEquipment::Arm;
+        items_count++;
     }
 
-    if (py.inventory[player_equipment::EQUIPMENT_OUTER].category_id != TV_NOTHING) {
-        items[itemsCount] = player_equipment::EQUIPMENT_OUTER;
-        itemsCount++;
+    if (py.inventory[PlayerEquipment::Outer].category_id != TV_NOTHING) {
+        items[items_count] = PlayerEquipment::Outer;
+        items_count++;
     }
 
-    if (py.inventory[player_equipment::EQUIPMENT_HANDS].category_id != TV_NOTHING) {
-        items[itemsCount] = player_equipment::EQUIPMENT_HANDS;
-        itemsCount++;
+    if (py.inventory[PlayerEquipment::Hands].category_id != TV_NOTHING) {
+        items[items_count] = PlayerEquipment::Hands;
+        items_count++;
     }
 
-    if (py.inventory[player_equipment::EQUIPMENT_HEAD].category_id != TV_NOTHING) {
-        items[itemsCount] = player_equipment::EQUIPMENT_HEAD;
-        itemsCount++;
+    if (py.inventory[PlayerEquipment::Head].category_id != TV_NOTHING) {
+        items[items_count] = PlayerEquipment::Head;
+        items_count++;
     }
 
     // also affect boots
-    if (py.inventory[player_equipment::EQUIPMENT_FEET].category_id != TV_NOTHING) {
-        items[itemsCount] = player_equipment::EQUIPMENT_FEET;
-        itemsCount++;
+    if (py.inventory[PlayerEquipment::Feet].category_id != TV_NOTHING) {
+        items[items_count] = PlayerEquipment::Feet;
+        items_count++;
     }
 
     bool minus = false;
 
-    if (itemsCount == 0) {
+    if (items_count == 0) {
         return minus;
     }
 
-    uint8_t itemID = items[randomNumber(itemsCount) - 1];
+    uint8_t item_id = items[randomNumber(items_count) - 1];
 
     obj_desc_t description = {'\0'};
     obj_desc_t msg = {'\0'};
 
-    if ((py.inventory[itemID].flags & typ_dam) != 0u) {
+    if ((py.inventory[item_id].flags & typ_dam) != 0u) {
         minus = true;
 
-        itemDescription(description, py.inventory[itemID], false);
+        itemDescription(description, py.inventory[item_id], false);
         (void) sprintf(msg, "Your %s resists damage!", description);
         printMessage(msg);
-    } else if (py.inventory[itemID].ac + py.inventory[itemID].to_ac > 0) {
+    } else if (py.inventory[item_id].ac + py.inventory[item_id].to_ac > 0) {
         minus = true;
 
-        itemDescription(description, py.inventory[itemID], false);
+        itemDescription(description, py.inventory[item_id], false);
         (void) sprintf(msg, "Your %s is damaged!", description);
         printMessage(msg);
 
-        py.inventory[itemID].to_ac--;
+        py.inventory[item_id].to_ac--;
         playerRecalculateBonuses();
     }
 

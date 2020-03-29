@@ -263,7 +263,7 @@ static void resetDungeonFlags() {
 
 // Check light status for dungeon setup
 static void playerInitializePlayerLight() {
-    py.carrying_light = (py.inventory[player_equipment::EQUIPMENT_LIGHT].misc_use > 0);
+    py.carrying_light = (py.inventory[PlayerEquipment::Light].misc_use > 0);
 }
 
 // Check for a maximum level
@@ -275,7 +275,7 @@ static void playerUpdateMaxDungeonDepth() {
 
 // Check light status
 static void playerUpdateLightStatus() {
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_LIGHT];
+    Inventory_t &item = py.inventory[PlayerEquipment::Light];
 
     if (py.carrying_light) {
         if (item.misc_use > 0) {
@@ -2249,7 +2249,7 @@ static void dungeonJamDoor() {
 static void inventoryRefillLamp() {
     game.player_free_turn = true;
 
-    if (py.inventory[player_equipment::EQUIPMENT_LIGHT].sub_category_id != 0) {
+    if (py.inventory[PlayerEquipment::Light].sub_category_id != 0) {
         printMessage("But you are not using a lamp.");
         return;
     }
@@ -2262,7 +2262,7 @@ static void inventoryRefillLamp() {
 
     game.player_free_turn = false;
 
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_LIGHT];
+    Inventory_t &item = py.inventory[PlayerEquipment::Light];
     item.misc_use += py.inventory[item_pos_start].misc_use;
 
     if (item.misc_use > config::treasure::OBJECT_LAMP_MAX_CAPACITY) {

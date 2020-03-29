@@ -62,19 +62,19 @@ typedef struct {
 } Inventory_t;
 
 // magic numbers for players equipment inventory array
-enum player_equipment {
-    EQUIPMENT_WIELD = 22, // must be first item in equipment list
-    EQUIPMENT_HEAD,
-    EQUIPMENT_NECK,
-    EQUIPMENT_BODY,
-    EQUIPMENT_ARM,
-    EQUIPMENT_HANDS,
-    EQUIPMENT_RIGHT,
-    EQUIPMENT_LEFT,
-    EQUIPMENT_FEET,
-    EQUIPMENT_OUTER,
-    EQUIPMENT_LIGHT,
-    EQUIPMENT_AUX,
+enum PlayerEquipment {
+    Wield = 22, // must be first item in equipment list
+    Head,
+    Neck,
+    Body,
+    Arm,
+    Hands,
+    Right,
+    Left,
+    Feet,
+    Outer,
+    Light,
+    Auxiliary,
 };
 
 uint32_t inventoryCollectAllItemFlags();

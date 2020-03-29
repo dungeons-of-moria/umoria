@@ -287,29 +287,29 @@ static void writeCharacterSheetToFile(FILE *char_file) {
 
 static const char *equipmentPlacementDescription(int item_id) {
     switch (item_id) {
-        case player_equipment::EQUIPMENT_WIELD:
+        case PlayerEquipment::Wield:
             return "You are wielding";
-        case player_equipment::EQUIPMENT_HEAD:
+        case PlayerEquipment::Head:
             return "Worn on head";
-        case player_equipment::EQUIPMENT_NECK:
+        case PlayerEquipment::Neck:
             return "Worn around neck";
-        case player_equipment::EQUIPMENT_BODY:
+        case PlayerEquipment::Body:
             return "Worn on body";
-        case player_equipment::EQUIPMENT_ARM:
+        case PlayerEquipment::Arm:
             return "Worn on shield arm";
-        case player_equipment::EQUIPMENT_HANDS:
+        case PlayerEquipment::Hands:
             return "Worn on hands";
-        case player_equipment::EQUIPMENT_RIGHT:
+        case PlayerEquipment::Right:
             return "Right ring finger";
-        case player_equipment::EQUIPMENT_LEFT:
+        case PlayerEquipment::Left:
             return "Left  ring finger";
-        case player_equipment::EQUIPMENT_FEET:
+        case PlayerEquipment::Feet:
             return "Worn on feet";
-        case player_equipment::EQUIPMENT_OUTER:
+        case PlayerEquipment::Outer:
             return "Worn about body";
-        case player_equipment::EQUIPMENT_LIGHT:
+        case PlayerEquipment::Light:
             return "Light source is";
-        case player_equipment::EQUIPMENT_AUX:
+        case PlayerEquipment::Auxiliary:
             return "Secondary weapon";
         default:
             return "*Unknown value*";
@@ -328,7 +328,7 @@ static void writeEquipmentListToFile(FILE *equip_file) {
     obj_desc_t description = {'\0'};
     int item_slot_id = 0;
 
-    for (int i = player_equipment::EQUIPMENT_WIELD; i < PLAYER_INVENTORY_SIZE; i++) {
+    for (int i = PlayerEquipment::Wield; i < PLAYER_INVENTORY_SIZE; i++) {
         if (py.inventory[i].category_id == TV_NOTHING) {
             continue;
         }

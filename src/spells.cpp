@@ -413,7 +413,7 @@ bool spellIdentifyItem() {
     itemDescription(description, item, true);
 
     obj_desc_t msg = {'\0'};
-    if (item_id >= player_equipment::EQUIPMENT_WIELD) {
+    if (item_id >= PlayerEquipment::Wield) {
         playerRecalculateBonuses();
         (void) sprintf(msg, "%s: %s", playerItemWearingDescription(item_id), description);
     } else {
@@ -2310,7 +2310,7 @@ bool spellEnchantItem(int16_t &plusses, int16_t max_bonus_limit) {
 bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
-    for (int id = player_equipment::EQUIPMENT_WIELD; id <= player_equipment::EQUIPMENT_OUTER; id++) {
+    for (int id = PlayerEquipment::Wield; id <= PlayerEquipment::Outer; id++) {
         if ((py.inventory[id].flags & config::treasure::flags::TR_CURSED) != 0u) {
             py.inventory[id].flags &= ~config::treasure::flags::TR_CURSED;
             playerRecalculateBonuses();

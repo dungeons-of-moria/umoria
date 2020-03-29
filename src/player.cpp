@@ -425,7 +425,7 @@ void playerAdjustBonusesForItem(Inventory_t const &item, int factor) {
 }
 
 static void playerRecalculateBonusesFromInventory() {
-    for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
+    for (int i = PlayerEquipment::Wield; i < PlayerEquipment::Light; i++) {
         Inventory_t const &item = py.inventory[i];
 
         if (item.category_id != TV_NOTHING) {
@@ -459,7 +459,7 @@ static void playerRecalculateBonusesFromInventory() {
 }
 
 static void playerRecalculateSustainStatsFromInventory() {
-    for (int i = player_equipment::EQUIPMENT_WIELD; i < player_equipment::EQUIPMENT_LIGHT; i++) {
+    for (int i = PlayerEquipment::Wield; i < PlayerEquipment::Light; i++) {
         if ((py.inventory[i].flags & config::treasure::flags::TR_SUST_STAT) == 0u) {
             continue;
         }
@@ -520,7 +520,7 @@ void playerRecalculateBonuses() {
     py.misc.display_ac += py.misc.display_to_ac;
 
     if (py.weapon_is_heavy) {
-        py.misc.display_to_hit += (py.stats.used[py_attrs::A_STR] * 15 - py.inventory[player_equipment::EQUIPMENT_WIELD].weight);
+        py.misc.display_to_hit += (py.stats.used[py_attrs::A_STR] * 15 - py.inventory[PlayerEquipment::Wield].weight);
     }
 
     // Add in temporary spell increases
@@ -600,9 +600,9 @@ void playerTakeOff(int item_id, int pack_position_id) {
     py.equipment_count--;
 
     const char *p = nullptr;
-    if (item_id == player_equipment::EQUIPMENT_WIELD || item_id == player_equipment::EQUIPMENT_AUX) {
+    if (item_id == PlayerEquipment::Wield || item_id == PlayerEquipment::Auxiliary) {
         p = "Was wielding ";
-    } else if (item_id == player_equipment::EQUIPMENT_LIGHT) {
+    } else if (item_id == PlayerEquipment::Light) {
         p = "Light source was ";
     } else {
         p = "Was wearing ";
@@ -620,7 +620,7 @@ void playerTakeOff(int item_id, int pack_position_id) {
     printMessage(msg);
 
     // For secondary weapon
-    if (item_id != player_equipment::EQUIPMENT_AUX) {
+    if (item_id != PlayerEquipment::Auxiliary) {
         playerAdjustBonusesForItem(item, -1);
     }
 
@@ -743,7 +743,7 @@ int playerCarryingLoadLimit() {
 
 // Are we strong enough for the current pack and weapon? -CJS-
 void playerStrength() {
-    Inventory_t const &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t const &item = py.inventory[PlayerEquipment::Wield];
 
     if (item.category_id != TV_NOTHING && py.stats.used[py_attrs::A_STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
@@ -1112,7 +1112,7 @@ static void playerAttackMonster(Coord_t coord) {
 
     Monster_t &monster = monsters[creature_id];
     Creature_t const &creature = creatures_list[monster.creature_id];
-    Inventory_t &item = py.inventory[player_equipment::EQUIPMENT_WIELD];
+    Inventory_t &item = py.inventory[PlayerEquipment::Wield];
 
     monster.sleep_count = 0;
 
