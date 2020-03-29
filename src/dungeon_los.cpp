@@ -467,9 +467,9 @@ static bool lookRay(int y, int from, int to) {
 
 static bool lookSee(Coord_t coord, bool &transparent) {
     if (coord.x < 0 || coord.y < 0 || coord.y > coord.x) {
-        obj_desc_t errorMessage = {'\0'};
-        (void) sprintf(errorMessage, "Illegal call to lookSee(%d, %d)", coord.y, coord.x);
-        printMessage(errorMessage);
+        obj_desc_t error_message = {'\0'};
+        (void) sprintf(error_message, "Illegal call to lookSee(%d, %d)", coord.y, coord.x);
+        printMessage(error_message);
     }
 
     const char *description = nullptr;

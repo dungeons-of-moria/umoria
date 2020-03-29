@@ -30,7 +30,6 @@ void dungeonDisplayMap() {
     priority[32] = -15; // char ' '
 
     // Display highest priority object in the RATIO, by RATIO area
-    constexpr uint8_t RATIO = 3;
     uint8_t panel_width = MAX_WIDTH / RATIO;
     uint8_t panel_height = MAX_HEIGHT / RATIO;
 
@@ -404,7 +403,7 @@ void dungeonLiteSpot(Coord_t const &coord) {
 
 // Normal movement
 // When FIND_FLAG,  light only permanent features
-static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
+static void sub1MoveLight(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
         // Turn off lamp light
         for (int y = from.y - 1; y <= from.y + 1; y++) {
@@ -469,7 +468,7 @@ static void sub1_move_light(Coord_t const &from, Coord_t const &to) {
 
 // When blinded,  move only the player symbol.
 // With no light,  movement becomes involved.
-static void sub3_move_light(Coord_t const &from, Coord_t const &to) {
+static void sub3MoveLight(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
         Coord_t coord = Coord_t{0, 0};
 
@@ -494,9 +493,9 @@ static void sub3_move_light(Coord_t const &from, Coord_t const &to) {
 // Four cases : Normal, Finding, Blind, and No light -RAK-
 void dungeonMoveCharacterLight(Coord_t const &from, Coord_t const &to) {
     if (py.flags.blind > 0 || !py.carrying_light) {
-        sub3_move_light(from, to);
+        sub3MoveLight(from, to);
     } else {
-        sub1_move_light(from, to);
+        sub1MoveLight(from, to);
     }
 }
 

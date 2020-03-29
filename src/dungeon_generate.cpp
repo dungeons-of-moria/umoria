@@ -529,11 +529,11 @@ static void dungeonPlaceFourSmallRooms(Coord_t coord, int depth, int height, int
 //   4 - Inner room has a maze
 //   5 - A set of four inner rooms
 enum class InnerRoomTypes {
-    plain = 1,
-    treasure_vault,
-    pillars,
-    maze,
-    four_small_rooms,
+    Plain = 1,
+    TreasureVault,
+    Pillars,
+    Maze,
+    FourSmallRooms,
 };
 
 // Builds a type 2 unusual room at a row, column coordinate -RAK-
@@ -589,11 +589,11 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
 
     // Inner room variations
     switch ((InnerRoomTypes) randomNumber(5)) {
-        case InnerRoomTypes::plain:
+        case InnerRoomTypes::Plain:
             dungeonPlaceRandomSecretDoor(coord, depth, height, left, right);
             dungeonPlaceVaultMonster(coord, 1);
             break;
-        case InnerRoomTypes::treasure_vault:
+        case InnerRoomTypes::TreasureVault:
             dungeonPlaceTreasureVault(coord, depth, height, left, right);
 
             // Guard the treasure well
@@ -602,7 +602,7 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
             // If the monsters don't get 'em.
             dungeonPlaceVaultTrap(coord, Coord_t{4, 10}, 2 + randomNumber(3));
             break;
-        case InnerRoomTypes::pillars:
+        case InnerRoomTypes::Pillars:
             dungeonPlaceRandomSecretDoor(coord, depth, height, left, right);
 
             dungeonPlaceInnerPillars(coord);
@@ -633,7 +633,7 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
             dungeonPlaceVaultMonster(Coord_t{coord.y, coord.x - 2}, randomNumber(2));
             dungeonPlaceVaultMonster(Coord_t{coord.y, coord.x + 2}, randomNumber(2));
             break;
-        case InnerRoomTypes::maze:
+        case InnerRoomTypes::Maze:
             dungeonPlaceRandomSecretDoor(coord, depth, height, left, right);
 
             dungeonPlaceMazeInsideRoom(depth, height, left, right);
@@ -651,7 +651,7 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
                 dungeonPlaceRandomObjectNear(coord, 1);
             }
             break;
-        case InnerRoomTypes::four_small_rooms:
+        case InnerRoomTypes::FourSmallRooms:
             dungeonPlaceFourSmallRooms(coord, depth, height, left, right);
 
             // Treasure in each one.
