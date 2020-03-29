@@ -137,27 +137,27 @@ static bool playerSeeNothing(int dir, Coord_t coord) {
 }
 
 static void findRunningBreak(int dir, Coord_t coord) {
-    bool deepLeft = false;
-    bool deepRight = false;
-    bool shortLeft = false;
-    bool shortRight = false;
+    bool deep_left = false;
+    bool deep_right = false;
+    bool short_left = false;
+    bool short_right = false;
 
-    int cycleIndex = chome[dir];
+    int cycle_index = chome[dir];
 
-    if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], py.pos)) {
+    if (playerCanSeeDungeonWall(cycle[cycle_index + 1], py.pos)) {
         find_breakleft = true;
-        shortLeft = true;
-    } else if (playerCanSeeDungeonWall(cycle[cycleIndex + 1], coord)) {
+        short_left = true;
+    } else if (playerCanSeeDungeonWall(cycle[cycle_index + 1], coord)) {
         find_breakleft = true;
-        deepLeft = true;
+        deep_left = true;
     }
 
-    if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], py.pos)) {
+    if (playerCanSeeDungeonWall(cycle[cycle_index - 1], py.pos)) {
         find_breakright = true;
-        shortRight = true;
-    } else if (playerCanSeeDungeonWall(cycle[cycleIndex - 1], coord)) {
+        short_right = true;
+    } else if (playerCanSeeDungeonWall(cycle[cycle_index - 1], coord)) {
         find_breakright = true;
-        deepRight = true;
+        deep_right = true;
     }
 
     if (find_breakleft && find_breakright) {
@@ -165,20 +165,20 @@ static void findRunningBreak(int dir, Coord_t coord) {
 
         // a hack to allow angled corridor entry
         if ((dir & 1) != 0) {
-            if (deepLeft && !deepRight) {
-                find_prevdir = cycle[cycleIndex - 1];
-            } else if (deepRight && !deepLeft) {
-                find_prevdir = cycle[cycleIndex + 1];
+            if (deep_left && !deep_right) {
+                find_prevdir = cycle[cycle_index - 1];
+            } else if (deep_right && !deep_left) {
+                find_prevdir = cycle[cycle_index + 1];
             }
-        } else if (playerCanSeeDungeonWall(cycle[cycleIndex], coord)) {
+        } else if (playerCanSeeDungeonWall(cycle[cycle_index], coord)) {
             // else if there is a wall two spaces ahead and seem to be in a
             // corridor, then force a turn into the side corridor, must
             // be moving straight into a corridor here
 
-            if (shortLeft && !shortRight) {
-                find_prevdir = cycle[cycleIndex - 2];
-            } else if (shortRight && !shortLeft) {
-                find_prevdir = cycle[cycleIndex + 2];
+            if (short_left && !short_right) {
+                find_prevdir = cycle[cycle_index - 2];
+            } else if (short_right && !short_left) {
+                find_prevdir = cycle[cycle_index + 2];
             }
         }
     } else {
@@ -248,7 +248,7 @@ void playerEndRunning() {
     dungeonMoveCharacterLight(py.pos, py.pos);
 }
 
-static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t coord, int &check_dir, int &option1, int &option2) {
+static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t coord, int &check_dir, int &dir_a, int &dir_b) {
     Tile_t const &tile = dg.floor[coord.y][coord.x];
 
     // Default: Square unseen. Treat as open.
@@ -256,9 +256,9 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t 
 
     if (py.carrying_light || tile.temporary_light || tile.permanent_light || tile.field_mark) {
         if (tile.treasure_id != 0) {
-            int tileID = game.treasure.list[tile.treasure_id].category_id;
+            int tile_id = game.treasure.list[tile.treasure_id].category_id;
 
-            if (tileID != TV_INVIS_TRAP && tileID != TV_SECRET_DOOR && (tileID != TV_OPEN_DOOR || !config::options::run_ignore_doors)) {
+            if (tile_id != TV_INVIS_TRAP && tile_id != TV_SECRET_DOOR && (tile_id != TV_OPEN_DOOR || !config::options::run_ignore_doors)) {
                 playerEndRunning();
                 return true;
             }
@@ -289,27 +289,27 @@ static bool areaAffectStopLookingAtSquares(int i, int dir, int new_dir, Coord_t 
                     return true;
                 }
             }
-        } else if (option1 == 0) {
+        } else if (dir_a == 0) {
             // The first new direction.
-            option1 = new_dir;
-        } else if (option2 != 0) {
+            dir_a = new_dir;
+        } else if (dir_b != 0) {
             // Three new directions. STOP.
             playerEndRunning();
             return true;
-        } else if (option1 != cycle[chome[dir] + i - 1]) {
+        } else if (dir_a != cycle[chome[dir] + i - 1]) {
             // If not adjacent to prev, STOP
             playerEndRunning();
             return true;
         } else {
-            // Two adjacent choices. Make option2 the diagonal, and
+            // Two adjacent choices. Make dir_b the diagonal, and
             // remember the other diagonal adjacent to the first option.
             if ((new_dir & 1) == 1) {
                 check_dir = cycle[chome[dir] + i - 2];
-                option2 = new_dir;
+                dir_b = new_dir;
             } else {
                 check_dir = cycle[chome[dir] + i + 1];
-                option2 = option1;
-                option1 = new_dir;
+                dir_b = dir_a;
+                dir_a = new_dir;
             }
         }
     } else if (find_openarea) {
@@ -339,8 +339,8 @@ void playerAreaAffect(int direction, Coord_t coord) {
     }
 
     int check_dir = 0;
-    int option = 0;
-    int option2 = 0;
+    int dir_a = 0;
+    int dir_b = 0;
 
     direction = find_prevdir;
 
@@ -357,7 +357,7 @@ void playerAreaAffect(int direction, Coord_t coord) {
 
         // Objects player can see (Including doors?) cause a stop.
         if (playerMovePosition(new_dir, spot)) {
-            areaAffectStopLookingAtSquares(i, direction, new_dir, spot, check_dir, option, option2);
+            areaAffectStopLookingAtSquares(i, direction, new_dir, spot, check_dir, dir_a, dir_b);
         }
     }
 
@@ -367,18 +367,18 @@ void playerAreaAffect(int direction, Coord_t coord) {
 
     // choose a direction.
 
-    if (option2 == 0 || (config::options::run_examine_corners && !config::options::run_cut_corners)) {
+    if (dir_b == 0 || (config::options::run_examine_corners && !config::options::run_cut_corners)) {
         // There is only one option, or if two, then we always examine
         // potential corners and never cur known corners, so you step
         // into the straight option.
-        if (option != 0) {
-            find_direction = option;
+        if (dir_a != 0) {
+            find_direction = dir_a;
         }
 
-        if (option2 == 0) {
-            find_prevdir = option;
+        if (dir_b == 0) {
+            find_prevdir = dir_a;
         } else {
-            find_prevdir = option2;
+            find_prevdir = dir_b;
         }
 
         return;
@@ -387,28 +387,28 @@ void playerAreaAffect(int direction, Coord_t coord) {
     // Two options!
 
     Coord_t location = Coord_t{coord.y, coord.x};
-    (void) playerMovePosition(option, location);
+    (void) playerMovePosition(dir_a, location);
 
-    if (!playerCanSeeDungeonWall(option, location) || !playerCanSeeDungeonWall(check_dir, location)) {
+    if (!playerCanSeeDungeonWall(dir_a, location) || !playerCanSeeDungeonWall(check_dir, location)) {
         // Don't see that it is closed off.  This could be a
         // potential corner or an intersection.
-        if (config::options::run_examine_corners && playerSeeNothing(option, location) && playerSeeNothing(option2, location)) {
+        if (config::options::run_examine_corners && playerSeeNothing(dir_a, location) && playerSeeNothing(dir_b, location)) {
             // Can not see anything ahead and in the direction we are
             // turning, assume that it is a potential corner.
-            find_direction = option;
-            find_prevdir = option2;
+            find_direction = dir_a;
+            find_prevdir = dir_b;
         } else {
             // STOP: we are next to an intersection or a room
             playerEndRunning();
         }
     } else if (config::options::run_cut_corners) {
         // This corner is seen to be enclosed; we cut the corner.
-        find_direction = option2;
-        find_prevdir = option2;
+        find_direction = dir_b;
+        find_prevdir = dir_b;
     } else {
         // This corner is seen to be enclosed, and we deliberately
         // go the long way.
-        find_direction = option;
-        find_prevdir = option2;
+        find_direction = dir_a;
+        find_prevdir = dir_b;
     }
 }
