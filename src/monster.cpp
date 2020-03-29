@@ -1735,9 +1735,10 @@ static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, i
         case 24: // Eat charges
             noticed = inventoryDiminishChargesAttack(creature_level, monster_hp, noticed);
             break;
-        case 99:
-            noticed = false;
-            break;
+            // NOTE: default handles this case
+            // case 99:
+            //     noticed = false;
+            //     break;
         default:
             noticed = false;
             break;

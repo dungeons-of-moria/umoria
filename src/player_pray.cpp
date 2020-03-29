@@ -203,6 +203,7 @@ static void playerRecitePrayer(int prayer_type) {
             }
             break;
         default:
+            // All cases are handled, so this should never be reached!
             break;
     }
 }

@@ -333,6 +333,7 @@ static void playerStepsOnTrap(Coord_t coord) {
             break;
 
         default:
+            // All cases are handled, so this should never be reached!
             printMessage("Unknown trap value.");
             break;
     }

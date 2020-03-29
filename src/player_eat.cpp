@@ -202,6 +202,7 @@ void playerEat() {
                 break;
 #endif
             default:
+                // All cases are handled, so this should never be reached!
                 printMessage("Internal error in playerEat()");
                 break;
         }

@@ -196,6 +196,7 @@ static void castSpell(int spell_id) {
             (void) spellGenocide();
             break;
         default:
+            // All cases are handled, so this should never be reached!
             break;
     }
 }

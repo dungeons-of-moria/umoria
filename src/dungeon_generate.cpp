@@ -664,6 +664,7 @@ static void dungeonBuildRoomWithInnerRooms(Coord_t coord) {
             dungeonPlaceVaultMonster(Coord_t{coord.y - 2, coord.x + 4}, randomNumber(2));
             break;
         default:
+            // All cases are handled, so this should never be reached!
             break;
     }
 }
@@ -800,9 +801,10 @@ static void dungeonBuildRoomCrossShaped(Coord_t coord) {
                 dg.floor[coord.y][coord.x].feature_id = TMP1_WALL;
             }
             break;
-        case 4:
-            // no special feature!
-            break;
+        // handled by the default case
+        // case 4:
+        //     // no special feature!
+        //     break;
         default:
             break;
     }

@@ -327,6 +327,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 py.flags.timed_infra += 100 + randomNumber(100);
                 break;
             default:
+                // All cases are handled, so this should never be reached!
                 printMessage("Internal error in potion()");
                 break;
         }

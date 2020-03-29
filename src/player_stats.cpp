@@ -288,9 +288,7 @@ bool playerStatRandomIncrease(int stat) {
         return false;
     }
 
-    if (new_stat < 18) {
-        new_stat++;
-    } else if (new_stat < 116) {
+    if (new_stat >= 18 && new_stat < 116) {
         // stat increases by 1/6 to 1/3 of difference from max
         int gain = ((118 - new_stat) / 3 + 1) >> 1;
 
@@ -319,9 +317,7 @@ bool playerStatRandomDecrease(int stat) {
         return false;
     }
 
-    if (new_stat < 19) {
-        new_stat--;
-    } else if (new_stat < 117) {
+    if (new_stat >= 19 && new_stat < 117) {
         int loss = (((118 - new_stat) >> 1) + 1) >> 1;
         new_stat += -randomNumber(loss) - loss;
 

@@ -190,6 +190,7 @@ static bool staffDischarge(Inventory_t &item) {
                 // store bought flag
                 break;
             default:
+                // All cases are handled, so this should never be reached!
                 printMessage("Internal error in staffs()");
                 break;
         }
@@ -365,6 +366,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 flags = (uint32_t)(1L << (randomNumber(23) - 1));
                 break;
             default:
+                // All cases are handled, so this should never be reached!
                 printMessage("Internal error in wands()");
                 break;
         }
