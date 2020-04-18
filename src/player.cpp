@@ -819,8 +819,6 @@ static uint32_t playerDetermineLearnableSpells() {
 
 // gain spells when player wants to -JW-
 void playerGainSpells() {
-    // Priests don't need light because they get spells from their god, so only
-    // fail when can't see if player has config::spells::SPELL_TYPE_MAGE spells. This check is done below.
     if (py.flags.confused > 0) {
         printMessage("You are too confused.");
         return;
@@ -834,8 +832,10 @@ void playerGainSpells() {
 
     int stat, offset;
 
+    // Priests don't need light because they get spells from their god, so only
+    // fail when can't see if player has SPELL_TYPE_MAGE spells. This check is done below.
     if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
-        // People with config::spells::SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
+        // People with SPELL_TYPE_MAGE spells can't learn spell_bank if they can't read their books.
         if (!playerCanRead()) {
             return;
         }

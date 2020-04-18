@@ -473,8 +473,8 @@ static void uiCommandInventoryUnwieldItem() {
         screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
     }
 
-    playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Auxiliary], -1);  // Subtract bonuses
-    playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Wield], 1); // Add bonuses
+    playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Auxiliary], -1); // Subtract bonuses
+    playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Wield], 1);      // Add bonuses
 
     if (py.inventory[PlayerEquipment::Wield].category_id != TV_NOTHING) {
         obj_desc_t msg_label = {'\0'};
@@ -1096,16 +1096,64 @@ enum class PackMenu {
     Inventory,
 };
 
+// Switch between Equipment/Inventory menu.
+// Returns true when menu has changed
+static bool inventorySwitchPackMenu(vtype_t &prompt, PackMenu &menu, bool menu_active, int &item_id_end) {
+    bool changed = false;
+
+    if (menu == PackMenu::Inventory) {
+        if (py.equipment_count == 0) {
+            putStringClearToEOL("But you're not using anything -more-", Coord_t{0, 0});
+            (void) getKeyInput();
+        } else {
+            menu = PackMenu::Equipment;
+            changed = true;
+
+            if (menu_active) {
+                item_id_end = py.equipment_count;
+
+                while (item_id_end < py.pack.unique_items) {
+                    item_id_end++;
+                    eraseLine(Coord_t{item_id_end, 0});
+                }
+            }
+            item_id_end = py.equipment_count - 1;
+        }
+
+        putStringClearToEOL(prompt, Coord_t{0, 0});
+    } else {
+        if (py.pack.unique_items == 0) {
+            putStringClearToEOL("But you're not carrying anything -more-", Coord_t{0, 0});
+            (void) getKeyInput();
+        } else {
+            menu = PackMenu::Inventory;
+            changed = true;
+
+            if (menu_active) {
+                item_id_end = py.pack.unique_items;
+
+                while (item_id_end < py.equipment_count) {
+                    item_id_end++;
+                    eraseLine(Coord_t{item_id_end, 0});
+                }
+            }
+            item_id_end = py.pack.unique_items - 1;
+        }
+    }
+
+    return changed;
+}
+
 // Get the ID of an item and return the CTR value of it -RAK-
 bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message) {
-    PackMenu menu_id = PackMenu::Inventory;
+    PackMenu menu = PackMenu::Inventory;
     bool pack_full = false;
 
     if (item_id_end > PlayerEquipment::Wield) {
         pack_full = true;
 
         if (py.pack.unique_items == 0) {
-            menu_id = PackMenu::Equipment;
+            menu = PackMenu::Equipment;
             item_id_end = py.equipment_count - 1;
         } else {
             item_id_end = py.pack.unique_items - 1;
@@ -1124,7 +1172,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
     do {
         if (menu_active) {
-            if (menu_id == PackMenu::Inventory) {
+            if (menu == PackMenu::Inventory) {
                 (void) displayInventory(item_id_start, item_id_end, false, 80, mask);
             } else {
                 (void) displayEquipment(false, 80);
@@ -1134,24 +1182,24 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
         vtype_t description = {'\0'};
 
         if (pack_full) {
-            (void) sprintf(description,                            //
-                           "(%s: %c-%c,%s%s / for %s, or ESC) %s", //
-                           (menu_id == PackMenu::Inventory ? "Inven" : "Equip"),    //
-                           item_id_start + 'a',                    //
-                           item_id_end + 'a',                      //
-                           (menu_id == PackMenu::Inventory ? " 0-9," : ""),         //
-                           (menu_active ? "" : " * to see,"),    //
-                           (menu_id == PackMenu::Inventory ? "Equip" : "Inven"),    //
-                           prompt                                  //
+            (void) sprintf(description,                                       //
+                           "(%s: %c-%c,%s%s / for %s, or ESC) %s",            //
+                           (menu == PackMenu::Inventory ? "Inven" : "Equip"), //
+                           item_id_start + 'a',                               //
+                           item_id_end + 'a',                                 //
+                           (menu == PackMenu::Inventory ? " 0-9," : ""),      //
+                           (menu_active ? "" : " * to see,"),                 //
+                           (menu == PackMenu::Inventory ? "Equip" : "Inven"), //
+                           prompt                                             //
             );
         } else {
-            (void) sprintf(description,                                     //
-                           "(Items %c-%c,%s%s ESC to exit) %s",             //
-                           item_id_start + 'a',                             //
-                           item_id_end + 'a',                               //
-                           (menu_id == PackMenu::Inventory ? " 0-9," : ""),                  //
+            (void) sprintf(description,                                   //
+                           "(Items %c-%c,%s%s ESC to exit) %s",           //
+                           item_id_start + 'a',                           //
+                           item_id_end + 'a',                             //
+                           (menu == PackMenu::Inventory ? " 0-9," : ""),  //
                            (menu_active ? "" : " * for inventory list,"), //
-                           prompt                                           //
+                           prompt                                         //
             );
         }
 
@@ -1163,56 +1211,15 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
             switch (which) {
                 case ESCAPE:
-                    menu_id = PackMenu::CloseMenu;
+                    menu = PackMenu::CloseMenu;
                     done = true;
 
                     game.player_free_turn = true;
 
                     break;
-                case '/': // switch between Equipment/Inventory lists. Works with `drop` command.
-                    if (pack_full) {
-                        if (menu_id == PackMenu::Inventory) {
-                            // TODO: when is this branch triggered?
+                case '/':
+                    done = inventorySwitchPackMenu(description, menu, menu_active, item_id_end);
 
-                            if (py.equipment_count == 0) {
-                                putStringClearToEOL("But you're not using anything -more-", Coord_t{0, 0});
-                                (void) getKeyInput();
-                            } else {
-                                menu_id = PackMenu::Equipment;
-                                done = true;
-
-                                if (menu_active) {
-                                    item_id_end = py.equipment_count;
-
-                                    while (item_id_end < py.pack.unique_items) {
-                                        item_id_end++;
-                                        eraseLine(Coord_t{item_id_end, 0});
-                                    }
-                                }
-                                item_id_end = py.equipment_count - 1;
-                            }
-
-                            putStringClearToEOL(description, Coord_t{0, 0});
-                        } else {
-                            if (py.pack.unique_items == 0) {
-                                putStringClearToEOL("But you're not carrying anything -more-", Coord_t{0, 0});
-                                (void) getKeyInput();
-                            } else {
-                                menu_id = PackMenu::Inventory;
-                                done = true;
-
-                                if (menu_active) {
-                                    item_id_end = py.pack.unique_items;
-
-                                    while (item_id_end < py.equipment_count) {
-                                        item_id_end++;
-                                        eraseLine(Coord_t{item_id_end, 0});
-                                    }
-                                }
-                                item_id_end = py.pack.unique_items - 1;
-                            }
-                        }
-                    }
                     break;
                 case '*': // activate menu if required
                     if (!menu_active) {
@@ -1223,7 +1230,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     break;
                 default:
                     // look for item whose inscription matches "which"
-                    if (which >= '0' && which <= '9' && menu_id != PackMenu::Equipment) { // TODO: menu_id == PackMenu::Inventory ???
+                    if (which >= '0' && which <= '9' && menu != PackMenu::Equipment) { // TODO: menu == PackMenu::Inventory ???
                         int m;
 
                         // Note: loop to find the inventory item
@@ -1242,7 +1249,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     }
 
                     if (command_key_id >= item_id_start && command_key_id <= item_id_end && (mask == CNIL || (mask[command_key_id] != 0))) {
-                        if (menu_id == PackMenu::Equipment) {
+                        if (menu == PackMenu::Equipment) {
                             item_id_start = 21;
                             item_id_end = command_key_id;
 
@@ -1260,7 +1267,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                         }
 
                         if ((isupper((int) which) != 0) && !verify("Try", command_key_id)) {
-                            menu_id = PackMenu::CloseMenu;
+                            menu = PackMenu::CloseMenu;
                             done = true;
 
                             game.player_free_turn = true;
@@ -1268,7 +1275,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                             break;
                         }
 
-                        menu_id = PackMenu::CloseMenu;
+                        menu = PackMenu::CloseMenu;
                         done = true;
 
                         item_found = true;
@@ -1283,7 +1290,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     break;
             }
         }
-    } while (menu_id != PackMenu::CloseMenu);
+    } while (menu != PackMenu::CloseMenu);
 
     if (menu_active) {
         terminalRestoreScreen();
