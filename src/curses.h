@@ -15,6 +15,10 @@
   #undef KEY_EVENT
   #include <ncurses/ncurses.h>
 #else
-  #include <ncurses.h>
+  #ifdef __NetBSD__
+    #include <curses.h>
+  #else
+    #include <ncurses.h>
+  #endif 
 #endif
 
