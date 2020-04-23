@@ -14,11 +14,9 @@
   // this is defined in Windows and also in ncurses
   #undef KEY_EVENT
   #include <ncurses/ncurses.h>
+#elif __NetBSD__
+  #include <curses.h>
 #else
-  #ifdef __NetBSD__
-    #include <curses.h>
-  #else
-    #include <ncurses.h>
-  #endif 
+  #include <ncurses.h>
 #endif
 
