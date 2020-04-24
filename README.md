@@ -16,6 +16,10 @@ Supported Platforms:
 
 _* other Linux distros may work, but have not yet been tested._
 
+Compiles and limited testing done for:
+
+  - NetBSD 8.1 (with gcc 5.5)
+
 
 ## Umoria Restoration Release: v5.7
 
