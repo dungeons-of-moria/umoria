@@ -100,4 +100,4 @@ void setFileptr(FILE *file);
 
 // game_run.cpp
 // (includes the playDungeon() main game loop)
-void startMoria(int seed, bool start_new_game, bool use_roguelike_keys);
+void startMoria(int seed, bool start_new_game);

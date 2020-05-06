@@ -28,7 +28,11 @@ static void dungeonGoDownLevel();
 static void dungeonJamDoor();
 static void inventoryRefillLamp();
 
-void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
+void startMoria(int seed, bool start_new_game) {
+    // Enable roguelike keys by default - this will be overridden by the
+    // setting in the game save file.
+    config::options::use_roguelike_keys = true;
+
     priceAdjust();
 
     // Show the game splash screen
@@ -65,11 +69,6 @@ void startMoria(int seed, bool start_new_game, bool use_roguelike_keys) {
 
     if (!start_new_game && (access(config::files::save_game.c_str(), 0) == 0) && loadGame(generate)) {
         result = true;
-    }
-
-    // Executing after game load to override saved game settings
-    if (use_roguelike_keys) {
-        config::options::use_roguelike_keys = true;
     }
 
     // enter wizard mode before showing the character display, but must wait

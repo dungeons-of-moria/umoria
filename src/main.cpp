@@ -21,7 +21,6 @@ SAVEGAME is an optional save game filename (default: game.sav)
 
 Options:
     -n           Force start of new game
-    -r           Disable classic roguelike keys (default: enabled)
     -d           Display high scores and exit
     -s NUMBER    Game Seed, as a decimal number (max: 2147483647)
 
@@ -33,7 +32,6 @@ Options:
 int main(int argc, char *argv[]) {
     uint32_t seed = 0;
     bool new_game = false;
-    bool roguelike_keys = true;
 
     // call this routine to grab a file pointer to the high score file
     // and prepare things to relinquish setuid privileges
@@ -60,9 +58,6 @@ int main(int argc, char *argv[]) {
                 return 0;
             case 'n':
                 new_game = true;
-                break;
-            case 'r':
-                roguelike_keys = false;
                 break;
             case 'd':
                 showScoresScreen();
@@ -104,7 +99,7 @@ int main(int argc, char *argv[]) {
         config::files::save_game = argv[0];
     }
 
-    startMoria(seed, new_game, roguelike_keys);
+    startMoria(seed, new_game);
 
     return 0;
 }

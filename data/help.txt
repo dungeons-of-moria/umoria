@@ -1,5 +1,5 @@
 Command Summary (@ is optional count, ~ is direction, ^R redraws, ESC aborts)
-  a        Aim and fire a wand          | @ B ~      Bash item or monster
+  a        Aim and fire a wand         | @ B ~      Bash item or monster
   b        Browse a book               |   C        Character description
   c ~      Close a door                | @ D ~      Disarm a trap/chest
   d        Drop an item                |   E        Eat some food
