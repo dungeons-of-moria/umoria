@@ -5,6 +5,8 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
+- Add `Press ? for help` to the message bar on game start/load.
+- Fix bug in the roguelike keys settings, and remove option from the CLI.
 - Player (`row`,`col`) and Monster (`y`,`x`) now use `Coord_t` for their positions.
 - Use `Coord_t` in all functions that used `y, x` coordinates.
 - Reorganise some game arrays and variables, placing them on an object:

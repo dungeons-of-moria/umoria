@@ -125,6 +125,7 @@ void startMoria(int seed, bool start_new_game) {
     // Begin the game
     //
     clearScreen();
+    putString("Press ? for help", Coord_t{0, 63});
     printCharacterStatsBlock();
 
     if (generate) {
