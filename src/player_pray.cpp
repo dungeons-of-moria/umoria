@@ -232,39 +232,44 @@ void pray() {
         return;
     }
 
-    if (randomNumber(100) < chance) {
-        printMessage("You lost your concentration!");
-        return;
-    }
-
     Spell_t const &spell = magic_spells[py.misc.class_id - 1][choice];
 
     // NOTE: at least one function called by `playerRecitePrayer()` sets `player_free_turn = true`,
     // e.g. `spellCreateFood()`, so this check is required. -MRC-
     game.player_free_turn = false;
-    playerRecitePrayer(choice);
-    if (!game.player_free_turn) {
-        if ((py.flags.spells_worked & (1L << choice)) == 0) {
-            py.misc.exp += spell.exp_gain_for_learning << 2;
-            displayCharacterExperience();
-            py.flags.spells_worked |= (1L << choice);
-        }
-    }
 
-    if (!game.player_free_turn) {
-        if (spell.mana_required > py.misc.current_mana) {
-            printMessage("You faint from fatigue!");
-            py.flags.paralysis = (int16_t) randomNumber((5 * (spell.mana_required - py.misc.current_mana)));
-            py.misc.current_mana = 0;
-            py.misc.current_mana_fraction = 0;
-            if (randomNumber(3) == 1) {
-                printMessage("You have damaged your health!");
-                (void) playerStatRandomDecrease(PlayerAttr::CON);
+    if (randomNumber(100) < chance) {
+        printMessage("You lost your concentration!");
+    } else {
+        playerRecitePrayer(choice);
+
+        if (!game.player_free_turn) {
+            if ((py.flags.spells_worked & (1L << choice)) == 0) {
+                py.misc.exp += spell.exp_gain_for_learning << 2;
+                displayCharacterExperience();
+                py.flags.spells_worked |= (1L << choice);
             }
-        } else {
-            py.misc.current_mana -= spell.mana_required;
         }
-
-        printCharacterCurrentMana();
     }
+
+    if (game.player_free_turn) {
+        return;
+    }
+
+    if (spell.mana_required > py.misc.current_mana) {
+        printMessage("You faint from fatigue!");
+
+        py.flags.paralysis = (int16_t) randomNumber((5 * (spell.mana_required - py.misc.current_mana)));
+        py.misc.current_mana = 0;
+        py.misc.current_mana_fraction = 0;
+
+        if (randomNumber(3) == 1) {
+            printMessage("You have damaged your health!");
+            (void) playerStatRandomDecrease(PlayerAttr::CON);
+        }
+    } else {
+        py.misc.current_mana -= spell.mana_required;
+    }
+
+    printCharacterCurrentMana();
 }
