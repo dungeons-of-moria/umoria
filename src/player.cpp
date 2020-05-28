@@ -520,7 +520,7 @@ void playerRecalculateBonuses() {
     py.misc.display_ac += py.misc.display_to_ac;
 
     if (py.weapon_is_heavy) {
-        py.misc.display_to_hit += (py.stats.used[PlayerAttr::STR] * 15 - py.inventory[PlayerEquipment::Wield].weight);
+        py.misc.display_to_hit += (py.stats.used[PlayerAttr::A_STR] * 15 - py.inventory[PlayerEquipment::Wield].weight);
     }
 
     // Add in temporary spell increases
@@ -732,7 +732,7 @@ void playerSearch(Coord_t coord, int chance) {
 
 // Computes current weight limit -RAK-
 int playerCarryingLoadLimit() {
-    int weight_cap = py.stats.used[PlayerAttr::STR] * config::player::PLAYER_WEIGHT_CAP + py.misc.weight;
+    int weight_cap = py.stats.used[PlayerAttr::A_STR] * config::player::PLAYER_WEIGHT_CAP + py.misc.weight;
 
     if (weight_cap > 3000) {
         weight_cap = 3000;
@@ -745,7 +745,7 @@ int playerCarryingLoadLimit() {
 void playerStrength() {
     Inventory_t const &item = py.inventory[PlayerEquipment::Wield];
 
-    if (item.category_id != TV_NOTHING && py.stats.used[PlayerAttr::STR] * 15 < item.weight) {
+    if (item.category_id != TV_NOTHING && py.stats.used[PlayerAttr::A_STR] * 15 < item.weight) {
         if (!py.weapon_is_heavy) {
             printMessage("You have trouble wielding such a heavy weapon.");
             py.weapon_is_heavy = true;
@@ -839,10 +839,10 @@ void playerGainSpells() {
         if (!playerCanRead()) {
             return;
         }
-        stat = PlayerAttr::INT;
+        stat = PlayerAttr::A_INT;
         offset = config::spells::NAME_OFFSET_SPELLS;
     } else {
-        stat = PlayerAttr::WIS;
+        stat = PlayerAttr::A_WIS;
         offset = config::spells::NAME_OFFSET_PRAYERS;
     }
 
@@ -850,7 +850,7 @@ void playerGainSpells() {
 
     if (new_spells == 0) {
         vtype_t tmp_str = {'\0'};
-        (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == PlayerAttr::INT ? "spell" : "prayer"));
+        (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == PlayerAttr::A_INT ? "spell" : "prayer"));
         printMessage(tmp_str);
 
         game.player_free_turn = true;
@@ -861,7 +861,7 @@ void playerGainSpells() {
 
     // determine which spells player can learn
     // mages need the book to learn a spell, priests do not need the book
-    if (stat == PlayerAttr::INT) {
+    if (stat == PlayerAttr::A_INT) {
         spell_flag = playerDetermineLearnableSpells();
     } else {
         spell_flag = 0x7FFFFFFF;
@@ -893,7 +893,7 @@ void playerGainSpells() {
 
     if (new_spells == 0) {
         // do nothing
-    } else if (stat == PlayerAttr::INT) {
+    } else if (stat == PlayerAttr::A_INT) {
         // get to choose which mage spells will be learned
         terminalSaveScreen();
         displaySpellsList(spell_bank, spell_id, false, -1);
@@ -1048,7 +1048,7 @@ int playerWeaponCriticalBlow(int weapon_weight, int plus_to_hit, int damage, int
 bool playerSavingThrow() {
     int class_level_adjustment = class_level_adj[py.misc.class_id][PlayerClassLevelAdj::SAVE] * py.misc.level / 3;
 
-    int saving = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::WIS) + class_level_adjustment;
+    int saving = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_WIS) + class_level_adjustment;
 
     return randomNumber(100) <= saving;
 }
@@ -1211,7 +1211,7 @@ static int16_t playerLockPickingSkill() {
 
     skill += 2;
     skill *= playerDisarmAdjustment();
-    skill += playerStatAdjustmentWisdomIntelligence(PlayerAttr::INT);
+    skill += playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT);
     skill += class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DISARM] * py.misc.level / 3;
 
     return skill;
@@ -1590,7 +1590,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
     const char *magic_type_str = nullptr;
     int offset;
 
-    if (stat == PlayerAttr::INT) {
+    if (stat == PlayerAttr::A_INT) {
         magic_type_str = "spell";
         offset = config::spells::NAME_OFFSET_SPELLS;
     } else {

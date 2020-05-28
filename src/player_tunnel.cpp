@@ -32,7 +32,7 @@ static bool playerCanTunnel(int treasure_id, int tile_id) {
 
 // Compute the digging ability of player; based on strength, and type of tool used
 static int playerDiggingAbility(Inventory_t const &weapon) {
-    int digging_ability = py.stats.used[PlayerAttr::STR];
+    int digging_ability = py.stats.used[PlayerAttr::A_STR];
 
     if ((weapon.flags & config::treasure::flags::TR_TUNNEL) != 0u) {
         digging_ability += 25 + weapon.misc_use * 50;
@@ -46,7 +46,7 @@ static int playerDiggingAbility(Inventory_t const &weapon) {
     // If this weapon is too heavy for the player to wield properly,
     // then also make it harder to dig with it.
     if (py.weapon_is_heavy) {
-        digging_ability += (py.stats.used[PlayerAttr::STR] * 15) - weapon.weight;
+        digging_ability += (py.stats.used[PlayerAttr::A_STR] * 15) - weapon.weight;
 
         if (digging_ability < 0) {
             digging_ability = 0;

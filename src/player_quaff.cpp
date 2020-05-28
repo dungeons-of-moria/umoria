@@ -73,7 +73,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
         // Potions
         switch ((PotionSpellTypes) potion_id) {
             case PotionSpellTypes::Strength:
-                if (playerStatRandomIncrease(PlayerAttr::STR)) {
+                if (playerStatRandomIncrease(PlayerAttr::A_STR)) {
                     printMessage("Wow!  What bulging muscles!");
                     identified = true;
                 }
@@ -83,13 +83,13 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 identified = true;
                 break;
             case PotionSpellTypes::RestoreStrength:
-                if (playerStatRestore(PlayerAttr::STR)) {
+                if (playerStatRestore(PlayerAttr::A_STR)) {
                     printMessage("You feel warm all over.");
                     identified = true;
                 }
                 break;
             case PotionSpellTypes::Intelligence:
-                if (playerStatRandomIncrease(PlayerAttr::INT)) {
+                if (playerStatRandomIncrease(PlayerAttr::A_INT)) {
                     printMessage("Aren't you brilliant!");
                     identified = true;
                 }
@@ -99,13 +99,13 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 identified = true;
                 break;
             case PotionSpellTypes::RestoreIntelligence:
-                if (playerStatRestore(PlayerAttr::INT)) {
+                if (playerStatRestore(PlayerAttr::A_INT)) {
                     printMessage("You have have a warm feeling.");
                     identified = true;
                 }
                 break;
             case PotionSpellTypes::Wisdom:
-                if (playerStatRandomIncrease(PlayerAttr::WIS)) {
+                if (playerStatRandomIncrease(PlayerAttr::A_WIS)) {
                     printMessage("You suddenly have a profound thought!");
                     identified = true;
                 }
@@ -115,13 +115,13 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 identified = true;
                 break;
             case PotionSpellTypes::RestoreWisdom:
-                if (playerStatRestore(PlayerAttr::WIS)) {
+                if (playerStatRestore(PlayerAttr::A_WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
             case PotionSpellTypes::Charisma:
-                if (playerStatRandomIncrease(PlayerAttr::CHR)) {
+                if (playerStatRandomIncrease(PlayerAttr::A_CHR)) {
                     printMessage("Gee, ain't you cute!");
                     identified = true;
                 }
@@ -131,7 +131,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 identified = true;
                 break;
             case PotionSpellTypes::RestoreCharisma:
-                if (playerStatRestore(PlayerAttr::CHR)) {
+                if (playerStatRestore(PlayerAttr::A_CHR)) {
                     printMessage("You feel your looks returning.");
                     identified = true;
                 }
@@ -149,7 +149,7 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 identified = spellChangePlayerHitPoints(1000);
                 break;
             case PotionSpellTypes::Constitution:
-                if (playerStatRandomIncrease(PlayerAttr::CON)) {
+                if (playerStatRandomIncrease(PlayerAttr::A_CON)) {
                     printMessage("You feel tingly for a moment.");
                     identified = true;
                 }
@@ -209,19 +209,19 @@ static bool playerDrinkPotion(uint32_t flags, uint8_t item_type) {
                 py.flags.slow += randomNumber(25) + 15;
                 break;
             case PotionSpellTypes::Dexterity:
-                if (playerStatRandomIncrease(PlayerAttr::DEX)) {
+                if (playerStatRandomIncrease(PlayerAttr::A_DEX)) {
                     printMessage("You feel more limber!");
                     identified = true;
                 }
                 break;
             case PotionSpellTypes::RestoreDexterity:
-                if (playerStatRestore(PlayerAttr::DEX)) {
+                if (playerStatRestore(PlayerAttr::A_DEX)) {
                     printMessage("You feel less clumsy.");
                     identified = true;
                 }
                 break;
             case PotionSpellTypes::RestoreConstitution:
-                if (playerStatRestore(PlayerAttr::CON)) {
+                if (playerStatRestore(PlayerAttr::A_CON)) {
                     printMessage("You feel your health returning!");
                     identified = true;
                 }

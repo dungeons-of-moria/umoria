@@ -80,12 +80,12 @@ static void characterGenerateStatsAndRace() {
     Race_t const &race = character_races[py.misc.race_id];
 
     characterGenerateStats();
-    py.stats.max[PlayerAttr::STR] = createModifyPlayerStat(py.stats.max[PlayerAttr::STR], race.str_adjustment);
-    py.stats.max[PlayerAttr::INT] = createModifyPlayerStat(py.stats.max[PlayerAttr::INT], race.int_adjustment);
-    py.stats.max[PlayerAttr::WIS] = createModifyPlayerStat(py.stats.max[PlayerAttr::WIS], race.wis_adjustment);
-    py.stats.max[PlayerAttr::DEX] = createModifyPlayerStat(py.stats.max[PlayerAttr::DEX], race.dex_adjustment);
-    py.stats.max[PlayerAttr::CON] = createModifyPlayerStat(py.stats.max[PlayerAttr::CON], race.con_adjustment);
-    py.stats.max[PlayerAttr::CHR] = createModifyPlayerStat(py.stats.max[PlayerAttr::CHR], race.chr_adjustment);
+    py.stats.max[PlayerAttr::A_STR] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_STR], race.str_adjustment);
+    py.stats.max[PlayerAttr::A_INT] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_INT], race.int_adjustment);
+    py.stats.max[PlayerAttr::A_WIS] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_WIS], race.wis_adjustment);
+    py.stats.max[PlayerAttr::A_DEX] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_DEX], race.dex_adjustment);
+    py.stats.max[PlayerAttr::A_CON] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_CON], race.con_adjustment);
+    py.stats.max[PlayerAttr::A_CHR] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_CHR], race.chr_adjustment);
 
     py.misc.level = 1;
 
@@ -365,12 +365,12 @@ static void generateCharacterClass(uint8_t const class_id) {
     putString(klass.title, Coord_t{5, 15});
 
     // Adjust the stats for the class adjustment -RAK-
-    py.stats.max[PlayerAttr::STR] = createModifyPlayerStat(py.stats.max[PlayerAttr::STR], klass.strength);
-    py.stats.max[PlayerAttr::INT] = createModifyPlayerStat(py.stats.max[PlayerAttr::INT], klass.intelligence);
-    py.stats.max[PlayerAttr::WIS] = createModifyPlayerStat(py.stats.max[PlayerAttr::WIS], klass.wisdom);
-    py.stats.max[PlayerAttr::DEX] = createModifyPlayerStat(py.stats.max[PlayerAttr::DEX], klass.dexterity);
-    py.stats.max[PlayerAttr::CON] = createModifyPlayerStat(py.stats.max[PlayerAttr::CON], klass.constitution);
-    py.stats.max[PlayerAttr::CHR] = createModifyPlayerStat(py.stats.max[PlayerAttr::CHR], klass.charisma);
+    py.stats.max[PlayerAttr::A_STR] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_STR], klass.strength);
+    py.stats.max[PlayerAttr::A_INT] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_INT], klass.intelligence);
+    py.stats.max[PlayerAttr::A_WIS] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_WIS], klass.wisdom);
+    py.stats.max[PlayerAttr::A_DEX] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_DEX], klass.dexterity);
+    py.stats.max[PlayerAttr::A_CON] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_CON], klass.constitution);
+    py.stats.max[PlayerAttr::A_CHR] = createModifyPlayerStat(py.stats.max[PlayerAttr::A_CHR], klass.charisma);
 
     for (auto i = 0; i < 6; i++) {
         py.stats.current[i] = py.stats.max[i];
@@ -456,11 +456,11 @@ static int monetaryValueCalculatedFromStat(uint8_t const stat) {
 }
 
 static void playerCalculateStartGold() {
-    auto value = monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::STR]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::INT]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::WIS]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::CON]);
-    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::DEX]);
+    auto value = monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::A_STR]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::A_INT]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::A_WIS]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::A_CON]);
+    value += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::A_DEX]);
 
     // Social Class adjustment
     auto new_gold = py.misc.social_class * 6 + randomNumber(25) + 325;
@@ -469,7 +469,7 @@ static void playerCalculateStartGold() {
     new_gold -= value;
 
     // Charisma adjustment
-    new_gold += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::CHR]);
+    new_gold += monetaryValueCalculatedFromStat(py.stats.max[PlayerAttr::A_CHR]);
 
     // She charmed the banker into it! -CJS-
     if (!playerIsMale()) {

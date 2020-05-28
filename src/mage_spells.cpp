@@ -256,7 +256,7 @@ void getAndCastMagicSpell() {
 
         if (randomNumber(3) == 1) {
             printMessage("You have damaged your health!");
-            (void) playerStatRandomDecrease(PlayerAttr::CON);
+            (void) playerStatRandomDecrease(PlayerAttr::A_CON);
         }
     } else {
         py.misc.current_mana -= magic_spell.mana_required;
@@ -273,9 +273,9 @@ int spellChanceOfSuccess(int spell_id) {
 
     int stat;
     if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
-        stat = PlayerAttr::INT;
+        stat = PlayerAttr::A_INT;
     } else {
-        stat = PlayerAttr::WIS;
+        stat = PlayerAttr::A_WIS;
     }
 
     chance -= 3 * (playerStatAdjustmentWisdomIntelligence(stat) - 1);

@@ -573,12 +573,12 @@ void printCharacterAbilities() {
 
     // this results in a range from 0 to 9
     int xstl = py.misc.stealth_factor + 1;
-    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(PlayerAttr::INT) +
+    int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT) +
                (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DISARM] * py.misc.level / 3);
     int xsave =
-        py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::WIS) + (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::SAVE] * py.misc.level / 3);
+        py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_WIS) + (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::SAVE] * py.misc.level / 3);
     int xdev =
-        py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::INT) + (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DEVICE] * py.misc.level / 3);
+        py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT) + (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};
     (void) sprintf(xinfra, "%d feet", py.flags.see_infra * 10);
@@ -750,11 +750,11 @@ static void playerGainLevel() {
     Class_t const &player_class = classes[py.misc.class_id];
 
     if (player_class.class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
-        playerCalculateAllowedSpellsCount(PlayerAttr::INT);
-        playerGainMana(PlayerAttr::INT);
+        playerCalculateAllowedSpellsCount(PlayerAttr::A_INT);
+        playerGainMana(PlayerAttr::A_INT);
     } else if (player_class.class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
-        playerCalculateAllowedSpellsCount(PlayerAttr::WIS);
-        playerGainMana(PlayerAttr::WIS);
+        playerCalculateAllowedSpellsCount(PlayerAttr::A_WIS);
+        playerGainMana(PlayerAttr::A_WIS);
     }
 }
 

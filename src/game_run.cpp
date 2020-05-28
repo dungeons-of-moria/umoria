@@ -99,12 +99,12 @@ void startMoria(int seed, bool start_new_game) {
         // Spell and Mana based on class: Mage or Clerical realm.
         if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE) {
             clearScreen(); // makes spell list easier to read
-            playerCalculateAllowedSpellsCount(PlayerAttr::INT);
-            playerGainMana(PlayerAttr::INT);
+            playerCalculateAllowedSpellsCount(PlayerAttr::A_INT);
+            playerGainMana(PlayerAttr::A_INT);
         } else if (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_PRIEST) {
-            playerCalculateAllowedSpellsCount(PlayerAttr::WIS);
+            playerCalculateAllowedSpellsCount(PlayerAttr::A_WIS);
             clearScreen(); // force out the 'learn prayer' message
-            playerGainMana(PlayerAttr::WIS);
+            playerGainMana(PlayerAttr::A_WIS);
         }
 
         // Set some default values -MRC-

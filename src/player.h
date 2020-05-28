@@ -18,12 +18,12 @@ enum PlayerClassLevelAdj {
 
 // Attribute indexes -CJS-
 enum PlayerAttr {
-    STR,
-    INT,
-    WIS,
-    DEX,
-    CON,
-    CHR,
+    A_STR,
+    A_INT,
+    A_WIS,
+    A_DEX,
+    A_CON,
+    A_CHR,
 };
 
 // this depends on the fact that py_class_level_adj::CLASS_SAVE values are all the same,

@@ -14,7 +14,7 @@ static int playerTrapDisarmAbility() {
     int ability = py.misc.disarm;
     ability += 2;
     ability *= playerDisarmAdjustment();
-    ability += playerStatAdjustmentWisdomIntelligence(PlayerAttr::INT);
+    ability += playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT);
     ability += class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DISARM] * py.misc.level / 3;
 
     if (py.flags.blind > 0 || playerNoLight()) {
@@ -150,7 +150,7 @@ static void chestLooseStrength() {
         return;
     }
 
-    (void) playerStatRandomDecrease(PlayerAttr::STR);
+    (void) playerStatRandomDecrease(PlayerAttr::A_STR);
 
     playerTakesHit(diceRoll(Dice_t{1, 4}), "a poison needle");
 

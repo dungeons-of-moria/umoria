@@ -1143,7 +1143,7 @@ void storeEnter(int store_id) {
                 case 'w': // Wear
                 case 'X':
                 case 'x': // Switch weapon
-                    saved_chr = py.stats.used[PlayerAttr::CHR];
+                    saved_chr = py.stats.used[PlayerAttr::A_CHR];
 
                     do {
                         inventoryExecuteCommand(command);
@@ -1151,7 +1151,7 @@ void storeEnter(int store_id) {
                     } while (command != 0);
 
                     // redisplay store prices if charisma changes
-                    if (saved_chr != py.stats.used[PlayerAttr::CHR]) {
+                    if (saved_chr != py.stats.used[PlayerAttr::A_CHR]) {
                         displayStoreInventory(stores[store_id], current_top_item_id);
                     }
 

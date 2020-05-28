@@ -133,37 +133,37 @@ void playerEat() {
                 break;
 #endif
             case FoodMagicTypes::RestoreSTR:
-                if (playerStatRestore(PlayerAttr::STR)) {
+                if (playerStatRestore(PlayerAttr::A_STR)) {
                     printMessage("You feel your strength returning.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::RestoreCON:
-                if (playerStatRestore(PlayerAttr::CON)) {
+                if (playerStatRestore(PlayerAttr::A_CON)) {
                     printMessage("You feel your health returning.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::RestoreINT:
-                if (playerStatRestore(PlayerAttr::INT)) {
+                if (playerStatRestore(PlayerAttr::A_INT)) {
                     printMessage("Your head spins a moment.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::RestoreWIS:
-                if (playerStatRestore(PlayerAttr::WIS)) {
+                if (playerStatRestore(PlayerAttr::A_WIS)) {
                     printMessage("You feel your wisdom returning.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::RestoreDEX:
-                if (playerStatRestore(PlayerAttr::DEX)) {
+                if (playerStatRestore(PlayerAttr::A_DEX)) {
                     printMessage("You feel more dexterous.");
                     identified = true;
                 }
                 break;
             case FoodMagicTypes::RestoreCHR:
-                if (playerStatRestore(PlayerAttr::CHR)) {
+                if (playerStatRestore(PlayerAttr::A_CHR)) {
                     printMessage("Your skin stops itching.");
                     identified = true;
                 }
