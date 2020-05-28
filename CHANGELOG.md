@@ -5,7 +5,10 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
-- Bugfix in `pray()`: loose mana when reciting a prayer fails.
+
+## 5.7.12 (2020-05-28)
+
+- Bugfix in `pray()`: should loose mana when failing to recite a prayer.
 - Add `Press ? for help` to the message bar on game start/load.
 - Use roguelike keys by default, and remove setting option from the CLI.
 - Player (`row`,`col`) and Monster (`y`,`x`) now use `Coord_t` for their positions.
@@ -22,6 +25,7 @@ Tracking all changes since the 5.6.0 release.
 - Move the Manual and FAQ to the `historical` directory and remove from release.
   It seems that these are very much out of date - possibly for any 5.x version - so
   it makes sense to move them back in with the rest of the historical documents.
+- Various compiler fixes.
 
 
 ## 5.7.11 (2020-02-26)

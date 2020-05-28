@@ -4,7 +4,7 @@ _The Dungeons of Moria_ is a single player dungeon simulation originally
 written by Robert Alan Koeneke, with v1.0 released in 1983. The game was
 originally developed in VMS Pascal before being ported to the C language and
 released as _Umoria_ in 1988. Moria has had many variants over the years, with
-[_Angband_](http://rephial.org/) being the most well known, and was also an
+[_Angband_](http://rephial.org/) being the most well known. Moria was also an
 inspiration for one the most commercially successful action roguelike games,
 _Diablo_!
 
@@ -12,13 +12,12 @@ Supported Platforms:
 
   - Windows
   - macOS
-  - Linux* (Ubuntu, Debian, Fedora)
+  - Linux (Ubuntu/Debian)
 
-_* other Linux distros may work, but have not yet been tested._
-
-Compiles and limited testing done for:
+Compiling and limited testing done for:
 
   - NetBSD 8.1 (with gcc 5.5)
+  - Fedora 32
 
 
 ## Umoria Restoration Release: v5.7
@@ -28,10 +27,10 @@ operating systems: Windows, macOS, and Linux. Support for all other outdated
 computer systems such as MS DOS, "Classic" Mac OS (pre OSX), Amiga, and
 Atari ST has been removed.
 
-_Note: there are no intentional game play changes in this release._
+_Note: there are no intentional game play changes in the 5.7.x releases._
 
-A great deal of _code restoration_ has also been undertaken in the hope to aid
-future development of the game. Examples of tasks completed so far include
+A great deal of _code restoration_ has been undertaken in the hope of aiding
+future development of the game. Examples of refactoring completed so far include
 reformatting the source code with the help of `clang-tidy` and `clang-format`,
 modernizing the code to use standard C types, and fixing all warnings while
 compiling against recent versions of GCC and Clang.
@@ -46,28 +45,24 @@ classic roguelike game.
 
 ## Notes on Compiling Umoria
 
-At present Umoria has been tested against GCC `6.x`, `7.x`, and `8.1`, with
-`ncurses 6.x`, although earlier versions should also work fine. You will
+At present Umoria has been tested against GCC `7.x`, and `8.1`, with
+`ncurses 6.x`, although recent earlier versions should also work fine. You will
 require these along with `CMake` and the C++ build tools for your system.
 
 
 ### macOS and Linux
 
-An in-source build can be made by changing to the `umoria` game directory and
-enter the following commands at the terminal:
+Change to the `umoria` game directory and enter the following commands at the
+terminal:
 
-```
-  $ cmake .
-  $ make
-```
+    $ cmake .
+    $ make
 
 To perform an out-of-source build, type the following:
 
-```
-  $ mkdir build && cd build
-  $ cmake ..
-  $ make
-```
+    $ mkdir build && cd build
+    $ cmake ..
+    $ make
 
 An `umoria` directory will be created in the current directory containing the
 game binary and data files, which can then be moved to any other location, such
@@ -87,19 +82,15 @@ need to be specified. This will be either `mingw64` or `mingw32`.
 At the command prompt type the following, being sure to add the correct label
 to `MINGW=`:
 
-```
-  $ MINGW=mingw64 cmake .
-  $ make
-```
+    $ MINGW=mingw64 cmake .
+    $ make
 
 To perform an out-of-source build, type the following:
 
-```
-  $ mkdir build
-  $ cd build
-  $ MINGW=mingw64 cmake ..
-  $ make
-```
+    $ mkdir build
+    $ cd build
+    $ MINGW=mingw64 cmake ..
+    $ make
 
 As with the macOS/Linux builds, the files will be installed into an `umoria` directory.
 
@@ -115,7 +106,7 @@ If you'd like to learn more on the development history of Umoria, these can
 make for interesting reading.
 
 There is also the original Moria Manual and FAQ. Although these are a little
-outdated now, they are certainly worth reading as they contain lots of
+outdated now, they are certainly worth reading as they contain a lot of
 interesting and useful information.
 
 
