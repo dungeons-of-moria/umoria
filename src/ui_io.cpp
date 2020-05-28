@@ -544,7 +544,7 @@ void getDefaultPlayerName(char *buffer) {
     unsigned long bufCharCount = PLAYER_NAME_SIZE;
 
     if (!GetUserName(buffer, &bufCharCount)) {
-        (void) strcpy(buffer, defaultName);
+        (void) strcpy(buffer, default_name);
     }
 #else
     char *p = getlogin();
