@@ -607,7 +607,7 @@ bool tilde(const char *file, char *expanded) {
 
         user[0] = '\0';
         file++;
-        while (*file != '/' && i < (int) sizeof(user)) {
+        while (*file != '/' && i < (int) sizeof(user) - 1) {
             user[i++] = *file++;
         }
         user[i] = '\0';
