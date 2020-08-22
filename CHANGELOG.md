@@ -6,6 +6,11 @@ Tracking all changes since the 5.6.0 release.
 ## HEAD
 
 
+## 5.7.13 (2020-08-22)
+
+- Bugfix in `getAndCastMagicSpell()`: losing mana when cancelling a mage spell
+
+
 ## 5.7.12 (2020-05-28)
 
 - Bugfix in `pray()`: should loose mana when failing to recite a prayer.
