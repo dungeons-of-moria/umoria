@@ -27,6 +27,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 project(umoria)
 
 #
+# Get around the fact that Visual Studio doesn't have ssize_t
+# defined but uses SSIZE_T instead.
+#
+if(MSVC)
+    add_definitions(-Dssize_t=SSIZE_T)
+endif(MSVC)
+
+#
 # Core set of warnings
 #
 set(cxx_warnings "-Wall")

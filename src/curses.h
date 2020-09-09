@@ -13,7 +13,12 @@
 #ifdef _WIN32
   // this is defined in Windows and also in ncurses
   #undef KEY_EVENT
-  #include <ncurses/ncurses.h>
+  #ifdef _MSVC_LANG 
+    #undef MOUSE_MOVED
+    #include <curses.h>
+  #else
+    #include <ncurses/ncurses.h>
+  #endif
 #elif __NetBSD__
   #include <curses.h>
 #else
