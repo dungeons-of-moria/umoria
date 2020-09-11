@@ -27,14 +27,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 project(umoria)
 
 #
-# Get around the fact that Visual Studio doesn't have ssize_t
-# defined but uses SSIZE_T instead.
-#
-if(MSVC)
-    add_definitions(-Dssize_t=SSIZE_T)
-endif(MSVC)
-
-#
 # Core set of warnings
 #
 set(cxx_warnings "-Wall")
@@ -245,6 +237,14 @@ set(resources ${data_files} ${support_files})
 # Also add resources to the target so they are visible in the IDE
 add_executable(umoria ${source_files} ${resources})
 
+
+#
+# Get around the fact that Visual Studio doesn't have ssize_t
+# defined but uses SSIZE_T instead.
+#
+if(MSVC)
+    add_definitions(-Dssize_t=SSIZE_T)
+endif(MSVC)
 
 # This is horrible, but needed bacause `find_package()` doesn't use the
 # include/lib inside the /mingw32 or /mingw64 directories, and with
