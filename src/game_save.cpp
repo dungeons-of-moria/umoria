@@ -876,7 +876,7 @@ bool loadGame(bool &generate) {
 
             if (panic_save) {
                 printMessage("This game is from a panic save.  Score will not be added to scoreboard.");
-            } else if ((!game.noscore) & 0x04) {
+            } else if ((~game.noscore) & 0x04) {
                 printMessage("This character is already on the scoreboard; it will not be scored again.");
                 game.noscore |= 0x4;
             }
