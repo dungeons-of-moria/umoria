@@ -367,6 +367,33 @@ char getKeyInput() {
             return ESCAPE;
         }
 
+	// AFR: convert arrow keys to movement
+	if (ch == ESCAPE) {
+	  int ch2 = getch();
+	  if (ch2 == '[') {
+	    int ch3 = getch();
+	    switch (ch3) {
+	    case 'A':  //up
+	      return 'k';
+	      break;
+	    case 'B': // down
+	      return 'j';
+	      break;
+	    case 'C': // right
+	      return 'l';
+	      break;
+	    case 'D': // left
+	      return 'h';
+	      break;
+	    default:
+	      // rollback
+	      ungetch(ch3);
+	    }
+	  }
+	  // rollback
+	  ungetch(ch2);
+	}
+	
         if (ch != CTRL_KEY('R')) {
             return (char) ch;
         }
