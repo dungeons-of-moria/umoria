@@ -29,9 +29,9 @@ static void dungeonJamDoor();
 static void inventoryRefillLamp();
 
 void startMoria(int seed, bool start_new_game) {
-    // Enable roguelike keys by default - this will be overridden by the
-    // setting in the game save file.
-    config::options::use_roguelike_keys = true;
+    // Roguelike keys are disabled by default.
+    // This will be overridden by the setting in the game save file.
+    config::options::use_roguelike_keys = false;
 
     priceAdjust();
 
