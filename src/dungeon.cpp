@@ -500,46 +500,25 @@ void dungeonMoveCharacterLight(Coord_t const &from, Coord_t const &to) {
 }
 
 // Deletes a monster entry from the level -RAK-
+//
+// If used within updateMonsters(), deleting a monster while scanning the
+// monsters causes two problems;
+//   1. monsters might get two turns
+//   2. m_ptr/monptr might be invalid after running this function
+// Hence a two step process is provided for updateMonsters().
 void dungeonDeleteMonster(int id) {
-    Monster_t *monster = &monsters[id];
-
-    dg.floor[monster->pos.y][monster->pos.x].creature_id = 0;
-
-    if (monster->lit) {
-        dungeonLiteSpot(Coord_t{monster->pos.y, monster->pos.x});
-    }
-
-    int last_id = next_free_monster_id - 1;
-
-    if (id != last_id) {
-        monster = &monsters[last_id];
-        dg.floor[monster->pos.y][monster->pos.x].creature_id = (uint8_t) id;
-        monsters[id] = monsters[last_id];
-    }
-
-    next_free_monster_id--;
-    monsters[next_free_monster_id] = blank_monster;
-
-    if (monster_multiply_total > 0) {
-        monster_multiply_total--;
-    }
+    dungeonRemoveMonsterFromLevel(id);
+    dungeonDeleteMonsterRecord(id);
 }
 
-// The following two procedures implement the same function as delete monster.
-// However, they are used within updateMonsters(), because deleting a monster
-// while scanning the monsters causes two problems, monsters might get two
-// turns, and m_ptr/monptr might be invalid after the dungeonDeleteMonster.
-// Hence the delete is done in two steps.
-//
-// dungeonDeleteMonsterFix1 does everything dungeonDeleteMonster does except delete
-// the monster record and reduce next_free_monster_id, this is called in breathe, and
-// a couple of places in creatures.c
-void dungeonDeleteMonsterFix1(int id) {
+// dungeonRemoveMonsterFromLevel ensures the monster has no HP before removing
+// its ID from the dungeon level.
+// This is called in breath(), and a couple of places in creatures.c.
+void dungeonRemoveMonsterFromLevel(int id) {
     Monster_t &monster = monsters[id];
 
-    // force the hp negative to ensure that the monster is dead, for example,
-    // if the monster was just eaten by another, it will still have positive
-    // hit points
+    // Force the HP negative to ensure that the monster is dead. For example, if the
+    // monster was just eaten by another, it will still have positive hit points.
     monster.hp = -1;
 
     dg.floor[monster.pos.y][monster.pos.x].creature_id = 0;
@@ -553,16 +532,14 @@ void dungeonDeleteMonsterFix1(int id) {
     }
 }
 
-// dungeonDeleteMonsterFix2 does everything in dungeonDeleteMonster that wasn't done
-// by fix1_monster_delete above, this is only called in updateMonsters()
-void dungeonDeleteMonsterFix2(int id) {
+// dungeonDeleteMonsterRecord delete the monster record from the monsters list.
+// Called by updateMonsters() and dungeonDeleteMonster() only.
+void dungeonDeleteMonsterRecord(int id) {
     int last_id = next_free_monster_id - 1;
+    Monster_t &monster = monsters[last_id];
 
     if (id != last_id) {
-        int y = monsters[last_id].pos.y;
-        int x = monsters[last_id].pos.x;
-        dg.floor[y][x].creature_id = (uint8_t) id;
-
+        dg.floor[monster.pos.y][monster.pos.x].creature_id = (uint8_t) id;
         monsters[id] = monsters[last_id];
     }
 

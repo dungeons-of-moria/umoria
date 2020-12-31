@@ -86,8 +86,8 @@ void dungeonLiteSpot(Coord_t const &coord);
 void dungeonMoveCharacterLight(Coord_t const &from, Coord_t const &to);
 
 void dungeonDeleteMonster(int id);
-void dungeonDeleteMonsterFix1(int id);
-void dungeonDeleteMonsterFix2(int id);
+void dungeonRemoveMonsterFromLevel(int id);
+void dungeonDeleteMonsterRecord(int id);
 int dungeonSummonObject(Coord_t coord, int amount, int object_type);
 bool dungeonDeleteObject(Coord_t const &coord);
 

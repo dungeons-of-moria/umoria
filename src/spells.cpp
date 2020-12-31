@@ -1045,7 +1045,7 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
                                 // If it eats this monster, an already processed monster
                                 // will take its place, causing all kinds of havoc.
                                 // Delay the kill a bit.
-                                dungeonDeleteMonsterFix1((int) tile.creature_id);
+                                dungeonRemoveMonsterFromLevel((int) tile.creature_id);
                             }
                         }
                     } else if (tile.creature_id == 1) {

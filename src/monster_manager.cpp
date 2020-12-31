@@ -254,22 +254,22 @@ bool compactMonsters() {
     printMessage("Compacting monsters...");
 
     int cur_dis = 66;
-
     bool delete_any = false;
+
     while (!delete_any) {
         for (int i = next_free_monster_id - 1; i >= config::monsters::MON_MIN_INDEX_ID; i--) {
             if (cur_dis < monsters[i].distance_from_player && randomNumber(3) == 1) {
                 if ((creatures_list[monsters[i].creature_id].movement & config::monsters::move::CM_WIN) != 0u) {
                     // Never compact away the Balrog!!
                 } else if (hack_monptr < i) {
-                    // in case this is called from within updateMonsters(), this is a horrible
-                    // hack, the monsters/updateMonsters() code needs to be rewritten.
+                    // In case this is called from within updateMonsters().
+                    // This is a horrible hack, the monsters/updateMonsters() code needs to be rewritten.
                     dungeonDeleteMonster(i);
                     delete_any = true;
                 } else {
-                    // dungeonDeleteMonsterFix1() does not decrement next_free_monster_id,
+                    // dungeonRemoveMonsterFromLevel() does not decrement next_free_monster_id,
                     // so don't set delete_any if this was called.
-                    dungeonDeleteMonsterFix1(i);
+                    dungeonRemoveMonsterFromLevel(i);
                 }
             }
         }

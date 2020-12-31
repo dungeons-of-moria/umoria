@@ -10,8 +10,8 @@
 
 #include "headers.h"
 
-// A horrible hack, needed because compact_monster() is called from
-// deep within updateMonsters() via monsterPlaceNew() and monsterSummon()
+// A horrible hack, needed because compactMonsters() is called from deep
+// within updateMonsters() via monsterPlaceNew() and monsterSummon().
 int hack_monptr = -1;
 
 static bool executeAttackOnPlayer(uint8_t creature_level, int16_t &monster_hp, int monster_id, int attack_type, int damage, vtype_t death_description, bool noticed);
@@ -588,7 +588,7 @@ static void monsterMovesOnPlayer(Monster_t const &monster, uint8_t creature_id, 
                 // If it eats this monster, an already processed
                 // monster will take its place, causing all kinds
                 // of havoc. Delay the kill a bit.
-                dungeonDeleteMonsterFix1((int) creature_id);
+                dungeonRemoveMonsterFromLevel((int) creature_id);
             }
         } else {
             do_move = false;
@@ -948,7 +948,7 @@ bool monsterMultiply(Coord_t coord, int creature_id, int monster_id) {
                             // If it eats this monster, an already processed
                             // monster will take its place, causing all kinds
                             // of havoc. Delay the kill a bit.
-                            dungeonDeleteMonsterFix1((int) tile.creature_id);
+                            dungeonRemoveMonsterFromLevel((int) tile.creature_id);
                         }
 
                         // in case compact_monster() is called, it needs monster_id.
@@ -1322,7 +1322,7 @@ void updateMonsters(bool attack) {
         // process this monster. This is necessary because we can't delete
         // monsters while scanning the monsters here.
         if (monster.hp < 0) {
-            dungeonDeleteMonsterFix2(id);
+            dungeonDeleteMonsterRecord(id);
             continue;
         }
 
@@ -1345,7 +1345,7 @@ void updateMonsters(bool attack) {
         // we can't delete monsters while scanning the monsters here.
         // This monster may have been killed during monsterMove().
         if (monster.hp < 0) {
-            dungeonDeleteMonsterFix2(id);
+            dungeonDeleteMonsterRecord(id);
             continue;
         }
     }
@@ -1393,7 +1393,7 @@ int monsterTakeHit(int monster_id, int damage) {
     if (hack_monptr < monster_id) {
         dungeonDeleteMonster(monster_id);
     } else {
-        dungeonDeleteMonsterFix1(monster_id);
+        dungeonRemoveMonsterFromLevel(monster_id);
     }
 
     return m_take_hit;
