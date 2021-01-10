@@ -42,7 +42,7 @@ static void weaponMissileFacts(Inventory_t &item, int &base_to_hit, int &plus_to
         plus_to_hit -= py.inventory[PlayerEquipment::Wield].to_hit;
     }
 
-    distance = (((py.stats.used[PlayerAttr::A_STR] + 20) * 10) / weight);
+    distance = ((py.stats.used[PlayerAttr::A_STR] + 20) * 10) / weight;
     if (distance > 10) {
         distance = 10;
     }
@@ -197,13 +197,12 @@ void playerThrowItem() {
 
     while (!flag) {
         (void) playerMovePosition(dir, coord);
-
-        if (current_distance + 1 > tdis) {
-            break;
-        }
-
         current_distance++;
         dungeonLiteSpot(old_coord);
+
+        if (current_distance > tdis) {
+            flag = true;
+        }
 
         Tile_t const &tile = dg.floor[coord.y][coord.x];
 
