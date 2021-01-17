@@ -341,7 +341,7 @@ static void setObjectTriedFlag(int16_t id) {
 }
 
 static bool isObjectKnown(int16_t id) {
-    return (objects_identified[id] & config::identification::OD_KNOWN1) != 0;
+    return (objects_identified[id] & config::identification::OD_KNOWN1) != 0u;
 }
 
 // Remove "Secret" symbol for identity of object
@@ -451,11 +451,8 @@ void itemIdentify(Inventory_t &item, int &item_id) {
 
     itemSetAsIdentified(item.category_id, item.sub_category_id);
 
-    int cat_id = item.category_id;
-    int sub_cat_id = item.sub_category_id;
-
     // no merging possible
-    if (sub_cat_id < ITEM_SINGLE_STACK_MIN || sub_cat_id >= ITEM_GROUP_MIN) {
+    if (!inventoryItemSingleStackable(item)) {
         return;
     }
 
@@ -464,7 +461,11 @@ void itemIdentify(Inventory_t &item, int &item_id) {
     for (int i = 0; i < py.pack.unique_items; i++) {
         Inventory_t const &t_ptr = py.inventory[i];
 
-        if (t_ptr.category_id == cat_id && t_ptr.sub_category_id == sub_cat_id && i != item_id && ((int) t_ptr.items_count + (int) item.items_count) < 256) {
+        bool matching_cat = t_ptr.category_id == item.category_id;
+        bool matching_sub_cat = t_ptr.sub_category_id == item.sub_category_id;
+        int total_items_count = (int) t_ptr.items_count + item.items_count;
+
+        if (matching_cat && matching_sub_cat && i != item_id && total_items_count < 256) {
             // make *item_id the smaller number
             if (item_id > i) {
                 j = item_id;

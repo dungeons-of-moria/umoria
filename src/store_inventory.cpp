@@ -227,7 +227,7 @@ bool storeCheckPlayerItemsCount(Store_t const &store, Inventory_t const &item) {
         return true;
     }
 
-    if (item.sub_category_id < ITEM_SINGLE_STACK_MIN) {
+    if (!inventoryItemStackable(item)) {
         return false;
     }
 
@@ -325,7 +325,7 @@ void storeDestroyItem(int store_id, int item_id, bool only_one_of) {
     // for single stackable objects, only destroy one half on average,
     // this will help ensure that general store and alchemist have
     // reasonable selection of objects
-    if (store_item.sub_category_id >= ITEM_SINGLE_STACK_MIN && store_item.sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+    if (inventoryItemSingleStackable(store_item)) {
         if (only_one_of) {
             number = 1;
         } else {

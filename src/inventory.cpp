@@ -46,7 +46,7 @@ void inventoryDestroyItem(int item_id) {
 void inventoryTakeOneItem(Inventory_t *to_item, Inventory_t *from_item) {
     *to_item = *from_item;
 
-    if (to_item->items_count > 1 && to_item->sub_category_id >= ITEM_SINGLE_STACK_MIN && to_item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+    if (to_item->items_count > 1 && inventoryItemSingleStackable(*to_item)) {
         to_item->items_count = 1;
     }
 }
@@ -217,7 +217,7 @@ bool inventoryCanCarryItemCount(Inventory_t const &item) {
         return true;
     }
 
-    if (item.sub_category_id < ITEM_SINGLE_STACK_MIN) {
+    if (!inventoryItemStackable(item) ) {
         return false;
     }
 
@@ -274,13 +274,15 @@ int inventoryCarryItem(Inventory_t &new_item) {
         Inventory_t &item = py.inventory[slot_id];
 
         bool is_same_category = new_item.category_id == item.category_id && new_item.sub_category_id == item.sub_category_id;
-        bool not_too_many_items = int(item.items_count + new_item.items_count) < 256;
+        bool not_too_many_items = int(new_item.items_count + item.items_count) < 256;
 
         // only stack if both or neither are identified
         bool same_known_status = itemSetColorlessAsIdentified(item.category_id, item.sub_category_id, item.identification) == is_known;
 
-        if (is_same_category && new_item.sub_category_id >= ITEM_SINGLE_STACK_MIN && not_too_many_items &&
-            (new_item.sub_category_id < ITEM_GROUP_MIN || item.misc_use == new_item.misc_use) && same_known_status) {
+        bool is_stackable = inventoryItemStackable(new_item);
+        bool is_same_group = (new_item.sub_category_id < ITEM_GROUP_MIN || item.misc_use == new_item.misc_use);
+
+        if (is_same_category && is_stackable && not_too_many_items && is_same_group && same_known_status) {
             item.items_count += new_item.items_count;
             break;
         }
@@ -311,7 +313,7 @@ bool inventoryFindRange(int item_id_start, int item_id_end, int &j, int &k) {
     bool at_end_of_range = false;
 
     for (int i = 0; i < py.pack.unique_items; i++) {
-        auto item_id = (int) py.inventory[i].category_id;
+        int item_id = (int) py.inventory[i].category_id;
 
         if (!at_end_of_range) {
             if (item_id == item_id_start || item_id == item_id_end) {
@@ -355,6 +357,16 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item) {
     to_item.damage.sides = from.damage.sides;
     to_item.depth_first_found = from.depth_first_found;
     to_item.identification = 0;
+}
+
+// Checks if an item is stackable, only as a singles object.
+bool inventoryItemSingleStackable(Inventory_t const &item) {
+    return item.sub_category_id >= ITEM_SINGLE_STACK_MIN && item.sub_category_id <= ITEM_SINGLE_STACK_MAX;
+}
+
+// Checks if an item is stackable; either singles objects or group items.
+bool inventoryItemStackable(Inventory_t const &item) {
+    return item.sub_category_id >= ITEM_SINGLE_STACK_MIN;
 }
 
 // AC gets worse -RAK-
