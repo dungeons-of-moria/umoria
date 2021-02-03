@@ -8,6 +8,11 @@ Tracking all changes since the 5.6.0 release.
 - Revert to Moria keys as default.
 - Minor configuration update to support compiling on Visual Studio 2019.
 
+### Bug Fixes
+
+- Calculate throw distance/position correctly. Introduced with commit [#fc1d6d](https://github.com/dungeons-of-moria/umoria/commit/ca135fda382bf206a010f9f9550cf4fa299bd2a9).
+- Correctly stack inventory items (arrows/bolts). Introduced with commit [#195c9a6](https://github.com/dungeons-of-moria/umoria/commit/195c9a68d3ff7da47296888c635c87c37f435413). 
+
 
 ## 5.7.13 (2020-08-22)
 

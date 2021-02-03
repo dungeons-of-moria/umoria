@@ -273,7 +273,8 @@ int inventoryCarryItem(Inventory_t &new_item) {
     for (slot_id = 0; slot_id < PLAYER_INVENTORY_SIZE; slot_id++) {
         Inventory_t &item = py.inventory[slot_id];
 
-        bool is_same_category = new_item.category_id == item.category_id && new_item.sub_category_id == item.sub_category_id;
+        bool is_same_category = new_item.category_id == item.category_id;
+        bool is_same_sub_category = new_item.sub_category_id == item.sub_category_id;
         bool not_too_many_items = int(new_item.items_count + item.items_count) < 256;
 
         // only stack if both or neither are identified
@@ -282,12 +283,12 @@ int inventoryCarryItem(Inventory_t &new_item) {
         bool is_stackable = inventoryItemStackable(new_item);
         bool is_same_group = (new_item.sub_category_id < ITEM_GROUP_MIN || item.misc_use == new_item.misc_use);
 
-        if (is_same_category && is_stackable && not_too_many_items && is_same_group && same_known_status) {
+        if (is_same_category && is_same_sub_category && is_stackable && not_too_many_items && is_same_group && same_known_status) {
             item.items_count += new_item.items_count;
             break;
         }
 
-        if ((is_same_category && is_always_known) || new_item.category_id > item.category_id) {
+        if ((is_same_category && new_item.sub_category_id < item.sub_category_id && is_always_known) || new_item.category_id > item.category_id) {
             // For items which are always `is_known`, i.e. never have a 'color',
             // insert them into the inventory in sorted order.
             for (int i = py.pack.unique_items - 1; i >= slot_id; i--) {
