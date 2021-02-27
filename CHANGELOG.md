@@ -5,6 +5,9 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
+
+## 5.7.14 (2021-02-27)
+
 - Revert to Moria keys as default.
 - Minor configuration update to support compiling on Visual Studio 2019.
 
