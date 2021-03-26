@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include <string>
+#include "types.h"
+
 // Panel_t holds data about a screen panel (the dungeon display)
 // Screen panels calculated from the dungeon/screen dimensions
 typedef struct {

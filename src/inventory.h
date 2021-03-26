@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "dice.h"
+
 // Size of inventory array (DO NOT CHANGE)
 constexpr uint8_t PLAYER_INVENTORY_SIZE = 34;
 

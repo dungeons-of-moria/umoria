@@ -8,6 +8,10 @@
 
 #pragma once
 
+#include <string>
+#include "inventory.h"
+#include "types.h"
+
 constexpr uint8_t TREASURE_MAX_LEVELS = 50; // Maximum level of magic in dungeon
 
 // Note that the following constants are all related, if you change one, you

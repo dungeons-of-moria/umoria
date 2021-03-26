@@ -8,6 +8,10 @@
 
 #pragma once
 
+#include <string>
+#include "types.h"
+#include "dice.h"
+
 // Monster_t is created for any living monster found on the current dungeon level
 typedef struct {
     int16_t hp;           // Hit points

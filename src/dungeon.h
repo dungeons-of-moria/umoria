@@ -8,6 +8,12 @@
 
 #pragma once
 
+#include "dice.h"
+#include "types.h"
+#include "ui.h"
+#include "dungeon_tile.h"
+#include "game.h"
+
 // Dungeon size parameters
 constexpr uint8_t RATIO = 3;       // Size ratio of the Map screen
 constexpr uint8_t MAX_HEIGHT = 66; // Multiple of 11; >= 22

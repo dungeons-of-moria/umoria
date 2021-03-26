@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 // rng.cpp
 uint32_t getRandomSeed();
 void setRandomSeed(uint32_t seed);

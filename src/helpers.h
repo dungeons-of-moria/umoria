@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 int getAndClearFirstBit(uint32_t &flag);
 void insertNumberIntoString(char *to_string, const char *from_string, int32_t number, bool show_sign);
 void insertStringIntoString(char *to_string, const char *from_string, const char *str_to_insert);

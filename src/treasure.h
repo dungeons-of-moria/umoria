@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 // defines for treasure type values (tval)
 constexpr int8_t TV_NEVER = -1; // used by find_range() for non-search
 constexpr uint8_t TV_NOTHING = 0;

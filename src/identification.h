@@ -8,6 +8,10 @@
 
 #pragma once
 
+#include "inventory.h"
+#include "types.h"
+#include "game.h"
+
 // indexes into the special name table
 enum SpecialNameIds {
     SN_NULL,

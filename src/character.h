@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 // Race type for the generated player character
 typedef struct {
     const char *name;       // Type of race

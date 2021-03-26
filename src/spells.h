@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "player.h"
+
 // spell types used by get_flags(), breathe(), fire_bolt() and fire_ball()
 enum MagicSpellFlags {
     MagicMissile,

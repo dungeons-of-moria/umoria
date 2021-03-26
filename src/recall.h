@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "monster.h"
+
 // Recall_t holds the player's known knowledge for any given monster, aka memories
 typedef struct {
     uint32_t movement;

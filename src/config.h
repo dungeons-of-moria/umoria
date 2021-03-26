@@ -8,6 +8,11 @@
 
 // Basic Configuration
 
+#pragma once
+
+#include <cstdint>
+#include <string>
+
 // clang-format off
 
 namespace config {

@@ -8,6 +8,11 @@
 
 #pragma once
 
+#include "inventory.h"
+#include "types.h"
+#include "character.h"
+#include "monster.h"
+
 enum PlayerClassLevelAdj {
     BTH,
     BTHB,

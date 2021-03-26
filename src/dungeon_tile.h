@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 // Tile_t holds data about a specific tile in the dungeon.
 typedef struct {
     uint8_t creature_id; // ID for any creature occupying the tile

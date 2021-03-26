@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 typedef struct {
     uint8_t dice;
     uint8_t sides;

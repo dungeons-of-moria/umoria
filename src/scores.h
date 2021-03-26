@@ -9,6 +9,7 @@
 #pragma once
 
 #include <cstdint>
+#include "player.h"
 
 // HighScore_t is a score object used for saving to the high score file
 // This structure is 64 bytes in size

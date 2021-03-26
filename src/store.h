@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "player.h"
+
 constexpr uint8_t MAX_OWNERS = 18;               // Number of owners to choose from
 constexpr uint8_t MAX_STORES = 6;                // Number of different stores
 constexpr uint8_t STORE_MAX_DISCRETE_ITEMS = 24; // Max number of discrete objects in inventory

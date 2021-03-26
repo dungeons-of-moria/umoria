@@ -6,6 +6,10 @@
 //
 // See LICENSE and AUTHORS for more information.
 
+#pragma once
+
+#include <cstdint>
+
 // This used to be NULL, but that was technically incorrect.
 // CNIL is used instead of null to help avoid lint errors.
 constexpr char *CNIL = nullptr;
