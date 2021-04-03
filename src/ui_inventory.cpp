@@ -645,10 +645,216 @@ static void inventoryItemIsCursedMessage(int itemId) {
     printMessage(strcat(msg, "appears to be cursed."));
 }
 
-static bool selectItemCommands(char *command, char *which, bool selecting) {
-    int itemIdToTakeOff;
+// Get its place in the equipment list.
+static bool executeRemoveItemCommand(bool selecting, int itemId, char &command, const char *which, const char *prompt) {
+    int itemIdToTakeOff = itemId;
+    itemId = 21;
+
+    do {
+        itemId++;
+        if (py.inventory[itemId].category_id != TV_NOTHING) {
+            itemIdToTakeOff--;
+        }
+    } while (itemIdToTakeOff >= 0);
+
+    if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
+        itemId = -1;
+    } else if (inventoryItemIsCursed(py.inventory[itemId])) {
+        itemId = -1;
+        printMessage("Hmmm, it seems to be cursed.");
+    } else if (command == 't' && !inventoryCanCarryItemCount(py.inventory[itemId])) {
+        if (dg.floor[py.pos.y][py.pos.x].treasure_id != 0) {
+            itemId = -1;
+            printMessage("You can't carry it.");
+        } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
+            command = 'r';
+        } else {
+            itemId = -1;
+        }
+    }
+
+    if (itemId >= 0) {
+        if (command == 'r') {
+            inventoryDropItem(itemId, true);
+            // As a safety measure, set the player's inven
+            // weight to 0, when the last object is dropped.
+            if (py.pack.unique_items == 0 && py.equipment_count == 0) {
+                py.pack.weight = 0;
+            }
+        } else {
+            playerTakeOff(itemId, inventoryCarryItem(py.inventory[itemId]));
+        }
+
+        playerStrength();
+        game.player_free_turn = false;
+
+        if (command == 'r') {
+            selecting = false;
+        }
+    }
+
+    return selecting;
+}
+
+// Wearing. Go to a bit of trouble over replacing existing equipment.
+static void executeWearItemCommand(int itemId, const char *which, const char *prompt) {
     int slot = 0;
 
+    if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
+        itemId = -1;
+    } else {
+        slot = inventoryGetSlotToWearEquipment(py.inventory[itemId].category_id);
+        if (slot == -1) {
+            itemId = -1;
+        }
+    }
+
+    if (itemId >= 0 && py.inventory[slot].category_id != TV_NOTHING) {
+        if (inventoryItemIsCursed(py.inventory[slot])) {
+            inventoryItemIsCursedMessage(slot);
+            itemId = -1;
+        } else if (py.inventory[itemId].sub_category_id == ITEM_GROUP_MIN && py.inventory[itemId].items_count > 1 && !inventoryCanCarryItemCount(py.inventory[slot])) {
+            // this can happen if try to wield a torch,
+            // and have more than one in inventory
+            printMessage("You will have to drop something first.");
+            itemId = -1;
+        }
+    }
+
+    if (itemId == -1) {
+        return;
+    }
+
+    // OK. Wear it.
+    game.player_free_turn = false;
+
+    //
+    // 1. remove new item from inventory
+    //
+    Inventory_t savedItem = py.inventory[itemId];
+    Inventory_t *item = &savedItem;
+
+    game.screen.wear_high_id--;
+
+    // Fix for torches
+    if (item->items_count > 1 && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
+        item->items_count = 1;
+        game.screen.wear_high_id++;
+    }
+
+    py.pack.weight += item->weight * item->items_count;
+    inventoryDestroyItem(itemId); // Subtracts weight
+
+    //
+    // 2. add old item to inv and remove from equipment list, if necessary.
+    //
+    item = &py.inventory[slot];
+    if (item->category_id != TV_NOTHING) {
+        int uniqItems = py.pack.unique_items;
+
+        int id = inventoryCarryItem(*item);
+
+        // If item removed did not stack with anything
+        // in inventory, then increment wear_high.
+        if (py.pack.unique_items != uniqItems) {
+            game.screen.wear_high_id++;
+        }
+
+        playerTakeOff(slot, id);
+    }
+
+    //
+    // 3. wear new item
+    //
+    *item = savedItem;
+    py.equipment_count++;
+
+    playerAdjustBonusesForItem(*item, 1);
+
+    const char *text = nullptr;
+    if (slot == PlayerEquipment::Wield) {
+        text = "You are wielding";
+    } else if (slot == PlayerEquipment::Light) {
+        text = "Your light source is";
+    } else {
+        text = "You are wearing";
+    }
+
+    obj_desc_t description = {'\0'};
+    itemDescription(description, *item, true);
+
+    // Get the right equipment letter.
+    int itemIdToTakeOff = PlayerEquipment::Wield;
+    itemId = 0;
+
+    while (itemIdToTakeOff != slot) {
+        if (py.inventory[itemIdToTakeOff++].category_id != TV_NOTHING) {
+            itemId++;
+        }
+    }
+
+    obj_desc_t msg = {'\0'};
+    (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + itemId);
+    printMessage(msg);
+
+    // this is a new weapon, so clear heavy flag
+    if (slot == PlayerEquipment::Wield) {
+        py.weapon_is_heavy = false;
+    }
+    playerStrength();
+
+    if (inventoryItemIsCursed(*item)) {
+        printMessage("Oops! It feels deathly cold!");
+        itemAppendToInscription(*item, config::identification::ID_DAMD);
+
+        // To force a cost of 0, even if unidentified.
+        item->cost = -1;
+    }
+}
+
+static void executeDropItemCommand(int itemId, const char *which, const char *prompt) {
+    char inputCommand = 'y';
+
+    if (py.inventory[itemId].items_count > 1) {
+        obj_desc_t description = {'\0'};
+        itemDescription(description, py.inventory[itemId], true);
+        description[strlen(description) - 1] = '?';
+
+        obj_desc_t msg = {'\0'};
+        (void) sprintf(msg, "Drop all %s [y/n]", description);
+        msg[strlen(description) - 1] = '.';
+
+        putStringClearToEOL(msg, Coord_t{0, 0});
+
+        // request command from player
+        inputCommand = getKeyInput();
+
+        if (inputCommand != 'y' && inputCommand != 'n') {
+            if (inputCommand != ESCAPE) {
+                terminalBellSound();
+            }
+            messageLineClear();
+            itemId = -1;
+        }
+    } else if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
+        itemId = -1;
+    }
+
+    if (itemId >= 0) {
+        game.player_free_turn = false;
+
+        inventoryDropItem(itemId, inputCommand == 'y');
+        playerStrength();
+    }
+
+    // As a safety measure, set the player's inven weight
+    // to 0, when the last object is dropped.
+    if (py.pack.unique_items == 0 && py.equipment_count == 0) {
+        py.pack.weight = 0;
+    }
+}
+
+static bool selectItemCommands(char *command, char *which, bool selecting) {
     int from, to;
     const char *prompt = nullptr;
     const char *swap = nullptr;
@@ -728,207 +934,17 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         }
 
         //
-        // Found an item!
+        // Found an item - do something with it!
         //
-
         if (*command == 'r' || *command == 't') {
             // Get its place in the equipment list.
-            itemIdToTakeOff = itemId;
-            itemId = 21;
-
-            do {
-                itemId++;
-                if (py.inventory[itemId].category_id != TV_NOTHING) {
-                    itemIdToTakeOff--;
-                }
-            } while (itemIdToTakeOff >= 0);
-
-            if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
-                itemId = -1;
-            } else if (inventoryItemIsCursed(py.inventory[itemId])) {
-                itemId = -1;
-                printMessage("Hmmm, it seems to be cursed.");
-            } else if (*command == 't' && !inventoryCanCarryItemCount(py.inventory[itemId])) {
-                if (dg.floor[py.pos.y][py.pos.x].treasure_id != 0) {
-                    itemId = -1;
-                    printMessage("You can't carry it.");
-                } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
-                    *command = 'r';
-                } else {
-                    itemId = -1;
-                }
-            }
-
-            if (itemId >= 0) {
-                if (*command == 'r') {
-                    inventoryDropItem(itemId, true);
-                    // As a safety measure, set the player's inven
-                    // weight to 0, when the last object is dropped.
-                    if (py.pack.unique_items == 0 && py.equipment_count == 0) {
-                        py.pack.weight = 0;
-                    }
-                } else {
-                    slot = inventoryCarryItem(py.inventory[itemId]);
-                    playerTakeOff(itemId, slot);
-                }
-
-                playerStrength();
-                game.player_free_turn = false;
-
-                if (*command == 'r') {
-                    selecting = false;
-                }
-            }
+            selecting = executeRemoveItemCommand(selecting, itemId, *command, which, prompt);
         } else if (*command == 'w') {
-            // Wearing. Go to a bit of trouble over replacing existing equipment.
-
-            if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
-                itemId = -1;
-            } else {
-                slot = inventoryGetSlotToWearEquipment(py.inventory[itemId].category_id);
-                if (slot == -1) {
-                    itemId = -1;
-                }
-            }
-
-            if (itemId >= 0 && py.inventory[slot].category_id != TV_NOTHING) {
-                if (inventoryItemIsCursed(py.inventory[slot])) {
-                    inventoryItemIsCursedMessage(slot);
-                    itemId = -1;
-                } else if (py.inventory[itemId].sub_category_id == ITEM_GROUP_MIN && py.inventory[itemId].items_count > 1 && !inventoryCanCarryItemCount(py.inventory[slot])) {
-                    // this can happen if try to wield a torch,
-                    // and have more than one in inventory
-                    printMessage("You will have to drop something first.");
-                    itemId = -1;
-                }
-            }
-
-            // OK. Wear it.
-            if (itemId >= 0) {
-                game.player_free_turn = false;
-
-                // 1. remove new item from inventory
-                Inventory_t savedItem = py.inventory[itemId];
-                Inventory_t *item = &savedItem;
-
-                game.screen.wear_high_id--;
-
-                // Fix for torches
-                if (item->items_count > 1 && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
-                    item->items_count = 1;
-                    game.screen.wear_high_id++;
-                }
-
-                py.pack.weight += item->weight * item->items_count;
-
-                // Subtracts weight
-                inventoryDestroyItem(itemId);
-
-                // 2. add old item to inv and remove from equipment list, if necessary.
-                item = &py.inventory[slot];
-                if (item->category_id != TV_NOTHING) {
-                    int saved_counter = py.pack.unique_items;
-
-                    itemIdToTakeOff = inventoryCarryItem(*item);
-
-                    // If item removed did not stack with anything
-                    // in inventory, then increment wear_high.
-                    if (py.pack.unique_items != saved_counter) {
-                        game.screen.wear_high_id++;
-                    }
-
-                    playerTakeOff(slot, itemIdToTakeOff);
-                }
-
-                // 3. wear new item
-                *item = savedItem;
-                py.equipment_count++;
-
-                playerAdjustBonusesForItem(*item, 1);
-
-                const char *text = nullptr;
-                if (slot == PlayerEquipment::Wield) {
-                    text = "You are wielding";
-                } else if (slot == PlayerEquipment::Light) {
-                    text = "Your light source is";
-                } else {
-                    text = "You are wearing";
-                }
-
-                obj_desc_t description = {'\0'};
-                itemDescription(description, *item, true);
-
-                // Get the right equipment letter.
-                itemIdToTakeOff = PlayerEquipment::Wield;
-                itemId = 0;
-
-                while (itemIdToTakeOff != slot) {
-                    if (py.inventory[itemIdToTakeOff++].category_id != TV_NOTHING) {
-                        itemId++;
-                    }
-                }
-
-                obj_desc_t msg = {'\0'};
-                (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + itemId);
-                printMessage(msg);
-
-                // this is a new weapon, so clear heavy flag
-                if (slot == PlayerEquipment::Wield) {
-                    py.weapon_is_heavy = false;
-                }
-                playerStrength();
-
-                if (inventoryItemIsCursed(*item)) {
-                    printMessage("Oops! It feels deathly cold!");
-                    itemAppendToInscription(*item, config::identification::ID_DAMD);
-
-                    // To force a cost of 0, even if unidentified.
-                    item->cost = -1;
-                }
-            }
+            executeWearItemCommand(itemId, which, prompt);
         } else {
             // command == 'd'
-
-            char inputCommand = 'y';
-
-            if (py.inventory[itemId].items_count > 1) {
-                obj_desc_t description = {'\0'};
-                itemDescription(description, py.inventory[itemId], true);
-                description[strlen(description) - 1] = '?';
-
-                obj_desc_t msg = {'\0'};
-                (void) sprintf(msg, "Drop all %s [y/n]", description);
-                msg[strlen(description) - 1] = '.';
-
-                putStringClearToEOL(msg, Coord_t{0, 0});
-
-                inputCommand = getKeyInput();
-
-                if (inputCommand != 'y' && inputCommand != 'n') {
-                    if (inputCommand != ESCAPE) {
-                        terminalBellSound();
-                    }
-                    messageLineClear();
-                    itemId = -1;
-                }
-            } else if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
-                itemId = -1;
-            }
-
-            if (itemId >= 0) {
-                game.player_free_turn = false;
-
-                inventoryDropItem(itemId, inputCommand == 'y');
-                playerStrength();
-            }
-
+            executeDropItemCommand(itemId, which, prompt);
             selecting = false;
-
-            // As a safety measure, set the player's inven weight
-            // to 0, when the last object is dropped.
-            if (py.pack.unique_items == 0 && py.equipment_count == 0) {
-                py.pack.weight = 0;
-            }
         }
 
         if (!game.player_free_turn && game.screen.current_screen_id == Screen::Blank) {
