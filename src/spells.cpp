@@ -2313,8 +2313,8 @@ bool spellRemoveCurseFromAllItems() {
     bool removed = false;
 
     for (int id = PlayerEquipment::Wield; id <= PlayerEquipment::Outer; id++) {
-        if ((py.inventory[id].flags & config::treasure::flags::TR_CURSED) != 0u) {
-            py.inventory[id].flags &= ~config::treasure::flags::TR_CURSED;
+        if (inventoryItemIsCursed(id)) {
+            inventoryItemRemoveCurse(id);
             playerRecalculateBonuses();
             removed = true;
         }

@@ -75,17 +75,17 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if ((py.inventory[PlayerEquipment::Body].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    if (inventoryItemIsCursed(PlayerEquipment::Body)) {
         item_id = PlayerEquipment::Body;
-    } else if ((py.inventory[PlayerEquipment::Arm].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if (inventoryItemIsCursed(PlayerEquipment::Arm)) {
         item_id = PlayerEquipment::Arm;
-    } else if ((py.inventory[PlayerEquipment::Outer].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if (inventoryItemIsCursed(PlayerEquipment::Outer)) {
         item_id = PlayerEquipment::Outer;
-    } else if ((py.inventory[PlayerEquipment::Head].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if (inventoryItemIsCursed(PlayerEquipment::Head)) {
         item_id = PlayerEquipment::Head;
-    } else if ((py.inventory[PlayerEquipment::Hands].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if (inventoryItemIsCursed(PlayerEquipment::Hands)) {
         item_id = PlayerEquipment::Hands;
-    } else if ((py.inventory[PlayerEquipment::Feet].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    } else if (inventoryItemIsCursed(PlayerEquipment::Feet)) {
         item_id = PlayerEquipment::Feet;
     }
 

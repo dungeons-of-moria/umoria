@@ -370,6 +370,14 @@ bool inventoryItemStackable(Inventory_t const &item) {
     return item.sub_category_id >= ITEM_SINGLE_STACK_MIN;
 }
 
+bool inventoryItemIsCursed(int item_id) {
+    return (py.inventory[item_id].flags & config::treasure::flags::TR_CURSED) != 0u;
+}
+
+void inventoryItemRemoveCurse(int item_id) {
+    py.inventory[item_id].flags &= ~config::treasure::flags::TR_CURSED;
+}
+
 // AC gets worse -RAK-
 // Note: This routine affects magical AC bonuses so
 // that stores can detect the damage.

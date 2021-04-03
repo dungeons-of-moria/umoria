@@ -325,7 +325,7 @@ static void uiCommandSwitchScreen(Screen nextScreen) {
 }
 
 // Used to verify if this really is the item we wish to wear or read. -CJS-
-static bool verify(const char *prompt, int item) {
+static bool verifyAction(const char *prompt, int item) {
     obj_desc_t description = {'\0'};
     itemDescription(description, py.inventory[item], true);
 
@@ -338,7 +338,7 @@ static bool verify(const char *prompt, int item) {
     return getInputConfirmation(msg);
 }
 
-static void setInventoryCommandScreenState(char command) {
+static void requestAndShowInventoryScreen(bool recoverScreen) {
     if (game.doing_inventory_command == 0) {
         game.screen.screen_left_pos = 50;
         game.screen.screen_bottom_pos = 0;
@@ -352,7 +352,7 @@ static void setInventoryCommandScreenState(char command) {
     // is a simple ' ' to recover the screen, just quit. Otherwise, check
     // and see what the user wants.
     if (screen_has_changed) {
-        if (command == ' ' || !getInputConfirmation("Continuing with inventory command?")) {
+        if (recoverScreen || !getInputConfirmation("Continuing with inventory command?")) {
             game.doing_inventory_command = 0;
             return;
         }
@@ -360,9 +360,9 @@ static void setInventoryCommandScreenState(char command) {
         game.screen.screen_bottom_pos = 0;
     }
 
-    Screen savedState = game.screen.current_screen_id;
+    Screen currentScreen = game.screen.current_screen_id;
     game.screen.current_screen_id = Screen::Wrong;
-    uiCommandSwitchScreen(savedState);
+    uiCommandSwitchScreen(currentScreen);
 }
 
 static bool uiCommandInventoryTakeOffItem(bool selecting) {
@@ -384,7 +384,7 @@ static bool uiCommandInventoryTakeOffItem(bool selecting) {
     return true;
 }
 
-static bool uiCommandInventoryDropItem(char *command, bool selecting) {
+static bool uiCommandInventoryDropItem(char &command, bool selecting) {
     if (py.pack.unique_items == 0 && py.equipment_count == 0) {
         printMessage("But you're not carrying anything.");
         return selecting;
@@ -399,7 +399,7 @@ static bool uiCommandInventoryDropItem(char *command, bool selecting) {
         if (game.screen.current_screen_id != Screen::Blank) {
             uiCommandSwitchScreen(Screen::Equipment);
         }
-        *command = 'r'; // Remove - or take off and drop.
+        command = 'r'; // Remove - or take off and drop.
     } else if (game.screen.current_screen_id != Screen::Blank) {
         uiCommandSwitchScreen(Screen::Inventory);
     }
@@ -434,12 +434,12 @@ static bool uiCommandInventoryWearWieldItem(bool selecting) {
 }
 
 static void uiCommandInventoryUnwieldItem() {
-    if (py.inventory[PlayerEquipment::Wield].category_id == TV_NOTHING && py.inventory[PlayerEquipment::Auxiliary].category_id == TV_NOTHING) {
+    if (!playerIsWieldingItem()) {
         printMessage("But you are wielding no weapons.");
         return;
     }
 
-    if ((py.inventory[PlayerEquipment::Wield].flags & config::treasure::flags::TR_CURSED) != 0u) {
+    if (inventoryItemIsCursed(PlayerEquipment::Wield)) {
         obj_desc_t description = {'\0'};
         itemDescription(description, py.inventory[PlayerEquipment::Wield], false);
 
@@ -608,7 +608,7 @@ static int inventoryGetSlotToWearEquipment(int item) {
                         } else {
                             terminalBellSound();
                         }
-                        if ((slot != 0) && !verify("Replace", slot)) {
+                        if ((slot != 0) && !verifyAction("Replace", slot)) {
                             slot = 0;
                         }
                     }
@@ -738,9 +738,9 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
             } while (itemIdToTakeOff >= 0);
 
-            if ((isupper((int) *which) != 0) && !verify((char *) prompt, itemId)) {
+            if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
                 itemId = -1;
-            } else if ((py.inventory[itemId].flags & config::treasure::flags::TR_CURSED) != 0u) {
+            } else if (inventoryItemIsCursed(itemId)) {
                 itemId = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(py.inventory[itemId])) {
@@ -777,7 +777,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else if (*command == 'w') {
             // Wearing. Go to a bit of trouble over replacing existing equipment.
 
-            if ((isupper((int) *which) != 0) && !verify((char *) prompt, itemId)) {
+            if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
                 itemId = -1;
             } else {
                 slot = inventoryGetSlotToWearEquipment(itemId);
@@ -787,7 +787,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
 
             if (itemId >= 0 && py.inventory[slot].category_id != TV_NOTHING) {
-                if ((py.inventory[slot].flags & config::treasure::flags::TR_CURSED) != 0u) {
+                if (inventoryItemIsCursed(slot)) {
                     inventoryItemIsCursedMessage(slot);
                     itemId = -1;
                 } else if (py.inventory[itemId].sub_category_id == ITEM_GROUP_MIN && py.inventory[itemId].items_count > 1 && !inventoryCanCarryItemCount(py.inventory[slot])) {
@@ -906,7 +906,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                     messageLineClear();
                     itemId = -1;
                 }
-            } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, itemId)) {
+            } else if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
                 itemId = -1;
             }
 
@@ -991,7 +991,12 @@ void inventoryExecuteCommand(char command) {
     game.player_free_turn = true;
 
     terminalSaveScreen();
-    setInventoryCommandScreenState(command);
+
+    bool recoverScreen = false;
+    if (command == ' ') {
+        recoverScreen = true;
+    }
+    requestAndShowInventoryScreen(recoverScreen);
 
     do {
         if (isupper((int) command) != 0) {
@@ -1011,7 +1016,7 @@ void inventoryExecuteCommand(char command) {
                 selecting = uiCommandInventoryTakeOffItem(selecting);
                 break;
             case 'd':
-                selecting = uiCommandInventoryDropItem(&command, selecting);
+                selecting = uiCommandInventoryDropItem(command, selecting);
                 break;
             case 'w':
                 selecting = uiCommandInventoryWearWieldItem(selecting);
@@ -1249,7 +1254,7 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
                             commandKeyId = itemIdStart;
                         }
 
-                        if ((isupper((int) which) != 0) && !verify("Try", commandKeyId)) {
+                        if ((isupper((int) which) != 0) && !verifyAction("Try", commandKeyId)) {
                             menu = PackMenu::CloseMenu;
                             done = true;
 

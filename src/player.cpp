@@ -780,6 +780,13 @@ void playerStrength() {
     py.flags.status &= ~config::player::status::PY_STR_WGT;
 }
 
+bool playerIsWieldingItem() {
+    if (py.inventory[PlayerEquipment::Wield].category_id == TV_NOTHING && py.inventory[PlayerEquipment::Auxiliary].category_id == TV_NOTHING) {
+        return false;
+    }
+    return true;
+}
+
 static bool playerCanRead() {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read your spell book!");

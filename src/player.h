@@ -216,6 +216,7 @@ void playerSearch(Coord_t coord, int chance);
 
 int playerCarryingLoadLimit();
 void playerStrength();
+bool playerIsWieldingItem();
 
 void playerGainSpells();
 void playerGainMana(int stat);
