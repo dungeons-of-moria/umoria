@@ -8,10 +8,10 @@
 
 #include "headers.h"
 
-static void inventoryItemWeightText(char *text, int item_id) {
-    int total_weight = py.inventory[item_id].weight * py.inventory[item_id].items_count;
-    int quotient = total_weight / 10;
-    int remainder = total_weight % 10;
+static void inventoryItemWeightText(char *text, int itemId) {
+    int totalWeight = py.inventory[itemId].weight * py.inventory[itemId].items_count;
+    int quotient = totalWeight / 10;
+    int remainder = totalWeight % 10;
 
     (void) sprintf(text, "%3d.%d lb", quotient, remainder);
 }
@@ -22,7 +22,7 @@ static void inventoryItemWeightText(char *text, int item_id) {
 // does not fit, it may be moved left.  The return value is the left edge
 // used. If mask is non-zero, then only display those items which have a
 // non-zero entry in the mask array.
-int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, const char *mask) {
+int displayInventoryItems(int itemIdStart, int itemIdEnd, bool weighted, int column, const char *mask) {
     vtype_t descriptions[23];
 
     int len = 79 - column;
@@ -35,7 +35,7 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
     }
 
     // Generate the descriptions text
-    for (int i = item_id_start; i <= item_id_end; i++) {
+    for (int i = itemIdStart; i <= itemIdEnd; i++) {
         if (mask != CNIL && (mask[i] == 0)) {
             continue;
         }
@@ -64,29 +64,29 @@ int displayInventory(int item_id_start, int item_id_end, bool weighted, int colu
         column = 0;
     }
 
-    int current_line = 1;
+    int currentLine = 1;
 
     // Print the descriptions
-    for (int i = item_id_start; i <= item_id_end; i++) {
+    for (int i = itemIdStart; i <= itemIdEnd; i++) {
         if (mask != CNIL && (mask[i] == 0)) {
             continue;
         }
 
         // don't need first two spaces if in first column
         if (column == 0) {
-            putStringClearToEOL(descriptions[i], Coord_t{current_line, column});
+            putStringClearToEOL(descriptions[i], Coord_t{currentLine, column});
         } else {
-            putString("  ", Coord_t{current_line, column});
-            putStringClearToEOL(descriptions[i], Coord_t{current_line, column + 2});
+            putString("  ", Coord_t{currentLine, column});
+            putStringClearToEOL(descriptions[i], Coord_t{currentLine, column + 2});
         }
 
         if (weighted) {
             obj_desc_t text = {'\0'};
             inventoryItemWeightText(text, i);
-            putStringClearToEOL(text, Coord_t{current_line, 71});
+            putStringClearToEOL(text, Coord_t{currentLine, 71});
         }
 
-        current_line++;
+        currentLine++;
     }
 
     return column;
@@ -124,13 +124,12 @@ const char *playerItemWearingDescription(int body_location) {
     }
 }
 
-static const char *itemPositionDescription(int position_id, uint16_t weight) {
-    switch (position_id) {
+static const char *equipmentPositionDescription(PlayerEquipment id, uint16_t weight) {
+    switch (id) {
         case PlayerEquipment::Wield:
             if (py.stats.used[PlayerAttr::A_STR] * 15 < weight) {
                 return "Just lifting";
             }
-
             return "Wielding";
         case PlayerEquipment::Head:
             return "On head";
@@ -155,19 +154,19 @@ static const char *itemPositionDescription(int position_id, uint16_t weight) {
         case PlayerEquipment::Auxiliary:
             return "Spare weapon";
         default:
-            return "Unknown value";
+            return "Unknown equipment position ID";
     }
 }
 
 // Displays equipment items from r1 to end -RAK-
 // Keep display as far right as possible. -CJS-
-int displayEquipment(bool weighted, int column) {
+int displayEquipment(bool showWeights, int column) {
     vtype_t descriptions[PLAYER_INVENTORY_SIZE - PlayerEquipment::Wield];
 
     int len = 79 - column;
 
     int lim;
-    if (weighted) {
+    if (showWeights) {
         lim = 52;
     } else {
         lim = 60;
@@ -181,7 +180,7 @@ int displayEquipment(bool weighted, int column) {
         }
 
         // Get position
-        const char *position_description = itemPositionDescription(i, py.inventory[i].weight);
+        const char *equippedDescription = equipmentPositionDescription((PlayerEquipment)i, py.inventory[i].weight);
 
         obj_desc_t description = {'\0'};
         itemDescription(description, py.inventory[i], true);
@@ -189,11 +188,11 @@ int displayEquipment(bool weighted, int column) {
         // Truncate if necessary
         description[lim] = 0;
 
-        (void) sprintf(descriptions[line], "%c) %-14s: %s", line + 'a', position_description, description);
+        (void) sprintf(descriptions[line], "%c) %-14s: %s", line + 'a', equippedDescription, description);
 
         int l = (int) strlen(descriptions[line]) + 2;
 
-        if (weighted) {
+        if (showWeights) {
             l += 9;
         }
 
@@ -224,7 +223,7 @@ int displayEquipment(bool weighted, int column) {
             putStringClearToEOL(descriptions[line], Coord_t{line + 1, column + 2});
         }
 
-        if (weighted) {
+        if (showWeights) {
             obj_desc_t text = {'\0'};
             inventoryItemWeightText(text, i);
             putStringClearToEOL(text, Coord_t{line + 1, 71});
@@ -235,6 +234,22 @@ int displayEquipment(bool weighted, int column) {
     eraseLine(Coord_t{line + 1, column});
 
     return column;
+}
+
+static int showEquipmentHelpMenu(int leftColumn) {
+    if (leftColumn > 52) {
+        leftColumn = 52;
+    }
+
+    putStringClearToEOL("  ESC: exit", Coord_t{1, leftColumn});
+    putStringClearToEOL("  w  : wear or wield object", Coord_t{2, leftColumn});
+    putStringClearToEOL("  t  : take off item", Coord_t{3, leftColumn});
+    putStringClearToEOL("  d  : drop object", Coord_t{4, leftColumn});
+    putStringClearToEOL("  x  : exchange weapons", Coord_t{5, leftColumn});
+    putStringClearToEOL("  i  : inventory of pack", Coord_t{6, leftColumn});
+    putStringClearToEOL("  e  : list used equipment", Coord_t{7, leftColumn});
+
+    return 7; // current line position
 }
 
 // TODO: Most of the functions below should probably not be part of the UI,
@@ -266,78 +281,50 @@ int displayEquipment(bool weighted, int column) {
 // The display of inventory items is kept to the right of the screen to
 // minimize the work done to restore the screen afterwards. -CJS-
 
-// Inventory command screen states.
-constexpr int BLANK_SCR = 0;
-constexpr int EQUIP_SCR = 1;
-constexpr int INVEN_SCR = 2;
-constexpr int WEAR_SCR = 3;
-constexpr int HELP_SCR = 4;
-constexpr int WRONG_SCR = 5;
-
-// Keep track of the state of the inventory screen.
-int screen_state, screen_left, screen_base;
-int wear_low, wear_high;
-
-static void uiCommandDisplayInventoryScreen(int new_screen) {
-    if (new_screen == screen_state) {
+static void uiCommandSwitchScreen(Screen nextScreen) {
+    if (nextScreen == game.screen.current_screen_id) {
         return;
     }
+    game.screen.current_screen_id = nextScreen;
 
-    screen_state = new_screen;
-
-    int line;
-
-    switch (new_screen) {
-        case BLANK_SCR:
-            line = 0;
+    int currentLinePos = 0;
+    switch (nextScreen) {
+        case Screen::Blank:
             break;
-        case HELP_SCR:
-            if (screen_left > 52) {
-                screen_left = 52;
-            }
-
-            putStringClearToEOL("  ESC: exit", Coord_t{1, screen_left});
-            putStringClearToEOL("  w  : wear or wield object", Coord_t{2, screen_left});
-            putStringClearToEOL("  t  : take off item", Coord_t{3, screen_left});
-            putStringClearToEOL("  d  : drop object", Coord_t{4, screen_left});
-            putStringClearToEOL("  x  : exchange weapons", Coord_t{5, screen_left});
-            putStringClearToEOL("  i  : inventory of pack", Coord_t{6, screen_left});
-            putStringClearToEOL("  e  : list used equipment", Coord_t{7, screen_left});
-
-            line = 7;
+        case Screen::Help:
+            currentLinePos = showEquipmentHelpMenu(game.screen.screen_left_pos);
             break;
-        case INVEN_SCR:
-            screen_left = displayInventory(0, py.pack.unique_items - 1, config::options::show_inventory_weights, screen_left, CNIL);
-            line = py.pack.unique_items;
+        case Screen::Inventory:
+            game.screen.screen_left_pos = displayInventoryItems(0, py.pack.unique_items - 1, config::options::show_inventory_weights, game.screen.screen_left_pos, CNIL);
+            currentLinePos = py.pack.unique_items;
             break;
-        case WEAR_SCR:
-            screen_left = displayInventory(wear_low, wear_high, config::options::show_inventory_weights, screen_left, CNIL);
-            line = wear_high - wear_low + 1;
+        case Screen::Wear:
+            game.screen.screen_left_pos = displayInventoryItems(game.screen.wear_low_id, game.screen.wear_high_id, config::options::show_inventory_weights, game.screen.screen_left_pos, CNIL);
+            currentLinePos = game.screen.wear_high_id - game.screen.wear_low_id + 1;
             break;
-        case EQUIP_SCR:
-            screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
-            line = py.equipment_count;
+        case Screen::Equipment:
+            game.screen.screen_left_pos = displayEquipment(config::options::show_inventory_weights, game.screen.screen_left_pos);
+            currentLinePos = py.equipment_count;
             break;
+        case Screen::Wrong:
         default:
-            line = 0;
             break;
     }
 
-    if (line >= screen_base) {
-        screen_base = line + 1;
-        eraseLine(Coord_t{screen_base, screen_left});
+    if (currentLinePos >= game.screen.screen_bottom_pos) {
+        game.screen.screen_bottom_pos = currentLinePos + 1;
+        eraseLine(Coord_t{game.screen.screen_bottom_pos, game.screen.screen_left_pos});
         return;
     }
+    currentLinePos++;
 
-    line++;
-    while (line <= screen_base) {
-        eraseLine(Coord_t{line, screen_left});
-        line++;
+    while (currentLinePos <= game.screen.screen_bottom_pos) {
+        eraseLine(Coord_t{currentLinePos, game.screen.screen_left_pos});
+        currentLinePos++;
     }
 }
 
-// Used to verify if this really is the item we wish to -CJS-
-// wear or read.
+// Used to verify if this really is the item we wish to wear or read. -CJS-
 static bool verify(const char *prompt, int item) {
     obj_desc_t description = {'\0'};
     itemDescription(description, py.inventory[item], true);
@@ -352,32 +339,30 @@ static bool verify(const char *prompt, int item) {
 }
 
 static void setInventoryCommandScreenState(char command) {
-    // Take up where we left off after a previous inventory command. -CJS-
-    if (game.doing_inventory_command != 0) {
-        // If the screen has been flushed, we need to redraw. If the command
-        // is a simple ' ' to recover the screen, just quit. Otherwise, check
-        // and see what the user wants.
-        if (screen_has_changed) {
-            if (command == ' ' || !getInputConfirmation("Continuing with inventory command?")) {
-                game.doing_inventory_command = 0;
-                return;
-            }
-            screen_left = 50;
-            screen_base = 0;
-        }
-
-        int saved_state = screen_state;
-        screen_state = WRONG_SCR;
-        uiCommandDisplayInventoryScreen(saved_state);
-
+    if (game.doing_inventory_command == 0) {
+        game.screen.screen_left_pos = 50;
+        game.screen.screen_bottom_pos = 0;
+        game.screen.current_screen_id = Screen::Blank; // this forces exit of inventoryExecuteCommand() if selecting is not set true
         return;
     }
 
-    screen_left = 50;
-    screen_base = 0;
+    // Take up where we left off after a previous inventory command. -CJS-
 
-    // this forces exit of inventoryExecuteCommand() if selecting is not set true
-    screen_state = BLANK_SCR;
+    // If the screen has been flushed, we need to redraw. If the command
+    // is a simple ' ' to recover the screen, just quit. Otherwise, check
+    // and see what the user wants.
+    if (screen_has_changed) {
+        if (command == ' ' || !getInputConfirmation("Continuing with inventory command?")) {
+            game.doing_inventory_command = 0;
+            return;
+        }
+        game.screen.screen_left_pos = 50;
+        game.screen.screen_bottom_pos = 0;
+    }
+
+    Screen savedState = game.screen.current_screen_id;
+    game.screen.current_screen_id = Screen::Wrong;
+    uiCommandSwitchScreen(savedState);
 }
 
 static bool uiCommandInventoryTakeOffItem(bool selecting) {
@@ -392,8 +377,8 @@ static bool uiCommandInventoryTakeOffItem(bool selecting) {
         return selecting;
     }
 
-    if (screen_state != BLANK_SCR) {
-        uiCommandDisplayInventoryScreen(EQUIP_SCR);
+    if (game.screen.current_screen_id != Screen::Blank) {
+        uiCommandSwitchScreen(Screen::Equipment);
     }
 
     return true;
@@ -410,36 +395,39 @@ static bool uiCommandInventoryDropItem(char *command, bool selecting) {
         return selecting;
     }
 
-    if ((screen_state == EQUIP_SCR && py.equipment_count > 0) || py.pack.unique_items == 0) {
-        if (screen_state != BLANK_SCR) {
-            uiCommandDisplayInventoryScreen(EQUIP_SCR);
+    if ((game.screen.current_screen_id == Screen::Equipment && py.equipment_count > 0) || py.pack.unique_items == 0) {
+        if (game.screen.current_screen_id != Screen::Blank) {
+            uiCommandSwitchScreen(Screen::Equipment);
         }
         *command = 'r'; // Remove - or take off and drop.
-    } else if (screen_state != BLANK_SCR) {
-        uiCommandDisplayInventoryScreen(INVEN_SCR);
+    } else if (game.screen.current_screen_id != Screen::Blank) {
+        uiCommandSwitchScreen(Screen::Inventory);
     }
 
     return true;
 }
 
 static bool uiCommandInventoryWearWieldItem(bool selecting) {
-    // Note: simple loop to get the global wear_low value
-    for (wear_low = 0; wear_low < py.pack.unique_items && py.inventory[wear_low].category_id > TV_MAX_WEAR; wear_low++)
-        ;
+    // Note: simple loop to get the global game.screen.wear_low_id value
+    game.screen.wear_low_id = 0;
+    while (game.screen.wear_low_id < py.pack.unique_items && py.inventory[game.screen.wear_low_id].category_id > TV_MAX_WEAR) {
+        game.screen.wear_low_id++;
+    }
 
     // Note: simple loop to get the global wear_high value
-    for (wear_high = wear_low; wear_high < py.pack.unique_items && py.inventory[wear_high].category_id >= TV_MIN_WEAR; wear_high++)
-        ;
+    game.screen.wear_high_id = game.screen.wear_low_id;
+    while (game.screen.wear_high_id < py.pack.unique_items && py.inventory[game.screen.wear_high_id].category_id >= TV_MIN_WEAR) {
+        game.screen.wear_high_id++;
+    }
+    game.screen.wear_high_id--;
 
-    wear_high--;
-
-    if (wear_low > wear_high) {
+    if (game.screen.wear_low_id > game.screen.wear_high_id) {
         printMessage("You have nothing to wear or wield.");
         return selecting;
     }
 
-    if (screen_state != BLANK_SCR && screen_state != INVEN_SCR) {
-        uiCommandDisplayInventoryScreen(WEAR_SCR);
+    if (game.screen.current_screen_id != Screen::Blank && game.screen.current_screen_id != Screen::Inventory) {
+        uiCommandSwitchScreen(Screen::Wear);
     }
 
     return true;
@@ -465,25 +453,26 @@ static void uiCommandInventoryUnwieldItem() {
 
     game.player_free_turn = false;
 
-    Inventory_t saved_item = py.inventory[PlayerEquipment::Auxiliary];
+    // swap auxiliary and wield items
+    Inventory_t savedItem = py.inventory[PlayerEquipment::Auxiliary];
     py.inventory[PlayerEquipment::Auxiliary] = py.inventory[PlayerEquipment::Wield];
-    py.inventory[PlayerEquipment::Wield] = saved_item;
+    py.inventory[PlayerEquipment::Wield] = savedItem;
 
-    if (screen_state == EQUIP_SCR) {
-        screen_left = displayEquipment(config::options::show_inventory_weights, screen_left);
+    if (game.screen.current_screen_id == Screen::Equipment) {
+        game.screen.screen_left_pos = displayEquipment(config::options::show_inventory_weights, game.screen.screen_left_pos);
     }
 
     playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Auxiliary], -1); // Subtract bonuses
     playerAdjustBonusesForItem(py.inventory[PlayerEquipment::Wield], 1);      // Add bonuses
 
     if (py.inventory[PlayerEquipment::Wield].category_id != TV_NOTHING) {
-        obj_desc_t msg_label = {'\0'};
-        (void) strcpy(msg_label, "Primary weapon   : ");
+        obj_desc_t label = {'\0'};
+        (void) strcpy(label, "Primary weapon   : ");
 
         obj_desc_t description = {'\0'};
         itemDescription(description, py.inventory[PlayerEquipment::Wield], true);
 
-        printMessage(strcat(msg_label, description));
+        printMessage(strcat(label, description));
     } else {
         printMessage("No primary weapon.");
     }
@@ -493,7 +482,7 @@ static void uiCommandInventoryUnwieldItem() {
     playerStrength();
 }
 
-// look for item whose inscription matches "which"
+// look for item whose inscription matches `which`
 static int inventoryGetItemMatchingInscription(char which, char command, int from, int to) {
     int item;
 
@@ -522,9 +511,9 @@ static void buildCommandHeading(char *str, int from, int to, const char *swap, c
     from = from + 'a';
     to = to + 'a';
 
-    const char *list_items = "";
-    if (screen_state == BLANK_SCR) {
-        list_items = ", * to list";
+    const char *list = "";
+    if (game.screen.current_screen_id == Screen::Blank) {
+        list = ", * to list";
     }
 
     const char *digits = "";
@@ -532,24 +521,24 @@ static void buildCommandHeading(char *str, int from, int to, const char *swap, c
         digits = ", 0-9";
     }
 
-    (void) sprintf(str, "(%c-%c%s%s%s, space to break, ESC to exit) %s which one?", from, to, list_items, swap, digits, prompt);
+    (void) sprintf(str, "(%c-%c%s%s%s, space to break, ESC to exit) %s which one?", from, to, list, swap, digits, prompt);
 }
 
-static void drawInventoryScreenForCommand(char command) {
+static void changeScreenForCommand(char command) {
     if (command == 't' || command == 'r') {
-        uiCommandDisplayInventoryScreen(EQUIP_SCR);
-    } else if (command == 'w' && screen_state != INVEN_SCR) {
-        uiCommandDisplayInventoryScreen(WEAR_SCR);
+        uiCommandSwitchScreen(Screen::Equipment);
+    } else if (command == 'w' && game.screen.current_screen_id != Screen::Inventory) {
+        uiCommandSwitchScreen(Screen::Wear);
     } else {
-        uiCommandDisplayInventoryScreen(INVEN_SCR);
+        uiCommandSwitchScreen(Screen::Inventory);
     }
 }
 
-static void swapInventoryScreenForDrop() {
-    if (screen_state == EQUIP_SCR) {
-        uiCommandDisplayInventoryScreen(INVEN_SCR);
-    } else if (screen_state == INVEN_SCR) {
-        uiCommandDisplayInventoryScreen(EQUIP_SCR);
+static void flipInventoryEquipmentScreens() {
+    if (game.screen.current_screen_id == Screen::Equipment) {
+        uiCommandSwitchScreen(Screen::Inventory);
+    } else if (game.screen.current_screen_id == Screen::Inventory) {
+        uiCommandSwitchScreen(Screen::Equipment);
     }
 }
 
@@ -635,24 +624,24 @@ static int inventoryGetSlotToWearEquipment(int item) {
     return slot;
 }
 
-static void inventoryItemIsCursedMessage(int item_id) {
+static void inventoryItemIsCursedMessage(int itemId) {
     obj_desc_t description = {'\0'};
-    itemDescription(description, py.inventory[item_id], false);
+    itemDescription(description, py.inventory[itemId], false);
 
-    obj_desc_t item_text = {'\0'};
-    (void) sprintf(item_text, "The %s you are ", description);
+    obj_desc_t msg = {'\0'};
+    (void) sprintf(msg, "The %s you are ", description);
 
-    if (item_id == PlayerEquipment::Head) {
-        (void) strcat(item_text, "wielding ");
+    if (itemId == PlayerEquipment::Head) {
+        (void) strcat(msg, "wielding ");
     } else {
-        (void) strcat(item_text, "wearing ");
+        (void) strcat(msg, "wearing ");
     }
 
-    printMessage(strcat(item_text, "appears to be cursed."));
+    printMessage(strcat(msg, "appears to be cursed."));
 }
 
 static bool selectItemCommands(char *command, char *which, bool selecting) {
-    int item_to_take_off;
+    int itemIdToTakeOff;
     int slot = 0;
 
     int from, to;
@@ -663,8 +652,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         swap = "";
 
         if (*command == 'w') {
-            from = wear_low;
-            to = wear_high;
+            from = game.screen.wear_low_id;
+            to = game.screen.wear_high_id;
             prompt = "Wear/Wield";
         } else {
             from = 0;
@@ -696,19 +685,19 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             continue;
         }
 
-        obj_desc_t heading_text = {'\0'};
-        buildCommandHeading(heading_text, from, to, swap, *command, prompt);
+        obj_desc_t headingMsg = {'\0'};
+        buildCommandHeading(headingMsg, from, to, swap, *command, prompt);
 
         // Abort everything.
-        if (!getCommand(heading_text, *which)) {
+        if (!getCommand(headingMsg, *which)) {
             *which = ESCAPE;
             selecting = false;
-            continue; // can we just return false from the function? -MRC-
+            continue;
         }
 
         // Draw the screen and maybe exit to main prompt.
         if (*which == ' ' || *which == '*') {
-            drawInventoryScreenForCommand(*command);
+            changeScreenForCommand(*command);
             if (*which == ' ') {
                 selecting = false;
             }
@@ -722,63 +711,63 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             } else {
                 *command = 'd';
             }
-            swapInventoryScreenForDrop();
+            flipInventoryEquipmentScreens();
             continue;
         }
 
         // look for item whose inscription matches "which"
-        int item_id = inventoryGetItemMatchingInscription(*which, *command, from, to);
-
-        if (item_id < from || item_id > to) {
+        int itemId = inventoryGetItemMatchingInscription(*which, *command, from, to);
+        if (itemId < from || itemId > to) {
             terminalBellSound();
             continue;
         }
 
+        //
         // Found an item!
+        //
 
         if (*command == 'r' || *command == 't') {
             // Get its place in the equipment list.
-            item_to_take_off = item_id;
-            item_id = 21;
+            itemIdToTakeOff = itemId;
+            itemId = 21;
 
             do {
-                item_id++;
-                if (py.inventory[item_id].category_id != TV_NOTHING) {
-                    item_to_take_off--;
+                itemId++;
+                if (py.inventory[itemId].category_id != TV_NOTHING) {
+                    itemIdToTakeOff--;
                 }
-            } while (item_to_take_off >= 0);
+            } while (itemIdToTakeOff >= 0);
 
-            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
-                item_id = -1;
-            } else if ((py.inventory[item_id].flags & config::treasure::flags::TR_CURSED) != 0u) {
-                item_id = -1;
+            if ((isupper((int) *which) != 0) && !verify((char *) prompt, itemId)) {
+                itemId = -1;
+            } else if ((py.inventory[itemId].flags & config::treasure::flags::TR_CURSED) != 0u) {
+                itemId = -1;
                 printMessage("Hmmm, it seems to be cursed.");
-            } else if (*command == 't' && !inventoryCanCarryItemCount(py.inventory[item_id])) {
+            } else if (*command == 't' && !inventoryCanCarryItemCount(py.inventory[itemId])) {
                 if (dg.floor[py.pos.y][py.pos.x].treasure_id != 0) {
-                    item_id = -1;
+                    itemId = -1;
                     printMessage("You can't carry it.");
                 } else if (getInputConfirmation("You can't carry it.  Drop it?")) {
                     *command = 'r';
                 } else {
-                    item_id = -1;
+                    itemId = -1;
                 }
             }
 
-            if (item_id >= 0) {
+            if (itemId >= 0) {
                 if (*command == 'r') {
-                    inventoryDropItem(item_id, true);
+                    inventoryDropItem(itemId, true);
                     // As a safety measure, set the player's inven
                     // weight to 0, when the last object is dropped.
                     if (py.pack.unique_items == 0 && py.equipment_count == 0) {
                         py.pack.weight = 0;
                     }
                 } else {
-                    slot = inventoryCarryItem(py.inventory[item_id]);
-                    playerTakeOff(item_id, slot);
+                    slot = inventoryCarryItem(py.inventory[itemId]);
+                    playerTakeOff(itemId, slot);
                 }
 
                 playerStrength();
-
                 game.player_free_turn = false;
 
                 if (*command == 'r') {
@@ -788,67 +777,66 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else if (*command == 'w') {
             // Wearing. Go to a bit of trouble over replacing existing equipment.
 
-            if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
-                item_id = -1;
+            if ((isupper((int) *which) != 0) && !verify((char *) prompt, itemId)) {
+                itemId = -1;
             } else {
-                slot = inventoryGetSlotToWearEquipment(item_id);
+                slot = inventoryGetSlotToWearEquipment(itemId);
                 if (slot == -1) {
-                    item_id = -1;
+                    itemId = -1;
                 }
             }
 
-            if (item_id >= 0 && py.inventory[slot].category_id != TV_NOTHING) {
+            if (itemId >= 0 && py.inventory[slot].category_id != TV_NOTHING) {
                 if ((py.inventory[slot].flags & config::treasure::flags::TR_CURSED) != 0u) {
                     inventoryItemIsCursedMessage(slot);
-                    item_id = -1;
-                } else if (py.inventory[item_id].sub_category_id == ITEM_GROUP_MIN && py.inventory[item_id].items_count > 1 && !inventoryCanCarryItemCount(py.inventory[slot])) {
+                    itemId = -1;
+                } else if (py.inventory[itemId].sub_category_id == ITEM_GROUP_MIN && py.inventory[itemId].items_count > 1 && !inventoryCanCarryItemCount(py.inventory[slot])) {
                     // this can happen if try to wield a torch,
                     // and have more than one in inventory
                     printMessage("You will have to drop something first.");
-                    item_id = -1;
+                    itemId = -1;
                 }
             }
 
             // OK. Wear it.
-            if (item_id >= 0) {
+            if (itemId >= 0) {
                 game.player_free_turn = false;
 
-                // first remove new item from inventory
-                Inventory_t saved_item = py.inventory[item_id];
-                Inventory_t *item = &saved_item;
+                // 1. remove new item from inventory
+                Inventory_t savedItem = py.inventory[itemId];
+                Inventory_t *item = &savedItem;
 
-                wear_high--;
+                game.screen.wear_high_id--;
 
                 // Fix for torches
                 if (item->items_count > 1 && item->sub_category_id <= ITEM_SINGLE_STACK_MAX) {
                     item->items_count = 1;
-                    wear_high++;
+                    game.screen.wear_high_id++;
                 }
 
                 py.pack.weight += item->weight * item->items_count;
 
                 // Subtracts weight
-                inventoryDestroyItem(item_id);
+                inventoryDestroyItem(itemId);
 
-                // Second, add old item to inv and remove
-                // from equipment list, if necessary.
+                // 2. add old item to inv and remove from equipment list, if necessary.
                 item = &py.inventory[slot];
                 if (item->category_id != TV_NOTHING) {
                     int saved_counter = py.pack.unique_items;
 
-                    item_to_take_off = inventoryCarryItem(*item);
+                    itemIdToTakeOff = inventoryCarryItem(*item);
 
                     // If item removed did not stack with anything
                     // in inventory, then increment wear_high.
                     if (py.pack.unique_items != saved_counter) {
-                        wear_high++;
+                        game.screen.wear_high_id++;
                     }
 
-                    playerTakeOff(slot, item_to_take_off);
+                    playerTakeOff(slot, itemIdToTakeOff);
                 }
 
-                // third, wear new item
-                *item = saved_item;
+                // 3. wear new item
+                *item = savedItem;
                 py.equipment_count++;
 
                 playerAdjustBonusesForItem(*item, 1);
@@ -866,17 +854,17 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 itemDescription(description, *item, true);
 
                 // Get the right equipment letter.
-                item_to_take_off = PlayerEquipment::Wield;
-                item_id = 0;
+                itemIdToTakeOff = PlayerEquipment::Wield;
+                itemId = 0;
 
-                while (item_to_take_off != slot) {
-                    if (py.inventory[item_to_take_off++].category_id != TV_NOTHING) {
-                        item_id++;
+                while (itemIdToTakeOff != slot) {
+                    if (py.inventory[itemIdToTakeOff++].category_id != TV_NOTHING) {
+                        itemId++;
                     }
                 }
 
                 obj_desc_t msg = {'\0'};
-                (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + item_id);
+                (void) sprintf(msg, "%s %s (%c)", text, description, 'a' + itemId);
                 printMessage(msg);
 
                 // this is a new weapon, so clear heavy flag
@@ -896,12 +884,11 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         } else {
             // command == 'd'
 
-            // NOTE: initializing to `ESCAPE` as warnings were being given. -MRC-
-            char query = ESCAPE;
+            char inputCommand = 'y';
 
-            if (py.inventory[item_id].items_count > 1) {
+            if (py.inventory[itemId].items_count > 1) {
                 obj_desc_t description = {'\0'};
-                itemDescription(description, py.inventory[item_id], true);
+                itemDescription(description, py.inventory[itemId], true);
                 description[strlen(description) - 1] = '?';
 
                 obj_desc_t msg = {'\0'};
@@ -910,25 +897,23 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
                 putStringClearToEOL(msg, Coord_t{0, 0});
 
-                query = getKeyInput();
+                inputCommand = getKeyInput();
 
-                if (query != 'y' && query != 'n') {
-                    if (query != ESCAPE) {
+                if (inputCommand != 'y' && inputCommand != 'n') {
+                    if (inputCommand != ESCAPE) {
                         terminalBellSound();
                     }
                     messageLineClear();
-                    item_id = -1;
+                    itemId = -1;
                 }
-            } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, item_id)) {
-                item_id = -1;
-            } else {
-                query = 'y';
+            } else if ((isupper((int) *which) != 0) && !verify((char *) prompt, itemId)) {
+                itemId = -1;
             }
 
-            if (item_id >= 0) {
+            if (itemId >= 0) {
                 game.player_free_turn = false;
 
-                inventoryDropItem(item_id, query == 'y');
+                inventoryDropItem(itemId, inputCommand == 'y');
                 playerStrength();
             }
 
@@ -941,7 +926,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
         }
 
-        if (!game.player_free_turn && screen_state == BLANK_SCR) {
+        if (!game.player_free_turn && game.screen.current_screen_id == Screen::Blank) {
             selecting = false;
         }
     }
@@ -951,7 +936,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
 // Put an appropriate header.
 static void inventoryDisplayAppropriateHeader() {
-    if (screen_state == INVEN_SCR) {
+    if (game.screen.current_screen_id == Screen::Inventory) {
         obj_desc_t msg = {'\0'};
         int w_quotient = py.pack.weight / 10;
         int w_remainder = py.pack.weight % 10;
@@ -965,14 +950,14 @@ static void inventoryDisplayAppropriateHeader() {
             (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -", w_quotient, w_remainder, l_quotient, l_remainder);
         }
 
-        putStringClearToEOL(msg, Coord_t{0, 0});
-    } else if (screen_state == WEAR_SCR) {
-        if (wear_high < wear_low) {
+        putStringClearToEOL(msg, Coord_t{0, 0}  );
+    } else if (game.screen.current_screen_id == Screen::Wear) {
+        if (game.screen.wear_high_id < game.screen.wear_low_id) {
             putStringClearToEOL("You have nothing you could wield.", Coord_t{0, 0});
         } else {
             putStringClearToEOL("You could wield -", Coord_t{0, 0});
         }
-    } else if (screen_state == EQUIP_SCR) {
+    } else if (game.screen.current_screen_id == Screen::Equipment) {
         if (py.equipment_count == 0) {
             putStringClearToEOL("You are not using anything.", Coord_t{0, 0});
         } else {
@@ -982,14 +967,14 @@ static void inventoryDisplayAppropriateHeader() {
         putStringClearToEOL("Allowed commands:", Coord_t{0, 0});
     }
 
-    eraseLine(Coord_t{screen_base, screen_left});
+    eraseLine(Coord_t{game.screen.screen_bottom_pos, game.screen.screen_left_pos});
 }
 
 static void uiCommandDisplayInventory() {
     if (py.pack.unique_items == 0) {
         printMessage("You are not carrying anything.");
     } else {
-        uiCommandDisplayInventoryScreen(INVEN_SCR);
+        uiCommandSwitchScreen(Screen::Inventory);
     }
 }
 
@@ -997,7 +982,7 @@ static void uiCommandDisplayEquipment() {
     if (py.equipment_count == 0) {
         printMessage("You are not using any equipment.");
     } else {
-        uiCommandDisplayInventoryScreen(EQUIP_SCR);
+        uiCommandSwitchScreen(Screen::Equipment);
     }
 }
 
@@ -1034,11 +1019,11 @@ void inventoryExecuteCommand(char command) {
             case 'x':
                 uiCommandInventoryUnwieldItem();
                 break;
+            case '?':
+                uiCommandSwitchScreen(Screen::Help);
+                break;
             case ' ':
                 // Dummy command to return again to main prompt.
-                break;
-            case '?':
-                uiCommandDisplayInventoryScreen(HELP_SCR);
                 break;
             default:
                 // Nonsense command
@@ -1055,7 +1040,7 @@ void inventoryExecuteCommand(char command) {
 
         selecting = selectItemCommands(&command, &which, selecting);
 
-        if (which == ESCAPE || screen_state == BLANK_SCR) {
+        if (which == ESCAPE || game.screen.current_screen_id == Screen::Blank) {
             command = ESCAPE;
         } else if (!game.player_free_turn) {
             // Save state for recovery if they want to call us again next turn.
@@ -1076,14 +1061,14 @@ void inventoryExecuteCommand(char command) {
         } else {
             inventoryDisplayAppropriateHeader();
 
-            putString("e/i/t/w/x/d/?/ESC:", Coord_t{screen_base, 60});
+            putString("e/i/t/w/x/d/?/ESC:", Coord_t{game.screen.screen_bottom_pos, 60});
             command = getKeyInput();
 
-            eraseLine(Coord_t{screen_base, screen_left});
+            eraseLine(Coord_t{game.screen.screen_bottom_pos, game.screen.screen_left_pos});
         }
     } while (command != ESCAPE);
 
-    if (screen_state != BLANK_SCR) {
+    if (game.screen.current_screen_id != Screen::Blank) {
         terminalRestoreScreen();
     }
 
@@ -1145,27 +1130,27 @@ static bool inventorySwitchPackMenu(vtype_t &prompt, PackMenu &menu, bool menu_a
 }
 
 // Get the ID of an item and return the CTR value of it -RAK-
-bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message) {
+bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemIdStart, int itemIdEnd, char *mask, const char *message) {
     PackMenu menu = PackMenu::Inventory;
-    bool pack_full = false;
+    bool packFull = false;
 
-    if (item_id_end > PlayerEquipment::Wield) {
-        pack_full = true;
+    if (itemIdEnd > PlayerEquipment::Wield) {
+        packFull = true;
 
         if (py.pack.unique_items == 0) {
             menu = PackMenu::Equipment;
-            item_id_end = py.equipment_count - 1;
+            itemIdEnd = py.equipment_count - 1;
         } else {
-            item_id_end = py.pack.unique_items - 1;
+            itemIdEnd = py.pack.unique_items - 1;
         }
     }
 
-    if (py.pack.unique_items < 1 && (!pack_full || py.equipment_count < 1)) {
+    if (py.pack.unique_items < 1 && (!packFull || py.equipment_count < 1)) {
         putStringClearToEOL("You are not carrying anything.", Coord_t{0, 0});
         return false;
     }
 
-    command_key_id = 0;
+    commandKeyId = 0;
 
     bool item_found = false;
     bool menu_active = false;
@@ -1173,7 +1158,7 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
     do {
         if (menu_active) {
             if (menu == PackMenu::Inventory) {
-                (void) displayInventory(item_id_start, item_id_end, false, 80, mask);
+                (void) displayInventoryItems(itemIdStart, itemIdEnd, false, 80, mask);
             } else {
                 (void) displayEquipment(false, 80);
             }
@@ -1181,12 +1166,12 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
 
         vtype_t description = {'\0'};
 
-        if (pack_full) {
+        if (packFull) {
             (void) sprintf(description,                                       //
                            "(%s: %c-%c,%s%s / for %s, or ESC) %s",            //
                            (menu == PackMenu::Inventory ? "Inven" : "Equip"), //
-                           item_id_start + 'a',                               //
-                           item_id_end + 'a',                                 //
+                           itemIdStart + 'a',                                 //
+                           itemIdEnd + 'a',                                   //
                            (menu == PackMenu::Inventory ? " 0-9," : ""),      //
                            (menu_active ? "" : " * to see,"),                 //
                            (menu == PackMenu::Inventory ? "Equip" : "Inven"), //
@@ -1195,8 +1180,8 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
         } else {
             (void) sprintf(description,                                   //
                            "(Items %c-%c,%s%s ESC to exit) %s",           //
-                           item_id_start + 'a',                           //
-                           item_id_end + 'a',                             //
+                           itemIdStart + 'a',                             //
+                           itemIdEnd + 'a',                               //
                            (menu == PackMenu::Inventory ? " 0-9," : ""),  //
                            (menu_active ? "" : " * for inventory list,"), //
                            prompt                                         //
@@ -1213,12 +1198,10 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                 case ESCAPE:
                     menu = PackMenu::CloseMenu;
                     done = true;
-
                     game.player_free_turn = true;
-
                     break;
                 case '/':
-                    done = inventorySwitchPackMenu(description, menu, menu_active, item_id_end);
+                    done = inventorySwitchPackMenu(description, menu, menu_active, itemIdEnd);
 
                     break;
                 case '*': // activate menu if required
@@ -1230,43 +1213,43 @@ bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int ite
                     break;
                 default:
                     // look for item whose inscription matches "which"
-                    if (which >= '0' && which <= '9' && menu != PackMenu::Equipment) { // TODO: menu == PackMenu::Inventory ???
+                    if (which >= '0' && which <= '9' && menu != PackMenu::Equipment) {
                         int m;
 
                         // Note: loop to find the inventory item
-                        for (m = item_id_start; m < PlayerEquipment::Wield && (py.inventory[m].inscription[0] != which || py.inventory[m].inscription[1] != '\0'); m++)
+                        for (m = itemIdStart; m < PlayerEquipment::Wield && (py.inventory[m].inscription[0] != which || py.inventory[m].inscription[1] != '\0'); m++)
                             ;
 
                         if (m < PlayerEquipment::Wield) {
-                            command_key_id = m;
+                            commandKeyId = m;
                         } else {
-                            command_key_id = -1;
+                            commandKeyId = -1;
                         }
                     } else if (isupper((int) which) != 0) {
-                        command_key_id = which - 'A';
+                        commandKeyId = which - 'A';
                     } else {
-                        command_key_id = which - 'a';
+                        commandKeyId = which - 'a';
                     }
 
-                    if (command_key_id >= item_id_start && command_key_id <= item_id_end && (mask == CNIL || (mask[command_key_id] != 0))) {
+                    if (commandKeyId >= itemIdStart && commandKeyId <= itemIdEnd && (mask == CNIL || (mask[commandKeyId] != 0))) {
                         if (menu == PackMenu::Equipment) {
-                            item_id_start = 21;
-                            item_id_end = command_key_id;
+                            itemIdStart = 21;
+                            itemIdEnd = commandKeyId;
 
                             do {
                                 // Note: a simple loop to find first inventory item
-                                item_id_start++;
-                                while (py.inventory[item_id_start].category_id == TV_NOTHING) {
-                                    item_id_start++;
+                                itemIdStart++;
+                                while (py.inventory[itemIdStart].category_id == TV_NOTHING) {
+                                    itemIdStart++;
                                 }
 
-                                item_id_end--;
-                            } while (item_id_end >= 0);
+                                itemIdEnd--;
+                            } while (itemIdEnd >= 0);
 
-                            command_key_id = item_id_start;
+                            commandKeyId = itemIdStart;
                         }
 
-                        if ((isupper((int) which) != 0) && !verify("Try", command_key_id)) {
+                        if ((isupper((int) which) != 0) && !verify("Try", commandKeyId)) {
                             menu = PackMenu::CloseMenu;
                             done = true;
 

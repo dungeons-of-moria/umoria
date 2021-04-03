@@ -133,8 +133,8 @@ void displaySpellsList(const int *spell_ids, int number_of_choices, bool comment
 void displayCharacterExperience();
 
 // UI Inventory/Equipment
-int displayInventory(int item_id_start, int item_id_end, bool weighted, int column, const char *mask);
+int displayInventoryItems(int itemIdStart, int itemIdEnd, bool weighted, int column, const char *mask);
 const char *playerItemWearingDescription(int body_location);
-int displayEquipment(bool weighted, int column);
+int displayEquipment(bool showWeights, int column);
 void inventoryExecuteCommand(char command);
-bool inventoryGetInputForItemId(int &command_key_id, const char *prompt, int item_id_start, int item_id_end, char *mask, const char *message);
+bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemIdStart, int itemIdEnd, char *mask, const char *message);

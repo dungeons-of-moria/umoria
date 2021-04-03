@@ -25,6 +25,16 @@ constexpr uint8_t LEVEL_MAX_OBJECTS = 175; // Max objects per level
 constexpr uint16_t NORMAL_TABLE_SIZE = 256;
 constexpr uint8_t NORMAL_TABLE_SD = 64; // the standard deviation for the table
 
+// Inventory command screen states.
+enum class Screen {
+    Blank = 0,
+    Equipment,
+    Inventory,
+    Wear,
+    Help,
+    Wrong,
+};
+
 typedef struct {
     uint32_t magic_seed = 0; // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
     uint32_t town_seed = 0;  // Seed for town generation
@@ -53,6 +63,15 @@ typedef struct {
         int16_t current_id = 0; // Current treasure heap ptr
         Inventory_t list[LEVEL_MAX_OBJECTS]{};
     } treasure;
+
+    // Keep track of the state of the current screen (inventory, equipment, help, etc.).
+    struct {
+        Screen current_screen_id = Screen::Blank;
+        int screen_left_pos = 0;
+        int screen_bottom_pos = 0;
+        int wear_low_id = 0;
+        int wear_high_id = 0;
+    } screen;
 } Game_t;
 
 extern Game_t game;
