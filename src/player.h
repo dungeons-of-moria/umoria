@@ -216,6 +216,9 @@ void playerSearch(Coord_t coord, int chance);
 
 int playerCarryingLoadLimit();
 void playerStrength();
+
+bool playerLeftHandRingEmpty();
+bool playerRightHandRingEmpty();
 bool playerIsWieldingItem();
 bool playerWornItemIsCursed(PlayerEquipment id);
 void playerWornItemRemoveCurse(PlayerEquipment id);

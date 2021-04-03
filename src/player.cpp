@@ -780,6 +780,14 @@ void playerStrength() {
     py.flags.status &= ~config::player::status::PY_STR_WGT;
 }
 
+bool playerLeftHandRingEmpty() {
+    return py.inventory[PlayerEquipment::Left].category_id == TV_NOTHING;
+}
+
+bool playerRightHandRingEmpty() {
+    return py.inventory[PlayerEquipment::Right].category_id == TV_NOTHING;
+}
+
 bool playerIsWieldingItem() {
     if (py.inventory[PlayerEquipment::Wield].category_id == TV_NOTHING && py.inventory[PlayerEquipment::Auxiliary].category_id == TV_NOTHING) {
         return false;

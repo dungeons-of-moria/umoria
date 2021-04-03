@@ -484,32 +484,32 @@ static void uiCommandInventoryUnwieldItem() {
 
 // look for item whose inscription matches `which`
 static int inventoryGetItemMatchingInscription(char which, char command, int from, int to) {
-    int item;
+    int itemId;
 
     if (which >= '0' && which <= '9' && command != 'r' && command != 't') {
-        int m;
-
         // Note: simple loop to get id
-        for (m = from; m <= to && m < PLAYER_INVENTORY_SIZE && ((py.inventory[m].inscription[0] != which) || (py.inventory[m].inscription[1] != '\0')); m++)
-            ;
+        int m = from;
+        while (m <= to && m < PLAYER_INVENTORY_SIZE && ((py.inventory[m].inscription[0] != which) || (py.inventory[m].inscription[1] != '\0'))) {
+            m++;
+        }
 
         if (m <= to) {
-            item = m;
+            itemId = m;
         } else {
-            item = -1;
+            itemId = -1;
         }
     } else if (which >= 'A' && which <= 'Z') {
-        item = which - 'A';
+        itemId = which - 'A';
     } else {
-        item = which - 'a';
+        itemId = which - 'a';
     }
 
-    return item;
+    return itemId;
 }
 
 static void buildCommandHeading(char *str, int from, int to, const char *swap, char command, const char *prompt) {
-    from = from + 'a';
-    to = to + 'a';
+    from += 'a';
+    to += 'a';
 
     const char *list = "";
     if (game.screen.current_screen_id == Screen::Blank) {
@@ -542,11 +542,40 @@ static void flipInventoryEquipmentScreens() {
     }
 }
 
-static int inventoryGetSlotToWearEquipment(int item) {
-    int slot;
+static int requestPutRingOnWhichHand() {
+    int hand = 0;
+
+    // Rings. Give choice over where they go.
+    do {
+        char query;
+        if (!getCommand("Put ring on which hand (l/r/L/R)?", query)) {
+            hand = -1;
+        } else if (query == 'l') {
+            hand = PlayerEquipment::Left;
+        } else if (query == 'r') {
+            hand = PlayerEquipment::Right;
+        } else {
+            if (query == 'L') {
+                hand = PlayerEquipment::Left;
+            } else if (query == 'R') {
+                hand = PlayerEquipment::Right;
+            } else {
+                terminalBellSound();
+            }
+            if ((hand != 0) && !verifyAction("Replace", hand)) {
+                hand = 0;
+            }
+        }
+    } while (hand == 0);
+
+    return hand;
+}
+
+static int inventoryGetSlotToWearEquipment(int categoryId) {
+    int slot = -1;
 
     // Slot for equipment
-    switch (py.inventory[item].category_id) {
+    switch (categoryId) {
         case TV_SLING_AMMO:
         case TV_BOLT:
         case TV_ARROW:
@@ -584,39 +613,15 @@ static int inventoryGetSlotToWearEquipment(int item) {
             slot = PlayerEquipment::Neck;
             break;
         case TV_RING:
-            if (py.inventory[PlayerEquipment::Right].category_id == TV_NOTHING) {
+            if (playerRightHandRingEmpty()) {
                 slot = PlayerEquipment::Right;
-            } else if (py.inventory[PlayerEquipment::Left].category_id == TV_NOTHING) {
+            } else if (playerLeftHandRingEmpty()) {
                 slot = PlayerEquipment::Left;
             } else {
-                slot = 0;
-
-                // Rings. Give choice over where they go.
-                do {
-                    char query;
-                    if (!getCommand("Put ring on which hand (l/r/L/R)?", query)) {
-                        slot = -1;
-                    } else if (query == 'l') {
-                        slot = PlayerEquipment::Left;
-                    } else if (query == 'r') {
-                        slot = PlayerEquipment::Right;
-                    } else {
-                        if (query == 'L') {
-                            slot = PlayerEquipment::Left;
-                        } else if (query == 'R') {
-                            slot = PlayerEquipment::Right;
-                        } else {
-                            terminalBellSound();
-                        }
-                        if ((slot != 0) && !verifyAction("Replace", slot)) {
-                            slot = 0;
-                        }
-                    }
-                } while (slot == 0);
+                slot = requestPutRingOnWhichHand();
             }
             break;
         default:
-            slot = -1;
             printMessage("IMPOSSIBLE: I don't see how you can use that.");
             break;
     }
@@ -780,7 +785,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
                 itemId = -1;
             } else {
-                slot = inventoryGetSlotToWearEquipment(itemId);
+                slot = inventoryGetSlotToWearEquipment(py.inventory[itemId].category_id);
                 if (slot == -1) {
                     itemId = -1;
                 }
