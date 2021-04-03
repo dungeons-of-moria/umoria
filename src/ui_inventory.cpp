@@ -740,7 +740,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
 
             if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
                 itemId = -1;
-            } else if (inventoryItemIsCursed(itemId)) {
+            } else if (inventoryItemIsCursed(py.inventory[itemId])) {
                 itemId = -1;
                 printMessage("Hmmm, it seems to be cursed.");
             } else if (*command == 't' && !inventoryCanCarryItemCount(py.inventory[itemId])) {
@@ -787,7 +787,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
 
             if (itemId >= 0 && py.inventory[slot].category_id != TV_NOTHING) {
-                if (inventoryItemIsCursed(slot)) {
+                if (inventoryItemIsCursed(py.inventory[slot])) {
                     inventoryItemIsCursedMessage(slot);
                     itemId = -1;
                 } else if (py.inventory[itemId].sub_category_id == ITEM_GROUP_MIN && py.inventory[itemId].items_count > 1 && !inventoryCanCarryItemCount(py.inventory[slot])) {
@@ -873,7 +873,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
                 }
                 playerStrength();
 
-                if ((item->flags & config::treasure::flags::TR_CURSED) != 0u) {
+                if (inventoryItemIsCursed(*item)) {
                     printMessage("Oops! It feels deathly cold!");
                     itemAppendToInscription(*item, config::identification::ID_DAMD);
 

@@ -125,7 +125,7 @@ static void castSpell(int spell_id) {
             break;
         case MageSpellId::RemoveCurse:
             for (int id = 22; id < PLAYER_INVENTORY_SIZE; id++) {
-                inventoryItemRemoveCurse(id);
+                inventoryItemRemoveCurse(py.inventory[id]);
             }
             break;
         case MageSpellId::FrostBolt:

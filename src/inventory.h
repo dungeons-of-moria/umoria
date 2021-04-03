@@ -93,8 +93,8 @@ void inventoryItemCopyTo(int from_item_id, Inventory_t &to_item);
 bool inventoryItemSingleStackable(Inventory_t const &item);
 bool inventoryItemStackable(Inventory_t const &item);
 
-bool inventoryItemIsCursed(int item_id);
-void inventoryItemRemoveCurse(int item_id);
+bool inventoryItemIsCursed(const Inventory_t &item);
+void inventoryItemRemoveCurse(Inventory_t &item);
 
 bool setNull(Inventory_t *item);
 bool setFrostDestroyableItems(Inventory_t *item);

@@ -441,7 +441,7 @@ void itemSetAsTried(Inventory_t const &item) {
 // Somethings been identified.
 // Extra complexity by CJS so that it can merge store/dungeon objects when appropriate.
 void itemIdentify(Inventory_t &item, int &item_id) {
-    if ((item.flags & config::treasure::flags::TR_CURSED) != 0u) {
+    if (inventoryItemIsCursed(item)) {
         itemAppendToInscription(item, config::identification::ID_DAMD);
     }
 

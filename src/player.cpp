@@ -449,7 +449,7 @@ static void playerRecalculateBonusesFromInventory() {
 
                 py.misc.display_to_ac += item.to_ac;
                 py.misc.display_ac += item.ac;
-            } else if ((item.flags & config::treasure::flags::TR_CURSED) == 0u) {
+            } else if (!inventoryItemIsCursed(item)) {
                 // Base AC values should always be visible,
                 // as long as the item is not cursed.
                 py.misc.display_ac += item.ac;
@@ -788,11 +788,11 @@ bool playerIsWieldingItem() {
 }
 
 bool playerWornItemIsCursed(PlayerEquipment id) {
-    return inventoryItemIsCursed(static_cast<int>(id));
+    return inventoryItemIsCursed(py.inventory[id]);
 }
 
 void playerWornItemRemoveCurse(PlayerEquipment id) {
-    inventoryItemRemoveCurse(static_cast<int>(id));
+    inventoryItemRemoveCurse(py.inventory[id]);
 }
 
 static bool playerCanRead() {
@@ -1305,7 +1305,7 @@ static void openClosedChest(Coord_t coord) {
         // Chest treasure is allocated as if a creature had been killed.
         // clear the cursed chest/monster win flag, so that people
         // can not win by opening a cursed chest
-        game.treasure.list[tile.treasure_id].flags &= ~config::treasure::flags::TR_CURSED;
+        inventoryItemRemoveCurse(game.treasure.list[tile.treasure_id]);
 
         (void) monsterDeath(coord, game.treasure.list[tile.treasure_id].flags);
 

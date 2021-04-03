@@ -107,7 +107,7 @@ static bool scrollEnchantWeaponToHit() {
     printMessage(msg);
 
     if (spellEnchantItem(item.to_hit, 10)) {
-        item.flags &= ~config::treasure::flags::TR_CURSED;
+        inventoryItemRemoveCurse(item);
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -141,7 +141,7 @@ static bool scrollEnchantWeaponToDamage() {
     }
 
     if (spellEnchantItem(item.to_damage, scroll_type)) {
-        item.flags &= ~config::treasure::flags::TR_CURSED;
+        inventoryItemRemoveCurse(item);
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -167,7 +167,7 @@ static bool scrollEnchantItemToAC() {
     printMessage(msg);
 
     if (spellEnchantItem(item.to_ac, 10)) {
-        item.flags &= ~config::treasure::flags::TR_CURSED;
+        inventoryItemRemoveCurse(item);
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -271,7 +271,7 @@ static bool scrollEnchantWeapon() {
     }
 
     if (enchanted) {
-        item.flags &= ~config::treasure::flags::TR_CURSED;
+        inventoryItemRemoveCurse(item);
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");
@@ -335,7 +335,7 @@ static bool scrollEnchantArmor() {
     }
 
     if (enchanted) {
-        item.flags &= ~config::treasure::flags::TR_CURSED;
+        inventoryItemRemoveCurse(item);
         playerRecalculateBonuses();
     } else {
         printMessage("The enchantment fails.");

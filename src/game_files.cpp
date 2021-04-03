@@ -173,7 +173,7 @@ void outputRandomLevelObjectsToFile() {
         Inventory_t &item = game.treasure.list[treasure_id];
         itemIdentifyAsStoreBought(item);
 
-        if ((item.flags & config::treasure::flags::TR_CURSED) != 0u) {
+        if (inventoryItemIsCursed(item)) {
             itemAppendToInscription(item, config::identification::ID_DAMD);
         }
 

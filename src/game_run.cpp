@@ -2054,7 +2054,7 @@ static void playerRegenerateMana(int percent) {
 // Is an item an enchanted weapon or armor and we don't know? -CJS-
 // only returns true if it is a good enchantment
 static bool itemEnchanted(Inventory_t const &item) {
-    if (item.category_id < TV_MIN_ENCHANT || item.category_id > TV_MAX_ENCHANT || (item.flags & config::treasure::flags::TR_CURSED) != 0u) {
+    if (item.category_id < TV_MIN_ENCHANT || item.category_id > TV_MAX_ENCHANT || inventoryItemIsCursed(item)) {
         return false;
     }
 
