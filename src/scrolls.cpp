@@ -75,17 +75,17 @@ static int inventoryItemIdOfCursedEquipment() {
         item_id = items[randomNumber(item_count) - 1];
     }
 
-    if (inventoryItemIsCursed(PlayerEquipment::Body)) {
+    if (playerWornItemIsCursed(PlayerEquipment::Body)) {
         item_id = PlayerEquipment::Body;
-    } else if (inventoryItemIsCursed(PlayerEquipment::Arm)) {
+    } else if (playerWornItemIsCursed(PlayerEquipment::Arm)) {
         item_id = PlayerEquipment::Arm;
-    } else if (inventoryItemIsCursed(PlayerEquipment::Outer)) {
+    } else if (playerWornItemIsCursed(PlayerEquipment::Outer)) {
         item_id = PlayerEquipment::Outer;
-    } else if (inventoryItemIsCursed(PlayerEquipment::Head)) {
+    } else if (playerWornItemIsCursed(PlayerEquipment::Head)) {
         item_id = PlayerEquipment::Head;
-    } else if (inventoryItemIsCursed(PlayerEquipment::Hands)) {
+    } else if (playerWornItemIsCursed(PlayerEquipment::Hands)) {
         item_id = PlayerEquipment::Hands;
-    } else if (inventoryItemIsCursed(PlayerEquipment::Feet)) {
+    } else if (playerWornItemIsCursed(PlayerEquipment::Feet)) {
         item_id = PlayerEquipment::Feet;
     }
 
@@ -195,7 +195,7 @@ static int scrollIdentifyItem(int item_id, bool &is_used_up) {
 }
 
 static bool scrollRemoveCurse() {
-    if (spellRemoveCurseFromAllItems()) {
+    if (spellRemoveCurseFromAllWornItems()) {
         printMessage("You feel as if someone is watching over you.");
         return true;
     }

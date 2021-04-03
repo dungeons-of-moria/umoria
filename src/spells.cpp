@@ -2309,12 +2309,12 @@ bool spellEnchantItem(int16_t &plusses, int16_t max_bonus_limit) {
 }
 
 // Removes curses from items in inventory -RAK-
-bool spellRemoveCurseFromAllItems() {
+bool spellRemoveCurseFromAllWornItems() {
     bool removed = false;
 
     for (int id = PlayerEquipment::Wield; id <= PlayerEquipment::Outer; id++) {
-        if (inventoryItemIsCursed(id)) {
-            inventoryItemRemoveCurse(id);
+        if (playerWornItemIsCursed(static_cast<PlayerEquipment>(id))) {
+            playerWornItemRemoveCurse(static_cast<PlayerEquipment>(id));
             playerRecalculateBonuses();
             removed = true;
         }

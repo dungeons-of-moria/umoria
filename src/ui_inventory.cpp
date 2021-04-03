@@ -439,7 +439,7 @@ static void uiCommandInventoryUnwieldItem() {
         return;
     }
 
-    if (inventoryItemIsCursed(PlayerEquipment::Wield)) {
+    if (playerWornItemIsCursed(PlayerEquipment::Wield)) {
         obj_desc_t description = {'\0'};
         itemDescription(description, py.inventory[PlayerEquipment::Wield], false);
 

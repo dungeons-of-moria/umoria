@@ -31,7 +31,7 @@ bool enterWizardMode() {
 }
 
 void wizardCureAll() {
-    (void) spellRemoveCurseFromAllItems();
+    (void) spellRemoveCurseFromAllWornItems();
     (void) playerCureBlindness();
     (void) playerCureConfusion();
     (void) playerCurePoison();

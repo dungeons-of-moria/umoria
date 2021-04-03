@@ -90,5 +90,5 @@ void spellLoseEXP(int32_t adjustment);
 bool spellSlowPoison();
 void spellDestroyArea(Coord_t coord);
 bool spellEnchantItem(int16_t &plusses, int16_t max_bonus_limit);
-bool spellRemoveCurseFromAllItems();
+bool spellRemoveCurseFromAllWornItems();
 bool spellRestorePlayerLevels();

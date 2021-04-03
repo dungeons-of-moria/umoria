@@ -787,6 +787,14 @@ bool playerIsWieldingItem() {
     return true;
 }
 
+bool playerWornItemIsCursed(PlayerEquipment id) {
+    return inventoryItemIsCursed(static_cast<int>(id));
+}
+
+void playerWornItemRemoveCurse(PlayerEquipment id) {
+    inventoryItemRemoveCurse(static_cast<int>(id));
+}
+
 static bool playerCanRead() {
     if (py.flags.blind > 0) {
         printMessage("You can't see to read your spell book!");
