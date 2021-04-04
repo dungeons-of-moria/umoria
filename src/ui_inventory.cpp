@@ -855,7 +855,7 @@ static void executeDropItemCommand(int itemId, const char *which, const char *pr
 }
 
 static bool selectItemCommands(char *command, char *which, bool selecting) {
-    int from, to;
+    int fromLine, toLine;
     const char *prompt = nullptr;
     const char *swap = nullptr;
 
@@ -863,20 +863,20 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         swap = "";
 
         if (*command == 'w') {
-            from = game.screen.wear_low_id;
-            to = game.screen.wear_high_id;
+            fromLine = game.screen.wear_low_id;
+            toLine = game.screen.wear_high_id;
             prompt = "Wear/Wield";
         } else {
-            from = 0;
+            fromLine = 0;
             if (*command == 'd') {
-                to = py.pack.unique_items - 1;
+                toLine = py.pack.unique_items - 1;
                 prompt = "Drop";
 
                 if (py.equipment_count > 0) {
                     swap = ", / for Equip";
                 }
             } else {
-                to = py.equipment_count - 1;
+                toLine = py.equipment_count - 1;
 
                 if (*command == 't') {
                     prompt = "Take off";
@@ -891,13 +891,13 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             }
         }
 
-        if (from > to) {
+        if (fromLine > toLine) {
             selecting = false;
             continue;
         }
 
         obj_desc_t headingMsg = {'\0'};
-        buildCommandHeading(headingMsg, from, to, swap, *command, prompt);
+        buildCommandHeading(headingMsg, fromLine, toLine, swap, *command, prompt);
 
         // Abort everything.
         if (!getCommand(headingMsg, *which)) {
@@ -906,7 +906,7 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
             continue;
         }
 
-        // Draw the screen and maybe exit to main prompt.
+        // Draw the screen and maybe exit toLine main prompt.
         if (*which == ' ' || *which == '*') {
             changeScreenForCommand(*command);
             if (*which == ' ') {
@@ -927,8 +927,8 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
         }
 
         // look for item whose inscription matches "which"
-        int itemId = inventoryGetItemMatchingInscription(*which, *command, from, to);
-        if (itemId < from || itemId > to) {
+        int itemId = inventoryGetItemMatchingInscription(*which, *command, fromLine, toLine);
+        if (itemId < fromLine || itemId > toLine) {
             terminalBellSound();
             continue;
         }
@@ -955,20 +955,20 @@ static bool selectItemCommands(char *command, char *which, bool selecting) {
     return selecting;
 }
 
-// Put an appropriate header.
+// Put an appropriate header message (on message line).
 static void inventoryDisplayAppropriateHeader() {
     if (game.screen.current_screen_id == Screen::Inventory) {
         obj_desc_t msg = {'\0'};
-        int w_quotient = py.pack.weight / 10;
-        int w_remainder = py.pack.weight % 10;
+        int weightQuotient = py.pack.weight / 10;
+        int weightRemainder = py.pack.weight % 10;
 
         if (!config::options::show_inventory_weights || py.pack.unique_items == 0) {
-            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s", w_quotient, w_remainder, (py.pack.unique_items == 0 ? "nothing." : "-"));
+            (void) sprintf(msg, "You are carrying %d.%d pounds. In your pack there is %s", weightQuotient, weightRemainder, (py.pack.unique_items == 0 ? "nothing." : "-"));
         } else {
-            int l_quotient = playerCarryingLoadLimit() / 10;
-            int l_remainder = playerCarryingLoadLimit() % 10;
+            int capacityQuotient = playerCarryingLoadLimit() / 10;
+            int capacityRemainder = playerCarryingLoadLimit() % 10;
 
-            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -", w_quotient, w_remainder, l_quotient, l_remainder);
+            (void) sprintf(msg, "You are carrying %d.%d pounds. Your capacity is %d.%d pounds. In your pack is -", weightQuotient, weightRemainder, capacityQuotient, capacityRemainder);
         }
 
         putStringClearToEOL(msg, Coord_t{0, 0}  );
@@ -1109,10 +1109,10 @@ enum class PackMenu {
 
 // Switch between Equipment/Inventory menu.
 // Returns true when menu has changed
-static bool inventorySwitchPackMenu(vtype_t &prompt, PackMenu &menu, bool menu_active, int &item_id_end) {
-    bool changed = false;
-
+static bool inventorySwitchPackMenu(vtype_t &prompt, PackMenu &menu, bool menuActive, int &itemIdEnd) {
     if (menu == PackMenu::Inventory) {
+        bool changed = false;
+
         if (py.equipment_count == 0) {
             putStringClearToEOL("But you're not using anything -more-", Coord_t{0, 0});
             (void) getKeyInput();
@@ -1120,39 +1120,38 @@ static bool inventorySwitchPackMenu(vtype_t &prompt, PackMenu &menu, bool menu_a
             menu = PackMenu::Equipment;
             changed = true;
 
-            if (menu_active) {
-                item_id_end = py.equipment_count;
+            if (menuActive) {
+                itemIdEnd = py.equipment_count;
 
-                while (item_id_end < py.pack.unique_items) {
-                    item_id_end++;
-                    eraseLine(Coord_t{item_id_end, 0});
+                while (itemIdEnd < py.pack.unique_items) {
+                    itemIdEnd++;
+                    eraseLine(Coord_t{itemIdEnd, 0});
                 }
             }
-            item_id_end = py.equipment_count - 1;
+            itemIdEnd = py.equipment_count - 1;
         }
 
         putStringClearToEOL(prompt, Coord_t{0, 0});
-    } else {
-        if (py.pack.unique_items == 0) {
-            putStringClearToEOL("But you're not carrying anything -more-", Coord_t{0, 0});
-            (void) getKeyInput();
-        } else {
-            menu = PackMenu::Inventory;
-            changed = true;
-
-            if (menu_active) {
-                item_id_end = py.pack.unique_items;
-
-                while (item_id_end < py.equipment_count) {
-                    item_id_end++;
-                    eraseLine(Coord_t{item_id_end, 0});
-                }
-            }
-            item_id_end = py.pack.unique_items - 1;
-        }
+        return changed;
     }
 
-    return changed;
+    if (py.pack.unique_items == 0) {
+        putStringClearToEOL("But you're not carrying anything -more-", Coord_t{0, 0});
+        (void) getKeyInput();
+        return false;
+    }
+
+    menu = PackMenu::Inventory;
+    if (menuActive) {
+        itemIdEnd = py.pack.unique_items;
+
+        while (itemIdEnd < py.equipment_count) {
+            itemIdEnd++;
+            eraseLine(Coord_t{itemIdEnd, 0});
+        }
+    }
+    itemIdEnd = py.pack.unique_items - 1;
+    return true;
 }
 
 // Get the ID of an item and return the CTR value of it -RAK-
@@ -1178,11 +1177,11 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
 
     commandKeyId = 0;
 
-    bool item_found = false;
-    bool menu_active = false;
+    bool itemFound = false;
+    bool menuActive = false;
 
     do {
-        if (menu_active) {
+        if (menuActive) {
             if (menu == PackMenu::Inventory) {
                 (void) displayInventoryItems(itemIdStart, itemIdEnd, false, 80, mask);
             } else {
@@ -1199,7 +1198,7 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
                            itemIdStart + 'a',                                 //
                            itemIdEnd + 'a',                                   //
                            (menu == PackMenu::Inventory ? " 0-9," : ""),      //
-                           (menu_active ? "" : " * to see,"),                 //
+                           (menuActive ? "" : " * to see,"),                 //
                            (menu == PackMenu::Inventory ? "Equip" : "Inven"), //
                            prompt                                             //
             );
@@ -1209,7 +1208,7 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
                            itemIdStart + 'a',                             //
                            itemIdEnd + 'a',                               //
                            (menu == PackMenu::Inventory ? " 0-9," : ""),  //
-                           (menu_active ? "" : " * for inventory list,"), //
+                           (menuActive ? "" : " * for inventory list,"), //
                            prompt                                         //
             );
         }
@@ -1227,14 +1226,14 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
                     game.player_free_turn = true;
                     break;
                 case '/':
-                    done = inventorySwitchPackMenu(description, menu, menu_active, itemIdEnd);
+                    done = inventorySwitchPackMenu(description, menu, menuActive, itemIdEnd);
 
                     break;
                 case '*': // activate menu if required
-                    if (!menu_active) {
+                    if (!menuActive) {
                         done = true;
                         terminalSaveScreen();
-                        menu_active = true;
+                        menuActive = true;
                     }
                     break;
                 default:
@@ -1287,7 +1286,7 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
                         menu = PackMenu::CloseMenu;
                         done = true;
 
-                        item_found = true;
+                        itemFound = true;
                     } else if (message != nullptr) {
                         printMessage(message);
 
@@ -1301,11 +1300,11 @@ bool inventoryGetInputForItemId(int &commandKeyId, const char *prompt, int itemI
         }
     } while (menu != PackMenu::CloseMenu);
 
-    if (menu_active) {
+    if (menuActive) {
         terminalRestoreScreen();
     }
 
     messageLineClear();
 
-    return item_found;
+    return itemFound;
 }
