@@ -271,10 +271,10 @@ void printMessage(const char *msg) {
 
             putString(" -more-", Coord_t{MSG_LINE, old_len});
 
-            char in_char;
+            char key;
             do {
-                in_char = getKeyInput();
-            } while ((in_char != ' ') && (in_char != ESCAPE) && (in_char != '\n') && (in_char != '\r'));
+                key = getKeyInput();
+            } while ((key != ' ') && (key != ESCAPE) && (key != '\n') && (key != '\r'));
         } else {
             combine_messages = true;
         }
@@ -487,16 +487,16 @@ int getInputConfirmationWithAbort(int column, const std::string &prompt) {
 
     (void) addstr(" [y/n]");
 
-    char input = ' ';
-    while (input == ' ') {
-        input = getKeyInput();
+    char key = ' ';
+    while (key == ' ') {
+        key = getKeyInput();
     }
 
     messageLineClear();
 
-    if (input == 'N' || input == 'n') {
+    if (key == 'N' || key == 'n') {
         return 0;
-    } else if (input == 'Y' || input == 'y') {
+    } else if (key == 'Y' || key == 'y') {
         return 1;
     } else {
         return -1;

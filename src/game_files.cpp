@@ -53,7 +53,6 @@ void displayTextHelpFile(const std::string &filename) {
 
     constexpr uint8_t max_line_length = 80;
     char line_buffer[max_line_length];
-    char input;
 
     while (feof(file) == 0) {
         clearScreen();
@@ -65,8 +64,7 @@ void displayTextHelpFile(const std::string &filename) {
         }
 
         putStringClearToEOL("[ press any key to continue ]", Coord_t{23, 23});
-        input = getKeyInput();
-        if (input == ESCAPE) {
+        if (getKeyInput() == ESCAPE) {
             break;
         }
     }

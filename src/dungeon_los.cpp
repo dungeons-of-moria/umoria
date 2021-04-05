@@ -495,7 +495,7 @@ static bool lookSee(Coord_t coord, bool &transparent) {
         return false; // Don't look at a direct line of sight. A hack.
     }
 
-    char query = ESCAPE;
+    char key = ESCAPE;
     obj_desc_t msg = {'\0'};
 
     if (los_rocks_and_objects == 0 && tile.creature_id > 1 && monsters[tile.creature_id].lit) {
@@ -505,11 +505,11 @@ static bool lookSee(Coord_t coord, bool &transparent) {
         putStringClearToEOL(msg, Coord_t{0, 0});
 
         panelMoveCursor(coord);
-        query = getKeyInput();
+        key = getKeyInput();
 
-        if (query == 'r' || query == 'R') {
+        if (key == 'r' || key == 'R') {
             terminalSaveScreen();
-            query = (char) memoryRecall(j);
+            key = (char) memoryRecall(j);
             terminalRestoreScreen();
         }
     }
@@ -531,7 +531,7 @@ static bool lookSee(Coord_t coord, bool &transparent) {
                 putStringClearToEOL(msg, Coord_t{0, 0});
 
                 panelMoveCursor(coord);
-                query = getKeyInput();
+                key = getKeyInput();
             }
         }
 
@@ -562,14 +562,14 @@ static bool lookSee(Coord_t coord, bool &transparent) {
                 (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
                 putStringClearToEOL(msg, Coord_t{0, 0});
                 panelMoveCursor(coord);
-                query = getKeyInput();
+                key = getKeyInput();
             }
         }
     }
 
     if (msg[0] != 0) {
         los_num_places_seen++;
-        if (query == ESCAPE) {
+        if (key == ESCAPE) {
             return true;
         }
     }

@@ -201,7 +201,6 @@ void showScoresScreen() {
     HighScore_t score{};
     readHighScore(score);
 
-    char input;
     char msg[100];
 
     int i = 0;
@@ -231,8 +230,7 @@ void showScoresScreen() {
         putStringClearToEOL("Rank  Points Name              Sex Race       Class  Lvl Killed By", Coord_t{0, 0});
         eraseLine(Coord_t{1, 0});
         putStringClearToEOL("[ press any key to continue ]", Coord_t{23, 23});
-        input = getKeyInput();
-        if (input == ESCAPE) {
+        if (getKeyInput() == ESCAPE) {
             break;
         }
     }
