@@ -548,7 +548,7 @@ static int requestPutRingOnWhichHand() {
     // Rings. Give choice over where they go.
     do {
         char query;
-        if (!getCommand("Put ring on which hand (l/r/L/R)?", query)) {
+        if (!getMenuItemId("Put ring on which hand (l/r/L/R)?", query)) {
             hand = -1;
         } else if (query == 'l') {
             hand = PlayerEquipment::Left;

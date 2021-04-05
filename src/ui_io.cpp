@@ -389,6 +389,15 @@ bool getCommand(const std::string &prompt, char &command) {
     return command != ESCAPE;
 }
 
+// NOTE: currently this just wraps the getCommand() function, but better defines the different usages. -MRC-
+bool getTileCharacter(const std::string &prompt, char &command) {
+    return getCommand(prompt, command);
+}
+// NOTE: currently this just wraps the getCommand() function, but better defines the different usages. -MRC-
+bool getMenuItemId(const std::string &prompt, char &command) {
+    return getCommand(prompt, command);
+}
+
 // Gets a string terminated by <RETURN>
 // Function returns false if <ESCAPE> is input
 bool getStringInput(char *in_str, Coord_t coord, int slen) {

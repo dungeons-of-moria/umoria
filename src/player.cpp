@@ -922,7 +922,7 @@ void playerGainSpells() {
         displaySpellsList(spell_bank, spell_id, false, -1);
 
         char query;
-        while ((new_spells != 0) && getCommand("Learn which spell?", query)) {
+        while ((new_spells != 0) && getMenuItemId("Learn which spell?", query)) {
             int c = query - 'a';
 
             // test j < 23 in case i is greater than 22, only 22 spells

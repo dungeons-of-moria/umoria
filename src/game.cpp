@@ -277,14 +277,12 @@ bool getDirectionWithMemory(char *prompt, int &direction) {
 
     while (true) {
         // Don't end a counted command. -CJS-
-        int save = game.command_count;
-
+        int oldCount = game.command_count;
         if (!getCommand(prompt, command)) {
             game.player_free_turn = true;
             return false;
         }
-
-        game.command_count = save;
+        game.command_count = oldCount;
 
         if (config::options::use_roguelike_keys) {
             command = mapRoguelikeKeysToKeypad(command);

@@ -219,14 +219,14 @@ static const char *objectDescription(char command) {
 }
 
 void identifyGameObject() {
-    char command;
-    if (!getCommand("Enter character to be identified :", command)) {
+    char itemId; // being an ASCII character representing the item/monster tile, e.g. `+` = Door.
+
+    if (!getTileCharacter("Enter character to be identified :", itemId)) {
         return;
     }
 
-    putStringClearToEOL(objectDescription(command), Coord_t{0, 0});
-
-    recallMonsterAttributes(command);
+    putStringClearToEOL(objectDescription(itemId), Coord_t{0, 0});
+    recallMonsterAttributes(itemId);
 }
 
 // Initialize all Potions, wands, staves, scrolls, etc.

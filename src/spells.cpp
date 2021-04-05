@@ -22,11 +22,11 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
 
     int offset = (classes[py.misc.class_id].class_to_use_mage_spells == config::spells::SPELL_TYPE_MAGE ? config::spells::NAME_OFFSET_SPELLS : config::spells::NAME_OFFSET_PRAYERS);
 
-    char choice;
+    char spellChoice;
 
-    while (!spell_found && getCommand(str, choice)) {
-        if (isupper((int) choice) != 0) {
-            spell_id = choice - 'A' + first_spell;
+    while (!spell_found && getMenuItemId(str, spellChoice)) {
+        if (isupper((int) spellChoice) != 0) {
+            spell_id = spellChoice - 'A' + first_spell;
 
             // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
             int test_spell_id;
@@ -49,8 +49,8 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
                     spell_id = -1;
                 }
             }
-        } else if (islower((int) choice) != 0) {
-            spell_id = choice - 'a' + first_spell;
+        } else if (islower((int) spellChoice) != 0) {
+            spell_id = spellChoice - 'a' + first_spell;
 
             // verify that this is in spells[], at most 22 entries in class_to_use_mage_spells[]
             int test_spell_id;
@@ -65,14 +65,14 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
             } else {
                 spell_found = true;
             }
-        } else if (choice == '*') {
+        } else if (spellChoice == '*') {
             // only do this drawing once
             if (!redraw) {
                 terminalSaveScreen();
                 redraw = true;
                 displaySpellsList(spell_ids, number_of_choices, false, first_spell);
             }
-        } else if (isalpha((int) choice) != 0) {
+        } else if (isalpha((int) spellChoice) != 0) {
             spell_id = -2;
         } else {
             spell_id = -1;
@@ -1749,7 +1749,7 @@ bool spellMassGenocide() {
 // NOTE : Winning creatures can not be killed by genocide.
 bool spellGenocide() {
     char creature_char;
-    if (!getCommand("Which type of creature do you wish exterminated?", creature_char)) {
+    if (!getTileCharacter("Which type of creature do you wish exterminated?", creature_char)) {
         return false;
     }
 

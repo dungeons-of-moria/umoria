@@ -76,6 +76,8 @@ void printMessage(const char *msg);
 void printMessageNoCommandInterrupt(const std::string &msg);
 char getKeyInput();
 bool getCommand(const std::string &prompt, char &command);
+bool getMenuItemId(const std::string &prompt, char &command);
+bool getTileCharacter(const std::string &prompt, char &command);
 bool getStringInput(char *in_str, Coord_t coord, int slen);
 bool getInputConfirmation(const std::string &prompt);
 int getInputConfirmationWithAbort(int column, const std::string &prompt);

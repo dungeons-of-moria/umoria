@@ -210,7 +210,7 @@ static bool storeGetItemId(int &item_id, const char *prompt, int item_pos_start,
     (void) sprintf(msg, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
 
     char key_char;
-    while (getCommand(msg, key_char)) {
+    while (getMenuItemId(msg, key_char)) {
         key_char -= 'a';
         if (key_char >= item_pos_start && key_char <= item_pos_end) {
             item_found = true;
