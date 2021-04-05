@@ -825,7 +825,7 @@ static void executeDropItemCommand(int itemId, const char *which, const char *pr
         msg[strlen(description) - 1] = '.';
 
         // request command from player
-        confirmed = getInputConfirmationWithAbort(msg);
+        confirmed = getInputConfirmationWithAbort(0, msg);
         // if aborted
         if (confirmed == -1) {
             itemId = -1;

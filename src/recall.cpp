@@ -678,15 +678,12 @@ int memoryRecall(int monster_id) {
 // Allow access to monster memory. -CJS-
 void recallMonsterAttributes(char command) {
     int n = 0;
-    char query;
 
     for (int i = MON_MAX_CREATURES - 1; i >= 0; i--) {
         if (creatures_list[i].sprite == command && memoryMonsterKnown(creature_recall[i])) {
             if (n == 0) {
-                putString("You recall those details? [y/n]", Coord_t{0, 40});
-                query = getKeyInput();
-
-                if (query != 'y' && query != 'Y') {
+                int confirmed = getInputConfirmationWithAbort(40, "You recall those details?");
+                if (confirmed != 1) {
                     break;
                 }
 
@@ -695,7 +692,7 @@ void recallMonsterAttributes(char command) {
             }
             n++;
 
-            query = (char) memoryRecall(i);
+            int query = (char) memoryRecall(i);
             terminalRestoreScreen();
             if (query == ESCAPE) {
                 break;
