@@ -458,6 +458,11 @@ bool getStringInput(char *in_str, Coord_t coord, int slen) {
 
 // Used to verify a choice - user gets the chance to abort choice. -CJS-
 bool getInputConfirmation(const std::string &prompt) {
+    int confirmed = getInputConfirmationWithAbort(prompt);
+    return confirmed == 1;
+}
+
+int getInputConfirmationWithAbort(const std::string &prompt) {
     putStringClearToEOL(prompt, Coord_t{0, 0});
 
     int y, x;
@@ -478,7 +483,13 @@ bool getInputConfirmation(const std::string &prompt) {
 
     messageLineClear();
 
-    return (input == 'Y' || input == 'y');
+    if (input == 'N' || input == 'n') {
+        return 0;
+    } else if (input == 'Y' || input == 'y') {
+        return 1;
+    } else {
+        return -1;
+    }
 }
 
 // Pauses for user response before returning -RAK-

@@ -78,6 +78,7 @@ char getKeyInput();
 bool getCommand(const std::string &prompt, char &command);
 bool getStringInput(char *in_str, Coord_t coord, int slen);
 bool getInputConfirmation(const std::string &prompt);
+int getInputConfirmationWithAbort(const std::string &prompt);
 void waitForContinueKey(int line_number);
 bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);

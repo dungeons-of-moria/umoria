@@ -813,27 +813,21 @@ static void executeWearItemCommand(int itemId, const char *which, const char *pr
 }
 
 static void executeDropItemCommand(int itemId, const char *which, const char *prompt) {
-    char inputCommand = 'y';
+    int confirmed = -1;
 
     if (py.inventory[itemId].items_count > 1) {
         obj_desc_t description = {'\0'};
         itemDescription(description, py.inventory[itemId], true);
-        description[strlen(description) - 1] = '?';
+        description[strlen(description) - 1] = '?'; // replace period with question
 
         obj_desc_t msg = {'\0'};
-        (void) sprintf(msg, "Drop all %s [y/n]", description);
+        (void) sprintf(msg, "Drop all %s", description);
         msg[strlen(description) - 1] = '.';
 
-        putStringClearToEOL(msg, Coord_t{0, 0});
-
         // request command from player
-        inputCommand = getKeyInput();
-
-        if (inputCommand != 'y' && inputCommand != 'n') {
-            if (inputCommand != ESCAPE) {
-                terminalBellSound();
-            }
-            messageLineClear();
+        confirmed = getInputConfirmationWithAbort(msg);
+        // if aborted
+        if (confirmed == -1) {
             itemId = -1;
         }
     } else if ((isupper((int) *which) != 0) && !verifyAction((char *) prompt, itemId)) {
@@ -843,7 +837,7 @@ static void executeDropItemCommand(int itemId, const char *which, const char *pr
     if (itemId >= 0) {
         game.player_free_turn = false;
 
-        inventoryDropItem(itemId, inputCommand == 'y');
+        inventoryDropItem(itemId, confirmed == 1);
         playerStrength();
     }
 
