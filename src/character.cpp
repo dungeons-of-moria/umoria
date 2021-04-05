@@ -135,28 +135,23 @@ static void displayCharacterRaces() {
 static void characterChooseRace() {
     displayCharacterRaces();
 
-    int race_id = 0;
-
+    int id;
     while (true) {
         moveCursor(Coord_t{20, 30});
+        const char key = getKeyInput();
 
-        char const input = getKeyInput();
-        race_id = input - 'a';
-
-        if (race_id < PLAYER_MAX_RACES && race_id >= 0) {
+        id = key - 97; // ASCII `a`, setting id between 0 and 7
+        if (id >= 0 && id < PLAYER_MAX_RACES) {
             break;
-        }
-
-        if (input == '?') {
+        } else if (key == '?') {
             displayTextHelpFile(config::files::welcome_screen);
         } else {
             terminalBellSound();
         }
     }
+    py.misc.race_id = (uint8_t) id;
 
-    py.misc.race_id = (uint8_t) race_id;
-
-    putString(character_races[race_id].name, Coord_t{3, 15});
+    putString(character_races[id].name, Coord_t{3, 15});
 }
 
 // Will print the history of a character -JWT-
@@ -277,22 +272,19 @@ static void characterSetGender() {
     putString("Choose a sex (? for Help):", Coord_t{20, 2});
     putString("m) Male       f) Female", Coord_t{21, 2});
 
-    bool is_set = false;
-    while (!is_set) {
+    while (true) {
         moveCursor(Coord_t{20, 29});
+        const char key = getKeyInput();
 
-        // speed not important here
-        char const input = getKeyInput();
-
-        if (input == 'f' || input == 'F') {
+        if (key == 'f' || key == 'F') {
             playerSetGender(false);
             putString("Female", Coord_t{4, 15});
-            is_set = true;
-        } else if (input == 'm' || input == 'M') {
+            break;
+        } else if (key == 'm' || key == 'M') {
             playerSetGender(true);
             putString("Male", Coord_t{4, 15});
-            is_set = true;
-        } else if (input == '?') {
+            break;
+        } else if (key == '?') {
             displayTextHelpFile(config::files::welcome_screen);
         } else {
             terminalBellSound();
@@ -391,7 +383,7 @@ static void generateCharacterClass(uint8_t const class_id) {
 
     // now set misc stats, do this after setting stats because of playerStatAdjustmentConstitution() for hit-points
     py.misc.hit_die += klass.hit_points;
-    py.misc.max_hp = (int16_t)(playerStatAdjustmentConstitution() + py.misc.hit_die);
+    py.misc.max_hp = (int16_t) (playerStatAdjustmentConstitution() + py.misc.hit_die);
     py.misc.current_hp = py.misc.max_hp;
     py.misc.current_hp_fraction = 0;
 
@@ -430,18 +422,15 @@ static void characterGetClass() {
     // Reset the class ID
     py.misc.class_id = 0;
 
-    bool is_set = false;
-
-    while (!is_set) {
+    while (true) {
         moveCursor(Coord_t{20, 31});
+        const char key = getKeyInput();
 
-        char const input = getKeyInput();
-        int class_id = input - 'a';
-
-        if (class_id < class_count && class_id >= 0) {
-            is_set = true;
-            generateCharacterClass(class_list[class_id]);
-        } else if (input == '?') {
+        int id = key - 97; // ASCII `a`, setting id to 0-5
+        if (id >= 0 && id < class_count) {
+            generateCharacterClass(class_list[id]);
+            break;
+        } else if (key == '?') {
             displayTextHelpFile(config::files::welcome_screen);
         } else {
             terminalBellSound();
@@ -504,11 +493,11 @@ void characterCreate() {
         putString("Hit space to re-roll or ESC to accept characteristics: ", Coord_t{20, 2});
 
         while (true) {
-            char const input = getKeyInput();
-            if (input == ESCAPE) {
+            const char key = getKeyInput();
+            if (key == ESCAPE) {
                 done = true;
                 break;
-            } else if (input == ' ') {
+            } else if (key == ' ') {
                 break;
             } else {
                 terminalBellSound();

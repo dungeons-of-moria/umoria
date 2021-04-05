@@ -495,10 +495,7 @@ static bool lookSee(Coord_t coord, bool &transparent) {
         return false; // Don't look at a direct line of sight. A hack.
     }
 
-    // This was uninitialized but the `query == ESCAPE` below was causing
-    // a warning. Perhaps we can set it to `ESCAPE` here as default. -MRC-
     char query = ESCAPE;
-
     obj_desc_t msg = {'\0'};
 
     if (los_rocks_and_objects == 0 && tile.creature_id > 1 && monsters[tile.creature_id].lit) {
