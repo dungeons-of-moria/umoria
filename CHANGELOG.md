@@ -7,6 +7,8 @@ Tracking all changes since the 5.6.0 release.
 
 
 
+## 5.7.15 (2021-06-02)
+
 Fix incorrect license.
 
 Umoria 5.6 was released under a GPL-3.0-or-later license but I had accidentally
@@ -20,7 +22,6 @@ The license has been corrected to GPL-3.0-or-later.
 
 * Refactor keyboard input code.
 * Refactor ui_inventory.
-
 
 
 ## 5.7.14 (2021-02-27)
