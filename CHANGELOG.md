@@ -6,6 +6,23 @@ Tracking all changes since the 5.6.0 release.
 ## HEAD
 
 
+
+Fix incorrect license.
+
+Umoria 5.6 was released under a GPL-3.0-or-later license but I had accidentally
+changed the license to GPL-2.0 in a commit from the very early days of the project:
+https://github.com/dungeons-of-moria/umoria/commit/df109c5f55f6792dfd79055524728206f3a05247
+
+The license has been corrected to GPL-3.0-or-later.
+
+
+## Minor Changes
+
+* Refactor keyboard input code.
+* Refactor ui_inventory.
+
+
+
 ## 5.7.14 (2021-02-27)
 
 - Revert to Moria keys as default.
@@ -285,7 +302,7 @@ and macOS.
 
 ## 5.6.0 (2008-10-13)
 
-Umoria is released under a new GPL v2 license. More information is available
-on the [free-moria](http://free-moria.sourceforge.net/) website.
+Umoria released under a new GPL-3.0-or-later license by David Grabiner.
+More information is available on the [free-moria](http://free-moria.sourceforge.net/) website.
 
 All previous changes can be found in the [historical/CHANGELOG](historical/CHANGELOG).

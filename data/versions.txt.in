@@ -19,7 +19,7 @@ Bug reports and contributions can be made to the Umoria repository:
 https://github.com/dungeons-of-moria/umoria
 
 
-               Umoria is free software released under GPL v2.0
+               Umoria is free software released under GPL-3.0
 
                             VMS Moria Version 4.8
 
@@ -39,7 +39,7 @@ VMS Moria Modules :
       V3.0  Internal Help & Misc   - RAK
       V4.0  Source Release Version - RAK
 
-    Umoria is free software released under GNU General Public License v2.0
+    Umoria is free software released under GNU General Public License v3.0
                    See LICENSE and AUTHORS for more details
 
                Copyright (c) Robert A. Koeneke, James E. Wilson

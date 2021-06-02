@@ -4,12 +4,12 @@ Robert Alan Koeneke created Moria from 1981-86. James E. Wilson took
 the VMS Moria sources and created Umoria from 1987-94.
 
 In 2008 Moria/Umoria was re-licensed under the GNU General Public License
-version 2.0. All new additions to the code will fall under this license.
+version 3.0-or-later. All new additions to the code will fall under this license.
 
 
 ## Umoria 5.7.x
 
-Michael R. Cook [-MRC-] (GPL v2)
+Michael R. Cook [-MRC-] (GPL-3.0-or-later)
   Umoria restoration project:
     Windows and macOS support
     deprecation of old computer systems (Amiga, Atari ST, etc.)
