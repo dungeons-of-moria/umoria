@@ -1,12 +1,13 @@
 # Umoria
 
 _The Dungeons of Moria_ is a single player dungeon simulation originally
-written by Robert Alan Koeneke, with v1.0 released in 1983. The game was
-originally developed in VMS Pascal before being ported to the C language and
-released as _Umoria_ in 1988. Moria has had many variants over the years, with
-[_Angband_](http://rephial.org/) being the most well known. Moria was also an
-inspiration for one the most commercially successful action roguelike games,
-_Diablo_!
+written by Robert Alan Koeneke, with its first public release in 1983.
+The game was originally developed using VMS Pascal before being ported to the
+C language by James E. Wilson in 1988, and released a _Umoria_.
+
+Moria/Umoria has had many variants over the years, with [_Angband_](http://rephial.org/)
+being the most well known. Umoria was also an inspiration for one the most
+commercially successful action roguelike games, _Diablo_!
 
 Supported Platforms:
 
@@ -14,40 +15,41 @@ Supported Platforms:
   - macOS
   - Linux (Ubuntu/Debian)
 
-Compiling and limited testing done for:
-
-  - NetBSD 8.1 (with gcc 5.5)
-  - Fedora 32
+Compiling and limited testing has been done for other Linux based system
+including NetBSD 8.1 and Fedora 32.
 
 
-## Umoria Restoration Release: v5.7
+## Umoria 5.7.x releases
 
-The main focus of the `v5.7` release is to provide support for the three main
-operating systems: Windows, macOS, and Linux. Support for all other outdated
-computer systems such as MS DOS, "Classic" Mac OS (pre OSX), Amiga, and
-Atari ST has been removed.
+The main focus of the `5.7.0` release was to provide support for the three
+main operating systems: Windows, macOS, and Linux. Support for all other
+outdated computer systems such as MS DOS, "Classic" Mac OS (pre OSX), Amiga,
+and Atari ST was removed.
 
-_Note: there are no intentional game play changes in the 5.7.x releases._
+_Note: there have been no intentional game play changes in the 5.7.x releases._
 
-A great deal of _code restoration_ has been undertaken in the hope of aiding
-future development of the game. Examples of refactoring completed so far include
-reformatting the source code with the help of `clang-tidy` and `clang-format`,
-modernizing the code to use standard C types, and fixing all warnings while
+Since the initial 5.7 release, a great deal of _code restoration_ has been
+undertaken in the hope of aiding future development of the game. Some examples
+of the work done include reformatting the source code with the help of
+`clang-tidy` and `clang-format`, modernizing the code to use standard C types,
+breaking apart most large functions (many of which had hundreds of lines of code)
+into smaller, easier to read functions, and fixing all compiler warnings when
 compiling against recent versions of GCC and Clang.
 
 Full details of all changes can be found in the [CHANGELOG](CHANGELOG.md), and
 by browsing the commit history.
 
-Due to its lack of Windows and Mac support, Moria was unplayable for many
-people. Hopefully these changes will give more people a chance to play this
-classic roguelike game.
+Due to its lack of Windows and macOS support Moria was inaccessible to many
+people. Hopefully these changes will give many more people a chance to play
+this classic roguelike game.
 
 
 ## Notes on Compiling Umoria
 
-At present Umoria has been tested against GCC `7.x`, and `8.1`, with
-`ncurses 6.x`, although recent earlier versions should also work fine. You will
-require these along with `CMake` and the C++ build tools for your system.
+At present Umoria has been tested against GCC `8.x`, and `9.3`, with
+`ncurses 6.x`, although recent earlier versions should also work fine.
+
+You will need these as well as `CMake` and the C++ build tools for your system.
 
 
 ### macOS and Linux
@@ -92,21 +94,19 @@ To perform an out-of-source build, type the following:
     $ MINGW=mingw64 cmake ..
     $ make
 
-As with the macOS/Linux builds, the files will be installed into an `umoria` directory.
+As with the macOS/Linux builds, all files will be installed into an `umoria` directory.
 
 
 ## Historical Documents
 
-Most of the original documents included in the Umoria 5.6 sources have been
-placed in the [historical](historical) directory. You will even find the old
-CHANGELOG which tracks all the code changes made between versions 4.81 and
-5.5.2 (1987-2008).
-
-If you'd like to learn more on the development history of Umoria, these can
-make for interesting reading.
+Most of the original document files included in the Umoria 5.6 sources have
+been placed in the [historical](historical) directory. You will even find the
+old CHANGELOG, which tracks all code changes made between versions 4.81 and
+5.5.2 (1987-2008). If you'd like to learn more on the development history of
+Umoria, these can make for interesting reading.
 
 There is also the original Moria Manual and FAQ. Although these are a little
-outdated now, they are certainly worth reading as they contain a lot of
+outdated now they are certainly worth reading as they contain a lot of
 interesting and useful information.
 
 
