@@ -45,7 +45,7 @@ constexpr uint8_t PLAYER_NAME_SIZE = 27;
 typedef const char *ClassRankTitle_t;
 
 // Player_t contains everything to be known about our player character
-typedef struct {
+typedef struct Player_t {
     struct {
         char name[PLAYER_NAME_SIZE];    // Name of character
         bool gender;                    // Gender of character (Female = 0, Male = 1)
