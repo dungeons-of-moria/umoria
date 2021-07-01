@@ -32,7 +32,7 @@ enum class Screen {
     Wrong,
 };
 
-typedef struct {
+typedef struct Game_t {
     uint32_t magic_seed = 0; // Seed for initializing magic items (Potions, Wands, Staves, Scrolls, etc.)
     uint32_t town_seed = 0;  // Seed for town generation
 
