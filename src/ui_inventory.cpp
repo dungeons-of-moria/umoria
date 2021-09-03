@@ -819,7 +819,6 @@ static void executeDropItemCommand(int itemId, const char *which, const char *pr
 
         obj_desc_t msg = {'\0'};
         (void) sprintf(msg, "Drop all %s", description);
-        msg[strlen(description) - 1] = '.';
 
         // request command from player
         confirmed = getInputConfirmationWithAbort(0, msg);
