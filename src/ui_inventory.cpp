@@ -335,7 +335,7 @@ static bool verifyAction(const char *prompt, int item) {
     return getInputConfirmation(msg);
 }
 
-static void requestAndShowInventoryScreen(bool recoverScreen) {
+static void requestAndShowInventoryScreen() {
     if (game.doing_inventory_command == 0) {
         game.screen.screen_left_pos = 50;
         game.screen.screen_bottom_pos = 0;
@@ -345,11 +345,10 @@ static void requestAndShowInventoryScreen(bool recoverScreen) {
 
     // Take up where we left off after a previous inventory command. -CJS-
 
-    // If the screen has been flushed, we need to redraw. If the command
-    // is a simple ' ' to recover the screen, just quit. Otherwise, check
+    // If the screen has been flushed, we need to redraw.  Check
     // and see what the user wants.
     if (screen_has_changed) {
-        if (recoverScreen || !getInputConfirmation("Continuing with inventory command?")) {
+        if (!getInputConfirmation("Continuing with inventory command?")) {
             game.doing_inventory_command = 0;
             return;
         }
@@ -1003,11 +1002,7 @@ void inventoryExecuteCommand(char command) {
 
     terminalSaveScreen();
 
-    bool recoverScreen = false;
-    if (command == ' ') {
-        recoverScreen = true;
-    }
-    requestAndShowInventoryScreen(recoverScreen);
+    requestAndShowInventoryScreen();
 
     do {
         if (isupper((int) command) != 0) {

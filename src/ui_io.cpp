@@ -93,7 +93,11 @@ ssize_t terminalBellSound() {
 
     // The player can turn off beeps if they find them annoying.
     if (config::options::error_beep_sound) {
+#ifdef __EMSCRIPTEN__
+        return beep();
+#else
         return write(1, "\007", 1);
+#endif
     }
 
     return 0;
@@ -337,6 +341,7 @@ char getKeyInput() {
 
         // some machines may not sign extend.
         if (ch == EOF) {
+
             // avoid infinite loops while trying to call getKeyInput() for a -more- prompt.
             message_ready_to_print = false;
 
@@ -367,7 +372,7 @@ char getKeyInput() {
         if (ch != CTRL_KEY('R')) {
             return (char) ch;
         }
-
+        
         (void) wrefresh(curscr);
         moriaTerminalInitialize();
     }
@@ -530,6 +535,13 @@ bool checkForNonBlockingKeyPress(int microseconds) {
     timeout(-1);
 
     return result > 0;
+#elif __EMSCRIPTEN__
+    /* timeout should be in milliseconds */
+    timeout(microseconds/1000);
+    int result = getch();
+    timeout(-1);
+
+    return result > 0;
 #else
     struct timeval tbuf {};
     int ch;
@@ -655,7 +667,7 @@ bool tilde(const char *file, char *expanded) {
 // Check user permissions on Unix based systems,
 // or if on Windows just return. -MRC-
 bool checkFilePermissions() {
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
     if (0 != setuid(getuid())) {
         perror("Can't set permissions correctly!  Setuid call failed.\n");
         return false;

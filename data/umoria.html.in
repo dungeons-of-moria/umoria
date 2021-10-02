@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+     body{
+       align-content:center;
+       background:#000;
+       color:#fff;
+       display:grid;
+       font-family:monospace;
+       font-size:22.5px;
+       justify-content:center;
+       overflow:hidden;
+     }
+
+     #cursor{
+       animation-duration:1.25s;
+       animation-iteration-count:9;
+       animation-name: blink;
+       background-color:#fff;
+       color:#000;
+       position:absolute;
+       width:1ch;
+     }
+
+     @keyframes blink{
+       0%, 49%{
+         background-color:#fff;
+         color:#000;
+       }
+       50%, 100%{
+         background-color: #000;
+         color:#fff;
+       }
+     }
+
+     #screen{
+       position:relative;
+     }
+
+     #terminal{
+       display:none;
+       width:80ch;
+     }
+    </style>
+    <script>
+      @umoria_js@
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

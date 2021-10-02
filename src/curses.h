@@ -21,6 +21,8 @@
   #endif
 #elif __NetBSD__
   #include <curses.h>
+#elif __EMSCRIPTEN__
+  #include "browser_curses.h"
 #else
   #include <ncurses.h>
 #endif
