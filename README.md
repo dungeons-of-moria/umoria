@@ -118,19 +118,19 @@ All command-line arguments work through URL GET parameters entered in the URL ba
 
     Run game without any arguments:
     /home/user/umoria/umoria.html
-    C:/umoria/umoria.html
+    file:///C:/umoria/umoria.html
     
     Show the version number:
     /home/user/umoria.html?-v
-    C:/umoria/umoria.html?-v
+    file:///C:/umoria/umoria.html?-v
     
     Force a new game with a seed of 67898 and a savefile named myChar.sav:
     /home/user/umoria/umoria.html?-s 67898 -n umoria/myChar.sav
-    C:/umoria/umoria.html?-s 67898 -n umoria/myChar.sav
+    file:///C:/umoria/umoria.html?-s 67898 -n umoria/myChar.sav
     
     Continuing previous game from myChar.sav
     /home/user/umoria/umoria.html?umoria/myChar.sav
-    C:/umoria/umoria.html?umoria/myChar.sav
+    file:///C:/umoria/umoria.html?umoria/myChar.sav
 
 Note that the path to myChar.sav in the last two examples includes umoria.  **This is required.**  Due to a limiation of how the filesystem works, all savefiles and scores.dat are saved in a directory called umoria in IndexedDB.  You need to make sure to include umoria in the path any time you specify a savefile name.  If you fail to do that when creating the character, **the character will not be saved.**
 
