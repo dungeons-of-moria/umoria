@@ -1,4 +1,4 @@
-# Umoria
+# Umoria with Modern Browser Support
 
 _The Dungeons of Moria_ is a single player dungeon simulation originally
 written by Robert Alan Koeneke, with its first public release in 1983.
@@ -18,6 +18,11 @@ Supported Platforms:
 Compiling and limited testing has been done for other Linux based system
 including NetBSD 8.1 and Fedora 32.
 
+Building Umoria to run in a browser requires emscripten (http://emscripten.org).
+The current build flow for emscripten only supports Linux, and has only been
+tested on Ubuntu.  There are no plans to support building in Windows at this time.
+The "executable" built with emscripten (umoria.html) will run on any modern browser
+regardless of operating system.
 
 ## Umoria 5.7.x releases
 
@@ -51,8 +56,7 @@ At present Umoria has been tested against GCC `8.x`, and `9.3`, with
 
 You will need these as well as `CMake` and the C++ build tools for your system.
 
-
-### macOS and Linux
+### macOS and Linux Native Builds
 
 Change to the `umoria` game directory and enter the following commands at the
 terminal:
@@ -71,7 +75,7 @@ game binary and data files, which can then be moved to any other location, such
 as the `home` directory.
 
 
-### Windows
+### Windows Native Builds
 
 MinGW is used to provide GCC and GNU Binutils for compiling on the Windows platform.
 The easiest solution to get set up is to use the [MSYS2 Installer](http://msys2.github.io/).
@@ -96,6 +100,39 @@ To perform an out-of-source build, type the following:
 
 As with the macOS/Linux builds, all files will be installed into an `umoria` directory.
 
+### Emscripten Build
+
+First, install the emscripten SDK (see https://emscripten.org/docs/getting_started/downloads.html for instruction).
+Make a backup of CMakeLists.txt and copy CMakeLists.txt.emscripten to CMakeLists.txt.  Type the following to build:
+
+    $ cmake . -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+    $ make -j
+    $ cmake --install .
+
+## Running in a Browser
+
+Assuming you've followed the steps to build with emscripten, the "executable" will be in the umoria directory, as
+with the native builds.  The file is named umoria.html.  You can move umoria.html to any directory you like, as it contains everything necessary to run the game. Savefiles are stored via IndexedDB.  Note that each browser you use has its own IndexedDB, so savefiles from one browser aren't available in another.
+
+All command-line arguments work through URL GET parameters entered in the URL bar.  Here are some examples of what to put in the URL bar to run the game with various options, assuming umoria.html is in a directory called /home/user/umoria inn Linux and C:\umoria in Windows:
+
+    Run game without any arguments:
+    /home/user/umoria/umoria.html
+    C:/umoria/umoria.html
+    
+    Show the version number:
+    /home/user/umoria.html?-v
+    C:/umoria/umoria.html?-v
+    
+    Force a new game with a seed of 67898 and a savefile named myChar.sav:
+    /home/user/umoria/umoria.html?-s 67898 -n umoria/myChar.sav
+    C:/umoria/umoria.html?-s 67898 -n umoria/myChar.sav
+    
+    Continuing previous game from myChar.sav
+    /home/user/umoria/umoria.html?umoria/myChar.sav
+    C:/umoria/umoria.html?umoria/myChar.sav
+
+Note that the path to myChar.sav in the last two examples includes umoria.  **This is required.**  Due to a limiation of how the filesystem works, all savefiles and scores.dat are saved in a directory called umoria in IndexedDB.  You need to make sure to include umoria in the path any time you specify a savefile name.  If you fail to do that when creating the character, **the character will not be saved.**
 
 ## Historical Documents
 
