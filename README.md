@@ -24,7 +24,7 @@ tested on Ubuntu.  There are no plans to support building in Windows at this tim
 The "executable" built with emscripten (umoria.html) will run on any modern browser
 regardless of operating system.
 
-**Note:  A pre-built version of umoria.html can be found in the umoria directory.**
+Note:  A pre-built version of umoria.html is included in the umoria directory.  You can also play at https://umoria.org/play/, thanks to Michael R. Cook https://github.com/mrcook, the current developer and maintainer for Umoria!
 
 ## Umoria 5.7.x releases
 
