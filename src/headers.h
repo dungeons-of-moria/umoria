@@ -18,7 +18,7 @@
     #include <io.h>
     #include <sys/types.h>
 
-#elif __APPLE__ ||  __linux__ || __NetBSD__
+#elif __APPLE__ ||  __linux__ || __NetBSD__ || __MORPHOS__
 
     #include <pwd.h>
     #include <unistd.h>
