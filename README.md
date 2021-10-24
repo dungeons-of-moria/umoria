@@ -104,7 +104,7 @@ As with the macOS/Linux builds, all files will be installed into an `umoria` dir
 
 ### Emscripten Build
 
-First, install the emscripten SDK (see https://emscripten.org/docs/getting_started/downloads.html for instruction).
+First, install the emscripten SDK (see https://emscripten.org/docs/getting_started/downloads.html for instructions).
 Make a backup of CMakeLists.txt and copy CMakeLists.txt.emscripten to CMakeLists.txt.  Type the following to build:
 
     $ cmake . -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
