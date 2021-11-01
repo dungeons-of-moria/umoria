@@ -807,7 +807,7 @@ bool loadGame(bool &generate) {
             count = rdByte();
             char_tmp = rdByte();
             for (int i = count; i > 0; i--) {
-                if (tile >= &dg.floor[MAX_HEIGHT][0]) {
+                if (tile >= &dg.floor[MAX_HEIGHT - 1][0]) {
                     goto error;
                 }
                 tile->feature_id = (uint8_t)(char_tmp & 0xF);
