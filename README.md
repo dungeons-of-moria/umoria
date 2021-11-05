@@ -24,7 +24,7 @@ tested on Ubuntu.  There are no plans to support building in Windows at this tim
 The "executable" built with emscripten (umoria.html) will run on any modern browser
 regardless of operating system.
 
-Note:  A pre-built version of umoria.html is included in the umoria directory.  You can also play at https://umoria.org/play/, thanks to Michael R. Cook https://github.com/mrcook, the current developer and maintainer for Umoria!
+Note:  A pre-built version of umoria.html is included in the umoria directory.  You can also play at https://umoria.org/play, thanks to Michael R. Cook https://github.com/mrcook, the current developer and maintainer for Umoria!
 
 ## Umoria 5.7.x releases
 
@@ -116,7 +116,7 @@ Make a backup of CMakeLists.txt and copy CMakeLists.txt.emscripten to CMakeLists
 Assuming you've followed the steps to build with emscripten, the "executable" will be in the umoria directory, as
 with the native builds.  The file is named umoria.html.  You can move umoria.html to any directory you like, as it contains everything necessary to run the game. Savefiles are stored via IndexedDB.  Note that each browser you use has its own IndexedDB, so savefiles from one browser aren't available in another.
 
-All command-line arguments work through URL GET parameters entered in the URL bar.  Here are some examples of what to put in the URL bar to run the game with various options, assuming umoria.html is in a directory called /home/user/umoria inn Linux and C:\umoria in Windows:
+All command-line arguments work through URL GET parameters entered in the URL bar.  Here are some examples of what to put in the URL bar to run the game with various options, assuming umoria.html is in a directory called /home/user/umoria in Linux and C:\umoria in Windows:
 
     Run game without any arguments:
     /home/user/umoria/umoria.html
