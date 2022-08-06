@@ -12,6 +12,7 @@
 Dungeon_t dg = Dungeon_t{0, 0, {}, -1, 0, true, {}};
 
 // dungeonDisplayMap shrinks the dungeon to a single screen
+// Added color support SAC
 void dungeonDisplayMap() {
     // Save the game screen
     terminalSaveScreen();
@@ -31,7 +32,6 @@ void dungeonDisplayMap() {
     uint8_t panel_height = MAX_HEIGHT / RATIO;
 
     char map[MAX_WIDTH / RATIO + 1] = {'\0'};
-    char line_buffer[80];
 
     // Add screen border
     addChar('+', Coord_t{0, 0});
@@ -51,14 +51,19 @@ void dungeonDisplayMap() {
     int player_y = 0;
     int player_x = 0;
     int line = -1;
+    int color = config::colors::COL_DEFAULT;
 
     // Shrink the dungeon!
     for (uint8_t y = 0; y < MAX_HEIGHT; y++) {
         uint8_t row = y / RATIO;
         if (row != line) {
             if (line >= 0) {
-                sprintf(line_buffer, "|%s|", map);
-                putString(line_buffer, Coord_t{line + 1, 0});
+                // loop through map
+                // cCol +1 to move inside border
+                for (int cCol = 0; cCol < MAX_WIDTH / RATIO; cCol++) {
+                    color = getSymbolColor(map[cCol]);
+                    addChar(map[cCol], Coord_t{line + 1, cCol + 1}, color);
+                }
             }
             for (uint8_t j = 0; j < panel_width; j++) {
                 map[j] = ' ';
@@ -80,9 +85,14 @@ void dungeonDisplayMap() {
         }
     }
 
+    // For color support, must change from writing entire line as string to char at a time
     if (line >= 0) {
-        sprintf(line_buffer, "|%s|", map);
-        putString(line_buffer, Coord_t{line + 1, 0});
+        // loop through map
+        // cCol +1 to move inside border
+        for (int cCol = 0; cCol < MAX_WIDTH / RATIO; cCol++) {
+            color = getSymbolColor(map[cCol]);
+            addChar(map[cCol], Coord_t{line + 1, cCol + 1}, color);
+        }
     }
 
     // Move cursor onto player character
@@ -165,6 +175,26 @@ int coordCorridorWallsNextTo(Coord_t const &coord) {
     }
 
     return walls;
+}
+
+// Returns color for given row, column SAC
+int caveGetTileColor(Coord_t const &coord) {
+    Tile_t const &tile = dg.floor[coord.y][coord.x];
+    
+    if (tile.creature_id > 1 && monsters[tile.creature_id].lit) {
+        // color for monsters
+        return creatures_list[monsters[tile.creature_id].creature_id].color;
+    } else if (tile.feature_id == TILE_BOUNDARY_WALL) {
+        return config::colors::COL_WHITE;
+    } else if (tile.feature_id == TILE_MAGMA_WALL && tile.treasure_id == 0) {
+        return config::colors::COL_MAGMA;
+    } else if (tile.feature_id == TILE_QUARTZ_WALL && tile.treasure_id == 0) {
+        return config::colors::COL_QUARTZ;
+    } else {
+        // color for other symbols
+        char ch = caveGetTileSymbol(coord);  
+        return getSymbolColor(ch);
+    }
 }
 
 // Returns symbol for given row, column -RAK-
@@ -355,6 +385,7 @@ void dungeonMoveCreatureRecord(Coord_t const &from, Coord_t const &to) {
 }
 
 // Room is lit, make it appear -RAK-
+// Added color suport SAC
 void dungeonLightRoom(Coord_t const &coord) {
     int height_middle = (SCREEN_HEIGHT / 2);
     int width_middle = (SCREEN_WIDTH / 2);
@@ -382,24 +413,26 @@ void dungeonLightRoom(Coord_t const &coord) {
                         tile.field_mark = true;
                     }
                 }
-                panelPutTile(caveGetTileSymbol(location), location);
+                panelPutTile(caveGetTileSymbol(location), location, caveGetTileColor(location));
             }
         }
     }
 }
 
 // Lights up given location -RAK-
+// Added color support SAC
 void dungeonLiteSpot(Coord_t const &coord) {
     if (!coordInsidePanel(coord)) {
         return;
     }
 
     char symbol = caveGetTileSymbol(coord);
-    panelPutTile(symbol, coord);
+    panelPutTile(symbol, coord, caveGetTileColor(coord));
 }
 
 // Normal movement
 // When FIND_FLAG,  light only permanent features
+// Added color support SAC
 static void sub1MoveLight(Coord_t const &from, Coord_t const &to) {
     if (py.temporary_light_only) {
         // Turn off lamp light
@@ -458,7 +491,7 @@ static void sub1MoveLight(Coord_t const &from, Coord_t const &to) {
     for (coord.y = top; coord.y <= bottom; coord.y++) {
         // Leftmost to rightmost do
         for (coord.x = left; coord.x <= right; coord.x++) {
-            panelPutTile(caveGetTileSymbol(coord), coord);
+            panelPutTile(caveGetTileSymbol(coord), coord, caveGetTileColor(coord));
         }
     }
 }

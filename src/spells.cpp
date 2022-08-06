@@ -552,6 +552,7 @@ bool spellDestroyAdjacentDoorsTraps() {
 }
 
 // Display all creatures on the current panel -RAK-
+// Added color support SAC
 bool spellDetectMonsters() {
     bool detected = false;
 
@@ -563,7 +564,8 @@ bool spellDetectMonsters() {
             detected = true;
 
             // works correctly even if hallucinating
-            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.pos.y, monster.pos.x});
+            int color = creatures_list[monster.creature_id].color;
+            panelPutTile((char) creatures_list[monster.creature_id].sprite, Coord_t{monster.pos.y, monster.pos.x}, color);
         }
     }
 

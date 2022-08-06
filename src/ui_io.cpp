@@ -54,6 +54,20 @@ bool terminalInitialize() {
     (void) clear();
     (void) refresh();
 
+    // adding color support
+    if (has_colors() == TRUE) {
+        start_color();
+        
+        // init all 256 colors for now; pair id to foreground color
+        // start at 1; 0 suppodely reserved in ncurses
+        for (int i = 1; i < 256; i++) {
+            init_pair(i, i, 0);
+        }
+    } else {
+        (void)printf("No color support found\n");
+        // exit (1);
+    }
+
     return true;
 }
 
@@ -135,14 +149,18 @@ void moveCursor(Coord_t coord) {
     (void) move(coord.y, coord.x);
 }
 
-void addChar(char ch, Coord_t coord) {
+// Added color support; defaults to COL_DEFAULT   SAC
+void addChar(char ch, Coord_t coord, int color) {
+    attron(COLOR_PAIR(color)); // color attribute on SAC
     if (mvaddch(coord.y, coord.x, ch) == ERR) {
         abort();
     }
+    attroff(COLOR_PAIR(color)); // color attribute off SAC
 }
 
 // Dump IO to buffer -RAK-
-void putString(const char *out_str, Coord_t coord) {
+// Added color support; defaults to COL_DEFAULT   SAC
+void putString(const char *out_str, Coord_t coord, int color) {
     // truncate the string, to make sure that it won't go past right edge of screen.
     if (coord.x > 79) {
         coord.x = 79;
@@ -152,20 +170,73 @@ void putString(const char *out_str, Coord_t coord) {
     (void) strncpy(str, out_str, (size_t)(79 - coord.x));
     str[79 - coord.x] = '\0';
 
+    attron(COLOR_PAIR(color)); // color attribute on SAC
     if (mvaddstr(coord.y, coord.x, str) == ERR) {
         abort();
+    }
+    attroff(COLOR_PAIR(color)); // color attribute off SAC
+}
+
+// Added color support  SAC
+// Example multicolor message:
+//     multicolor_msg_t msg;
+//     strcpy(msg.str, "This is a red, green, and blue string.");
+//     msg.pairs[0].pos = 10;
+//     msg.pairs[0].color = config::colors::COL_RED;
+//     msg.pairs[1].pos = 13;
+//     msg.pairs[1].color = config::colors::COL_DEFAULT;
+//     msg.pairs[2].pos = 15;
+//     msg.pairs[2].color = config::colors::COL_GREEN;
+//     msg.pairs[3].pos = 20;
+//     msg.pairs[3].color = config::colors::COL_DEFAULT;
+//     msg.pairs[4].pos = 26;
+//     msg.pairs[4].color = config::colors::COL_BLUE;
+//     msg.pairs[5].pos = 30;
+//     msg.pairs[5].color = config::colors::COL_DEFAULT;
+//     
+//     putMulticolorString(msg, Coord_t{MSG_LINE, 0});
+void putMulticolorString(multicolor_msg_t &mc_str, Coord_t coord) {
+    // truncate the string, to make sure that it won't go past right edge of screen.
+    if (coord.x > 79) {
+        coord.x = 79;
+    }     
+    
+    // get shortest of two
+    int max_len = strlen(mc_str.str);
+    if (max_len > 79 - coord.x) {
+        max_len = 79 - coord.x;
+    }
+    
+    // loop through full string and print each char with current color
+    int currColor = config::colors::COL_DEFAULT;
+    int currPairIndex = 0;
+    int nextColChangePos = mc_str.pairs[currPairIndex].pos;
+    
+    for (int i = 0; i < max_len; i++) {
+        // check if current index matches index of next color change
+        if (nextColChangePos == i) {
+            currColor = mc_str.pairs[currPairIndex].color;
+            currPairIndex += 1;
+            // avoid indexing out of pairs array
+            if (currPairIndex < MAX_COLOR_MSG_PAIRS) {
+                nextColChangePos = mc_str.pairs[currPairIndex].pos;
+            }
+        }
+        
+        addChar(mc_str.str[i], Coord_t{coord.y, coord.x + i}, currColor);
     }
 }
 
 // Outputs a line to a given y, x position -RAK-
-void putStringClearToEOL(const std::string &str, Coord_t coord) {
+// Added color support; defaults to COL_DEFAULT   SAC
+void putStringClearToEOL(const std::string &str, Coord_t coord, int color) {
     if (coord.y == MSG_LINE && message_ready_to_print) {
         printMessage(CNIL);
     }
 
     (void) move(coord.y, coord.x);
     clrtoeol();
-    putString(str.c_str(), coord);
+    putString(str.c_str(), coord, color);
 }
 
 // Clears given line of text -RAK-
@@ -191,14 +262,17 @@ void panelMoveCursor(Coord_t coord) {
 
 // Outputs a char to a given interpolated y, x position -RAK-
 // sign bit of a character used to indicate standout mode. -CJS
-void panelPutTile(char ch, Coord_t coord) {
+// Added color support SAC
+void panelPutTile(char ch, Coord_t coord, int color) {
     // Real coords convert to screen positions
     coord.y -= dg.panel.row_prt;
     coord.x -= dg.panel.col_prt;
 
+    attron(COLOR_PAIR(color));
     if (mvaddch(coord.y, coord.x, ch) == ERR) {
         abort();
     }
+    attroff(COLOR_PAIR(color));
 }
 
 static Coord_t currentCursorPosition() {
@@ -242,7 +316,8 @@ void messageLineClear() {
 
 // Outputs message to top line of screen
 // These messages are kept for later reference.
-void printMessage(const char *msg) {
+// Added color support  SAC
+void printMulticolorMessage(multicolor_msg_t &mc_msg, bool nullcase) {
     int new_len = 0;
     int old_len = 0;
     bool combine_messages = false;
@@ -254,13 +329,14 @@ void printMessage(const char *msg) {
         // we want display them together on the same line.  So we
         // don't flush the old message in this case.
 
-        if (msg != nullptr) {
-            new_len = (int) strlen(msg);
+        if (nullcase == false) {
+            new_len = (int) strlen(mc_msg.str);
         } else {
             new_len = 0;
         }
-
-        if ((msg == nullptr) || new_len + old_len + 2 >= 73) {
+        
+        
+        if ((nullcase == true) || new_len + old_len + 2 >= 73) {
             // ensure that the complete -more- message is visible.
             if (old_len > 73) {
                 old_len = 73;
@@ -281,10 +357,9 @@ void printMessage(const char *msg) {
         (void) move(MSG_LINE, 0);
         clrtoeol();
     }
-
+    
     // Make the null string a special case. -CJS-
-
-    if (msg == nullptr) {
+    if (nullcase == true) {
         message_ready_to_print = false;
         return;
     }
@@ -296,20 +371,37 @@ void printMessage(const char *msg) {
     // display them on the same line.
 
     if (combine_messages) {
-        putString(msg, Coord_t{MSG_LINE, old_len + 2});
+        putMulticolorString(mc_msg, Coord_t{MSG_LINE, old_len + 2});
         strcat(messages[last_message_id], "  ");
-        strcat(messages[last_message_id], msg);
+        strcat(messages[last_message_id], mc_msg.str);
     } else {
-        messageLinePrintMessage(msg);
+        messageLineClear();
+        putMulticolorString(mc_msg, Coord_t{MSG_LINE, 0});
         last_message_id++;
 
         if (last_message_id >= MESSAGE_HISTORY_SIZE) {
             last_message_id = 0;
         }
 
-        (void) strncpy(messages[last_message_id], msg, MORIA_MESSAGE_SIZE);
+        (void) strncpy(messages[last_message_id], mc_msg.str, MORIA_MESSAGE_SIZE);
         messages[last_message_id][MORIA_MESSAGE_SIZE - 1] = '\0';
     }
+}
+
+// Changed to wrapper that simply calls printMulticolorMessage   SAC
+// added flag for nullprt use to flush out msgs
+void printMessage(const char *msg) {
+    bool nullcase = false;
+    multicolor_msg_t color_msg;
+    
+    // handle special case for nullpointer; used as a kind of flush
+    if (msg == nullptr) {
+        nullcase = true;
+    } else {
+            (void) strcpy(color_msg.str, msg);
+    }
+    
+    printMulticolorMessage(color_msg, nullcase);
 }
 
 // Print a message so as not to interrupt a counted command. -CJS-
@@ -667,4 +759,76 @@ bool checkFilePermissions() {
 #endif
 
     return true;
+}
+
+// Added color support SAC
+// TODO: Could add colors to individual items in data_treasure similar to monsters
+//    - given how un-identified items are described randomly, couldn't match colors
+//      if done that way, so leaving as simple one color for most objects matched below
+int getSymbolColor(char ch) {
+    switch (ch) {
+    case '@':
+        if (((py.misc.current_hp * 100 / py.misc.max_hp)) < 50) {
+            return config::colors::COL_WARN;
+        } else if (((py.misc.current_hp * 100 / py.misc.max_hp)) < 25) {
+            return config::colors::COL_CRITIC;
+        } else {
+            return config::colors::COL_GOOD;
+        }
+    case '.':
+        return config::colors::COL_FLOOR;
+        break;
+    case '#':
+        return config::colors::COL_GRANITE;
+        break;
+    case '$':
+        // TODO: separate into gold/silver/copper/mithril SAC
+        return config::colors::COL_GOLD;
+        break;
+    case '*':
+        // TODO: separae into garnets/opals/sapphires/rubies/diamonds/emeralds SAC
+        return config::colors::COL_GOLD;
+        break;
+    case '%':
+        return config::colors::COL_MAGMA;
+        break;
+    case '+':
+    case '\'':
+    case '<':
+    case '>':
+        return config::colors::COL_BROWN;
+        break;
+    case '^':
+        return config::colors::COL_RED;
+        break;
+    case '!':
+    case '"':
+    case '&':
+    case '(':
+    case ')':
+    case '-':
+    case '/':
+    case '=':
+    case '?':
+    case '[':
+    case '\\':
+    case ']':
+    case '_':
+    case '{':
+    case '|':
+    case '}':
+        return config::colors::COL_STUFF;
+        break;
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+        return config::colors::COL_LTBLUE;
+        break;
+    default:
+        return config::colors::COL_DEFAULT;
+        break;
+    }
 }

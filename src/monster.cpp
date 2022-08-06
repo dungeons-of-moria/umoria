@@ -253,22 +253,42 @@ static void monsterGetMoveDirection(int monster_id, int *directions) {
     }
 }
 
+// Added color support  SAC
 static void monsterPrintAttackDescription(char *msg, int attack_id) {
+    multicolor_msg_t mc_msg;
+    (void) strcpy(mc_msg.str, msg);
+    mc_msg.pairs[0].pos = strlen(msg);
+    mc_msg.pairs[0].color = config::colors::COL_WARN;
     switch (attack_id) {
         case 1:
-            printMessage(strcat(msg, "hits you."));
+            (void) strcat(mc_msg.str, "hits you.");
+            mc_msg.pairs[1].pos = mc_msg.pairs[0].pos + 4;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
             break;
         case 2:
-            printMessage(strcat(msg, "bites you."));
+            (void) strcat(mc_msg.str, "bites you.");
+            mc_msg.pairs[1].pos = mc_msg.pairs[0].pos + 5;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
             break;
         case 3:
-            printMessage(strcat(msg, "claws you."));
+            (void) strcat(mc_msg.str, "claws you.");
+            mc_msg.pairs[1].pos = mc_msg.pairs[0].pos + 5;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
             break;
         case 4:
-            printMessage(strcat(msg, "stings you."));
+            (void) strcat(mc_msg.str, "stings you.");
+            mc_msg.pairs[1].pos = mc_msg.pairs[0].pos + 6;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
             break;
         case 5:
-            printMessage(strcat(msg, "touches you."));
+            (void) strcat(mc_msg.str, "touches you.");
+            mc_msg.pairs[1].pos = mc_msg.pairs[0].pos + 7;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
             break;
 #if 0
         case 6:
@@ -460,9 +480,15 @@ static void monsterAttackPlayer(int monster_id) {
             if ((attack_desc >= 1 && attack_desc <= 3) || attack_desc == 6) {
                 playerDisturb(1, 0);
 
-                vtype_t description = {'\0'};
-                (void) strcpy(description, name);
-                printMessage(strcat(description, "misses you."));
+
+                multicolor_msg_t mc_msg;
+                (void) strcpy(mc_msg.str, name);
+                mc_msg.pairs[0].pos = strlen(name);
+                mc_msg.pairs[0].color = config::colors::COL_GREEN;
+                (void) strcat(mc_msg.str, "misses you.");
+                mc_msg.pairs[1].pos = mc_msg.pairs[0].pos + 6;
+                mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+                printMulticolorMessage(mc_msg);
             }
         }
 

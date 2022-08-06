@@ -79,8 +79,10 @@ bool coordInsidePanel(Coord_t coord) {
 }
 
 // Prints the map of the dungeon -RAK-
+// Added color support SAC
 void drawDungeonPanel() {
     int line = 1;
+    int color;
 
     Coord_t coord = Coord_t{0, 0};
 
@@ -93,7 +95,8 @@ void drawDungeonPanel() {
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             char ch = caveGetTileSymbol(coord);
             if (ch != ' ') {
-                panelPutTile(ch, coord);
+                color = caveGetTileColor(coord);
+                panelPutTile(ch, coord, color);
             }
         }
     }
@@ -153,11 +156,18 @@ void statsAsString(uint8_t stat, char *stat_string) {
 }
 
 // Print character stat in given row, column -RAK-
+// Added color support SAC
 void displayCharacterStats(int stat) {
     char text[7];
+    
+    int color = config::colors::COL_WHITE;
+    if (py.stats.max[stat] > py.stats.used[stat]) {
+      color = config::colors::COL_WARN;
+    }
+    
     statsAsString(py.stats.used[stat], text);
     putString(stat_names[stat], Coord_t{6 + stat, STAT_COLUMN});
-    putString(text, Coord_t{6 + stat, STAT_COLUMN + 6});
+    putString(text, Coord_t{6 + stat, STAT_COLUMN + 6}, color);
 }
 
 // Print character info in given row, column -RAK-
@@ -191,17 +201,19 @@ static void printHeaderNumber(const char *header, int num, Coord_t coord) {
 }
 
 // Print long number at given row, column
-static void printLongNumber(int32_t num, Coord_t coord) {
+// Added color support SAC
+static void printLongNumber(int32_t num, Coord_t coord, int color = config::colors::COL_DEFAULT) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
-    putString(str, coord);
+    putString(str, coord, color);
 }
 
 // Print number at given row, column -RAK-
-static void printNumber(int num, Coord_t coord) {
+// Added color support SAC
+static void printNumber(int num, Coord_t coord, int color = config::colors::COL_DEFAULT) {
     vtype_t str = {'\0'};
     (void) sprintf(str, "%6d", num);
-    putString(str, coord);
+    putString(str, coord, color);
 }
 
 // Prints title of character -RAK-
@@ -216,7 +228,14 @@ void printCharacterLevel() {
 
 // Prints players current mana points. -RAK-
 void printCharacterCurrentMana() {
-    printNumber(py.misc.current_mana, Coord_t{15, STAT_COLUMN + 6});
+    int color = config::colors::COL_GOOD;
+    if (((py.misc.current_mana * 100 / py.misc.mana)) < 50) {
+        color = config::colors::COL_WARN;
+    } else if (((py.misc.current_mana * 100 / py.misc.mana)) < 25) {
+        color = config::colors::COL_CRITIC;
+    }
+    
+    printNumber(py.misc.current_mana, Coord_t{15, STAT_COLUMN + 6}, color);
 }
 
 // Prints Max hit points -RAK-
@@ -225,8 +244,16 @@ void printCharacterMaxHitPoints() {
 }
 
 // Prints players current hit points -RAK-
+// Added color support SAC
 void printCharacterCurrentHitPoints() {
-    printNumber(py.misc.current_hp, Coord_t{17, STAT_COLUMN + 6});
+    int color = config::colors::COL_GOOD;
+    if (((py.misc.current_hp * 100 / py.misc.max_hp)) < 50) {
+        color = config::colors::COL_WARN;
+    } else if (((py.misc.current_hp * 100 / py.misc.max_hp)) < 25) {
+        color = config::colors::COL_CRITIC;
+    }
+    
+    printNumber(py.misc.current_hp, Coord_t{17, STAT_COLUMN + 6}, color);
 }
 
 // prints current AC -RAK-
@@ -235,78 +262,88 @@ void printCharacterCurrentArmorClass() {
 }
 
 // Prints current gold -RAK-
+// Added color support SAC
 void printCharacterGoldValue() {
-    printLongNumber(py.misc.au, Coord_t{20, STAT_COLUMN + 6});
+    printLongNumber(py.misc.au, Coord_t{20, STAT_COLUMN + 6}, config::colors::COL_GOLD);
 }
 
 // Prints depth in stat area -RAK-
+// Added color support SAC
 void printCharacterCurrentDepth() {
     vtype_t depths = {'\0'};
 
     int depth = dg.current_level * 50;
+    int color = config::colors::COL_DEFAULT;
 
     if (depth == 0) {
         (void) strcpy(depths, "Town level");
     } else {
         (void) sprintf(depths, "%d feet", depth);
+        color = config::colors::COL_BROWN;
     }
 
-    putStringClearToEOL(depths, Coord_t{23, 65});
+    putStringClearToEOL(depths, Coord_t{23, 65}, color);
 }
 
 // Prints status of hunger -RAK-
+// Added color support SAC
 void printCharacterHungerStatus() {
     if ((py.flags.status & config::player::status::PY_WEAK) != 0u) {
-        putString("Weak  ", Coord_t{23, 0});
+        putString("Weak  ", Coord_t{23, 0}, config::colors::COL_CRITIC);
     } else if ((py.flags.status & config::player::status::PY_HUNGRY) != 0u) {
-        putString("Hungry", Coord_t{23, 0});
+        putString("Hungry", Coord_t{23, 0}, config::colors::COL_WARN);
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 0});
     }
 }
 
 // Prints Blind status -RAK-
+// Added color support SAC
 void printCharacterBlindStatus() {
     if ((py.flags.status & config::player::status::PY_BLIND) != 0u) {
-        putString("Blind", Coord_t{23, 7});
+        putString("Blind", Coord_t{23, 7}, config::colors::COL_WARN);
     } else {
         putString(&blank_string[BLANK_LENGTH - 5], Coord_t{23, 7});
     }
 }
 
 // Prints Confusion status -RAK-
+// Added color support SAC
 void printCharacterConfusedState() {
     if ((py.flags.status & config::player::status::PY_CONFUSED) != 0u) {
-        putString("Confused", Coord_t{23, 13});
+        putString("Confused", Coord_t{23, 13}, config::colors::COL_WARN);
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 13});
     }
 }
 
 // Prints Fear status -RAK-
+// Added color support SAC
 void printCharacterFearState() {
     if ((py.flags.status & config::player::status::PY_FEAR) != 0u) {
-        putString("Afraid", Coord_t{23, 22});
+        putString("Afraid", Coord_t{23, 22}, config::colors::COL_WARN);
     } else {
         putString(&blank_string[BLANK_LENGTH - 6], Coord_t{23, 22});
     }
 }
 
 // Prints Poisoned status -RAK-
+// Added color support SAC
 void printCharacterPoisonedState() {
     if ((py.flags.status & config::player::status::PY_POISONED) != 0u) {
-        putString("Poisoned", Coord_t{23, 29});
+        putString("Poisoned", Coord_t{23, 29}, config::colors::COL_WARN);
     } else {
         putString(&blank_string[BLANK_LENGTH - 8], Coord_t{23, 29});
     }
 }
 
 // Prints Searching, Resting, Paralysis, or 'count' status -RAK-
+// Added color support SAC
 void printCharacterMovementState() {
     py.flags.status &= ~config::player::status::PY_REPEAT;
 
     if (py.flags.paralysis > 1) {
-        putString("Paralysed", Coord_t{23, 38});
+        putString("Paralysed", Coord_t{23, 38}, config::colors::COL_WARN);
         return;
     }
 
@@ -356,6 +393,7 @@ void printCharacterMovementState() {
 }
 
 // Prints the speed of a character. -CJS-
+// Added color support SAC
 void printCharacterSpeed() {
     int speed = py.flags.speed;
 
@@ -365,15 +403,15 @@ void printCharacterSpeed() {
     }
 
     if (speed > 1) {
-        putString("Very Slow", Coord_t{23, 49});
+        putString("Very Slow", Coord_t{23, 49}, config::colors::COL_CRITIC);
     } else if (speed == 1) {
-        putString("Slow     ", Coord_t{23, 49});
+        putString("Slow     ", Coord_t{23, 49}, config::colors::COL_WARN);
     } else if (speed == 0) {
         putString(&blank_string[BLANK_LENGTH - 9], Coord_t{23, 49});
     } else if (speed == -1) {
-        putString("Fast     ", Coord_t{23, 49});
+        putString("Fast     ", Coord_t{23, 49}, config::colors::COL_GOOD);
     } else {
-        putString("Very Fast", Coord_t{23, 49});
+        putString("Very Fast", Coord_t{23, 49}, config::colors::COL_GOOD);
     }
 }
 
@@ -405,6 +443,7 @@ void printCharacterWinner() {
 }
 
 // Prints character-screen info -RAK-
+// Added color support SAC
 void printCharacterStatsBlock() {
     printCharacterInfoInField(character_races[py.misc.race_id].name, Coord_t{2, STAT_COLUMN});
     printCharacterInfoInField(classes[py.misc.class_id].title, Coord_t{3, STAT_COLUMN});
@@ -421,6 +460,14 @@ void printCharacterStatsBlock() {
     printHeaderNumber("CHP ", py.misc.current_hp, Coord_t{17, STAT_COLUMN});
     printHeaderNumber("AC  ", py.misc.display_ac, Coord_t{19, STAT_COLUMN});
     printHeaderLongNumber("GOLD", py.misc.au, Coord_t{20, STAT_COLUMN});
+    
+    // Add color to lines using updated functions; overlaps above, but DRY  SAC
+    for (int i = 0; i < 6; i++) {
+        displayCharacterStats(i);
+    }
+    printCharacterCurrentHitPoints();
+    printCharacterGoldValue();
+    
     printCharacterWinner();
 
     uint32_t status = py.flags.status;

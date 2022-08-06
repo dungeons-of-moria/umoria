@@ -64,6 +64,7 @@ bool coordInBounds(Coord_t const &coord);
 int coordDistanceBetween(Coord_t const &from, Coord_t const &to);
 int coordWallsNextTo(Coord_t const &coord);
 int coordCorridorWallsNextTo(Coord_t const &coord);
+int caveGetTileColor(Coord_t const &coord);
 char caveGetTileSymbol(Coord_t const &coord);
 bool caveTileVisible(Coord_t const &coord);
 

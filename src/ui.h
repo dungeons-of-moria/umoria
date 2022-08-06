@@ -61,14 +61,16 @@ void flushInputBuffer();
 void clearScreen();
 void clearToBottom(int row);
 void moveCursor(Coord_t coord);
-void addChar(char ch, Coord_t coord);
-void putString(const char *out_str, Coord_t coord);
-void putStringClearToEOL(const std::string &str, Coord_t coord);
+void addChar(char ch, Coord_t coord, int color = config::colors::COL_DEFAULT);
+void putString(const char *out_str, Coord_t coord, int color = config::colors::COL_DEFAULT);
+void putMulticolorString(multicolor_msg_t &mcStr, Coord_t coord);
+void putStringClearToEOL(const std::string &str, Coord_t coord, int color = config::colors::COL_DEFAULT);
 void eraseLine(Coord_t coord);
 void panelMoveCursor(Coord_t coord);
-void panelPutTile(char ch, Coord_t coord);
+void panelPutTile(char ch, Coord_t coord, int color = config::colors::COL_DEFAULT);
 void messageLinePrintMessage(std::string message);
 void messageLineClear();
+void printMulticolorMessage(multicolor_msg_t &mc_msg, bool nullcase = false);
 void printMessage(const char *msg);
 void printMessageNoCommandInterrupt(const std::string &msg);
 char getKeyInput();
@@ -82,6 +84,7 @@ void waitForContinueKey(int line_number);
 bool checkForNonBlockingKeyPress(int microseconds);
 void getDefaultPlayerName(char *buffer);
 bool checkFilePermissions();
+int getSymbolColor(char ch);
 
 #ifndef _WIN32
 // call functions which expand tilde before calling open/fopen

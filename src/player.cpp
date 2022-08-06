@@ -1127,6 +1127,7 @@ static int playerCalculateBaseToHit(bool creature_lit, int tot_tohit) {
 }
 
 // Player attacks a (poor, defenseless) creature -RAK-
+// Added color support  SAC
 static void playerAttackMonster(Coord_t coord) {
     int creature_id = dg.floor[coord.y][coord.x].creature_id;
 
@@ -1151,18 +1152,27 @@ static void playerAttackMonster(Coord_t coord) {
 
     int damage;
     vtype_t msg = {'\0'};
+    multicolor_msg_t mc_msg;
 
     // Loop for number of blows, trying to hit the critter.
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
         if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, PlayerClassLevelAdj::BTH)) {
-            (void) sprintf(msg, "You miss %s.", name);
-            printMessage(msg);
+            (void) sprintf(mc_msg.str, "You miss %s.", name);
+            mc_msg.pairs[0].pos = 4;
+            mc_msg.pairs[0].color = config::colors::COL_WARN;
+            mc_msg.pairs[1].pos = 8;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
             continue;
         }
 
-        (void) sprintf(msg, "You hit %s.", name);
-        printMessage(msg);
+        (void) sprintf(mc_msg.str, "You hit %s.", name);
+        mc_msg.pairs[0].pos = 4;
+        mc_msg.pairs[0].color = config::colors::COL_GOOD;
+        mc_msg.pairs[1].pos = 7;
+        mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+        printMulticolorMessage(mc_msg);
 
         if (item.category_id != TV_NOTHING) {
             damage = diceRoll(item.damage);
@@ -1203,8 +1213,13 @@ static void playerAttackMonster(Coord_t coord) {
 
         // See if we done it in.
         if (monsterTakeHit(creature_id, damage) >= 0) {
-            (void) sprintf(msg, "You have slain %s.", name);
-            printMessage(msg);
+            (void) sprintf(mc_msg.str, "You have slain %s.", name);
+            mc_msg.pairs[0].pos = 9;
+            mc_msg.pairs[0].color = config::colors::COL_GOOD;
+            mc_msg.pairs[1].pos = 14;
+            mc_msg.pairs[1].color = config::colors::COL_DEFAULT;
+            printMulticolorMessage(mc_msg);
+            
             displayCharacterExperience();
 
             return;

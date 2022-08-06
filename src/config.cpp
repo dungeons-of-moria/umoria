@@ -333,4 +333,44 @@ namespace config {
         const uint8_t STORE_MIN_AUTO_SELL_ITEMS = 10; // Min diff objects in stock for auto sell
         const uint8_t STORE_STOCK_TURN_AROUND = 9;    // Amount of buying and selling normally
     } // namespace stores
+    
+    /* SAC - color support */
+    namespace colors {
+        const uint8_t COL_DEFAULT = 15;
+        const uint8_t COL_PLAYER = 57;
+        const uint8_t COL_GOOD = 2;
+        const uint8_t COL_WARN = 208;
+        const uint8_t COL_CRITIC = 9;
+        
+        const uint8_t COL_RED = 9;
+        const uint8_t COL_GREEN = 10;
+        const uint8_t COL_BLUE = 12;
+        const uint8_t COL_WHITE = 15;
+        const uint8_t COL_EMERALD = 34;
+        const uint8_t COL_STUFF = 67;
+        const uint8_t COL_MAGMA = 180;
+        const uint8_t COL_LTBLUE = 110;
+        const uint8_t COL_FLOOR = 95;
+        const uint8_t COL_GRANITE = 7;
+        const uint8_t COL_QUARTZ = 15;
+
+        const uint8_t COL_BROWN = 130;
+        const uint8_t COL_GOLD = 229;
+        const uint8_t COL_SILVER = 231;
+        const uint8_t COL_MONSTER = 88;
+        const uint8_t COL_MONSTER_DEFAULT = 160;
+        const uint8_t COL_MONSTER_BLACK = 8;
+        const uint8_t COL_MONSTER_WHITE = 15;
+        const uint8_t COL_MONSTER_BLUE = 33;
+        const uint8_t COL_MONSTER_GREEN = 76;
+        const uint8_t COL_MONSTER_PURPLE = 92;
+        const uint8_t COL_MONSTER_BROWN = 130;
+        const uint8_t COL_MONSTER_HUMAN = 137;
+        const uint8_t COL_MONSTER_RED = 160;
+        const uint8_t COL_MONSTER_YELLOW = 190;
+        const uint8_t COL_MONSTER_DISENCHANT = 224;
+        const uint8_t COL_MONSTER_CLEAR = 231;
+        const uint8_t COL_MONSTER_GREY = 244;
+        const uint8_t COL_MONSTER_MULTI = 42;
+    } // namespace colors
 } // namespace config

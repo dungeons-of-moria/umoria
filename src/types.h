@@ -22,3 +22,22 @@ typedef struct {
     int y;
     int x;
 } Coord_t;
+
+
+// Added color support    SAC
+// color string type
+constexpr uint8_t MAX_COLOR_MSG_PAIRS = 10;
+struct color_posit_t {
+    int pos = 0;
+    int color = config::colors::COL_DEFAULT;
+};
+
+// multi-color string type
+// Option: could have full string, and array of index/color pairs that would point to
+//  different sections of the string that should be different colors. 
+//    Pro: less memory, no repeated string contents
+//    Con: 
+struct multicolor_msg_t {
+    obj_desc_t str = {'\0'};
+    color_posit_t pairs[MAX_COLOR_MSG_PAIRS];
+};

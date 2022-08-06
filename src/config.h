@@ -316,4 +316,44 @@ namespace config {
         extern const uint8_t STORE_MIN_AUTO_SELL_ITEMS;
         extern const uint8_t STORE_STOCK_TURN_AROUND;
     }
+    
+    /* SAC - color support */
+    namespace colors {
+        extern const uint8_t COL_DEFAULT;
+        extern const uint8_t COL_PLAYER;
+        extern const uint8_t COL_GOOD;
+        extern const uint8_t COL_WARN;
+        extern const uint8_t COL_CRITIC;
+        
+        extern const uint8_t COL_RED;
+        extern const uint8_t COL_GREEN;
+        extern const uint8_t COL_BLUE;
+        extern const uint8_t COL_WHITE;
+        extern const uint8_t COL_EMERALD;
+        extern const uint8_t COL_STUFF;
+        extern const uint8_t COL_MAGMA;
+        extern const uint8_t COL_LTBLUE;
+        extern const uint8_t COL_FLOOR;
+        extern const uint8_t COL_GRANITE;
+        extern const uint8_t COL_QUARTZ;
+
+        extern const uint8_t COL_BROWN;
+        extern const uint8_t COL_GOLD;
+        extern const uint8_t COL_SILVER;
+        extern const uint8_t COL_MONSTER;
+        extern const uint8_t COL_MONSTER_DEFAULT;
+        extern const uint8_t COL_MONSTER_BLACK;
+        extern const uint8_t COL_MONSTER_WHITE;
+        extern const uint8_t COL_MONSTER_BLUE;
+        extern const uint8_t COL_MONSTER_GREEN;
+        extern const uint8_t COL_MONSTER_PURPLE;
+        extern const uint8_t COL_MONSTER_BROWN;
+        extern const uint8_t COL_MONSTER_HUMAN;
+        extern const uint8_t COL_MONSTER_RED;
+        extern const uint8_t COL_MONSTER_YELLOW;
+        extern const uint8_t COL_MONSTER_DISENCHANT;
+        extern const uint8_t COL_MONSTER_CLEAR;
+        extern const uint8_t COL_MONSTER_GREY;
+        extern const uint8_t COL_MONSTER_MULTI;
+    }
 }
