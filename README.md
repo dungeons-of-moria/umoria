@@ -53,8 +53,8 @@ this classic roguelike game.
 
 ## Notes on Compiling Umoria
 
-At present Umoria has been tested against GCC `8.x`, and `9.3`, with
-`ncurses 6.x`, although recent earlier versions should also work fine.
+Umoria has been tested against GCC (`10` and `11`) and with `ncurses 6.x`,
+although recent earlier versions should also work fine.
 
 You will need these as well as `CMake` and the C++ build tools for your system.
 
@@ -63,14 +63,11 @@ You will need these as well as `CMake` and the C++ build tools for your system.
 Change to the `umoria` game directory and enter the following commands at the
 terminal:
 
-    $ cmake .
-    $ make
-
-To perform an out-of-source build, type the following:
-
     $ mkdir build && cd build
     $ cmake ..
     $ make
+
+NOTE: use `make -j $(nproc)` to speed up compilation on Linux.
 
 An `umoria` directory will be created in the current directory containing the
 game binary and data files, which can then be moved to any other location, such

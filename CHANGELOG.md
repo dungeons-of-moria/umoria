@@ -5,6 +5,7 @@ Tracking all changes since the 5.6.0 release.
 
 ## HEAD
 
+* Fix out-of-bounds compile error in `/src/game_save.cpp` (Line 810).
 
 
 ## 5.7.15 (2021-06-02)
