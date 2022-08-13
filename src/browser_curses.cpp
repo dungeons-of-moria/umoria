@@ -15,14 +15,6 @@ EM_ASYNC_JS(chtype, _getch, (int timeout), {
     return await IO.getch(timeout);
 });
 
-WINDOW::WINDOW() : y(0), x(0), refresh_all(FALSE) {
-  for (auto &line: cells) {
-    for (auto &cell: line) {
-      cell = ' ';
-    }
-  }
-}
-
 int addch(const chtype ch) { return waddch(stdscr, ch); }
 
 int addstr(const char *str) {
@@ -171,20 +163,6 @@ int overwrite(const WINDOW *srcwin, WINDOW *dstwin) {
 
 int refresh(void) { return wrefresh(stdscr); }
 
-bool _refreshcell(WINDOW *win, const int y, const int x) {
-  if (win->cells.at(y).at(x) != curscr->cells.at(y).at(x)) {
-    EM_ASM({IO.setCell($0, $1, $2);}, y, x, win->cells.at(y).at(x));
-    curscr->cells.at(y).at(x) = win->cells.at(y).at(x);
-    return TRUE;
-  }
-  return FALSE;
-}
-
-int touchwin(WINDOW *win) {
-  win->refresh_all = TRUE;
-  return OK;
-}
-
 int waddch(WINDOW *win, const chtype ch) {
   int y = win->y;
   int x = win->x;
@@ -194,10 +172,7 @@ int waddch(WINDOW *win, const chtype ch) {
     return ERR;
   }
 
-  if (win->cells.at(y).at(x) != ch) {
-    win->cells.at(y).at(x) = ch;
-    win->changed.emplace(y, x);
-  }
+  win->cells.at(y).at(x) = ch;
 
   // Check if cursor is in bottom right corner.  If so, don't move
   // the cursor and return an error.
@@ -228,35 +203,15 @@ int wmove(WINDOW *win, int y, int x) {
   win->x = x;
 
   return OK;
- }
+}
 
 int wrefresh(WINDOW *win) {
-  // If the whole window has to be refreshed (win->refresh_all ==
-  // TRUE), do two steps:
-  //   
-  // 1. Flush win->changed so these changes aren't left over for the
-  //    next call to wrefresh().
-  // 2. Update every cell
-  //
-  // If the whole window isn't being refreshed, iterate over
-  // win->changed, updating the corresponding cell.
-  if (win->refresh_all) {
-    for (auto it = win->changed.begin(); it != win->changed.end();) {
-      it = win->changed.erase(it);
-    }
-
-    for (std::size_t y = 0; y < win->cells.size(); y++) {
-      for (std::size_t x = 0; x < win->cells[0].size(); x++) {
-        _refreshcell(win, y, x);
+  for (std::size_t y = 0; y < win->cells.size(); ++y) {
+    for (std::size_t x = 0; x < win->cells.at(0).size(); ++x) {
+      if (win->cells.at(y).at(x) != curscr->cells.at(y).at(x)) {
+	EM_ASM({IO.setCell($0, $1, $2);}, y, x, win->cells.at(y).at(x));
+	curscr->cells.at(y).at(x) = win->cells.at(y).at(x);
       }
-    }
-  }
-  else {
-    for (auto it = win->changed.begin(); it != win->changed.end();) {
-      int y = it->first;
-      int x = it->second;
-      _refreshcell(win, y, x);
-      it = win->changed.erase(it);
     }
   }
 
@@ -266,9 +221,7 @@ int wrefresh(WINDOW *win) {
   // Update curscr logical cursor to match physical cursor
   wmove(curscr, win->y, win->x);
 
-  win->refresh_all = FALSE;
-
-  EM_ASM({IO.update();},);
+  EM_ASM({IO.refresh();},);
   
   return OK;
 }

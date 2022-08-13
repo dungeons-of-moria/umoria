@@ -149,10 +149,8 @@ var IO = (function() {
   var _fsSynced = false;
   var _keyBuffer = [];
   var _numRows;
-  var _raw = false;
   var _rowDivs = [];
   var _rowHeight;
-  var _rowModified = [];
   var _screen;
   var _terminal;
   var _terminalMode = false;
@@ -205,6 +203,10 @@ var IO = (function() {
   
   function filesSynced() {
     return _fsSynced;
+  }
+
+  function flushInputBuffer() {
+    _keyBuffer.length = 0;
   }
 
   function getch(timeout) {
@@ -272,24 +274,16 @@ var IO = (function() {
     }
   }
 
-  function raw() {
-    _raw = true;
+  function refresh() {
+    let row = 0;
+    while(row < _numRows) {
+      _rowDivs[row].textContent = _buffer[row].join("");
+      row++;
+    }
   }
 
   function setCell(row, col, code) {
-    _rowModified[row] = true;
     _buffer[row][col] = (code === SPACE) ? "\xa0" : String.fromCharCode(code);
-  }
-
-  function update() {
-    let row = 0;
-    while(row < _numRows) {
-      if (_rowModified[row]) {
-        _rowModified[row] = false;
-        _rowDivs[row].textContent = _buffer[row].join("");
-      }
-      row++;
-    }
   }
 
   function _createScreen(cols, rows) {
@@ -307,7 +301,6 @@ var IO = (function() {
       _screen.append(rowDiv);
       _buffer[row] = [];
       _rowDivs[row] = rowDiv;
-      _rowModified[row] = true;
       while (col < cols) {
         _buffer[row][col] = "\xa0";
         col++;
@@ -323,14 +316,14 @@ var IO = (function() {
 
     document.body.append(_screen);
 
-    /* Call update() to make sure all row divs are proper width and
+    /* Call refresh() to make sure all row divs are proper width and
        height before doing anything with them.  I suppose I could achieve
        this through css, but then I'd need to compute the height based on
        the font size being used.  This just seems easier and less
        error-prone. */
-    update();
+    refresh();
 
-    /* Once update() executes, use clientHeight to set _rowHeight,
+    /* Once refresh() executes, use clientHeight to set _rowHeight,
        the height of each row, and the cursor.  clientHeight is always a
        whole number and as long as the font size doesn't change after
        this point,it will give consistent spacing between rows and
@@ -358,9 +351,7 @@ var IO = (function() {
       
       let key = "";
 
-      if (_raw) {
-        event.preventDefault();
-      }
+      event.preventDefault();
 
       /* If modifier only, return */
       if ((event.key === "Alt") ||
@@ -415,14 +406,14 @@ var IO = (function() {
     endwin:endwin,
     exit:exit,
     filesSynced:filesSynced,
+    flushInputBuffer:flushInputBuffer,
     getch:getch,
     initFiles:initFiles,
     initscr:initscr,
     mvcur:mvcur,
     print:print,
-    raw:raw,
-    setCell:setCell,
-    update:update
+    refresh:refresh,
+    setCell:setCell
   }
 })();
 

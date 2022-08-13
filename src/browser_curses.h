@@ -33,13 +33,9 @@ typedef uint32_t chtype;
 
 struct WINDOW {
   int y, x; // Logical cursor position
-  bool refresh_all; // Refresh entire window
 
   /* Assume origin is 0, 0 and lines = LINES, columns = COLS */
   std::array<std::array<chtype, COLS>, LINES> cells;
-  std::set<std::pair<int, int>> changed;
-
-  WINDOW();
 };
 
 extern WINDOW *stdscr;
@@ -48,28 +44,29 @@ extern int _timeout;
 
 int addch(const chtype ch);
 int addstr(const char *str);
-inline int beep(void) { EM_ASM({IO.beep();},); return OK; };
-int clear(void);
-int clrtobot(void);
-int clrtoeol (void);
-inline int endwin(void) { EM_ASM({IO.endwin();},); return OK; };
-int getch(void);
+inline int beep() { EM_ASM({IO.beep();},); return OK; };
+int clear();
+int clrtobot();
+int clrtoeol ();
+inline int endwin() { EM_ASM({IO.endwin();},); return OK; };
+inline void flushinputbuffer() { EM_ASM({IO.flushInputBuffer();},); };
+int getch();
 void getyx(WINDOW *win, int &y, int &x);
-int initscr(void);
+int initscr();
 inline int keypad(WINDOW *win, bool bf) { UNUSED(win); UNUSED(bf); return OK; };
 int move(int y, int x);
 int mvaddch (int y, int x, const chtype ch);
 int mvaddstr(int y, int x, const char *str);
 int mvcur(int oldrow, int oldcol, int newrow, int newcol);
 WINDOW *newwin(int nlines, int ncols, int begin_y, int begin_x);
-inline int noecho(void) { return OK; };
-inline int nonl(void) { return OK; };
+inline int noecho() { return OK; };
+inline int nonl() { return OK; };
 int overwrite(const WINDOW *srcwin, WINDOW *dstwin);
-inline int raw(void) { EM_ASM({IO.raw();},); return OK; };
-int refresh(void);
-bool refreshcell(WINDOW *win, const int y, const int x);
+inline int raw() { return OK; };
+int refresh();
 inline void timeout(int delay) { _timeout = delay; };
-int touchwin(WINDOW *win);
+inline int touchwin(WINDOW *win) { return OK; };
 int waddch(WINDOW *win, const chtype ch);
 int wmove(WINDOW *win, int y, int x);
 int wrefresh(WINDOW *win);
+

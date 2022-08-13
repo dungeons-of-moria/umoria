@@ -117,8 +117,12 @@ void flushInputBuffer() {
         return;
     }
 
+    #ifdef __EMSCRIPTEN__
+    flushinputbuffer();
+    #else
     while (checkForNonBlockingKeyPress(0))
         ;
+    #endif
 }
 
 // Clears screen
@@ -536,7 +540,7 @@ bool checkForNonBlockingKeyPress(int microseconds) {
 
     return result > 0;
 #elif __EMSCRIPTEN__
-    /* timeout should be in milliseconds */
+    // timeout should be in milliseconds
     timeout(microseconds/1000);
     int result = getch();
     timeout(-1);
