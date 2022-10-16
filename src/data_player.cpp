@@ -138,6 +138,7 @@ Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS] = {
     {"of a Guildsman.  ",                                    90,  2,  3, 105},
     {"of a Landed Knight.  ",                                96,  2,  3, 120},
     {"of a Titled Noble.  ",                                 99,  2,  3, 130},
+    {"of a Royal Blood Line.  ",                            100,  2,  3, 140},
     {"You are the black sheep of the family.  ",             20,  3, 50,  20},
     {"You are a credit to the family.  ",                    80,  3, 50,  55},
     {"You are a well liked child.  ",                       100,  3, 50,  60},
@@ -254,8 +255,7 @@ Background_t character_backgrounds[PLAYER_MAX_BACKGROUNDS] = {
     {"and black ",                                          100, 65, 66,  50},
     {"ulcerous skin.",                                       33, 66,  0,  50},
     {"scabby skin.",                                         66, 66,  0,  50},
-    {"leprous skin.",                                       100, 66,  0,  50},
-    {"of a Royal Blood Line.  ",                            100,  2,  3, 140},
+    {"leprous skin.",                                       100, 66,  0,  50}
 };
 
 // Classes.
