@@ -380,7 +380,7 @@ static bool wizardRequestObjectId(int &id, const std::string &label, int start_i
 
 // Simplified wizard routine for creating an object
 void wizardGenerateObject() {
-    int id;
+    int id=0;
     if (!wizardRequestObjectId(id, "Dungeon/Store object", 0, 366)) {
         return;
     }
