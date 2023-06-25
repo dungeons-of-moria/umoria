@@ -52,9 +52,9 @@ void insertNumberIntoString(char *to_string, const char *from_string, int32_t nu
         (void) strcpy(str2, str + from_len);
 
         if (number >= 0 && show_sign) {
-            (void) sprintf(to_string, "%s+%d%s", str1, number, str2);
+            (void) snprintf(to_string, 255,"%s+%d%s", str1, number, str2);
         } else {
-            (void) sprintf(to_string, "%s%d%s", str1, number, str2);
+            (void) snprintf(to_string, 80,"%s%d%s", str1, number, str2);
         }
     }
 }

@@ -940,7 +940,7 @@ static void playerDetectEnchantment() {
 
         if (item.category_id != TV_NOTHING && itemEnchanted(item) && randomNumber(chance) == 1) {
             vtype_t tmp_str = {'\0'};
-            (void) sprintf(tmp_str, "There's something about what you are %s...", playerItemWearingDescription(i));
+            (void) snprintf(tmp_str, 80,"There's something about what you are %s...", playerItemWearingDescription(i));
             playerDisturb(0, 0);
             printMessage(tmp_str);
             itemAppendToInscription(item, config::identification::ID_MAGIK);
@@ -961,14 +961,14 @@ static int getCommandRepeatCount(char &last_input_command) {
     while (true) {
         if (last_input_command == DELETE || last_input_command == CTRL_KEY('H')) {
             repeat_count /= 10;
-            (void) sprintf(text_buffer, "%d", (int16_t) repeat_count);
+            (void) snprintf(text_buffer, 8,"%d", (int16_t) repeat_count);
             putStringClearToEOL(text_buffer, Coord_t{0, 14});
         } else if (last_input_command >= '0' && last_input_command <= '9') {
             if (repeat_count > 99) {
                 terminalBellSound();
             } else {
                 repeat_count = repeat_count * 10 + last_input_command - '0';
-                (void) sprintf(text_buffer, "%d", repeat_count);
+                (void) snprintf(text_buffer,8, "%d", repeat_count);
                 putStringClearToEOL(text_buffer, Coord_t{0, 14});
             }
         } else {
@@ -979,7 +979,7 @@ static int getCommandRepeatCount(char &last_input_command) {
 
     if (repeat_count == 0) {
         repeat_count = 99;
-        (void) sprintf(text_buffer, "%d", repeat_count);
+        (void) snprintf(text_buffer, 8,"%d", repeat_count);
         putStringClearToEOL(text_buffer, Coord_t{0, 14});
     }
 
@@ -1499,14 +1499,14 @@ static void commandLocateOnMap() {
         if (panel.y == old_panel.y && panel.x == old_panel.x) {
             tmp_str[0] = '\0';
         } else {
-            (void) sprintf(tmp_str,                                                                  //
+            (void) snprintf(tmp_str,  80,                                                                //
                            "%s%s of",                                                                //
                            panel.y < old_panel.y ? " North" : panel.y > old_panel.y ? " South" : "", //
                            panel.x < old_panel.x ? " West" : panel.x > old_panel.x ? " East" : ""    //
             );
         }
 
-        (void) sprintf(out_val, "Map sector [%d,%d], which is%s your sector. Look which direction?", panel.y, panel.x, tmp_str);
+        (void) snprintf(out_val, 80,"Map sector [%d,%d], which is%s your sector. Look which direction?", panel.y, panel.x, tmp_str);
 
         if (!getDirectionWithMemory(out_val, dir_val)) {
             break;
@@ -2237,7 +2237,7 @@ static void dungeonJamDoor() {
         game.player_free_turn = false;
 
         vtype_t msg = {'\0'};
-        (void) sprintf(msg, "The %s is in your way!", creatures_list[monsters[tile.creature_id].creature_id].name);
+        (void) snprintf(msg,80, "The %s is in your way!", creatures_list[monsters[tile.creature_id].creature_id].name);
         printMessage(msg);
     }
 }

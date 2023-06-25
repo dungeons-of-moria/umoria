@@ -12,7 +12,7 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
     spell_id = -1;
 
     vtype_t str = {'\0'};
-    (void) sprintf(str, "(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell_ids[0] + 'a' - first_spell, spell_ids[number_of_choices - 1] + 'a' - first_spell, prompt);
+    (void) snprintf(str, 80,"(Spells %c-%c, *=List, <ESCAPE>=exit) %s", spell_ids[0] + 'a' - first_spell, spell_ids[number_of_choices - 1] + 'a' - first_spell, prompt);
 
     bool spell_found = false;
     bool redraw = false;
@@ -39,7 +39,7 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
                 Spell_t const &spell = magic_spells[py.misc.class_id - 1][spell_id];
 
                 vtype_t tmp_str = {'\0'};
-                (void) sprintf(tmp_str, "Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], spell.mana_required, spellChanceOfSuccess(spell_id));
+                (void) snprintf(tmp_str, 80,"Cast %s (%d mana, %d%% fail)?", spell_names[spell_id + offset], spell.mana_required, spellChanceOfSuccess(spell_id));
                 if (getInputConfirmation(tmp_str)) {
                     spell_found = true;
                 } else {
@@ -78,7 +78,7 @@ static bool spellGetId(int *spell_ids, int number_of_choices, int &spell_id, int
 
         if (spell_id == -2) {
             vtype_t tmp_str = {'\0'};
-            (void) sprintf(tmp_str, "You don't know that %s.", (offset == config::spells::NAME_OFFSET_SPELLS ? "spell" : "prayer"));
+            (void) snprintf(tmp_str,80, "You don't know that %s.", (offset == config::spells::NAME_OFFSET_SPELLS ? "spell" : "prayer"));
             printMessage(tmp_str);
         }
     }
@@ -414,9 +414,9 @@ bool spellIdentifyItem() {
     obj_desc_t msg = {'\0'};
     if (item_id >= PlayerEquipment::Wield) {
         playerRecalculateBonuses();
-        (void) sprintf(msg, "%s: %s", playerItemWearingDescription(item_id), description);
+        (void) snprintf(msg, 80,"%s: %s", playerItemWearingDescription(item_id), description);
     } else {
-        (void) sprintf(msg, "%c %s", item_id + 97, description);
+        (void) snprintf(msg, 80,"%c %s", item_id + 97, description);
     }
     printMessage(msg);
 
@@ -1407,7 +1407,7 @@ bool spellWallToMud(Coord_t coord, int direction) {
                 itemDescription(description, game.treasure.list[tile.treasure_id], false);
 
                 obj_desc_t out_val = {'\0'};
-                (void) sprintf(out_val, "The %s turns into mud.", description);
+                (void) snprintf(out_val, 80,"The %s turns into mud.", description);
                 printMessage(out_val);
             }
 

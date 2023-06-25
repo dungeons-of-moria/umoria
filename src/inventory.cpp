@@ -83,7 +83,7 @@ void inventoryDropItem(int item_id, bool drop_all) {
         obj_desc_t prt1 = {'\0'};
         obj_desc_t prt2 = {'\0'};
         itemDescription(prt1, game.treasure.list[treasure_id], true);
-        (void) sprintf(prt2, "Dropped %s", prt1);
+        (void) snprintf(prt2,80, "Dropped %s", prt1);
         printMessage(prt2);
     }
 
@@ -428,13 +428,13 @@ static bool damageMinusAC(uint32_t typ_dam) {
         minus = true;
 
         itemDescription(description, py.inventory[item_id], false);
-        (void) sprintf(msg, "Your %s resists damage!", description);
+        (void) snprintf(msg,80, "Your %s resists damage!", description);
         printMessage(msg);
     } else if (py.inventory[item_id].ac + py.inventory[item_id].to_ac > 0) {
         minus = true;
 
         itemDescription(description, py.inventory[item_id], false);
-        (void) sprintf(msg, "Your %s is damaged!", description);
+        (void) snprintf(msg,80, "Your %s is damaged!", description);
         printMessage(msg);
 
         py.inventory[item_id].to_ac--;

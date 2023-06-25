@@ -92,7 +92,7 @@ static void playerBashAttack(Coord_t coord) {
     if (!monster.lit) {
         (void) strcpy(name, "it");
     } else {
-        (void) sprintf(name, "the %s", creature.name);
+        (void) snprintf(name, 80,"the %s", creature.name);
     }
 
     int base_to_hit = py.stats.used[PlayerAttr::A_STR];
@@ -107,7 +107,7 @@ static void playerBashAttack(Coord_t coord) {
 
     if (playerTestBeingHit(base_to_hit, (int) py.misc.level, (int) py.stats.used[PlayerAttr::A_DEX], (int) creature.ac, PlayerClassLevelAdj::BTH)) {
         vtype_t msg = {'\0'};
-        (void) sprintf(msg, "You hit %s.", name);
+        (void) snprintf(msg, 80,"You hit %s.", name);
         printMessage(msg);
 
         int damage = diceRoll(py.inventory[PlayerEquipment::Arm].damage);
@@ -121,7 +121,7 @@ static void playerBashAttack(Coord_t coord) {
 
         // See if we done it in.
         if (monsterTakeHit(monster_id, damage) >= 0) {
-            (void) sprintf(msg, "You have slain %s.", name);
+            (void) snprintf(msg, 80,"You have slain %s.", name);
             printMessage(msg);
             displayCharacterExperience();
         } else {
@@ -142,15 +142,15 @@ static void playerBashAttack(Coord_t coord) {
                     monster.stunned_amount = 24;
                 }
 
-                (void) sprintf(msg, "%s appears stunned!", name);
+                (void) snprintf(msg, 80,"%s appears stunned!", name);
             } else {
-                (void) sprintf(msg, "%s ignores your bash!", name);
+                (void) snprintf(msg, 80,"%s ignores your bash!", name);
             }
             printMessage(msg);
         }
     } else {
         vtype_t msg = {'\0'};
-        (void) sprintf(msg, "You miss %s.", name);
+        (void) snprintf(msg, 80,"You miss %s.", name);
         printMessage(msg);
     }
 

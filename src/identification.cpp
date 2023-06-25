@@ -350,7 +350,7 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
     }
 
     id <<= 6;
-    id += (uint8_t)(sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     objects_identified[id] |= config::identification::OD_KNOWN1;
 
@@ -370,7 +370,7 @@ static void unsample(Inventory_t &item) {
     }
 
     id <<= 6;
-    id += (uint8_t)(item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -416,7 +416,7 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
     }
 
     id <<= 6;
-    id += (uint8_t)(sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     return isObjectKnown(id);
 }
@@ -430,7 +430,7 @@ void itemSetAsTried(Inventory_t const &item) {
     }
 
     id <<= 6;
-    id += (uint8_t)(item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     setObjectTriedFlag(id);
 }
@@ -538,7 +538,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
         case TV_SLING_AMMO:
         case TV_BOLT:
         case TV_ARROW:
-            (void) sprintf(damstr, " (%dd%d)", item.damage.dice, item.damage.sides);
+            (void) snprintf(damstr, 80, " (%dd%d)", item.damage.dice, item.damage.sides);
             break;
         case TV_LIGHT:
             misc_type = ItemMiscUse::Light;
@@ -546,17 +546,17 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
         case TV_SPIKE:
             break;
         case TV_BOW:
-            (void) sprintf(damstr, " (x%d)", bowDamageValue(item.misc_use));
+            (void) snprintf(damstr, 80, " (x%d)", bowDamageValue(item.misc_use));
             break;
         case TV_HAFTED:
         case TV_POLEARM:
         case TV_SWORD:
-            (void) sprintf(damstr, " (%dd%d)", item.damage.dice, item.damage.sides);
+            (void) snprintf(damstr, 80, " (%dd%d)", item.damage.dice, item.damage.sides);
             misc_type = ItemMiscUse::Flags;
             break;
         case TV_DIGGING:
             misc_type = ItemMiscUse::ZPlusses;
-            (void) sprintf(damstr, " (%dd%d)", item.damage.sides, item.damage.sides);
+            (void) snprintf(damstr, 80, " (%dd%d)", item.damage.sides, item.damage.sides);
             break;
         case TV_BOOTS:
         case TV_GLOVES:
@@ -672,7 +672,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
             (void) strcat(description, ".");
             return;
         case TV_STORE_DOOR:
-            (void) sprintf(description, "the entrance to the %s.", game_objects[item.id].name);
+            (void) snprintf(description, 80, "the entrance to the %s.", game_objects[item.id].name);
             return;
         default:
             (void) strcpy(description, "Error in objdes()");
@@ -682,7 +682,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     obj_desc_t tmp_val = {'\0'};
 
     if (modstr != CNIL) {
-        (void) sprintf(tmp_val, basenm, modstr);
+        (void) snprintf(tmp_val, 80, basenm, modstr);
     } else {
         (void) strcpy(tmp_val, basenm);
     }
@@ -730,11 +730,11 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
         auto abs_to_damage = (int) std::abs((std::intmax_t) item.to_damage);
 
         if ((item.identification & config::identification::ID_SHOW_HIT_DAM) != 0) {
-            (void) sprintf(tmp_str, " (%c%d,%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit, (item.to_damage < 0) ? '-' : '+', abs_to_damage);
+            (void) snprintf(tmp_str, 80, " (%c%d,%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit, (item.to_damage < 0) ? '-' : '+', abs_to_damage);
         } else if (item.to_hit != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit);
+            (void) snprintf(tmp_str, 80, " (%c%d)", (item.to_hit < 0) ? '-' : '+', abs_to_hit);
         } else if (item.to_damage != 0) {
-            (void) sprintf(tmp_str, " (%c%d)", (item.to_damage < 0) ? '-' : '+', abs_to_damage);
+            (void) snprintf(tmp_str, 80, " (%c%d)", (item.to_damage < 0) ? '-' : '+', abs_to_damage);
         } else {
             tmp_str[0] = '\0';
         }
@@ -744,17 +744,17 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     // Crowns have a zero base AC, so make a special test for them.
     auto abs_to_ac = (int) std::abs((std::intmax_t) item.to_ac);
     if (item.ac != 0 || item.category_id == TV_HELM) {
-        (void) sprintf(tmp_str, " [%d", item.ac);
+        (void) snprintf(tmp_str, 80, " [%d", item.ac);
         (void) strcat(tmp_val, tmp_str);
         if (spellItemIdentified(item)) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, ",%c%d", (item.to_ac < 0) ? '-' : '+', abs_to_ac);
+            (void) snprintf(tmp_str, 80, ",%c%d", (item.to_ac < 0) ? '-' : '+', abs_to_ac);
             (void) strcat(tmp_val, tmp_str);
         }
         (void) strcat(tmp_val, "]");
     } else if (item.to_ac != 0 && spellItemIdentified(item)) {
         // originally used %+d, but several machines don't support it
-        (void) sprintf(tmp_str, " [%c%d]", (item.to_ac < 0) ? '-' : '+', abs_to_ac);
+        (void) snprintf(tmp_str, 80, " [%c%d]", (item.to_ac < 0) ? '-' : '+', abs_to_ac);
         (void) strcat(tmp_val, tmp_str);
     }
 
@@ -768,7 +768,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     tmp_str[0] = '\0';
 
     if (misc_type == ItemMiscUse::Light) {
-        (void) sprintf(tmp_str, " with %d turns of light", item.misc_use);
+        (void) snprintf(tmp_str, 80, " with %d turns of light", item.misc_use);
     } else if (misc_type == ItemMiscUse::Ignored) {
         // NOOP
     } else if (spellItemIdentified(item)) {
@@ -776,17 +776,17 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
 
         if (misc_type == ItemMiscUse::ZPlusses) {
             // originally used %+d, but several machines don't support it
-            (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
+            (void) snprintf(tmp_str, 80, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
         } else if (misc_type == ItemMiscUse::Charges) {
-            (void) sprintf(tmp_str, " (%d charges)", item.misc_use);
+            (void) snprintf(tmp_str, 80, " (%d charges)", item.misc_use);
         } else if (item.misc_use != 0) {
             if (misc_type == ItemMiscUse::Plusses) {
-                (void) sprintf(tmp_str, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
+                (void) snprintf(tmp_str, 80, " (%c%d)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
             } else if (misc_type == ItemMiscUse::Flags) {
                 if ((item.flags & config::treasure::flags::TR_STR) != 0u) {
-                    (void) sprintf(tmp_str, " (%c%d to STR)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
+                    (void) snprintf(tmp_str, 80, " (%c%d to STR)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
                 } else if ((item.flags & config::treasure::flags::TR_STEALTH) != 0u) {
-                    (void) sprintf(tmp_str, " (%c%d to stealth)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
+                    (void) snprintf(tmp_str, 80, " (%c%d to stealth)", (item.misc_use < 0) ? '-' : '+', abs_misc_use);
                 }
             }
         }
@@ -797,23 +797,23 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     if (tmp_val[0] == '&') {
         // use &tmp_val[1], so that & does not appear in output
         if (item.items_count > 1) {
-            (void) sprintf(description, "%d%s", (int) item.items_count, &tmp_val[1]);
+            (void) snprintf(description, 80, "%d%s", (int) item.items_count, &tmp_val[1]);
         } else if (item.items_count < 1) {
-            (void) sprintf(description, "%s%s", "no more", &tmp_val[1]);
+            (void) snprintf(description, 80, "%s%s", "no more", &tmp_val[1]);
         } else if (isVowel(tmp_val[2])) {
-            (void) sprintf(description, "an%s", &tmp_val[1]);
+            (void) snprintf(description, 80, "an%s", &tmp_val[1]);
         } else {
-            (void) sprintf(description, "a%s", &tmp_val[1]);
+            (void) snprintf(description, 80, "a%s", &tmp_val[1]);
         }
     } else if (item.items_count < 1) {
         // handle 'no more' case specially
 
         // check for "some" at start
         if (strncmp("some", tmp_val, 4) == 0) {
-            (void) sprintf(description, "no more %s", &tmp_val[5]);
+            (void) snprintf(description, 80, "no more %s", &tmp_val[5]);
         } else {
             // here if no article
-            (void) sprintf(description, "no more %s", tmp_val);
+            (void) snprintf(description, 80, "no more %s", tmp_val);
         }
     } else {
         (void) strcpy(description, tmp_val);
@@ -851,7 +851,7 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     }
 
     if (tmp_str[0] != 0) {
-        (void) sprintf(tmp_val, " {%s}", tmp_str);
+        (void) snprintf(tmp_val, 80, " {%s}", tmp_str);
         (void) strcat(description, tmp_val);
     }
 
@@ -867,7 +867,7 @@ void itemChargesRemainingDescription(int item_id) {
     int rem_num = py.inventory[item_id].misc_use;
 
     vtype_t out_val = {'\0'};
-    (void) sprintf(out_val, "You have %d charges remaining.", rem_num);
+    (void) snprintf(out_val, 80, "You have %d charges remaining.", rem_num);
     printMessage(out_val);
 }
 
@@ -884,7 +884,7 @@ void itemTypeRemainingCountDescription(int item_id) {
 
     // the string already has a dot at the end.
     obj_desc_t out_val = {'\0'};
-    (void) sprintf(out_val, "You have %s", tmp_str);
+    (void) snprintf(out_val, 80, "You have %s", tmp_str);
     printMessage(out_val);
 }
 
@@ -904,12 +904,12 @@ void itemInscribe() {
     itemDescription(msg, py.inventory[item_id], true);
 
     obj_desc_t inscription = {'\0'};
-    (void) sprintf(inscription, "Inscribing %s", msg);
+    (void) snprintf(inscription, 80, "Inscribing %s", msg);
 
     printMessage(inscription);
 
     if (py.inventory[item_id].inscription[0] != '\0') {
-        (void) sprintf(inscription, "Replace %s New inscription:", py.inventory[item_id].inscription);
+        (void) snprintf(inscription, 80, "Replace %s New inscription:", py.inventory[item_id].inscription);
     } else {
         (void) strcpy(inscription, "Inscription: ");
     }
@@ -944,11 +944,11 @@ void objectBlockedByMonster(int monster_id) {
     const char *name = creatures_list[monster.creature_id].name;
 
     if (monster.lit) {
-        (void) sprintf(description, "The %s", name);
+        (void) snprintf(description, 80, "The %s", name);
     } else {
         (void) strcpy(description, "Something");
     }
 
-    (void) sprintf(msg, "%s is in your way!", description);
+    (void) snprintf(msg, 80, "%s is in your way!", description);
     printMessage(msg);
 }

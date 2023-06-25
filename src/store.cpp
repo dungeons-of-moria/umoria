@@ -20,7 +20,7 @@ void storeInitializeOwners() {
     for (int store_id = 0; store_id < MAX_STORES; store_id++) {
         Store_t &store = stores[store_id];
 
-        store.owner_id = (uint8_t)(MAX_STORES * (randomNumber(count) - 1) + store_id);
+        store.owner_id = (uint8_t) (MAX_STORES * (randomNumber(count) - 1) + store_id);
         store.insults_counter = 0;
         store.turns_left_before_closing = 0;
         store.unique_items_counter = 0;
@@ -130,7 +130,7 @@ static void displayStoreInventory(Store_t &store, int item_pos_start) {
         item.items_count = (uint8_t) current_item_count;
 
         obj_desc_t msg = {'\0'};
-        (void) sprintf(msg, "%c) %s", 'a' + item_line_num, description);
+        (void) snprintf(msg, 80, "%c) %s", 'a' + item_line_num, description);
         putStringClearToEOL(msg, Coord_t{item_line_num + 5, 0});
 
         current_item_count = store.inventory[item_pos_start].cost;
@@ -141,9 +141,9 @@ static void displayStoreInventory(Store_t &store, int item_pos_start) {
             if (value <= 0) {
                 value = 1;
             }
-            (void) sprintf(msg, "%9d", value);
+            (void) snprintf(msg, 80, "%9d", value);
         } else {
-            (void) sprintf(msg, "%9d [Fixed]", current_item_count);
+            (void) snprintf(msg, 80, "%9d [Fixed]", current_item_count);
         }
 
         putStringClearToEOL(msg, Coord_t{item_line_num + 5, 59});
@@ -172,9 +172,9 @@ static void displaySingleCost(int store_id, int item_id) {
     if (cost < 0) {
         int32_t c = -cost;
         c = c * playerStatAdjustmentCharisma() / 100;
-        (void) sprintf(msg, "%d", c);
+        (void) snprintf(msg, 80, "%d", c);
     } else {
-        (void) sprintf(msg, "%9d [Fixed]", cost);
+        (void) snprintf(msg, 80, "%9d [Fixed]", cost);
     }
     putStringClearToEOL(msg, Coord_t{(item_id % 12) + 5, 59});
 }
@@ -182,7 +182,7 @@ static void displaySingleCost(int store_id, int item_id) {
 // Displays players gold -RAK-
 static void displayPlayerRemainingGold() {
     vtype_t msg = {'\0'};
-    (void) sprintf(msg, "Gold Remaining : %d", py.misc.au);
+    (void) snprintf(msg, 80, "Gold Remaining : %d", py.misc.au);
     putStringClearToEOL(msg, Coord_t{18, 17});
 }
 
@@ -204,7 +204,7 @@ static bool storeGetItemId(int &item_id, const char *prompt, int item_pos_start,
     bool item_found = false;
 
     vtype_t msg = {'\0'};
-    (void) sprintf(msg, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
+    (void) snprintf(msg, 80, "(Items %c-%c, ESC to exit) %s", item_pos_start + 'a', item_pos_end + 'a', prompt);
 
     char key_char;
     while (getMenuItemId(msg, key_char)) {
@@ -287,7 +287,7 @@ static bool storeGetHaggle(const char *prompt, int32_t &new_offer, int offer_cou
         if ((offer_count != 0) && store_last_increment != 0) {
             auto abs_store_last_increment = (int) std::abs((std::intmax_t) store_last_increment);
 
-            (void) sprintf(last_offer_str, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs_store_last_increment);
+            (void) snprintf(last_offer_str, 80, "[%c%d] ", (store_last_increment < 0) ? '-' : '+', abs_store_last_increment);
             putStringClearToEOL(last_offer_str, Coord_t{0, start_len});
 
             prompt_len = start_len + (int) strlen(last_offer_str);
@@ -453,7 +453,7 @@ static BidState storePurchaseHaggle(int store_id, int32_t &price, Inventory_t co
             bidding_open = true;
 
             vtype_t msg = {'\0'};
-            (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
+            (void) snprintf(msg, 80, "%s :  %d", comment, current_asking_price);
             putString(msg, Coord_t{1, 0});
 
             status = storeReceiveOffer(store_id, "What do you offer? ", new_offer, last_offer, offers_count, 1);
@@ -512,7 +512,7 @@ static BidState storePurchaseHaggle(int store_id, int32_t &price, Inventory_t co
 
                 // Set the automatic haggle increment so that RET will give
                 // a new_offer equal to the final_asking_price price.
-                store_last_increment = (int16_t)(final_asking_price - new_offer);
+                store_last_increment = (int16_t) (final_asking_price - new_offer);
                 final_flag++;
 
                 if (final_flag > 3) {
@@ -534,7 +534,7 @@ static BidState storePurchaseHaggle(int store_id, int32_t &price, Inventory_t co
 
                 eraseLine(Coord_t{1, 0});
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "Your last offer : %d", last_offer);
+                (void) snprintf(msg, 80, "Your last offer : %d", last_offer);
                 putString(msg, Coord_t{1, 39});
 
                 printSpeechSellingHaggle(last_offer, current_asking_price, final_flag);
@@ -542,7 +542,7 @@ static BidState storePurchaseHaggle(int store_id, int32_t &price, Inventory_t co
                 // If the current increment would take you over the store's
                 // price, then decrease it to an exact match.
                 if (current_asking_price - last_offer < store_last_increment) {
-                    store_last_increment = (int16_t)(current_asking_price - last_offer);
+                    store_last_increment = (int16_t) (current_asking_price - last_offer);
                 }
             }
         }
@@ -674,7 +674,7 @@ static BidState storeSellHaggle(int store_id, int32_t &price, Inventory_t const 
                 bidding_open = true;
 
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "%s :  %d", comment, current_asking_price);
+                (void) snprintf(msg, 80, "%s :  %d", comment, current_asking_price);
                 putString(msg, Coord_t{1, 0});
 
                 status = storeReceiveOffer(store_id, "What price do you ask? ", new_offer, last_offer, offer_count, -1);
@@ -733,7 +733,7 @@ static BidState storeSellHaggle(int store_id, int32_t &price, Inventory_t const 
 
                     // Set the automatic haggle increment so that RET will give
                     // a new_offer equal to the final_asking_price price.
-                    store_last_increment = (int16_t)(final_asking_price - new_offer);
+                    store_last_increment = (int16_t) (final_asking_price - new_offer);
                     final_flag++;
 
                     if (final_flag > 3) {
@@ -755,7 +755,7 @@ static BidState storeSellHaggle(int store_id, int32_t &price, Inventory_t const 
 
                     eraseLine(Coord_t{1, 0});
                     vtype_t msg = {'\0'};
-                    (void) sprintf(msg, "Your last bid %d", last_offer);
+                    (void) snprintf(msg, 80, "Your last bid %d", last_offer);
                     putString(msg, Coord_t{1, 39});
 
                     printSpeechBuyingHaggle(current_asking_price, last_offer, final_flag);
@@ -763,7 +763,7 @@ static BidState storeSellHaggle(int store_id, int32_t &price, Inventory_t const 
                     // If the current decrement would take you under the store's
                     // price, then increase it to an exact match.
                     if (current_asking_price - last_offer > store_last_increment) {
-                        store_last_increment = (int16_t)(current_asking_price - last_offer);
+                        store_last_increment = (int16_t) (current_asking_price - last_offer);
                     }
                 }
             }
@@ -849,7 +849,7 @@ static bool storePurchaseAnItem(int store_id, int &current_top_item_id) {
             itemDescription(description, py.inventory[new_item_id], true);
 
             obj_desc_t msg = {'\0'};
-            (void) sprintf(msg, "You have %s (%c)", description, new_item_id + 'a');
+            (void) snprintf(msg, 80, "You have %s (%c)", description, new_item_id + 'a');
             putStringClearToEOL(msg, Coord_t{0, 0});
 
             playerStrength();
@@ -1024,7 +1024,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
     itemDescription(description, sold_item, true);
 
     obj_desc_t msg = {'\0'};
-    (void) sprintf(msg, "Selling %s (%c)", description, item_id + 'a');
+    (void) snprintf(msg, 80, "Selling %s (%c)", description, item_id + 'a');
     printMessage(msg);
 
     if (!storeCheckPlayerItemsCount(stores[store_id], sold_item)) {
@@ -1060,7 +1060,7 @@ static bool storeSellAnItem(int store_id, int &current_top_item_id) {
         inventoryDestroyItem(item_id);
 
         itemDescription(description, sold_item, true);
-        (void) sprintf(msg, "You've sold %s", description);
+        (void) snprintf(msg, 80, "You've sold %s", description);
         printMessage(msg);
 
         int item_pos_id;
