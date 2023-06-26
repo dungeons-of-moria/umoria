@@ -301,7 +301,7 @@ static void cursedBoots(Inventory_t &item, int level) {
             break;
         default:
             item.special_name_id = SpecialNameIds::SN_GREAT_MASS;
-            item.weight = (uint16_t)(item.weight * 5);
+            item.weight = (uint16_t) (item.weight * 5);
             break;
     }
 
@@ -336,7 +336,7 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
                 item.cost += item.misc_use * 500;
                 break;
             default:
-                item.misc_use = (int16_t)(1 + randomNumber(4));
+                item.misc_use = (int16_t) (1 + randomNumber(4));
                 item.flags |= config::treasure::flags::TR_INFRA;
                 item.special_name_id = SpecialNameIds::SN_INFRAVISION;
                 item.cost += item.misc_use * 250;
@@ -376,7 +376,7 @@ static void magicalHelms(Inventory_t &item, int special, int level) {
             break;
         case 5:
             item.identification |= config::identification::ID_SHOW_P1;
-            item.misc_use = (int16_t)(5 * (1 + randomNumber(4)));
+            item.misc_use = (int16_t) (5 * (1 + randomNumber(4)));
             item.flags |= (config::treasure::flags::TR_SEE_INVIS | config::treasure::flags::TR_SEARCH);
             item.special_name_id = SpecialNameIds::SN_SEEING;
             item.cost += 1000 + item.misc_use * 100;
@@ -467,7 +467,7 @@ static void processRings(Inventory_t &item, int level, int cursed) {
             }
             break;
         case 5:
-            item.misc_use = (int16_t)(5 * magicEnchantmentBonus(1, 20, level));
+            item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 20, level));
             item.cost += item.misc_use * 50;
             if (magicShouldBeEnchanted(cursed)) {
                 item.misc_use = -item.misc_use;
@@ -538,7 +538,7 @@ static void processAmulets(Inventory_t &item, int level, int cursed) {
             item.cost += item.misc_use * 100;
         }
     } else if (item.sub_category_id == 2) {
-        item.misc_use = (int16_t)(5 * magicEnchantmentBonus(1, 25, level));
+        item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
         if (magicShouldBeEnchanted(cursed)) {
             item.misc_use = -item.misc_use;
             item.cost = -item.cost;
@@ -548,7 +548,7 @@ static void processAmulets(Inventory_t &item, int level, int cursed) {
         }
     } else if (item.sub_category_id == 8) {
         // amulet of the magi is never cursed
-        item.misc_use = (int16_t)(5 * magicEnchantmentBonus(1, 25, level));
+        item.misc_use = (int16_t) (5 * magicEnchantmentBonus(1, 25, level));
         item.cost += 20 * item.misc_use;
     }
 }

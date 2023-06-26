@@ -187,7 +187,7 @@ static void dungeonPlaceLockedDoor(Coord_t coord) {
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    game.treasure.list[cur_pos].misc_use = (int16_t)(randomNumber(10) + 10);
+    game.treasure.list[cur_pos].misc_use = (int16_t) (randomNumber(10) + 10);
 }
 
 static void dungeonPlaceStuckDoor(Coord_t coord) {
@@ -195,7 +195,7 @@ static void dungeonPlaceStuckDoor(Coord_t coord) {
     dg.floor[coord.y][coord.x].treasure_id = (uint8_t) cur_pos;
     inventoryItemCopyTo(config::dungeon::objects::OBJ_CLOSED_DOOR, game.treasure.list[cur_pos]);
     dg.floor[coord.y][coord.x].feature_id = TILE_BLOCKED_FLOOR;
-    game.treasure.list[cur_pos].misc_use = (int16_t)(-randomNumber(10) - 10);
+    game.treasure.list[cur_pos].misc_use = (int16_t) (-randomNumber(10) - 10);
 }
 
 static void dungeonPlaceSecretDoor(Coord_t coord) {
@@ -1016,8 +1016,8 @@ static void dungeonGenerate() {
     for (int row = 0; row < row_rooms; row++) {
         for (int col = 0; col < col_rooms; col++) {
             if (room_map[row][col]) {
-                locations[location_id].y = (int32_t)(row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
-                locations[location_id].x = (int32_t)(col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
+                locations[location_id].y = (int32_t) (row * (SCREEN_HEIGHT >> 1) + QUART_HEIGHT);
+                locations[location_id].x = (int32_t) (col * (SCREEN_WIDTH >> 1) + QUART_WIDTH);
                 if (dg.current_level > randomNumber(config::dungeon::DUN_UNUSUAL_ROOMS)) {
                     int room_type = randomNumber(3);
 
@@ -1264,8 +1264,8 @@ void generateCave() {
         dg.width = SCREEN_WIDTH;
     }
 
-    dg.panel.max_rows = (int16_t)((dg.height / SCREEN_HEIGHT) * 2 - 2);
-    dg.panel.max_cols = (int16_t)((dg.width / SCREEN_WIDTH) * 2 - 2);
+    dg.panel.max_rows = (int16_t) ((dg.height / SCREEN_HEIGHT) * 2 - 2);
+    dg.panel.max_cols = (int16_t) ((dg.width / SCREEN_WIDTH) * 2 - 2);
 
     dg.panel.row = dg.panel.max_rows;
     dg.panel.col = dg.panel.max_cols;

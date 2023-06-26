@@ -1020,19 +1020,20 @@ void spellBreath(Coord_t coord, int monster_id, int damage_hp, int spell_type, c
 
                         // can not call monsterTakeHit here, since player does not
                         // get experience for kill
-                        monster.hp = (int16_t)(monster.hp - damage);
+                        monster.hp = (int16_t) (monster.hp - damage);
                         monster.sleep_count = 0;
 
                         if (monster.hp < 0) {
                             uint32_t treasure_id = monsterDeath(Coord_t{monster.pos.y, monster.pos.x}, creature.movement);
 
                             if (monster.lit) {
-                                auto tmp = (uint32_t)((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
+                                auto tmp =
+                                    (uint32_t) ((creature_recall[monster.creature_id].movement & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT);
                                 if (tmp > ((treasure_id & config::monsters::move::CM_TREASURE) >> config::monsters::move::CM_TR_SHIFT)) {
-                                    treasure_id = (uint32_t)((treasure_id & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
+                                    treasure_id = (uint32_t) ((treasure_id & ~config::monsters::move::CM_TREASURE) | (tmp << config::monsters::move::CM_TR_SHIFT));
                                 }
                                 creature_recall[monster.creature_id].movement =
-                                    (uint32_t)(treasure_id | (creature_recall[monster.creature_id].movement & ~config::monsters::move::CM_TREASURE));
+                                    (uint32_t) (treasure_id | (creature_recall[monster.creature_id].movement & ~config::monsters::move::CM_TREASURE));
                             }
 
                             // It ate an already processed monster. Handle normally.
@@ -1313,7 +1314,7 @@ bool spellConfuseMonster(Coord_t coord, int direction) {
                 if (monster.confused_amount != 0u) {
                     monster.confused_amount += 3;
                 } else {
-                    monster.confused_amount = (uint8_t)(2 + randomNumber(16));
+                    monster.confused_amount = (uint8_t) (2 + randomNumber(16));
                 }
                 monster.sleep_count = 0;
 
@@ -2195,7 +2196,7 @@ void spellLoseEXP(int32_t adjustment) {
 // Slow Poison -RAK-
 bool spellSlowPoison() {
     if (py.flags.poisoned > 0) {
-        py.flags.poisoned = (int16_t)(py.flags.poisoned / 2);
+        py.flags.poisoned = (int16_t) (py.flags.poisoned / 2);
         if (py.flags.poisoned < 1) {
             py.flags.poisoned = 1;
         }

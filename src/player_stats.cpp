@@ -42,8 +42,8 @@ void playerCalculateHitPoints() {
         // Change current hit points proportionately to change of MHP,
         // divide first to avoid overflow, little loss of accuracy
         int32_t value = (((int32_t) py.misc.current_hp << 16) + py.misc.current_hp_fraction) / py.misc.max_hp * hp;
-        py.misc.current_hp = (int16_t)(value >> 16);
-        py.misc.current_hp_fraction = (uint16_t)(value & 0xFFFF);
+        py.misc.current_hp = (int16_t) (value >> 16);
+        py.misc.current_hp_fraction = (uint16_t) (value & 0xFFFF);
         py.misc.max_hp = (int16_t) hp;
 
         // can't print hit points here, may be in store or inventory mode

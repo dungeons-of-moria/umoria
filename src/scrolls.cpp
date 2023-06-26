@@ -293,8 +293,8 @@ static bool scrollCurseWeapon() {
 
     itemRemoveMagicNaming(item);
 
-    item.to_hit = (int16_t)(-randomNumber(5) - randomNumber(5));
-    item.to_damage = (int16_t)(-randomNumber(5) - randomNumber(5));
+    item.to_hit = (int16_t) (-randomNumber(5) - randomNumber(5));
+    item.to_damage = (int16_t) (-randomNumber(5) - randomNumber(5));
     item.to_ac = 0;
 
     // Must call playerAdjustBonusesForItem() before set (clear) flags, and
@@ -390,7 +390,7 @@ static bool scrollCurseArmor() {
     item.flags = config::treasure::flags::TR_CURSED;
     item.to_hit = 0;
     item.to_damage = 0;
-    item.to_ac = (int16_t)(-randomNumber(5) - randomNumber(5));
+    item.to_ac = (int16_t) (-randomNumber(5) - randomNumber(5));
 
     playerRecalculateBonuses();
 
@@ -412,7 +412,7 @@ static bool scrollSummonUndead() {
 
 static void scrollWordOfRecall() {
     if (py.flags.word_of_recall == 0) {
-        py.flags.word_of_recall = (int16_t)(25 + randomNumber(30));
+        py.flags.word_of_recall = (int16_t) (25 + randomNumber(30));
     }
     printMessage("The air about you becomes charged.");
 }

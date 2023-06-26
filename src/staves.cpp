@@ -91,7 +91,7 @@ static bool staffDischarge(Inventory_t &item) {
 
     uint32_t flags = item.flags;
     while (flags != 0) {
-        switch ((StaffSpellTypes)(getAndClearFirstBit(flags) + 1)) {
+        switch ((StaffSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case StaffSpellTypes::StaffLight:
                 identified = spellLightArea(py.pos);
                 break;
@@ -278,7 +278,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
         coord.x = py.pos.x;
 
         // Wand types
-        switch ((WandSpellTypes)(getAndClearFirstBit(flags) + 1)) {
+        switch ((WandSpellTypes) (getAndClearFirstBit(flags) + 1)) {
             case WandSpellTypes::WandLight:
                 printMessage("A line of blue shimmering light appears.");
                 spellLightLine(py.pos, direction);
@@ -360,7 +360,7 @@ static bool wandDischarge(Inventory_t &item, int direction) {
                 identified = true;
                 break;
             case WandSpellTypes::Wonder:
-                flags = (uint32_t)(1L << (randomNumber(23) - 1));
+                flags = (uint32_t) (1L << (randomNumber(23) - 1));
                 break;
             default:
                 // All cases are handled, so this should never be reached!

@@ -180,7 +180,7 @@ char caveGetTileSymbol(Coord_t const &coord) {
     }
 
     if (py.flags.image > 0 && randomNumber(12) == 1) {
-        return (uint8_t)(randomNumber(95) + 31);
+        return (uint8_t) (randomNumber(95) + 31);
     }
 
     if (tile.creature_id > 1 && monsters[tile.creature_id].lit) {
@@ -549,7 +549,7 @@ int dungeonSummonObject(Coord_t coord, int amount, int object_type) {
     int real_type;
 
     if (object_type == 1 || object_type == 5) {
-        real_type = 1; // object_type == 1 -> objects
+        real_type = 1;   // object_type == 1 -> objects
     } else {
         real_type = 256; // object_type == 2 -> gold
     }

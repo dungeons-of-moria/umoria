@@ -966,7 +966,7 @@ void playerGainSpells() {
         }
     }
 
-    py.flags.new_spells_to_learn = (uint8_t)(new_spells + diff_spells);
+    py.flags.new_spells_to_learn = (uint8_t) (new_spells + diff_spells);
 
     if (py.flags.new_spells_to_learn == 0) {
         py.flags.status |= config::player::status::PY_STUDY;
@@ -1016,8 +1016,8 @@ void playerGainMana(int stat) {
                 // change current mana proportionately to change of max mana,
                 // divide first to avoid overflow, little loss of accuracy
                 int32_t value = (((int32_t) py.misc.current_mana << 16) + py.misc.current_mana_fraction) / py.misc.mana * new_mana;
-                py.misc.current_mana = (int16_t)(value >> 16);
-                py.misc.current_mana_fraction = (uint16_t)(value & 0xFFFF);
+                py.misc.current_mana = (int16_t) (value >> 16);
+                py.misc.current_mana_fraction = (uint16_t) (value & 0xFFFF);
             } else {
                 py.misc.current_mana = (int16_t) new_mana;
                 py.misc.current_mana_fraction = 0;
@@ -1085,7 +1085,7 @@ void playerGainKillExperience(Creature_t const &creature) {
 
     if (remainder >= 0x10000L) {
         quotient++;
-        py.misc.exp_fraction = (uint16_t)(remainder - 0x10000L);
+        py.misc.exp_fraction = (uint16_t) (remainder - 0x10000L);
     } else {
         py.misc.exp_fraction = (uint16_t) remainder;
     }
@@ -1191,7 +1191,7 @@ static void playerAttackMonster(Coord_t coord) {
                 if (monster.confused_amount != 0u) {
                     monster.confused_amount += 3;
                 } else {
-                    monster.confused_amount = (uint8_t)(2 + randomNumber(16));
+                    monster.confused_amount = (uint8_t) (2 + randomNumber(16));
                 }
             }
             printMessage(msg);
@@ -1527,7 +1527,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowed_spells, int new
         if (order_id == 99) {
             mask = 0x0;
         } else {
-            mask = (uint32_t)(1L << order_id);
+            mask = (uint32_t) (1L << order_id);
         }
 
         if ((mask & py.flags.spells_forgotten) != 0u) {
@@ -1551,7 +1551,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowed_spells, int new
 // determine which spells player can learn must check all spells here,
 // in gain_spell() we actually check if the books are present
 static int learnableSpells(Spell_t *msp_ptr, int new_spells) {
-    auto spell_flag = (uint32_t)(0x7FFFFFFFL & ~py.flags.spells_learnt);
+    auto spell_flag = (uint32_t) (0x7FFFFFFFL & ~py.flags.spells_learnt);
 
     int id = 0;
     uint32_t mask = 0x1;
@@ -1587,7 +1587,7 @@ static void forgetSpells(int new_spells, const char *p, int offset) {
         if (order_id == 99) {
             mask = 0x0;
         } else {
-            mask = (uint32_t)(1L << order_id);
+            mask = (uint32_t) (1L << order_id);
         }
 
         if ((mask & py.flags.spells_learnt) != 0u) {

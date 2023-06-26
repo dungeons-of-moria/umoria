@@ -450,7 +450,7 @@ void printCharacterStatsBlock() {
     }
 
     // if speed non zero, print it, modify speed if Searching
-    int16_t speed = py.flags.speed - (int16_t)((status & config::player::status::PY_SEARCH) >> 8);
+    int16_t speed = py.flags.speed - (int16_t) ((status & config::player::status::PY_SEARCH) >> 8);
     if (speed != 0) {
         printCharacterSpeed();
     }
@@ -543,7 +543,7 @@ void printCharacterLevelExperience() {
     if (py.misc.level >= PLAYER_MAX_LEVEL) {
         putStringClearToEOL("Exp to Adv.: *******", Coord_t{12, 28});
     } else {
-        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t)(py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), Coord_t{12, 28});
+        printHeaderLongNumber7Spaces("Exp to Adv.", (int32_t) (py.base_exp_levels[py.misc.level - 1] * py.misc.experience_factor / 100), Coord_t{12, 28});
     }
 
     printHeaderLongNumber7Spaces("Gold       ", py.misc.au, Coord_t{13, 28});

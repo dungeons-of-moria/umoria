@@ -214,7 +214,7 @@ bool inventoryCanCarryItemCount(Inventory_t const &item) {
         return true;
     }
 
-    if (!inventoryItemStackable(item) ) {
+    if (!inventoryItemStackable(item)) {
         return false;
     }
 
