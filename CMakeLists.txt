@@ -5,6 +5,9 @@ if (${CMAKE_SOURCE_DIR} STREQUAL "${PROJECT_SOURCE_DIR}/src")
     message(FATAL_ERROR "CMake generation is not allowed within the source directory!")
 endif ()
 
+project(umoria
+    LANGUAGES CXX
+)
 
 #
 # Set a default build type
@@ -19,12 +22,9 @@ else ()
     message(STATUS "Build type set to '${CMAKE_BUILD_TYPE}'")
 endif ()
 
-# Compiler settings (this must come before calling project)
-set(CMAKE_CXX_COMPILER g++)
+# Compiler settings
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
-
-project(umoria)
 
 #
 # Core set of warnings
