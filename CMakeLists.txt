@@ -51,6 +51,7 @@ set(cxx_warnings "${cxx_warnings} -Wswitch-default")
 set(cxx_warnings "${cxx_warnings} -Wswitch-enum")
 set(cxx_warnings "${cxx_warnings} -Wunreachable-code")
 set(cxx_warnings "${cxx_warnings} -Wwrite-strings")
+set(cxx_warnings "${cxx_warnings} -Wno-deprecated-declarations")
 
 # Some very strict warnings, that will be nice to use, but require some hefty refactoring
 # set(cxx_warnings "${cxx_warnings} -Wcast-qual")
