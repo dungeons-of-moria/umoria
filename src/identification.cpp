@@ -350,7 +350,7 @@ void itemSetAsIdentified(int category_id, int sub_category_id) {
     }
 
     id <<= 6;
-    id += (uint8_t)(sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     objects_identified[id] |= config::identification::OD_KNOWN1;
 
@@ -370,7 +370,7 @@ static void unsample(Inventory_t &item) {
     }
 
     id <<= 6;
-    id += (uint8_t)(item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     // clear the tried flag, since it is now known
     clearObjectTriedFlag(id);
@@ -416,7 +416,7 @@ bool itemSetColorlessAsIdentified(int category_id, int sub_category_id, int iden
     }
 
     id <<= 6;
-    id += (uint8_t)(sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     return isObjectKnown(id);
 }
@@ -430,7 +430,7 @@ void itemSetAsTried(Inventory_t const &item) {
     }
 
     id <<= 6;
-    id += (uint8_t)(item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
+    id += (uint8_t) (item.sub_category_id & (ITEM_SINGLE_STACK_MIN - 1));
 
     setObjectTriedFlag(id);
 }

@@ -45,7 +45,7 @@ static void rdMonster(Monster_t &monster);
 // these are used for the save file, to avoid having to pass them to every procedure
 static FILE *fileptr;
 static uint8_t xor_byte;
-static int from_save_file;   // can overwrite old save file when save
+static int from_save_file;  // can overwrite old save file when save
 static uint32_t start_time; // time that play started
 
 // This save package was brought to by                -JWT-
@@ -294,7 +294,7 @@ static bool svWrite() {
     if (l < start_time) {
         // someone is messing with the clock!,
         // assume that we have been playing for 1 day
-        l = (uint32_t)(start_time + 86400L);
+        l = (uint32_t) (start_time + 86400L);
     }
     wrLong(l);
 
@@ -302,7 +302,7 @@ static bool svWrite() {
     wrString(game.character_died_from);
 
     // put the max_score in the save file
-    l = (uint32_t)(playerCalculateTotalPoints());
+    l = (uint32_t) (playerCalculateTotalPoints());
     wrLong(l);
 
     // put the date_of_birth in the save file
@@ -355,7 +355,7 @@ static bool svWrite() {
 
     for (auto &row : dg.floor) {
         for (auto tile : row) {
-            auto char_tmp = (uint8_t)(tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
+            auto char_tmp = (uint8_t) (tile.feature_id | (tile.perma_lit_room << 4) | (tile.field_mark << 5) | (tile.permanent_light << 6) | (tile.temporary_light << 7));
 
             if (char_tmp != prev_char || count == UCHAR_MAX) {
                 wrByte((uint8_t) count);
@@ -421,7 +421,7 @@ static bool saveChar(const std::string &filename) {
         wrByte(CURRENT_VERSION_PATCH);
         xor_byte = 0;
 
-        auto char_tmp = (uint8_t)(randomNumber(256) - 1);
+        auto char_tmp = (uint8_t) (randomNumber(256) - 1);
         wrByte(char_tmp);
         // Note that xor_byte is now equal to char_tmp
 
@@ -807,10 +807,10 @@ bool loadGame(bool &generate) {
             count = rdByte();
             char_tmp = rdByte();
             for (int i = count; i > 0; i--) {
-                if (tile > &dg.floor[MAX_HEIGHT-1][MAX_WIDTH-1]) {
+                if (tile > &dg.floor[MAX_HEIGHT - 1][MAX_WIDTH - 1]) {
                     goto error;
                 }
-                tile->feature_id = (uint8_t)(char_tmp & 0xF);
+                tile->feature_id = (uint8_t) (char_tmp & 0xF);
                 tile->perma_lit_room = (bool) ((char_tmp >> 4) & 0x1);
                 tile->field_mark = (bool) ((char_tmp >> 5) & 0x1);
                 tile->permanent_light = (bool) ((char_tmp >> 6) & 0x1);
@@ -897,9 +897,9 @@ bool loadGame(bool &generate) {
                     age = start_time - time_saved;
                 }
 
-                age = (uint32_t)((age + 43200L) / 86400L); // age in days
+                age = (uint32_t) ((age + 43200L) / 86400L); // age in days
                 if (age > 10) {
-                    age = 10; // in case save file is very old
+                    age = 10;                               // in case save file is very old
                 }
 
                 for (int i = 0; i < (int) age; i++) {
@@ -1048,7 +1048,7 @@ static void wrMonster(Monster_t const &monster) {
 
 // get_byte reads a single byte from a file, without any xor_byte encryption
 static uint8_t getByte() {
-    return (uint8_t)(getc(fileptr) & 0xFF);
+    return (uint8_t) (getc(fileptr) & 0xFF);
 }
 
 static bool rdBool() {
@@ -1070,7 +1070,7 @@ static uint16_t rdShort() {
     uint16_t decoded_int = c ^ xor_byte;
 
     xor_byte = getByte();
-    decoded_int |= (uint16_t)(c ^ xor_byte) << 8;
+    decoded_int |= (uint16_t) (c ^ xor_byte) << 8;
 
     DEBUG(fprintf(logfile, "SHORT: %02X %02X = %d\n", (int) c, (int) xor_byte, decoded_int))
 
@@ -1082,14 +1082,14 @@ static uint32_t rdLong() {
     uint32_t decoded_long = c ^ xor_byte;
 
     xor_byte = getByte();
-    decoded_long |= (uint32_t)(c ^ xor_byte) << 8;
+    decoded_long |= (uint32_t) (c ^ xor_byte) << 8;
     DEBUG(fprintf(logfile, "LONG:  %02X %02X ", (int) c, (int) xor_byte))
 
     c = getByte();
-    decoded_long |= (uint32_t)(c ^ xor_byte) << 16;
+    decoded_long |= (uint32_t) (c ^ xor_byte) << 16;
 
     xor_byte = getByte();
-    decoded_long |= (uint32_t)(c ^ xor_byte) << 24;
+    decoded_long |= (uint32_t) (c ^ xor_byte) << 24;
     DEBUG(fprintf(logfile, "%02X %02X = %ld\n", (int) c, (int) xor_byte, decoded_long))
 
     return decoded_long;
@@ -1127,7 +1127,7 @@ static void rdShorts(uint16_t *value, int count) {
         auto c = getByte();
         uint16_t s = c ^ xor_byte;
         xor_byte = getByte();
-        s |= (uint16_t)(c ^ xor_byte) << 8;
+        s |= (uint16_t) (c ^ xor_byte) << 8;
         *sptr++ = s;
         DEBUG(fprintf(logfile, "  %02X %02X = %d", (int) c, (int) xor_byte, (int) s))
     }

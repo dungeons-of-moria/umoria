@@ -149,7 +149,7 @@ void putString(const char *out_str, Coord_t coord) {
     }
 
     vtype_t str = {'\0'};
-    (void) strncpy(str, out_str, (size_t)(79 - coord.x));
+    (void) strncpy(str, out_str, (size_t) (79 - coord.x));
     str[79 - coord.x] = '\0';
 
     if (mvaddstr(coord.y, coord.x, str) == ERR) {

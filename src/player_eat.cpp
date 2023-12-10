@@ -62,7 +62,7 @@ void playerEat() {
     uint32_t item_flags = item->flags;
 
     while (item_flags != 0) {
-        switch ((FoodMagicTypes)(getAndClearFirstBit(item_flags) + 1)) {
+        switch ((FoodMagicTypes) (getAndClearFirstBit(item_flags) + 1)) {
             case FoodMagicTypes::Poison:
                 py.flags.poisoned += randomNumber(10) + item->depth_first_found;
                 identified = true;
@@ -254,9 +254,9 @@ void playerIngestFood(int amount) {
         py.flags.slow += penalty;
 
         if (extra == amount) {
-            py.flags.food = (int16_t)(py.flags.food - amount + penalty);
+            py.flags.food = (int16_t) (py.flags.food - amount + penalty);
         } else {
-            py.flags.food = (int16_t)(config::player::PLAYER_FOOD_MAX + penalty);
+            py.flags.food = (int16_t) (config::player::PLAYER_FOOD_MAX + penalty);
         }
     } else if (py.flags.food > config::player::PLAYER_FOOD_FULL) {
         printMessage("You are full.");
