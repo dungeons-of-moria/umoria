@@ -116,4 +116,4 @@ void setFileptr(FILE *file);
 
 // game_run.cpp
 // (includes the playDungeon() main game loop)
-void startMoria(int seed, bool start_new_game);
+void startMoria(uint32_t seed, bool start_new_game, bool roguelike_keys);

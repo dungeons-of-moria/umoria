@@ -25,10 +25,10 @@ static void dungeonGoDownLevel();
 static void dungeonJamDoor();
 static void inventoryRefillLamp();
 
-void startMoria(int seed, bool start_new_game) {
-    // Roguelike keys are disabled by default.
-    // This will be overridden by the setting in the game save file.
-    config::options::use_roguelike_keys = false;
+void startMoria(uint32_t seed, bool start_new_game, bool roguelike_keys) {
+    // Start the game with Roguelike keys (disabled by default)
+    // NOTE: this will be overridden by the game save file.
+    config::options::use_roguelike_keys = roguelike_keys;
 
     priceAdjust();
 
@@ -36,7 +36,7 @@ void startMoria(int seed, bool start_new_game) {
     displaySplashScreen();
 
     // Grab a random seed from the clock
-    seedsInitialize(static_cast<uint32_t>(seed));
+    seedsInitialize(seed);
 
     // Init monster and treasure levels for allocate
     initializeMonsterLevels();
