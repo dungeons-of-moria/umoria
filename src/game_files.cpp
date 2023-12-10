@@ -238,7 +238,7 @@ static void writeCharacterSheetToFile(FILE *char_file) {
     (void) fprintf(char_file, "    Cur Mana%8s %6d\n", colon, py.misc.current_mana);
     (void) fprintf(char_file, "%28sGold%8s %7d\n\n", blank, colon, py.misc.au);
 
-    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST +            //
+    int xbth = py.misc.bth + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + //
                (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::BTH] * py.misc.level);
     int xbthb = py.misc.bth_with_bows + py.misc.plusses_to_hit * BTH_PER_PLUS_TO_HIT_ADJUST + //
                 (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::BTHB] * py.misc.level);
@@ -254,9 +254,9 @@ static void writeCharacterSheetToFile(FILE *char_file) {
     int xstl = py.misc.stealth_factor + 1;
     int xdis = py.misc.disarm + 2 * playerDisarmAdjustment() + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT) + //
                (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DISARM] * py.misc.level / 3);
-    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_WIS) +                         //
+    int xsave = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_WIS) + //
                 (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::SAVE] * py.misc.level / 3);
-    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT) +                          //
+    int xdev = py.misc.saving_throw + playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT) + //
                (class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DEVICE] * py.misc.level / 3);
 
     vtype_t xinfra = {'\0'};

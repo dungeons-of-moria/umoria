@@ -33,7 +33,7 @@ constexpr uint8_t MESSAGE_HISTORY_SIZE = 22;
 constexpr uint8_t STAT_COLUMN = 0;
 
 constexpr char CTRL_KEY(char x) {
-    return static_cast<char>((x) &0x1F);
+    return static_cast<char>((x) & 0x1F);
 }
 
 #undef DELETE

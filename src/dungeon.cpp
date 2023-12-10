@@ -549,7 +549,7 @@ int dungeonSummonObject(Coord_t coord, int amount, int object_type) {
     int real_type;
 
     if (object_type == 1 || object_type == 5) {
-        real_type = 1;   // object_type == 1 -> objects
+        real_type = 1; // object_type == 1 -> objects
     } else {
         real_type = 256; // object_type == 2 -> gold
     }

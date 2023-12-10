@@ -899,7 +899,7 @@ bool loadGame(bool &generate) {
 
                 age = (uint32_t) ((age + 43200L) / 86400L); // age in days
                 if (age > 10) {
-                    age = 10;                               // in case save file is very old
+                    age = 10; // in case save file is very old
                 }
 
                 for (int i = 0; i < (int) age; i++) {
