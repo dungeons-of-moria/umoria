@@ -251,11 +251,11 @@ void playerRestOff() {
 // For "DIED_FROM" string
 void playerDiedFromString(vtype_t *description, const char *monster_name, uint32_t move) {
     if ((move & config::monsters::move::CM_WIN) != 0u) {
-        (void) sprintf(*description, "The %s", monster_name);
+        (void) snprintf(*description, MORIA_MESSAGE_SIZE, "The %s", monster_name);
     } else if (isVowel(monster_name[0])) {
-        (void) sprintf(*description, "an %s", monster_name);
+        (void) snprintf(*description, MORIA_MESSAGE_SIZE, "an %s", monster_name);
     } else {
-        (void) sprintf(*description, "a %s", monster_name);
+        (void) snprintf(*description, MORIA_MESSAGE_SIZE, "a %s", monster_name);
     }
 }
 
@@ -610,9 +610,9 @@ void playerTakeOff(int item_id, int pack_position_id) {
 
     obj_desc_t msg = {'\0'};
     if (pack_position_id >= 0) {
-        (void) sprintf(msg, "%s%s (%c)", p, description, 'a' + pack_position_id);
+        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "%s%s (%c)", p, description, 'a' + pack_position_id);
     } else {
-        (void) sprintf(msg, "%s%s", p, description);
+        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "%s%s", p, description);
     }
     printMessage(msg);
 
@@ -698,7 +698,7 @@ void playerSearch(Coord_t coord, int chance) {
                 itemDescription(description, item, true);
 
                 obj_desc_t msg = {'\0'};
-                (void) sprintf(msg, "You have found %s", description);
+                (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "You have found %s", description);
                 printMessage(msg);
 
                 trapChangeVisibility(spot);
@@ -870,7 +870,7 @@ void playerGainSpells() {
 
     if (new_spells == 0) {
         vtype_t tmp_str = {'\0'};
-        (void) sprintf(tmp_str, "You can't learn any new %ss!", (stat == PlayerAttr::A_INT ? "spell" : "prayer"));
+        (void) snprintf(tmp_str, MORIA_MESSAGE_SIZE, "You can't learn any new %ss!", (stat == PlayerAttr::A_INT ? "spell" : "prayer"));
         printMessage(tmp_str);
 
         game.player_free_turn = true;
@@ -954,7 +954,7 @@ void playerGainSpells() {
             last_known++;
 
             vtype_t tmp_str = {'\0'};
-            (void) sprintf(tmp_str, "You have learned the prayer of %s.", spell_names[spell_bank[id] + offset]);
+            (void) snprintf(tmp_str, MORIA_MESSAGE_SIZE, "You have learned the prayer of %s.", spell_names[spell_bank[id] + offset]);
             printMessage(tmp_str);
 
             for (; id <= spell_id - 1; id++) {
@@ -1141,7 +1141,7 @@ static void playerAttackMonster(Coord_t coord) {
     if (!monster.lit) {
         (void) strcpy(name, "it");
     } else {
-        (void) sprintf(name, "the %s", creature.name);
+        (void) snprintf(name, MORIA_MESSAGE_SIZE, "the %s", creature.name);
     }
 
     int blows, total_to_hit;
@@ -1156,12 +1156,12 @@ static void playerAttackMonster(Coord_t coord) {
     // Note: blows will always be greater than 0 at the start of the loop -MRC-
     for (int i = blows; i > 0; i--) {
         if (!playerTestBeingHit(base_to_hit, (int) py.misc.level, total_to_hit, (int) creature.ac, PlayerClassLevelAdj::BTH)) {
-            (void) sprintf(msg, "You miss %s.", name);
+            (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You miss %s.", name);
             printMessage(msg);
             continue;
         }
 
-        (void) sprintf(msg, "You hit %s.", name);
+        (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You hit %s.", name);
         printMessage(msg);
 
         if (item.category_id != TV_NOTHING) {
@@ -1185,9 +1185,9 @@ static void playerAttackMonster(Coord_t coord) {
             printMessage("Your hands stop glowing.");
 
             if (((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0) || randomNumber(MON_MAX_LEVELS) < creature.level) {
-                (void) sprintf(msg, "%s is unaffected.", name);
+                (void) snprintf(msg, MORIA_MESSAGE_SIZE, "%s is unaffected.", name);
             } else {
-                (void) sprintf(msg, "%s appears confused.", name);
+                (void) snprintf(msg, MORIA_MESSAGE_SIZE, "%s appears confused.", name);
                 if (monster.confused_amount != 0u) {
                     monster.confused_amount += 3;
                 } else {
@@ -1203,7 +1203,7 @@ static void playerAttackMonster(Coord_t coord) {
 
         // See if we done it in.
         if (monsterTakeHit(creature_id, damage) >= 0) {
-            (void) sprintf(msg, "You have slain %s.", name);
+            (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You have slain %s.", name);
             printMessage(msg);
             displayCharacterExperience();
 
@@ -1463,7 +1463,7 @@ static void eliminateKnownSpellsGreaterThanLevel(Spell_t *msp_ptr, const char *p
                 py.flags.spells_forgotten |= mask;
 
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
+                (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You have forgotten the %s of %s.", p, spell_names[i + offset]);
                 printMessage(msg);
             } else {
                 break;
@@ -1537,7 +1537,7 @@ static int rememberForgottenSpells(Spell_t *msp_ptr, int allowed_spells, int new
                 py.flags.spells_learnt |= mask;
 
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "You have remembered the %s of %s.", p, spell_names[order_id + offset]);
+                (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You have remembered the %s of %s.", p, spell_names[order_id + offset]);
                 printMessage(msg);
             } else {
                 allowed_spells++;
@@ -1596,7 +1596,7 @@ static void forgetSpells(int new_spells, const char *p, int offset) {
             new_spells++;
 
             vtype_t msg = {'\0'};
-            (void) sprintf(msg, "You have forgotten the %s of %s.", p, spell_names[order_id + offset]);
+            (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You have forgotten the %s of %s.", p, spell_names[order_id + offset]);
             printMessage(msg);
         }
     }
@@ -1641,7 +1641,7 @@ void playerCalculateAllowedSpellsCount(int stat) {
     if (new_spells != py.flags.new_spells_to_learn) {
         if (new_spells > 0 && py.flags.new_spells_to_learn == 0) {
             vtype_t msg = {'\0'};
-            (void) sprintf(msg, "You can learn some new %ss now.", magic_type_str);
+            (void) snprintf(msg, MORIA_MESSAGE_SIZE, "You can learn some new %ss now.", magic_type_str);
             printMessage(msg);
         }
 

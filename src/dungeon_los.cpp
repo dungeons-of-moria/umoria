@@ -465,7 +465,7 @@ static bool lookRay(int y, int from, int to) {
 static bool lookSee(Coord_t coord, bool &transparent) {
     if (coord.x < 0 || coord.y < 0 || coord.y > coord.x) {
         obj_desc_t error_message = {'\0'};
-        (void) sprintf(error_message, "Illegal call to lookSee(%d, %d)", coord.y, coord.x);
+        (void) snprintf(error_message, MORIA_OBJ_DESC_SIZE, "Illegal call to lookSee(%d, %d)", coord.y, coord.x);
         printMessage(error_message);
     }
 
@@ -497,7 +497,7 @@ static bool lookSee(Coord_t coord, bool &transparent) {
 
     if (los_rocks_and_objects == 0 && tile.creature_id > 1 && monsters[tile.creature_id].lit) {
         j = monsters[tile.creature_id].creature_id;
-        (void) sprintf(msg, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
+        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "%s %s %s. [(r)ecall]", description, isVowel(creatures_list[j].name[0]) ? "an" : "a", creatures_list[j].name);
         description = "It is on";
         putStringClearToEOL(msg, Coord_t{0, 0});
 
@@ -523,7 +523,7 @@ static bool lookSee(Coord_t coord, bool &transparent) {
                 obj_desc_t obj_string = {'\0'};
                 itemDescription(obj_string, game.treasure.list[tile.treasure_id], true);
 
-                (void) sprintf(msg, "%s %s ---pause---", description, obj_string);
+                (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "%s %s ---pause---", description, obj_string);
                 description = "It is in";
                 putStringClearToEOL(msg, Coord_t{0, 0});
 
@@ -556,7 +556,7 @@ static bool lookSee(Coord_t coord, bool &transparent) {
             }
 
             if (wall_description != nullptr) {
-                (void) sprintf(msg, "%s %s ---pause---", description, wall_description);
+                (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "%s %s ---pause---", description, wall_description);
                 putStringClearToEOL(msg, Coord_t{0, 0});
                 panelMoveCursor(coord);
                 key = getKeyInput();

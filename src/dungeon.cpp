@@ -31,7 +31,7 @@ void dungeonDisplayMap() {
     uint8_t panel_height = MAX_HEIGHT / RATIO;
 
     char map[MAX_WIDTH / RATIO + 1] = {'\0'};
-    char line_buffer[80];
+    vtype_t line_buffer;
 
     // Add screen border
     addChar('+', Coord_t{0, 0});
@@ -57,7 +57,7 @@ void dungeonDisplayMap() {
         uint8_t row = y / RATIO;
         if (row != line) {
             if (line >= 0) {
-                sprintf(line_buffer, "|%s|", map);
+                snprintf(line_buffer, MORIA_MESSAGE_SIZE, "|%s|", map);
                 putString(line_buffer, Coord_t{line + 1, 0});
             }
             for (uint8_t j = 0; j < panel_width; j++) {
@@ -81,7 +81,7 @@ void dungeonDisplayMap() {
     }
 
     if (line >= 0) {
-        sprintf(line_buffer, "|%s|", map);
+        snprintf(line_buffer, MORIA_MESSAGE_SIZE, "|%s|", map);
         putString(line_buffer, Coord_t{line + 1, 0});
     }
 

@@ -115,9 +115,9 @@ static void displayCharacterRaces() {
     Coord_t coord = Coord_t{21, 2};
 
     for (auto i = 0; i < PLAYER_MAX_RACES; i++) {
-        char description[80];
+        vtype_t description;
 
-        (void) sprintf(description, "%c) %s", i + 'a', character_races[i].name);
+        (void) snprintf(description, MORIA_MESSAGE_SIZE, "%c) %s", i + 'a', character_races[i].name);
         putString(description, coord);
 
         coord.x += 15;
@@ -320,7 +320,7 @@ static int displayRaceClasses(uint8_t const race_id, uint8_t *class_list) {
 
     auto class_id = 0;
 
-    char description[80];
+    vtype_t description;
     uint32_t mask = 0x1;
 
     clearToBottom(20);
@@ -328,7 +328,7 @@ static int displayRaceClasses(uint8_t const race_id, uint8_t *class_list) {
 
     for (uint8_t i = 0; i < PLAYER_MAX_CLASSES; i++) {
         if ((character_races[race_id].classes_bit_field & mask) != 0u) {
-            (void) sprintf(description, "%c) %s", class_id + 'a', classes[i].title);
+            (void) snprintf(description, MORIA_MESSAGE_SIZE, "%c) %s", class_id + 'a', classes[i].title);
             putString(description, coord);
             class_list[class_id] = i;
 

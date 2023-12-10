@@ -376,7 +376,7 @@ static void carry(Coord_t coord, bool pickup) {
         py.misc.au += item.cost;
 
         itemDescription(description, item, true);
-        (void) sprintf(msg, "You have found %d gold pieces worth of %s", item.cost, description);
+        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "You have found %d gold pieces worth of %s", item.cost, description);
 
         printCharacterGoldValue();
         (void) dungeonDeleteObject(coord);
@@ -411,13 +411,13 @@ static void carry(Coord_t coord, bool pickup) {
             int locn = inventoryCarryItem(item);
 
             itemDescription(description, py.inventory[locn], true);
-            (void) sprintf(msg, "You have %s (%c)", description, locn + 'a');
+            (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "You have %s (%c)", description, locn + 'a');
             printMessage(msg);
             (void) dungeonDeleteObject(coord);
         }
     } else {
         itemDescription(description, item, true);
-        (void) sprintf(msg, "You can't carry %s", description);
+        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "You can't carry %s", description);
         printMessage(msg);
     }
 }

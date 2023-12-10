@@ -240,7 +240,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  Gold = ", py.misc.au);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  Gold = ", py.misc.au);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 7)) {
@@ -254,7 +254,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-200) Searching = ", py.misc.chance_in_search);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  (0-200) Searching = ", py.misc.chance_in_search);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {
@@ -267,7 +267,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (-1-18) Stealth = ", py.misc.stealth_factor);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  (-1-18) Stealth = ", py.misc.stealth_factor);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {
@@ -279,7 +279,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-200) Disarming = ", py.misc.disarm);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  (0-200) Disarming = ", py.misc.disarm);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {
@@ -291,7 +291,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-100) Save = ", py.misc.saving_throw);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  (0-100) Save = ", py.misc.saving_throw);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {
@@ -303,7 +303,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-200) Base to hit = ", py.misc.bth);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  (0-200) Base to hit = ", py.misc.bth);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {
@@ -315,7 +315,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bth_with_bows);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  (0-200) Bows/Throwing = ", py.misc.bth_with_bows);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {
@@ -327,7 +327,7 @@ void wizardCharacterAdjustment() {
         return;
     }
 
-    (void) sprintf(input, "Current=%d  Weight = ", py.misc.weight);
+    (void) snprintf(input, MORIA_MESSAGE_SIZE, "Current=%d  Weight = ", py.misc.weight);
     number = (int) strlen(input);
     putStringClearToEOL(input, Coord_t{0, 0});
     if (getStringInput(input, Coord_t{0, number}, 3)) {

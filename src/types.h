@@ -16,7 +16,8 @@ typedef char vtype_t[MORIA_MESSAGE_SIZE];
 // Note: since its output can easily exceed 80 characters,
 // an object description must always be called with an
 // obj_desc_t type as the first parameter.
-typedef char obj_desc_t[160];
+constexpr uint8_t MORIA_OBJ_DESC_SIZE = 160;
+typedef char obj_desc_t[MORIA_OBJ_DESC_SIZE];
 
 typedef struct {
     int y;

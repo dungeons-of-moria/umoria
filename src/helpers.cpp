@@ -52,9 +52,9 @@ void insertNumberIntoString(char *to_string, const char *from_string, int32_t nu
         (void) strcpy(str2, str + from_len);
 
         if (number >= 0 && show_sign) {
-            (void) sprintf(to_string, "%s+%d%s", str1, number, str2);
+            (void) snprintf(to_string, MORIA_MESSAGE_SIZE, "%s+%d%s", str1, number, str2);
         } else {
-            (void) sprintf(to_string, "%s%d%s", str1, number, str2);
+            (void) snprintf(to_string, MORIA_MESSAGE_SIZE, "%s%d%s", str1, number, str2);
         }
     }
 }
@@ -83,7 +83,7 @@ void insertStringIntoString(char *to_string, const char *from_string, const char
     }
 
     if (pc <= bound) {
-        char new_string[MORIA_MESSAGE_SIZE];
+        vtype_t new_string;
 
         (void) strncpy(new_string, to_string, (pc - to_string));
 

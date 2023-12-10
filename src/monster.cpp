@@ -362,9 +362,9 @@ static void monsterConfuseOnAttack(Creature_t const &creature, Monster_t &monste
         vtype_t msg = {'\0'};
 
         if (randomNumber(MON_MAX_LEVELS) < creature.level || ((creature.defenses & config::monsters::defense::CD_NO_SLEEP) != 0)) {
-            (void) sprintf(msg, "%sis unaffected.", monster_name);
+            (void) snprintf(msg, MORIA_MESSAGE_SIZE, "%sis unaffected.", monster_name);
         } else {
-            (void) sprintf(msg, "%sappears confused.", monster_name);
+            (void) snprintf(msg, MORIA_MESSAGE_SIZE, "%sappears confused.", monster_name);
             if (monster.confused_amount != 0u) {
                 monster.confused_amount += 3;
             } else {
@@ -394,7 +394,7 @@ static void monsterAttackPlayer(int monster_id) {
     if (!monster.lit) {
         (void) strcpy(name, "It ");
     } else {
-        (void) sprintf(name, "The %s ", creature.name);
+        (void) snprintf(name, MORIA_MESSAGE_SIZE, "The %s ", creature.name);
     }
 
     vtype_t death_description = {'\0'};
@@ -792,11 +792,11 @@ void monsterExecuteCastingOfSpell(Monster_t &monster, int monster_id, int spell_
                 playerDisturb(1, 0);
 
                 vtype_t msg = {'\0'};
-                (void) sprintf(msg, "%sdraws psychic energy from you!", monster_name);
+                (void) snprintf(msg, MORIA_MESSAGE_SIZE, "%sdraws psychic energy from you!", monster_name);
                 printMessage(msg);
 
                 if (monster.lit) {
-                    (void) sprintf(msg, "%sappears healthier.", monster_name);
+                    (void) snprintf(msg, MORIA_MESSAGE_SIZE, "%sappears healthier.", monster_name);
                     printMessage(msg);
                 }
 
@@ -866,7 +866,7 @@ static bool monsterCastSpell(int monster_id) {
     // Describe the attack
     vtype_t name = {'\0'};
     if (monster.lit) {
-        (void) sprintf(name, "The %s ", creature.name);
+        (void) snprintf(name, MORIA_MESSAGE_SIZE, "The %s ", creature.name);
     } else {
         (void) strcpy(name, "It ");
     }
@@ -1294,7 +1294,7 @@ static void monsterAttackingUpdate(Monster_t &monster, int monster_id, int moves
                 if (monster.stunned_amount == 0) {
                     if (monster.lit) {
                         vtype_t msg = {'\0'};
-                        (void) sprintf(msg, "The %s ", creatures_list[monster.creature_id].name);
+                        (void) snprintf(msg, MORIA_MESSAGE_SIZE, "The %s ", creatures_list[monster.creature_id].name);
                         printMessage(strcat(msg, "recovers and glares at you."));
                     }
                 }

@@ -208,16 +208,16 @@ void showScoresScreen() {
         clearScreen();
         // Put twenty scores on each page, on lines 2 through 21.
         while ((feof(highscore_fp) == 0) && i < 21) {
-            (void) sprintf(msg,                                               //
-                           "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s", //
-                           rank,                                              //
-                           score.points,                                      //
-                           score.name,                                        //
-                           score.gender,                                      //
-                           character_races[score.race].name,                  //
-                           classes[score.character_class].title,              //
-                           score.level,                                       //
-                           score.died_from                                    //
+            (void) snprintf(msg, 100,                                          //
+                            "%-4d%8d %-19.19s %c %-10.10s %-7.7s%3d %-22.22s", //
+                            rank,                                              //
+                            score.points,                                      //
+                            score.name,                                        //
+                            score.gender,                                      //
+                            character_races[score.race].name,                  //
+                            classes[score.character_class].title,              //
+                            score.level,                                       //
+                            score.died_from                                    //
             );
             i++;
             putStringClearToEOL(msg, Coord_t{i, 0});

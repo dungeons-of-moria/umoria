@@ -144,7 +144,7 @@ static void inventoryDropOrThrowItem(Coord_t coord, Inventory_t *item) {
         obj_desc_t msg = {'\0'};
         itemDescription(description, *item, false);
 
-        (void) sprintf(msg, "The %s disappears.", description);
+        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "The %s disappears.", description);
         printMessage(msg);
     }
 }
@@ -228,10 +228,10 @@ void playerThrowItem() {
 
                     // Does the player know what they're fighting?
                     if (!m_ptr.lit) {
-                        (void) sprintf(msg, "You hear a cry as the %s finds a mark.", description);
+                        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "You hear a cry as the %s finds a mark.", description);
                         visible = false;
                     } else {
-                        (void) sprintf(msg, "The %s hits the %s.", description, creatures_list[damage].name);
+                        (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "The %s hits the %s.", description, creatures_list[damage].name);
                         visible = true;
                     }
                     printMessage(msg);
@@ -249,7 +249,7 @@ void playerThrowItem() {
                         if (!visible) {
                             printMessage("You have killed something!");
                         } else {
-                            (void) sprintf(msg, "You have killed the %s.", creatures_list[damage].name);
+                            (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "You have killed the %s.", creatures_list[damage].name);
                             printMessage(msg);
                         }
                         displayCharacterExperience();

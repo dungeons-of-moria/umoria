@@ -100,7 +100,7 @@ static bool scrollEnchantWeaponToHit() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows faintly!", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows faintly!", desc);
     printMessage(msg);
 
     if (spellEnchantItem(item.to_hit, 10)) {
@@ -124,7 +124,7 @@ static bool scrollEnchantWeaponToDamage() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows faintly!", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows faintly!", desc);
     printMessage(msg);
 
     int16_t scroll_type;
@@ -160,7 +160,7 @@ static bool scrollEnchantItemToAC() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows faintly!", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows faintly!", desc);
     printMessage(msg);
 
     if (spellEnchantItem(item.to_ac, 10)) {
@@ -240,7 +240,7 @@ static bool scrollEnchantWeapon() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows brightly!", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows brightly!", desc);
     printMessage(msg);
 
     bool enchanted = false;
@@ -288,7 +288,7 @@ static bool scrollCurseWeapon() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows black, fades.", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
     itemRemoveMagicNaming(item);
@@ -320,7 +320,7 @@ static bool scrollEnchantArmor() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows brightly!", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows brightly!", desc);
     printMessage(msg);
 
     bool enchanted = false;
@@ -382,7 +382,7 @@ static bool scrollCurseArmor() {
     obj_desc_t desc = {'\0'};
     itemDescription(desc, item, false);
 
-    (void) sprintf(msg, "Your %s glows black, fades.", desc);
+    (void) snprintf(msg, MORIA_OBJ_DESC_SIZE, "Your %s glows black, fades.", desc);
     printMessage(msg);
 
     itemRemoveMagicNaming(item);

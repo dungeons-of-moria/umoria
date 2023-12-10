@@ -140,7 +140,7 @@ void setGameOptions() {
     int max;
     for (max = 0; game_options[max].o_prompt != nullptr; max++) {
         vtype_t str = {'\0'};
-        (void) sprintf(str, "%-38s: %s", game_options[max].o_prompt, (*game_options[max].o_var ? "yes" : "no "));
+        (void) snprintf(str, MORIA_MESSAGE_SIZE, "%-38s: %s", game_options[max].o_prompt, (*game_options[max].o_var ? "yes" : "no "));
         putStringClearToEOL(str, Coord_t{max + 1, 0});
     }
     eraseLine(Coord_t{max + 1, 0});
