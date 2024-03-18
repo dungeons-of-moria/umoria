@@ -1229,8 +1229,7 @@ static void playerAttackMonster(Coord_t coord) {
 static int16_t playerLockPickingSkill() {
     int16_t skill = py.misc.disarm;
 
-    skill += 2;
-    skill *= playerDisarmAdjustment();
+    skill += 2 * playerDisarmAdjustment();
     skill += playerStatAdjustmentWisdomIntelligence(PlayerAttr::A_INT);
     skill += class_level_adj[py.misc.class_id][PlayerClassLevelAdj::DISARM] * py.misc.level / 3;
 
