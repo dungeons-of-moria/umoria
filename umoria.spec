@@ -6,7 +6,7 @@
 
 Name:           umoria
 Version:        5.7.15
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:    	Umoria %{version}
 
 License:        GPL-3.0
@@ -41,6 +41,8 @@ mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 cp %{_vpath_builddir}/umoria/umoria $RPM_BUILD_ROOT/%{_bindir}/umoria.bin
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/games/umoria
 cp -R %{_vpath_builddir}/umoria/data $RPM_BUILD_ROOT/%{_datadir}/games/umoria
+mkdir -p $RPM_BUILD_ROOT/%{_docdir}/umoria/historical
+cp historical/* $RPM_BUILD_ROOT/%{_docdir}/umoria/historical
 
 cat << EOF > $RPM_BUILD_ROOT/%{_bindir}/umoria
 #!/bin/sh
@@ -60,11 +62,18 @@ echo "Please remove each user's ~/.config/umoria manually, if you need."
 %files
 %{_bindir}/umoria*
 %{_datadir}/games/umoria/data/*
+%{_docdir}/umoria/historical/*
 %license LICENSE
 %doc *.md AUTHORS
 
 
 
 %changelog
-* Sat Feb 18 2023 Shiro Hara <white@vx-xv.com>
+* Sat Dec 30 2023 Shiro Hara <white@vx-xv.com> - 5.7.15-3
+- Enable roguelike keys via the CLI
+
+* Sat Jul 1 2023 Shiro Hara <white@vx-xv.com> - 5.7.15-2
+- Add files in "historical" to doc (Thanks, Justin Koh)
+
+* Sat Feb 18 2023 Shiro Hara <white@vx-xv.com> -5.7.15-1
 - Add .spec file
