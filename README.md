@@ -3,7 +3,7 @@
 _The Dungeons of Moria_ is a single player dungeon simulation originally
 written by Robert Alan Koeneke, with its first public release in 1983.
 The game was originally developed using VMS Pascal before being ported to the
-C language by James E. Wilson in 1988, and released a _Umoria_.
+C language by James E. Wilson in 1988, and released as _Umoria_.
 
 Moria/Umoria has had many variants over the years, with [_Angband_](http://rephial.org/)
 being the most well known. Umoria was also an inspiration for one the most
@@ -26,7 +26,7 @@ main operating systems: Windows, macOS, and Linux. Support for all other
 outdated computer systems such as MS DOS, "Classic" Mac OS (pre OSX), Amiga,
 and Atari ST was removed.
 
-_Note: there have been no intentional game play changes in the 5.7.x releases._
+_Note: there have been no intentional gameplay changes in the 5.7.x releases._
 
 Since the initial 5.7 release, a great deal of _code restoration_ has been
 undertaken in the hope of aiding future development of the game. Some examples
