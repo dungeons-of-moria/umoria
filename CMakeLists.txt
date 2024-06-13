@@ -66,9 +66,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(cxx_warnings "${cxx_warnings} -Wno-format-overflow")
 endif()
 
-# Ignore string truncation warnings for using snprintf
-set(cxx_warnings "${cxx_warnings} -Wno-format-truncation")
-
 #
 # Set the flags and warnings for the debug/release builds
 #
