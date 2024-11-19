@@ -533,14 +533,15 @@ bool checkForNonBlockingKeyPress(int microseconds) {
 #else
     struct timeval tbuf {};
     int ch;
-    int smask;
+    fd_set smask;
 
     // Return true if a read on descriptor 1 will not block.
     tbuf.tv_sec = 0;
     tbuf.tv_usec = microseconds;
 
-    smask = 1; // i.e. (1 << 0)
-    if (select(1, (fd_set *) &smask, (fd_set *) nullptr, (fd_set *) nullptr, &tbuf) == 1) {
+    FD_ZERO(&smask);
+    FD_SET(STDIN_FILENO, &smask);
+    if (select(1, &smask, (fd_set *) nullptr, (fd_set *) nullptr, &tbuf) == 1) {
         ch = getch();
         // check for EOF errors here, select sometimes works even when EOF
         if (ch == -1) {
