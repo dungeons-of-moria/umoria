@@ -257,8 +257,8 @@ elseif ((MSYS OR MINGW) AND NOT "$ENV{MINGW}" STREQUAL "")
     message(STATUS "NOTE: Configuring build for Windows release...")
 
     # Make the ncurses library static
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -static -lpthread")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static -lpthread")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -static -lpthread -DNCURSES_STATIC")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static -lpthread -DNCURSES_STATIC")
 
     set(CURSES_INCLUDE_DIR "/$ENV{MINGW}/include/")
     set(CURSES_LIBRARIES "/$ENV{MINGW}/lib/libncurses.a")
