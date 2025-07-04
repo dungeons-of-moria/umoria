@@ -331,7 +331,7 @@ void printCharacterMovementState() {
         char repeat_string[16];
 
         if (config::options::display_counts) {
-            (void) snprintf(repeat_string, 16, "Repeat %-3d", game.command_count);
+            (void) snprintf(repeat_string, sizeof(repeat_string), "Repeat %-.3d", game.command_count);
         } else {
             (void) strcpy(repeat_string, "Repeat");
         }

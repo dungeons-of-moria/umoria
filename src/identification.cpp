@@ -797,23 +797,25 @@ void itemDescription(obj_desc_t description, Inventory_t const &item, bool add_p
     if (tmp_val[0] == '&') {
         // use &tmp_val[1], so that & does not appear in output
         if (item.items_count > 1) {
-            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "%d%s", (int) item.items_count, &tmp_val[1]);
+            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "%d%.*s", (unsigned int) item.items_count, (int) MORIA_OBJ_DESC_SIZE-4, &tmp_val[1]);
         } else if (item.items_count < 1) {
-            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "%s%s", "no more", &tmp_val[1]);
+            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "%s%.*s", "no more", (int) MORIA_OBJ_DESC_SIZE-8, &tmp_val[1]);
         } else if (isVowel(tmp_val[2])) {
-            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "an%s", &tmp_val[1]);
+            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "an%.*s", (int) MORIA_OBJ_DESC_SIZE-3, &tmp_val[1]);
         } else {
-            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "a%s", &tmp_val[1]);
+            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "a%.*s", (int) MORIA_OBJ_DESC_SIZE-2, &tmp_val[1]);
         }
     } else if (item.items_count < 1) {
         // handle 'no more' case specially
 
+	int max_width = MORIA_OBJ_DESC_SIZE - sizeof("no more ");
+
         // check for "some" at start
         if (strncmp("some", tmp_val, 4) == 0) {
-            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "no more %s", &tmp_val[5]);
+            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "no more %.*s", max_width, &tmp_val[5]);
         } else {
             // here if no article
-            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "no more %s", tmp_val);
+            (void) snprintf(description, MORIA_OBJ_DESC_SIZE, "no more %.*s", max_width, tmp_val);
         }
     } else {
         (void) strcpy(description, tmp_val);
