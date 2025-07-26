@@ -52,7 +52,7 @@ typedef struct Game_t {
     bool use_last_direction = false;  // `true` when repeat commands should use last known direction
     char doing_inventory_command = 0; // Track inventory commands -CJS-
     char last_command = ' ';          // Save of the previous player command
-    int command_count = 0;            // How many times to repeat a specific command -CJS-
+    unsigned int command_count = 0;   // How many times to repeat a specific command -CJS-
 
     vtype_t character_died_from = {'\0'}; // What the character died from: starvation, Bat, etc.
 

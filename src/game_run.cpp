@@ -956,19 +956,19 @@ static int getCommandRepeatCount(char &last_input_command) {
     }
 
     char text_buffer[8];
-    int repeat_count = 0;
+    unsigned int repeat_count = 0;
 
     while (true) {
         if (last_input_command == DELETE || last_input_command == CTRL_KEY('H')) {
             repeat_count /= 10;
-            (void) snprintf(text_buffer, 8, "%d", (int16_t) repeat_count);
+            (void) snprintf(text_buffer, sizeof(text_buffer), "%.7d", (int16_t) repeat_count);
             putStringClearToEOL(text_buffer, Coord_t{0, 14});
         } else if (last_input_command >= '0' && last_input_command <= '9') {
             if (repeat_count > 99) {
                 terminalBellSound();
             } else {
                 repeat_count = repeat_count * 10 + last_input_command - '0';
-                (void) snprintf(text_buffer, 8, "%d", repeat_count);
+                (void) snprintf(text_buffer, sizeof(text_buffer), "%.7d", repeat_count);
                 putStringClearToEOL(text_buffer, Coord_t{0, 14});
             }
         } else {
