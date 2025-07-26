@@ -61,10 +61,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 # set(cxx_warnings "${cxx_warnings} -Wstrict-overflow")
 # set(cxx_warnings "${cxx_warnings} -fno-strict-aliasing")
 
-# Temporary support for GCC 8.
-# if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-#     set(cxx_warnings "${cxx_warnings} -Wno-format-overflow")
-# endif()
+set(cxx_warnings "${cxx_warnings} -Wno-format-overflow")
+set(cxx_warnings "${cxx_warnings} -Wno-format-truncation")
 
 #
 # Set the flags and warnings for the debug/release builds
