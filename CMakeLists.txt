@@ -79,7 +79,6 @@ set(
         source_files
         ${source_dir}/character.h
         ${source_dir}/config.h
-        ${source_dir}/curses.h
         ${source_dir}/dice.h
         ${source_dir}/dungeon.h
         ${source_dir}/dungeon_tile.h
@@ -152,7 +151,7 @@ set(
         ${source_dir}/treasure.cpp
         ${source_dir}/ui.cpp
         ${source_dir}/ui_inventory.cpp
-        ${source_dir}/ui_io.cpp
+        ${source_dir}/raylib_io.cpp
         ${source_dir}/wizard.cpp
 )
 
@@ -245,26 +244,12 @@ if(MSVC)
     add_definitions(-Dssize_t=SSIZE_T)
 endif(MSVC)
 
-# This is horrible, but needed bacause `find_package()` doesn't use the
-# include/lib inside the /mingw32 or /mingw64 directories, and with
-# `ncurses-devel` installed, it won't compile.
-if ((MSYS OR MINGW) AND "$ENV{MINGW}" STREQUAL "")
-    message(FATAL_ERROR "You must set the MINGW environment variable ('mingw64' or 'mingw32'). Example: MINGW=mingw64 cmake .")
-    message(FATAL_ERROR "This will be the directory used for locating the ncurses library files.")
-elseif ((MSYS OR MINGW) AND NOT "$ENV{MINGW}" STREQUAL "")
-    message(STATUS "NOTE: Configuring build for Windows release...")
+include(FetchContent)
+FetchContent_Declare(
+        raylib
+        GIT_REPOSITORY https://github.com/raysan5/raylib.git
+        GIT_TAG 5.0
+)
+FetchContent_MakeAvailable(raylib)
 
-    # Make the ncurses library static
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -static -lpthread -DNCURSES_STATIC")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -static -lpthread -DNCURSES_STATIC")
-
-    set(CURSES_INCLUDE_DIR "/$ENV{MINGW}/include/")
-    set(CURSES_LIBRARIES "/$ENV{MINGW}/lib/libncurses.a")
-else ()
-    message(STATUS "NOTE: Configuring build for macOS/Linux release...")
-    set(CURSES_NEED_NCURSES TRUE)
-    find_package(Curses REQUIRED)
-endif ()
-
-include_directories(${CURSES_INCLUDE_DIR})
-target_link_libraries(umoria ${CURSES_LIBRARIES})
+target_link_libraries(umoria raylib)

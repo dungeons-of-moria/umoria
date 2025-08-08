@@ -6,6 +6,7 @@
 // Run the game: the main loop
 
 #include "headers.h"
+#include "raylib.h"
 
 static void playDungeon();
 
@@ -131,6 +132,13 @@ void startMoria(uint32_t seed, bool start_new_game, bool roguelike_keys) {
 
     // Loop till dead, or exit
     while (!game.character_is_dead) {
+        if (WindowShouldClose()) {
+            game.character_is_dead = true;
+        }
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
         // Dungeon logic
         playDungeon();
 
@@ -150,6 +158,8 @@ void startMoria(uint32_t seed, bool start_new_game, bool roguelike_keys) {
         if (!game.character_is_dead) {
             generateCave();
         }
+
+        EndDrawing();
     }
 
     // Character gets buried.
