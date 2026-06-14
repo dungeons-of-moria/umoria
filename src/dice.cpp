@@ -8,7 +8,7 @@
 // generates damage for 2d6 style dice rolls
 int diceRoll(Dice_t const &dice) {
     auto sum = 0;
-    for (auto i = 0; i < dice.dice; i++) {
+    for (auto i = dice.dice; i > 0; i--) {
         sum += randomNumber(dice.sides);
     }
     return sum;
